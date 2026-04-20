@@ -8,23 +8,25 @@
   --font-display: 'Playfair Display', serif;
   --font-body: 'DM Sans', sans-serif;
 
-  --midnight: #0D0D14;
-  --midnight-2: #1A1A28;
+  /* NEW THEME: Professional Education (Matching Logo) */
+  --midnight: #111827;       /* Deep Navy for headers/text */
+  --midnight-2: #1f2937;
   --midnight-3: #252538;
-  --gold: #C9A84C;
-  --gold-light: #F5EDD6;
-  --gold-dark: #8B6A1F;
+  --gold: #38b6ff;           /* Sky Blue from "EDUCATION" text */
+  --gold-light: #e0f2fe;     /* Very Light Sky Blue */
+  --gold-dark: #1e1e66;      /* Deep Navy from "PROMOTE" text */
   --gold-muted: #D4B06A;
-  --surface: #FAFAF8;
-  --surface-2: #F2F1ED;
-  --surface-3: #E8E7E0;
-  --ink: #0D0D14;
-  --ink-2: #3A3A4A;
-  --ink-3: #7A7A8A;
-  --ink-4: #A8A8B8;
-  --action: #3A7BD5;
-  --success: #1DB87A;
-  --border: rgba(13, 13, 20, 0.1);
+  --surface: #ffffff;        /* Clean White background */
+  --surface-2: #f8fafc;      /* Subtle gray/blue offset */
+  --surface-3: #f1f5f9;
+  --ink: #0f172a;            /* Primary Text */
+  --ink-2: #334155;
+  --ink-3: #64748b;          /* Secondary Text */
+  --ink-4: #94a3b8;
+  --action: #38b6ff;         /* Primary Action: Sky Blue */
+  --success: #10b981;
+  --error: #ef4444;          /* Crimson Red from logo tassels */
+  --border: #e2e8f0;
   --border-mid: rgba(13, 13, 20, 0.16);
   --border-dark: rgba(13, 13, 20, 0.24);
 }

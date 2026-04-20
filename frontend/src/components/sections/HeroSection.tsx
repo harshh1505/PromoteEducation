@@ -1,234 +1,194 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Search, ArrowRight, TrendingUp } from 'lucide-react'
+import { Search, ChevronLeft, ChevronRight, GraduationCap, BookOpen, Award, CheckCircle2, Target, TrendingUp, Users } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { cn } from '@/lib/utils'
 
-const trendingSearches = ['JEE Main 2025', 'Top MBA Colleges', 'NEET Cutoff', 'Engineering Colleges Delhi']
+const carouselImages = [
+  "/images/carousel/aiimsdelhi.webp",
+  "/images/carousel/iitdelhi.jpg",
+  "/images/carousel/iitguwahati.avif",
+  "/images/carousel/kiitbhubaneswar.jpg",
+  "/images/carousel/srmktr.jpg",
+  "/images/carousel/iitbhu.jpg"
+]
+
+const stats = [
+  { label: '6000+ Institutions', icon: GraduationCap },
+  { label: '50+ Entrance Exams', icon: BookOpen },
+  { label: '200+ Student Reviews', icon: Award },
+  { label: '10,000+ Monthly Students', icon: Users },
+]
+
+const trustBadges = [
+  { label: 'Entrance Support', icon: CheckCircle2 },
+  { label: 'Rank Prediction', icon: TrendingUp },
+  { label: 'Direct Admissions', icon: Users },
+  { label: 'Placement Stats', icon: Award },
+]
 
 export default function HeroSection() {
+  const [currentSlide, setCurrentSlide] = useState(0)
   const [query, setQuery] = useState('')
-  const [focused, setFocused] = useState(false)
   const [results, setResults] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
+  const [focused, setFocused] = useState(false)
 
-  // Live search from Supabase
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % carouselImages.length)
+    }, 6000)
+    return () => clearInterval(interval)
+  }, [])
+
+  // Live search logic
   useEffect(() => {
     const searchColleges = async () => {
       if (query.length < 2) {
         setResults([])
         return
       }
-      
       setLoading(true)
       const { data, error } = await supabase
         .from('colleges')
-        .select('name, location, state, stream')
+        .select('name, location, stream')
         .or(`name.ilike.%${query}%,location.ilike.%${query}%,stream.ilike.%${query}%`)
-        .limit(6)
+        .limit(5)
 
-      if (!error && data) {
-        setResults(data)
-      }
+      if (!error && data) setResults(data)
       setLoading(false)
     }
-
     const timer = setTimeout(searchColleges, 300)
     return () => clearTimeout(timer)
   }, [query])
 
   return (
-    <section
-      className="relative min-h-[90vh] flex flex-col justify-center pt-14"
-      style={{ background: 'var(--midnight)' }}
-    >
-      {/* Subtle grid texture */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `linear-gradient(rgba(201,168,76,0.4) 1px, transparent 1px),
-                            linear-gradient(90deg, rgba(201,168,76,0.4) 1px, transparent 1px)`,
-          backgroundSize: '48px 48px',
-        }}
-      />
+    <section className="relative h-[95vh] w-full overflow-hidden flex items-center justify-center">
+      
+      {/* Background Carousel */}
+      {carouselImages.map((img, idx) => (
+        <div
+          key={idx}
+          className={cn(
+            "absolute inset-0 transition-all duration-[2000ms] ease-in-out",
+            currentSlide === idx ? "opacity-100 scale-100 rotate-0" : "opacity-0 scale-110 rotate-1"
+          )}
+        >
+          <div className="absolute inset-0 bg-midnight/60 z-10" />
+          <img src={img} alt="University" className="w-full h-full object-cover" />
+        </div>
+      ))}
 
-      {/* Gold accent line top */}
-      <div
-        className="absolute top-0 left-0 right-0 h-px opacity-40"
-        style={{ background: 'linear-gradient(90deg, transparent, var(--gold), transparent)' }}
-      />
+      {/* Slide Navigation Buttons */}
+      <button 
+        onClick={() => setCurrentSlide((prev) => (prev - 1 + carouselImages.length) % carouselImages.length)}
+        className="absolute left-6 z-30 p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all hidden md:block"
+      >
+        <ChevronLeft size={20} />
+      </button>
+      <button 
+        onClick={() => setCurrentSlide((prev) => (prev + 1) % carouselImages.length)}
+        className="absolute right-6 z-30 p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all hidden md:block"
+      >
+        <ChevronRight size={20} />
+      </button>
 
-      <div className="relative max-w-7xl mx-auto px-6 py-20">
-        <div className="grid lg:grid-cols-12 gap-12 items-center">
+      {/* Main Glassmorphism Card */}
+      <div className="relative z-20 max-w-6xl w-full px-6 flex flex-col items-center">
+        
+        <div className="w-full px-6 md:px-12 py-6 md:py-8 rounded-[40px] bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl animate-in fade-in zoom-in duration-700">
           
-          {/* Main Content (Left) */}
-          <div className="lg:col-span-8">
-            {/* Eyebrow */}
-            <div className="inline-flex items-center gap-2 mb-6 animate-on-load stagger-1">
-              <div className="w-5 h-px" style={{ background: 'var(--gold)' }} />
-              <span
-                className="text-xs font-medium tracking-wider uppercase"
-                style={{ color: 'var(--gold)', letterSpacing: '0.1em' }}
-              >
-                India's most trusted college guide
-              </span>
-            </div>
-
-            {/* H1 */}
-            <h1
-              className="text-5xl md:text-6xl lg:text-7xl font-medium leading-none mb-6 text-white animate-on-load stagger-2"
-              style={{
-                fontFamily: 'var(--font-display)',
-                letterSpacing: '-0.04em',
-                lineHeight: 1.1,
-              }}
-            >
-              Your dream college,
-              <br />
-              <span className="gold-shimmer">found with clarity.</span>
+          <div className="text-center mb-6">
+            <h1 className="text-3xl md:text-5xl font-medium text-white mb-2 tracking-tight leading-tight">
+              Explore Top <span className="text-gold">Colleges</span>, Exams, Results & More
             </h1>
-
-            {/* Subtext */}
-            <p
-              className="text-base md:text-lg mb-10 max-w-xl animate-on-load stagger-3"
-              style={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.7 }}
-            >
-              Compare rankings, fees, placements and real student reviews across 50,000+ colleges — all in one place.
+            <p className="text-white/50 text-sm md:text-base max-w-3xl mx-auto font-light leading-relaxed">
+              Explore 200+ Complete admission guidance for Engineering, Management, and Medical across India
             </p>
-
-            {/* Search Bar container */}
-            <div className="max-w-xl">
-              <div className="relative mb-6 animate-on-load stagger-4">
-                <div
-                  className="flex items-center gap-3 px-5 py-3.5 transition-all duration-200 shadow-xl"
-                  style={{
-                    background: focused ? 'rgba(255,255,255,0.97)' : 'rgba(255,255,255,0.94)',
-                    borderRadius: '999px',
-                    border: focused ? '1.5px solid var(--gold)' : '1px solid rgba(255,255,255,0.1)',
-                  }}
-                >
-                  <Search size={16} style={{ color: 'var(--ink-3)', flexShrink: 0 }} />
-                  <input
-                    type="text"
-                    placeholder="Search colleges, locations or streams…"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    onFocus={() => setFocused(true)}
-                    onBlur={() => setTimeout(() => setFocused(false), 200)}
-                    className="flex-1 bg-transparent text-sm outline-none"
-                    style={{ color: 'var(--ink)', fontSize: '14px' }}
-                  />
-                  <button
-                    className="flex items-center gap-1.5 px-6 py-2.5 text-sm font-medium transition-all duration-150 hover:brightness-110 active:scale-95 flex-shrink-0"
-                    style={{
-                      background: 'var(--gold)',
-                      color: 'var(--midnight)',
-                      borderRadius: '999px',
-                    }}
-                  >
-                    Search
-                    <ArrowRight size={13} />
-                  </button>
-                </div>
-
-                {/* Suggestions dropdown */}
-                {focused && query.length >= 2 && (
-                  <div
-                    className="absolute top-full left-0 right-0 mt-2 rounded-xl overflow-hidden z-10"
-                    style={{
-                      background: 'white',
-                      border: '0.5px solid var(--border)',
-                      boxShadow: '0 8px 32px rgba(13,13,20,0.12)',
-                    }}
-                  >
-                    <div className="px-4 py-2.5 border-b flex justify-between items-center" style={{ borderColor: 'var(--border)' }}>
-                      <span className="text-xs font-medium" style={{ color: 'var(--ink-3)' }}>
-                        {loading ? 'Searching...' : results.length > 0 ? 'Search results' : 'No results found'}
-                      </span>
-                    </div>
-                    {results.map((res) => (
-                      <button
-                        key={res.name}
-                        className="w-full flex flex-col px-4 py-3 text-left hover:bg-surface-2 transition-colors duration-100 group"
-                        onMouseDown={() => setQuery(res.name)}
-                      >
-                        <div className="flex items-center gap-2">
-                          <Search size={12} className="text-ink-4 group-hover:text-action" />
-                          <span className="text-sm font-medium text-ink">{res.name}</span>
-                        </div>
-                        <div className="text-[11px] ml-5 text-ink-3">
-                          {res.stream} • {res.location}, {res.state}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Trending */}
-              <div className="flex flex-wrap items-center gap-2 animate-on-load stagger-5">
-                <div className="flex items-center gap-1.5 mr-1">
-                  <TrendingUp size={12} style={{ color: 'var(--gold)' }} />
-                  <span className="text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>Trending:</span>
-                </div>
-                {trendingSearches.map((t) => (
-                  <button
-                    key={t}
-                    className="text-xs px-3 py-1 rounded-pill transition-all duration-150 hover:bg-white/10"
-                    style={{
-                      background: 'rgba(255,255,255,0.06)',
-                      color: 'rgba(255,255,255,0.55)',
-                      border: '0.5px solid rgba(255,255,255,0.1)',
-                      borderRadius: '999px',
-                    }}
-                  >
-                    {t}
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
 
-          {/* Stats Cards (Right) */}
-          <div className="hidden lg:flex lg:col-span-4 flex-col gap-4 animate-on-load stagger-3">
-            {[
-              { label: 'Avg package', value: '₹18.5L', sub: 'IIT Bombay CSE 2024', positive: true, offset: '0px' },
-              { label: 'Match score', value: '92%', sub: 'Based on your profile', positive: true, offset: '24px' },
-              { label: 'Open seats', value: '124', sub: 'AIIMS Delhi MBBS', positive: false, offset: '0px' },
-            ].map((card) => (
-              <div
-                key={card.label}
-                className="p-4 rounded-xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
-                style={{
-                  background: 'rgba(255,255,255,0.03)',
-                  borderColor: 'rgba(255,255,255,0.08)',
-                  backdropFilter: 'blur(16px)',
-                  marginLeft: card.offset,
-                  boxShadow: '0 4px 24px rgba(0,0,0,0.2)',
-                }}
+          {/* Stats Chips */}
+          <div className="flex flex-wrap justify-center gap-3 mb-6">
+            {stats.map((stat, i) => (
+              <div 
+                key={i} 
+                className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/70 text-[10px] font-bold uppercase tracking-wider hover:bg-white/10 transition-colors"
               >
-                <div className="text-[10px] uppercase tracking-wider font-semibold mb-1" style={{ color: 'var(--gold-muted)' }}>
-                  {card.label}
-                </div>
-                <div className="text-2xl font-medium text-white mb-1" style={{ letterSpacing: '-0.02em' }}>
-                  {card.value}
-                </div>
-                <div className="text-xs flex items-center gap-1.5" style={{ color: card.positive ? 'var(--success)' : 'rgba(255,255,255,0.4)' }}>
-                  {card.positive && <div className="w-1 h-1 rounded-full bg-success" />}
-                  {card.sub}
-                </div>
+                <stat.icon size={12} className="text-gold" />
+                {stat.label}
               </div>
             ))}
           </div>
 
+          {/* Combined Search Bar */}
+          <div className="relative max-w-4xl mx-auto mb-6 group">
+             <div className={cn(
+               "flex items-center gap-3 p-1 rounded-pill shadow-2xl transition-all duration-300",
+               focused ? "bg-white ring-4 ring-gold/20" : "bg-white/95"
+             )}>
+                <div className="pl-5 text-ink-4">
+                  <Search size={18} />
+                </div>
+                <input 
+                  type="text"
+                  placeholder="Search Colleges, Courses, Exams, Questions and Articles"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onFocus={() => setFocused(true)}
+                  onBlur={() => setTimeout(() => setFocused(false), 200)}
+                  className="flex-1 bg-transparent px-2 py-2.5 text-sm font-medium text-ink outline-none border-none placeholder:text-ink-4"
+                />
+                <button className="px-8 py-2.5 bg-action text-white font-bold rounded-pill hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-action/20">
+                   Search
+                </button>
+             </div>
+
+             {/* Search Results Dropdown */}
+             {focused && results.length > 0 && (
+               <div className="absolute top-full left-0 right-0 mt-3 bg-white rounded-3xl overflow-hidden shadow-2xl border border-border animate-in slide-in-from-top-2 duration-200">
+                  {results.map((res, i) => (
+                    <button 
+                      key={i}
+                      className="w-full flex flex-col items-start px-6 py-4 hover:bg-surface-2 transition-colors border-b border-border last:border-0"
+                    >
+                       <span className="text-sm font-bold text-ink">{res.name}</span>
+                       <span className="text-[10px] text-ink-3 uppercase tracking-wider">{res.stream} • {res.location}</span>
+                    </button>
+                  ))}
+               </div>
+             )}
+          </div>
+
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <button className="w-full sm:w-auto px-10 py-4 bg-action text-white font-bold rounded-2xl hover:brightness-110 hover:-translate-y-1 transition-all shadow-xl shadow-action/30 flex items-center justify-center gap-2">
+              Find Top Colleges
+              <ArrowRight size={18} />
+            </button>
+            <button className="w-full sm:w-auto px-10 py-4 bg-white/10 hover:bg-white/20 text-white font-bold border border-white/30 rounded-2xl transition-all flex items-center justify-center gap-2">
+              Counseling 2026
+            </button>
+          </div>
+
         </div>
+
+        {/* Bottom Trust Badges */}
+        <div className="flex flex-wrap justify-center gap-8 md:gap-12 mt-12">
+           {trustBadges.map((badge, i) => (
+             <div key={i} className="flex items-center gap-2 text-white/50 text-[11px] font-bold uppercase tracking-widest group cursor-default">
+                <badge.icon size={16} className="text-gold group-hover:scale-125 transition-transform" />
+                {badge.label}
+             </div>
+           ))}
+        </div>
+
       </div>
 
-      {/* Bottom fade */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none"
-        style={{ background: 'linear-gradient(transparent, var(--surface))' }}
-      />
     </section>
   )
+}
+
+function ArrowRight({ size }: { size: number }) {
+  return <TrendingUp size={size} className="ml-1" />
 }

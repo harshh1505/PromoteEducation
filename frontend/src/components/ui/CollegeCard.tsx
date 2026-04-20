@@ -1,14 +1,12 @@
 import { ArrowRight, GitCompare, MapPin, CheckCircle } from 'lucide-react'
 import type { College } from '@/types'
 import { formatCTC, formatFee } from '@/lib/utils'
-import MatchScoreRing from '@/components/ui/MatchScoreRing'
 
 interface CollegeCardProps {
   college: College
-  showMatch?: boolean
 }
 
-export default function CollegeCard({ college, showMatch = true }: CollegeCardProps) {
+export default function CollegeCard({ college }: CollegeCardProps) {
   return (
     <div
       className="rounded-xl overflow-hidden card-hover flex flex-col"
@@ -111,48 +109,6 @@ export default function CollegeCard({ college, showMatch = true }: CollegeCardPr
             </span>
           )}
         </div>
-
-        {/* Match score + admission chance */}
-        {showMatch && college.matchScore && (
-          <>
-            <div style={{ height: '0.5px', background: 'var(--border)' }} />
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2.5">
-                <MatchScoreRing score={college.matchScore} size={44} />
-                <div>
-                  <div className="text-xs font-medium" style={{ color: 'var(--ink)' }}>Match score</div>
-                  <div className="text-xs" style={{ color: 'var(--ink-3)' }}>Your profile fit</div>
-                </div>
-              </div>
-              {college.admissionChance && (
-                <div className="text-right">
-                  <div className="text-xs mb-1" style={{ color: 'var(--ink-3)' }}>Admission chance</div>
-                  <div className="flex items-center gap-1.5">
-                    <div
-                      className="h-1.5 w-20 rounded-full overflow-hidden"
-                      style={{ background: 'var(--surface-3)' }}
-                    >
-                      <div
-                        className="h-full rounded-full"
-                        style={{
-                          width: `${college.admissionChance}%`,
-                          background: college.admissionChance > 60
-                            ? 'var(--success)'
-                            : college.admissionChance > 35
-                            ? 'var(--gold)'
-                            : '#E24B4A',
-                        }}
-                      />
-                    </div>
-                    <span className="text-xs font-medium" style={{ color: 'var(--ink)' }}>
-                      {college.admissionChance}%
-                    </span>
-                  </div>
-                </div>
-              )}
-            </div>
-          </>
-        )}
 
         {/* Actions */}
         <div className="flex items-center justify-between mt-auto pt-1">

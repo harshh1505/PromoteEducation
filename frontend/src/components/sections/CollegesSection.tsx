@@ -109,7 +109,7 @@ export default function CollegesSection() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {colleges.length > 0
               ? colleges.map((college) => (
-                  <CollegeCard key={college.id} college={college} showMatch={true} />
+                  <CollegeCard key={college.id} college={college} />
                 ))
               : (
                 <div

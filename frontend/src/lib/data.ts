@@ -233,10 +233,10 @@ export const reviews: Review[] = [
 ]
 
 export const stats = [
-  { value: '50,000+', label: 'Colleges listed' },
-  { value: '2M+', label: 'Student reviews' },
-  { value: '500+', label: 'Entrance exams' },
-  { value: '10L+', label: 'Monthly students' },
+  { value: '6000+', label: 'Institutions' },
+  { value: '200+', label: 'Student reviews' },
+  { value: '50+', label: 'Entrance exams' },
+  { value: '10,000+', label: 'Monthly students' },
 ]
 
 export const streamFilters = [

@@ -108,24 +108,32 @@ export default function Navbar() {
       <header
         className={cn(
           'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-          scrolled ? 'border-b border-white/8 py-0' : 'border-b border-transparent py-2'
+          scrolled ? 'bg-white/90 backdrop-blur-md border-b border-border py-0 shadow-sm' : 'bg-transparent py-4'
         )}
-        style={{ background: 'var(--midnight)' }}
       >
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-14">
 
             {/* Logo */}
             <a href="/" className="flex items-center gap-2 group">
-              <div
-                className="w-2 h-2 rounded-full transition-transform duration-300 group-hover:scale-125"
-                style={{ background: 'var(--gold)' }}
-              />
+              <div className="flex -space-x-1.5">
+                <div
+                  className="w-3 h-3 rounded-full border-2 border-white shadow-sm transition-transform duration-300 group-hover:scale-110"
+                  style={{ background: 'var(--gold-dark)' }}
+                />
+                <div
+                  className="w-3 h-3 rounded-full border-2 border-white shadow-sm transition-transform duration-300 group-hover:scale-110 delay-75"
+                  style={{ background: 'var(--gold)' }}
+                />
+              </div>
               <span
-                className="text-white font-medium text-base tracking-snug"
-                style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}
+                className={cn(
+                  "font-bold text-base tracking-tight transition-colors duration-300",
+                  scrolled ? "text-ink" : "text-white"
+                )}
+                style={{ fontFamily: 'var(--font-display)' }}
               >
-                Promote Education
+                Promote <span className="text-gold">Education</span>
               </span>
             </a>
 
@@ -142,10 +150,10 @@ export default function Navbar() {
                     href={item.href}
                     onClick={() => setActiveItem(item.label)}
                     className={cn(
-                      'nav-link-underline flex items-center gap-1 px-3 py-1.5 text-sm transition-colors duration-150',
+                      'nav-link-underline flex items-center gap-1 px-3 py-1.5 text-sm font-medium transition-colors duration-150',
                       activeItem === item.label
-                        ? 'text-white active'
-                        : 'text-white/55 hover:text-white/90'
+                        ? (scrolled ? 'text-gold-dark active' : 'text-white active')
+                        : (scrolled ? 'text-ink-3 hover:text-gold-dark' : 'text-white/70 hover:text-white')
                     )}
                   >
                     {item.label}
@@ -211,13 +219,18 @@ export default function Navbar() {
                 <div className="relative">
                   <button
                     onClick={() => setUserDropdown(!userDropdown)}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-pill border border-white/10 hover:bg-white/5 transition-all"
+                    className={cn(
+                      "flex items-center gap-2 px-3 py-1.5 rounded-pill border transition-all",
+                      scrolled ? "border-border hover:bg-surface-2" : "border-white/10 hover:bg-white/5"
+                    )}
                   >
-                    <div className="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center text-gold text-[10px] font-bold">
+                    <div className="w-6 h-6 rounded-full bg-gold/10 flex items-center justify-center text-gold text-[10px] font-bold">
                       {user.email?.[0].toUpperCase()}
                     </div>
-                    <span className="text-sm text-white/80">{user.email?.split('@')[0]}</span>
-                    <ChevronDown size={14} className="text-white/40" />
+                    <span className={cn("text-sm", scrolled ? "text-ink-2" : "text-white/80")}>
+                      {user.email?.split('@')[0]}
+                    </span>
+                    <ChevronDown size={14} className={scrolled ? "text-ink-4" : "text-white/40"} />
                   </button>
 
                   {userDropdown && (
@@ -247,18 +260,20 @@ export default function Navbar() {
               ) : (
                 <button
                   onClick={() => setAuthVisible(true)}
-                  className="text-sm text-white/55 hover:text-white transition-colors duration-150 px-2"
+                  className={cn(
+                    "text-sm transition-colors duration-150 px-2 font-medium",
+                    scrolled ? "text-ink-3 hover:text-gold-dark" : "text-white/70 hover:text-white"
+                  )}
                 >
                   Sign in
                 </button>
               )}
               <button
                 onClick={() => setCounsellingVisible(true)}
-                className="text-sm font-medium px-4 py-1.5 rounded-pill transition-all duration-150 hover:brightness-110 active:scale-95 shadow-lg shadow-gold/10"
+                className="text-sm font-bold px-5 py-2 rounded-pill transition-all duration-300 hover:brightness-105 active:scale-95 shadow-lg shadow-gold/20"
                 style={{
                   background: 'var(--gold)',
-                  color: 'var(--midnight)',
-                  borderRadius: '999px',
+                  color: '#fff',
                 }}
               >
                 Get counselling
@@ -267,7 +282,10 @@ export default function Navbar() {
 
             {/* Mobile Hamburger */}
             <button
-              className="md:hidden text-white/70 hover:text-white p-1"
+              className={cn(
+                "md:hidden p-1 transition-colors",
+                scrolled ? "text-ink" : "text-white/70"
+              )}
               onClick={() => setMobileOpen(!mobileOpen)}
             >
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
