@@ -1,6 +1,6 @@
 import { ArrowRight, GitCompare, MapPin, CheckCircle } from 'lucide-react'
 import type { College } from '@/types'
-import { formatCTC, formatFee } from '@/lib/utils'
+import { formatCTC } from '@/lib/utils'
 
 interface CollegeCardProps {
   college: College
@@ -9,7 +9,7 @@ interface CollegeCardProps {
 export default function CollegeCard({ college }: CollegeCardProps) {
   return (
     <div
-      className="rounded-xl overflow-hidden card-hover flex flex-col"
+      className="rounded-xl overflow-hidden card-hover flex flex-col h-full"
       style={{
         background: 'var(--surface)',
         border: '0.5px solid var(--border)',
@@ -80,7 +80,7 @@ export default function CollegeCard({ college }: CollegeCardProps) {
               Govt. funded
             </span>
           )}
-          {college.accreditation.slice(0, 2).map((a) => (
+          {college.accreditation?.slice(0, 2).map((a) => (
             <span
               key={a}
               className="text-xs px-2.5 py-1 rounded-pill"
@@ -110,8 +110,8 @@ export default function CollegeCard({ college }: CollegeCardProps) {
           )}
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center justify-between mt-auto pt-1">
+        {/* Actions - Pushed to bottom */}
+        <div className="flex items-center justify-between mt-auto pt-4 border-t border-border">
           <button
             className="flex items-center gap-1 text-sm font-medium transition-colors duration-150 hover:opacity-80"
             style={{ color: 'var(--action)' }}

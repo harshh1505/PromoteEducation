@@ -3,10 +3,14 @@ import Footer from '@/components/layout/Footer'
 import HeroSection from '@/components/sections/HeroSection'
 import StatsBar from '@/components/sections/StatsBar'
 import CollegesSection from '@/components/sections/CollegesSection'
-import AIMatchSection from '@/components/sections/AIMatchSection'
+import PopularCitiesSection from '@/components/sections/PopularCitiesSection'
 import ExamsSection from '@/components/sections/ExamsSection'
-import ReviewsSection from '@/components/sections/ReviewsSection'
+import MockTestSection from '@/components/sections/MockTestSection'
+import PYQSection from '@/components/sections/PYQSection'
 import CompareSection from '@/components/sections/CompareSection'
+import LoanSection from '@/components/sections/LoanSection'
+import NewsSection from '@/components/sections/NewsSection'
+import ReviewsSection from '@/components/sections/ReviewsSection'
 
 export default function HomePage() {
   return (
@@ -15,10 +19,14 @@ export default function HomePage() {
       <HeroSection />
       <StatsBar />
       <CollegesSection />
-      <AIMatchSection />
+      <PopularCitiesSection />
       <ExamsSection />
-      <ReviewsSection />
+      <MockTestSection />
+      <PYQSection />
       <CompareSection />
+      <LoanSection />
+      <NewsSection />
+      <ReviewsSection />
       <Footer />
     </main>
   )
