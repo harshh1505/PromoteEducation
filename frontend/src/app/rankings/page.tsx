@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import RankingsPageContent from '@/components/pages/RankingsPage'
 import type { Metadata } from 'next'
 
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 }
 
 export default function RankingsPage() {
-  return <RankingsPageContent />
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-white flex items-center justify-center text-slate-400 text-sm">Loading rankings...</div>}>
+      <RankingsPageContent />
+    </Suspense>
+  )
 }
