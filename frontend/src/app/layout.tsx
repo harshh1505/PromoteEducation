@@ -8,14 +8,14 @@ export const metadata: Metadata = {
   },
   description: 'Explore 50,000+ top colleges in India. Compare NIRF rankings, fees, average placements (CTC), and verified student reviews. Get AI-powered college matching and career guidance.',
   keywords: [
-    'top colleges in india', 
-    'nirf rankings 2024', 
-    'college predictor', 
-    'engineering colleges admission', 
-    'medical colleges neet', 
-    'education loan calculator',
-    'student reviews india',
-    'best mba colleges'
+    'top colleges in india 2025', 
+    'nirf rankings 2025', 
+    'best engineering colleges 2025',
+    'medical colleges nirf ranking',
+    'iit bombay ranking 2025',
+    'university ranking india',
+    'college admission guide 2026',
+    'education loan calculator india'
   ],
   authors: [{ name: 'Promote Education Team' }],
   creator: 'Promote Education',
@@ -75,7 +75,17 @@ export default function RootLayout({
       "https://twitter.com/promoteedu",
       "https://linkedin.com/company/promoteeducation"
     ],
-    "description": "India's leading college discovery and career guidance platform."
+    "description": "India's premier institution discovery platform. Explore NIRF 2025 rankings, fees, and verified placements for 50,000+ top engineering, medical, and management colleges.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "New Delhi",
+      "addressCountry": "IN"
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://promoteeducation.in/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
   }
 
   return (

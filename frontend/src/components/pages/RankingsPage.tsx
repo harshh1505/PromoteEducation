@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
@@ -9,13 +10,16 @@ import { cn } from '@/lib/utils'
 import BrochureModal from '@/components/ui/BrochureModal'
 
 export default function RankingsPageContent() {
+  const searchParams = useSearchParams()
+  const cityParam = searchParams.get('city')
+  
   const [colleges, setColleges] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState('Engineering')
+  const [filter, setFilter] = useState(cityParam ? 'All' : 'Engineering')
   const [isBrochureModalOpen, setIsBrochureModalOpen] = useState(false)
   const [selectedCollege, setSelectedCollege] = useState<any>(null)
 
-  const categories = ['Engineering', 'Management', 'Medical', 'Pharmacy', 'Law', 'Architecture']
+  const categories = ['All', 'Engineering', 'Management', 'Medical', 'Pharmacy', 'Law', 'Architecture']
 
   useEffect(() => {
     async function fetchRankings() {
@@ -28,15 +32,21 @@ export default function RankingsPageContent() {
       if (filter !== 'All') {
         query = query.eq('stream', filter)
       }
+      
+      if (cityParam) {
+        query = query.ilike('location', cityParam)
+      }
 
       const { data, error } = await query
       if (!error && data) {
         setColleges(data)
+      } else {
+        setColleges([])
       }
       setLoading(false)
     }
     fetchRankings()
-  }, [filter])
+  }, [filter, cityParam])
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
@@ -98,10 +108,11 @@ export default function RankingsPageContent() {
               <table className="w-full border-collapse text-[13px]">
                 <thead>
                   <tr className="bg-[#f8f9fa] border-b border-slate-300">
-                    <th className="px-4 py-3 text-left font-bold border-r border-slate-200 w-32">Institute ID</th>
                     <th className="px-4 py-3 text-left font-bold border-r border-slate-200">Name</th>
                     <th className="px-4 py-3 text-left font-bold border-r border-slate-200 w-32">City</th>
                     <th className="px-4 py-3 text-left font-bold border-r border-slate-200 w-32">State</th>
+                    <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-28">Avg Package</th>
+                    <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-28">Total Fees</th>
                     <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-24">Score</th>
                     <th className="px-4 py-3 text-center font-bold w-20">Rank</th>
                   </tr>
@@ -112,9 +123,6 @@ export default function RankingsPageContent() {
                       key={college.id}
                       className="border-b border-slate-200 hover:bg-slate-50 transition-colors"
                     >
-                      <td className="px-4 py-4 border-r border-slate-200 font-mono text-[11px] text-slate-500">
-                        IR-E-U-{String(1000 + (college.ranking || index + 1)).padStart(4, '0')}
-                      </td>
                       <td className="px-4 py-4 border-r border-slate-200">
                          <div className="flex flex-col gap-1">
                             <span className="font-semibold text-slate-900 leading-tight">
@@ -138,7 +146,7 @@ export default function RankingsPageContent() {
                                  }}
                                  className="text-red-600 hover:scale-110 transition-transform"
                                  title="Download Brochure"
-                               >
+                                >
                                  <FileText size={14} />
                                </button>
                                <span className="text-slate-300">|</span>
@@ -157,6 +165,12 @@ export default function RankingsPageContent() {
                       </td>
                       <td className="px-4 py-4 border-r border-slate-200 text-slate-600">
                          {college.state}
+                      </td>
+                      <td className="px-4 py-4 border-r border-slate-200 text-center font-bold text-slate-700 bg-slate-50/30">
+                         {college['Average Package'] || '-'}
+                      </td>
+                      <td className="px-4 py-4 border-r border-slate-200 text-center font-medium text-slate-600">
+                         {college['Total Fees'] || '-'}
                       </td>
                       <td className="px-4 py-4 border-r border-slate-200 text-center font-medium text-slate-700">
                          {(89.5 - ((college.ranking || index) * 1.5)).toFixed(2)}

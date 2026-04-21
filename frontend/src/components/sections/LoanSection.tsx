@@ -5,14 +5,14 @@ import { IndianRupee, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const banks = [
-  { name: 'SBI', logo: 'https://companieslogo.com/img/orig/SBIN.NS-02f82998.png?t=1633512396' },
-  { name: 'HDFC Bank', logo: 'https://companieslogo.com/img/orig/HDB-639a0470.png?t=1633439401' },
-  { name: 'ICICI Bank', logo: 'https://companieslogo.com/img/orig/IBN-57db8905.png?t=1648043534' },
-  { name: 'Axis Bank', logo: 'https://companieslogo.com/img/orig/AXISBANK.NS-95e2639d.png?t=1633501726' },
-  { name: 'Kotak Bank', logo: 'https://companieslogo.com/img/orig/KOTAKBANK.NS-4739199d.png?t=1633509172' },
-  { name: 'PNB', logo: 'https://companieslogo.com/img/orig/PNB.NS-6a84eb6c.png?t=1633514781' },
-  { name: 'Canara Bank', logo: 'https://companieslogo.com/img/orig/CANBK.NS-47f3ae21.png?t=1633503254' },
-  { name: 'Bank of India', logo: 'https://companieslogo.com/img/orig/BANKINDIA.NS-59d4948a.png?t=1633502598' },
+  { name: 'SBI', logo: 'https://static.vecteezy.com/system/resources/previews/020/336/141/non_2x/sbi-logo-sbi-icon-free-free-vector.jpg' },
+  { name: 'HDFC Bank', logo: 'https://static.vecteezy.com/system/resources/previews/020/190/428/non_2x/hdfc-logo-hdfc-icon-free-free-vector.jpg' },
+  { name: 'ICICI Bank', logo: 'https://static.vecteezy.com/system/resources/previews/020/190/435/non_2x/icici-logo-icici-icon-free-free-vector.jpg' },
+  { name: 'Axis Bank', logo: 'https://brandlogos.net/wp-content/uploads/2014/12/axis_bank-logo-brandlogos.net_.png' },
+  { name: 'Kotak Bank', logo: 'https://wp.logos-download.com/wp-content/uploads/2016/06/Kotak_Mahindra_Bank_logo.png?dl' },
+  { name: 'PNB', logo: 'https://www.logoshape.com/wp-content/uploads/2024/02/punjab_national_bank-logo_logoshape.com_.png' },
+  { name: 'Canara Bank', logo: 'https://crystalpng.com/wp-content/uploads/2025/11/Canara-Bank-Logo.png' },
+  { name: 'Bank of India', logo: 'https://1000logos.net/wp-content/uploads/2021/06/Bank-of-India-logo.png' },
 ]
 
 export default function LoanSection() {
@@ -50,13 +50,17 @@ export default function LoanSection() {
               Find the best interest rates from India's leading banks. Transparent processing with zero hidden charges.
             </p>
 
-            <div className="grid grid-cols-4 gap-3 max-w-lg">
+            <div className="grid grid-cols-4 gap-4 max-w-lg">
               {banks.map((bank) => (
                 <div 
                   key={bank.name} 
-                  className="bg-white/[0.03] border border-white/5 rounded-xl p-3 h-14 flex items-center justify-center grayscale opacity-60 hover:opacity-100 hover:grayscale-0 transition-all duration-300"
+                  className="bg-white rounded-2xl p-4 h-20 flex items-center justify-center transition-all duration-300 group shadow-sm hover:shadow-xl hover:shadow-white/10 hover:-translate-y-1 active:scale-95"
                 >
-                  <img src={bank.logo} alt={bank.name} className="max-h-5 max-w-full object-contain" />
+                  <img 
+                    src={bank.logo} 
+                    alt={bank.name} 
+                    className="max-h-15 max-w-full object-contain transition-all duration-500 scale-95 group-hover:scale-100" 
+                  />
                 </div>
               ))}
             </div>

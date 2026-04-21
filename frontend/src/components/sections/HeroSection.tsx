@@ -6,12 +6,12 @@ import { supabase } from '@/lib/supabase'
 import { cn } from '@/lib/utils'
 
 const carouselImages = [
-  "/images/carousel/aiimsdelhi.webp",
-  "/images/carousel/iitdelhi.jpg",
-  "/images/carousel/iitguwahati.avif",
-  "/images/carousel/kiitbhubaneswar.jpg",
-  "/images/carousel/srmktr.jpg",
-  "/images/carousel/iitbhu.jpg"
+  { url: "/images/carousel/aiimsdelhi.webp", alt: "AIIMS New Delhi - Top Medical College in India Rankings" },
+  { url: "/images/carousel/iitdelhi.jpg", alt: "IIT Delhi - Premier Engineering Institution Campus" },
+  { url: "/images/carousel/iitguwahati.avif", alt: "IIT Guwahati - Top Tech University Landscape" },
+  { url: "/images/carousel/kiitbhubaneswar.jpg", alt: "KIIT Bhubaneswar - Excellence in Engineering and Management" },
+  { url: "/images/carousel/srmktr.jpg", alt: "SRM University Kattankulathur - Private University Rankings" },
+  { url: "/images/carousel/iitbhu.jpg", alt: "IIT BHU Varanasi - Historic Engineering College Excellence" }
 ]
 
 const stats = [
@@ -76,7 +76,11 @@ export default function HeroSection() {
           )}
         >
           <div className="absolute inset-0 bg-midnight/60 z-10" />
-          <img src={img} alt="University" className="w-full h-full object-cover" />
+          <img 
+            src={img.url} 
+            alt={img.alt} 
+            className="w-full h-full object-cover" 
+          />
         </div>
       ))}
 
@@ -101,10 +105,10 @@ export default function HeroSection() {
           
           <div className="text-center mb-6">
             <h1 className="text-3xl md:text-5xl font-medium text-white mb-2 tracking-tight leading-tight">
-              Explore Top <span className="text-gold">Colleges</span>, Exams, Results & More
+              Top <span className="text-gold">Colleges in India 2025</span>: NIRF Rankings & Admissions
             </h1>
             <p className="text-white/50 text-sm md:text-base max-w-3xl mx-auto font-light leading-relaxed">
-              Explore 200+ Complete admission guidance for Engineering, Management, and Medical across India
+              Complete admission guidance for Engineering, Management, and Medical across India based on latest data.
             </p>
           </div>
 

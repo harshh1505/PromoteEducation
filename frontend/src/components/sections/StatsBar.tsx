@@ -1,4 +1,9 @@
-import { stats } from '@/lib/data'
+const stats = [
+  { value: '6000+', label: 'Institutions' },
+  { value: '200+', label: 'Student reviews' },
+  { value: '50+', label: 'Entrance exams' },
+  { value: '10,000+', label: 'Monthly students' },
+]
 
 export default function StatsBar() {
   return (

@@ -3,141 +3,107 @@
 import { useState, useEffect } from 'react'
 import { ArrowRight } from 'lucide-react'
 import CollegeCard from '@/components/ui/CollegeCard'
-import { streamFilters } from '@/lib/data'
 import { cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
 import type { College, Stream } from '@/types'
 
 export default function CollegesSection() {
   const [colleges, setColleges] = useState<College[]>([])
-  const [activeStream, setActiveStream] = useState<Stream>('all')
+  const [activeStream, setActiveStream] = useState<string>('All')
   const [loading, setLoading] = useState(true)
+
+  const filters = [
+    { label: 'All', value: 'All' },
+    { label: 'Engineering', value: 'Engineering' },
+    { label: 'Management', value: 'Management' },
+    { label: 'Medical', value: 'Medical' },
+    { label: 'Pharmacy', value: 'Pharmacy' },
+    { label: 'Law', value: 'Law' },
+    { label: 'Architecture', value: 'Architecture' }
+  ]
 
   useEffect(() => {
     async function fetchColleges() {
       setLoading(true)
       let query = supabase.from('colleges').select('*')
-      
-      if (activeStream !== 'all') {
+      if (activeStream !== 'All') {
         query = query.ilike('stream', activeStream)
       }
-
-      const { data, error } = await query.order('rank', { ascending: true })
-
-      if (error) {
-        console.error('Error fetching colleges:', error)
-      } else {
-        const mappedData = (data || []).map((c: any) => ({
+      const { data, error } = await query.order('ranking', { ascending: true }).limit(6)
+      if (!error) {
+        setColleges((data || []).map((c: any) => ({
           ...c,
-          rankingBody: c.ranking_body,
-          avgCTC: c.avg_ctc,
-          highestCTC: c.highest_ctc,
-          cutoffExam: c.cutoff_exam,
-          totalFee: c.total_fee,
-          matchScore: c.match_score,
-          admissionChance: c.admission_chance,
-        }))
-        setColleges(mappedData)
+          rankingBody: 'NIRF 2025',
+          avgCTC: c['Average Package'],
+          totalFee: c['Total Fees'],
+        })))
       }
       setLoading(false)
     }
-
     fetchColleges()
   }, [activeStream])
 
   return (
-    <section id="colleges" className="py-20" style={{ background: 'var(--surface)' }}>
+    <section id="colleges" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-6">
-
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-4 h-px" style={{ background: 'var(--gold)' }} />
-              <span className="text-xs font-medium tracking-wider uppercase" style={{ color: 'var(--gold)', letterSpacing: '0.1em' }}>
-                NIRF 2024
-              </span>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-4 h-[2px] bg-sky-500" />
+              <span className="text-[11px] font-bold text-sky-500 uppercase tracking-[0.2em]">NIRF 2025</span>
             </div>
-            <h2
-              className="text-3xl md:text-4xl font-medium"
-              style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.03em', color: 'var(--ink)' }}
-            >
+            <h2 className="text-4xl md:text-5xl font-medium text-slate-900 tracking-tight mb-2" style={{ fontFamily: 'Georgia, serif' }}>
               Top ranked colleges
             </h2>
-            <p className="mt-1.5 text-sm" style={{ color: 'var(--ink-3)' }}>
-              Based on NIRF 2024 rankings, placement data & verified student reviews
+            <p className="text-sm text-slate-500 font-medium">
+              Based on National Institutional Ranking Framework 2025 listings and placement records.
             </p>
           </div>
-          <button
-            className="hidden md:flex items-center gap-1.5 text-sm font-medium transition-all duration-150 hover:opacity-80 flex-shrink-0"
-            style={{ color: 'var(--action)' }}
+          <button 
+            onClick={() => window.location.href = '/rankings'}
+            className="flex items-center gap-1.5 text-sm font-bold text-sky-500 hover:opacity-80 transition-all self-end"
           >
-            View all colleges
-            <ArrowRight size={14} />
+            View all colleges <ArrowRight size={16} />
           </button>
         </div>
 
-        {/* Filter pills */}
-        <div className="flex items-center gap-2 mb-8 overflow-x-auto scroll-container pb-1">
-          {streamFilters.map((f) => (
+        <div className="flex items-center gap-2 mb-10 overflow-x-auto no-scrollbar py-2">
+          {filters.map((f) => (
             <button
               key={f.value}
-              onClick={() => setActiveStream(f.value as Stream)}
+              onClick={() => setActiveStream(f.value)}
               className={cn(
-                'text-sm px-4 py-1.5 rounded-pill flex-shrink-0 transition-all duration-150',
+                "px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300",
+                activeStream === f.value 
+                  ? "bg-slate-900 text-white shadow-lg" 
+                  : "bg-slate-50 text-slate-600 hover:bg-slate-100"
               )}
-              style={{
-                borderRadius: '999px',
-                background: activeStream === f.value ? 'var(--midnight)' : 'var(--surface-2)',
-                color: activeStream === f.value ? 'white' : 'var(--ink-2)',
-                border: activeStream === f.value ? '0.5px solid var(--midnight)' : '0.5px solid var(--border)',
-              }}
             >
               {f.label}
             </button>
           ))}
         </div>
 
-        {/* Cards grid */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 opacity-50">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3].map(i => (
-              <div key={i} className="h-64 rounded-xl bg-surface-2 animate-pulse" />
+              <div key={i} className="aspect-[4/5] rounded-[32px] bg-slate-50 animate-pulse" />
             ))}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {colleges.length > 0
-              ? colleges.map((college) => (
-                  <CollegeCard key={college.id} college={college} />
-                ))
-              : (
-                <div
-                  className="col-span-3 text-center py-16 rounded-xl"
-                  style={{ background: 'var(--surface-2)', border: '0.5px solid var(--border)' }}
-                >
-                  <p style={{ color: 'var(--ink-3)' }}>No colleges found for this stream yet.</p>
-                </div>
-              )
-            }
+            {colleges.length > 0 ? (
+              colleges.map((college) => (
+                <CollegeCard key={college.id} college={college} />
+              ))
+            ) : (
+              <div className="col-span-full py-20 text-center rounded-[32px] bg-slate-50 border border-dashed border-slate-200">
+                <p className="text-slate-400 italic font-medium">Synchronizing latest ranking data...</p>
+              </div>
+            )}
           </div>
         )}
-
-        {/* Mobile view all */}
-        <div className="mt-8 flex justify-center md:hidden">
-          <button
-            className="flex items-center gap-1.5 text-sm font-medium px-6 py-2.5 rounded-pill transition-all duration-150"
-            style={{
-              border: '0.5px solid var(--border)',
-              color: 'var(--ink-2)',
-              borderRadius: '999px',
-            }}
-          >
-            View all colleges
-            <ArrowRight size={14} />
-          </button>
-        </div>
-
       </div>
     </section>
   )

@@ -3,7 +3,7 @@ export interface College {
   name: string
   location: string
   state: string
-  rank: number
+  ranking: number
   rankingBody: string
   stream: string
   type: 'government' | 'private' | 'deemed'

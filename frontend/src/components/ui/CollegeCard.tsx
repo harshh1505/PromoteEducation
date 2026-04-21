@@ -8,128 +8,55 @@ interface CollegeCardProps {
 
 export default function CollegeCard({ college }: CollegeCardProps) {
   return (
-    <div
-      className="rounded-xl overflow-hidden card-hover flex flex-col h-full"
-      style={{
-        background: 'var(--surface)',
-        border: '0.5px solid var(--border)',
-      }}
-    >
-      {/* Dark header */}
-      <div className="px-5 py-4" style={{ background: 'var(--midnight)' }}>
-        <div className="flex items-start justify-between gap-2 mb-2">
-          <div className="flex items-center gap-1.5 text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>
-            <MapPin size={10} />
-            {college.location}, {college.state}
-          </div>
-          <div
-            className="text-xs font-medium px-2.5 py-0.5 rounded-pill flex-shrink-0"
-            style={{
-              background: 'var(--gold)',
-              color: 'var(--midnight)',
-              borderRadius: '999px',
-            }}
-          >
-            #{college.rank} {college.rankingBody}
-          </div>
+    <div className="group bg-white rounded-[32px] border border-slate-100 overflow-hidden hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500 flex flex-col h-full hover:-translate-y-2">
+      {/* Visual Header / Rank Badge */}
+      <div className="aspect-[16/9] bg-slate-50 relative overflow-hidden">
+        <div className="absolute top-4 right-4 z-10 bg-slate-900 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
+          Rank #{college.ranking}
         </div>
-        <h3 className="text-white font-medium text-base mb-0.5" style={{ letterSpacing: '-0.02em' }}>
-          {college.name}
-        </h3>
-        <p className="text-sm" style={{ color: 'rgba(255,255,255,0.45)' }}>
-          {college.stream}
-        </p>
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-0" />
+        
+        {/* Stream & Logo Representation */}
+        <div className="absolute bottom-4 left-6 z-10 flex items-center gap-3">
+           <div className="w-10 h-10 bg-white rounded-xl shadow-md flex items-center justify-center p-2">
+              <span className="text-slate-900 font-black text-sm">{college.name.charAt(0)}</span>
+           </div>
+           <div className="flex flex-col">
+              <span className="text-[10px] font-bold text-sky-500 uppercase tracking-widest">{college.stream}</span>
+           </div>
+        </div>
       </div>
 
-      {/* Body */}
-      <div className="px-5 py-4 flex flex-col gap-4 flex-1">
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-2">
-          {[
-            { value: formatCTC(college.avgCTC), label: 'Avg CTC' },
-            { value: formatCTC(college.highestCTC), label: 'Highest' },
-            { 
-              value: college.cutoff, 
-              label: college.cutoffExam ? `Cutoff (${college.cutoffExam})` : 'Cutoff' 
-            },
-          ].map((s) => (
-            <div key={s.label}>
-              <div className="text-sm font-medium" style={{ color: 'var(--ink)', letterSpacing: '-0.01em' }}>
-                {s.value}
-              </div>
-              <div className="text-xs mt-0.5" style={{ color: 'var(--ink-3)' }}>{s.label}</div>
-            </div>
-          ))}
+      <div className="p-6 pt-2 flex flex-col flex-1">
+        <h3 className="text-lg font-bold text-slate-900 mb-2 line-clamp-1 leading-tight group-hover:text-sky-500 transition-colors">
+          {college.name}
+        </h3>
+        
+        <div className="flex items-center gap-1.5 text-xs text-slate-400 font-medium mb-6">
+          <MapPin size={12} className="text-sky-500" />
+          {college.location}, {college.state}
         </div>
 
-        {/* Divider */}
-        <div style={{ height: '0.5px', background: 'var(--border)' }} />
-
-        {/* Tags */}
-        <div className="flex flex-wrap gap-1.5">
-          {college.type === 'government' && (
-            <span
-              className="text-xs px-2.5 py-1 rounded-pill font-medium"
-              style={{
-                background: 'var(--gold-light)',
-                color: 'var(--gold-dark)',
-                border: '0.5px solid var(--gold-muted)',
-                borderRadius: '999px',
-              }}
-            >
-              Govt. funded
-            </span>
-          )}
-          {college.accreditation?.slice(0, 2).map((a) => (
-            <span
-              key={a}
-              className="text-xs px-2.5 py-1 rounded-pill"
-              style={{
-                background: 'var(--surface-2)',
-                color: 'var(--ink-2)',
-                border: '0.5px solid var(--border)',
-                borderRadius: '999px',
-              }}
-            >
-              {a}
-            </span>
-          ))}
-          {college.verified && (
-            <span
-              className="text-xs px-2.5 py-1 rounded-pill flex items-center gap-1"
-              style={{
-                background: 'rgba(29,184,122,0.08)',
-                color: 'var(--success)',
-                border: '0.5px solid rgba(29,184,122,0.2)',
-                borderRadius: '999px',
-              }}
-            >
-              <CheckCircle size={10} />
-              Verified
-            </span>
-          )}
+        <div className="grid grid-cols-2 gap-4 mb-8">
+           <div className="bg-slate-50 p-3 rounded-2xl">
+              <p className="text-[9px] uppercase font-bold text-slate-400 tracking-widest mb-1">Avg Package</p>
+              <p className="text-sm font-black text-slate-800">{formatCTC(college.avgCTC)}</p>
+           </div>
+           <div className="bg-slate-50 p-3 rounded-2xl">
+              <p className="text-[9px] uppercase font-bold text-slate-400 tracking-widest mb-1">Annual Fee</p>
+              <p className="text-sm font-black text-slate-800">₹{college.totalFee} Lacs</p>
+           </div>
         </div>
 
-        {/* Actions - Pushed to bottom */}
-        <div className="flex items-center justify-between mt-auto pt-4 border-t border-border">
-          <button
-            className="flex items-center gap-1 text-sm font-medium transition-colors duration-150 hover:opacity-80"
-            style={{ color: 'var(--action)' }}
-          >
-            View details
-            <ArrowRight size={13} />
-          </button>
-          <button
-            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-pill transition-all duration-150 hover:bg-surface-2"
-            style={{
-              color: 'var(--ink-2)',
-              border: '0.5px solid var(--border)',
-              borderRadius: '999px',
-            }}
-          >
-            <GitCompare size={11} />
-            Compare
-          </button>
+        <div className="mt-auto flex items-center justify-between pt-4 border-t border-slate-50">
+           <button className="text-xs font-black uppercase tracking-widest text-slate-900 hover:text-sky-500 transition-colors flex items-center gap-2 group/btn">
+             View College <ArrowRight size={14} className="transition-transform group-hover/btn:translate-x-1" />
+           </button>
+           {college.verified && (
+             <div className="flex items-center gap-1.5 text-[10px] font-bold text-green-600 bg-green-50 px-3 py-1 rounded-full">
+                <CheckCircle size={12} /> Verified
+             </div>
+           )}
         </div>
       </div>
     </div>

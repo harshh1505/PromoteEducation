@@ -88,7 +88,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
             Pros
           </div>
           <ul className="flex flex-col gap-1">
-            {review.pros.slice(0, 2).map((p) => (
+            {(review.pros || []).slice(0, 2).map((p) => (
               <li key={p} className="text-xs" style={{ color: 'var(--ink-3)' }}>
                 · {p}
               </li>
@@ -101,7 +101,7 @@ export default function ReviewCard({ review }: ReviewCardProps) {
             Cons
           </div>
           <ul className="flex flex-col gap-1">
-            {review.cons.slice(0, 2).map((c) => (
+            {(review.cons || []).slice(0, 2).map((c) => (
               <li key={c} className="text-xs" style={{ color: 'var(--ink-3)' }}>
                 · {c}
               </li>

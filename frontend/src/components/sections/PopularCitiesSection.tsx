@@ -1,6 +1,7 @@
 'use client'
 
 import { MapPin, ArrowRight } from 'lucide-react'
+import Link from 'next/link'
 
 const allCities = [
   { name: 'Bangalore', colleges: '520+', image: 'https://s7ap1.scene7.com/is/image/incredibleindia/vidhana-soudha-bangalore-karnataka-hero?qlt=82&ts=1742199603184' },
@@ -15,8 +16,11 @@ const allCities = [
 ]
 
 const CityCard = ({ city }: { city: any }) => (
-  <div className="flex-shrink-0 w-[180px] md:w-[220px] group cursor-pointer px-2">
-    <div className="relative aspect-square rounded-[32px] overflow-hidden mb-2">
+  <Link 
+    href={`/rankings?city=${encodeURIComponent(city.name)}`}
+    className="flex-shrink-0 w-[180px] md:w-[220px] group cursor-pointer px-2 block"
+  >
+    <div className="relative aspect-square rounded-[32px] overflow-hidden mb-2 shadow-sm group-hover:shadow-xl transition-shadow duration-300">
       <img 
         src={city.image} 
         alt={city.name} 
@@ -28,7 +32,7 @@ const CityCard = ({ city }: { city: any }) => (
          <div className="text-white/50 text-[9px] uppercase font-bold tracking-[0.1em]">{city.colleges} Colleges</div>
       </div>
     </div>
-  </div>
+  </Link>
 )
 
 export default function PopularCitiesSection() {
@@ -36,12 +40,12 @@ export default function PopularCitiesSection() {
     <section className="py-16 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 mb-10 text-center">
         <div className="flex items-center justify-center gap-2 mb-3">
-          <div className="w-4 h-px bg-gold" />
-          <span className="text-xs font-bold text-gold uppercase tracking-[0.2em]">Study Destinations</span>
-          <div className="w-4 h-px bg-gold" />
+          <div className="w-4 h-[2px] bg-sky-500" />
+          <span className="text-[11px] font-bold text-sky-500 uppercase tracking-[0.2em]">Study Destinations</span>
+          <div className="w-4 h-[2px] bg-sky-500" />
         </div>
-        <h2 className="text-3xl md:text-4xl font-medium text-ink tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>
-          Top <span className="text-gold">Educational Hubs</span>
+        <h2 className="text-3xl md:text-4xl font-medium text-slate-900 tracking-tight" style={{ fontFamily: 'Georgia, serif' }}>
+          Top <span className="italic text-slate-700">Educational</span> Hubs
         </h2>
       </div>
 

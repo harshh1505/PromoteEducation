@@ -64,37 +64,26 @@ export default function ExamsSection() {
           </button>
         </div>
 
-        {/* Horizontal scroll */}
-        <div className="flex gap-4 overflow-x-auto scroll-container pb-2">
-          {loading ? (
-            [1, 2, 3, 4].map(i => (
-              <div key={i} className="flex-shrink-0 w-64 h-48 rounded-xl bg-surface-3 animate-pulse" />
-            ))
-          ) : (
-            <>
-              {exams.map((exam) => (
-                <ExamCard key={exam.id} exam={exam} />
-              ))}
-              {/* View all card */}
-              <div
-                className="flex-shrink-0 w-56 rounded-xl p-4 flex flex-col items-center justify-center gap-3 card-hover cursor-pointer"
-                style={{
-                  border: '0.5px dashed var(--border-mid)',
-                  background: 'transparent',
-                }}
-              >
-                <div
-                  className="w-9 h-9 rounded-full flex items-center justify-center"
-                  style={{ background: 'var(--surface-3)' }}
-                >
-                  <ArrowRight size={15} style={{ color: 'var(--ink-3)' }} />
+        {/* Infinite Scroller */}
+        <div className="relative">
+          <div className="flex animate-marquee-slow hover:[animation-play-state:paused]">
+            {loading ? (
+              [1, 2, 3, 4, 5, 6].map(i => (
+                <div key={i} className="flex-shrink-0 w-72 h-44 rounded-2xl bg-white/50 border border-slate-100 mx-3 animate-pulse" />
+              ))
+            ) : (
+              // Triple the array to ensure smooth infinite loop
+              [...exams, ...exams, ...exams].map((exam, idx) => (
+                <div key={`${exam.id}-${idx}`} className="mx-3">
+                  <ExamCard exam={exam} />
                 </div>
-                <span className="text-sm text-center" style={{ color: 'var(--ink-3)' }}>
-                  View all 500+ exams
-                </span>
-              </div>
-            </>
-          )}
+              ))
+            )}
+          </div>
+          
+          {/* Fade edges */}
+          <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none" />
+          <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none" />
         </div>
 
       </div>

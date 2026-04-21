@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { X, User, Mail, Phone, MessageSquare, GraduationCap, Loader2, Building2 } from 'lucide-react'
+import { X, User, Mail, Phone, MessageSquare, GraduationCap, Loader2, Building2, CheckCircle2, TrendingUp } from 'lucide-react'
 
 interface CounsellingModalProps {
   isOpen: boolean
@@ -85,127 +85,122 @@ export default function CounsellingModal({ isOpen, onClose }: CounsellingModalPr
         ) : (
           <div className="flex flex-col md:flex-row">
             {/* Sidebar */}
-            <div className="md:w-1/4 bg-midnight p-8 text-white flex flex-col justify-between">
+            <div className="md:w-1/3 bg-slate-900 p-8 text-white flex flex-col justify-between">
               <div>
-                <div className="w-8 h-8 rounded-lg bg-gold/20 flex items-center justify-center mb-6">
-                  <Star className="text-gold" size={18} />
+                <div className="w-10 h-10 rounded-xl bg-[#38b6ff]/20 flex items-center justify-center mb-6">
+                  <Star className="text-[#38b6ff]" size={20} />
                 </div>
-                <h3 className="text-xl font-medium leading-tight mb-4">Expert Career Guidance</h3>
-                <p className="text-xs text-white/50 leading-relaxed">
-                  Join 50k+ students who found their right path with us.
+                <h3 className="text-2xl font-medium leading-tight mb-4" style={{ fontFamily: 'Georgia, serif' }}>
+                  Expert <span className="text-[#38b6ff] italic">Counseling</span>
+                </h3>
+                <p className="text-xs text-white/50 leading-relaxed mb-6">
+                  Join 50k+ students who found their right career path with our experts.
                 </p>
+                <div className="space-y-4">
+                   {[
+                     { text: 'Admission Support', icon: CheckCircle2 },
+                     { text: 'Scholarship Guide', icon: CheckCircle2 },
+                     { text: 'Career Roadmap', icon: CheckCircle2 }
+                   ].map((item, i) => (
+                     <div key={i} className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-white/70">
+                        <item.icon size={12} className="text-[#38b6ff]" />
+                        {item.text}
+                     </div>
+                   ))}
+                </div>
               </div>
               <div className="mt-8">
                 <div className="flex -space-x-2">
-                  {[1,2,3].map(i => (
-                    <div key={i} className="w-8 h-8 rounded-full border-2 border-midnight bg-surface-2 overflow-hidden">
-                      <img src={`https://i.pravatar.cc/100?u=${i}`} alt="User" />
+                  {[1,2,3,4].map(i => (
+                    <div key={i} className="w-8 h-8 rounded-full border-2 border-slate-900 bg-slate-800 overflow-hidden">
+                      <img src={`https://i.pravatar.cc/100?u=${i + 10}`} alt="User" />
                     </div>
                   ))}
                 </div>
-                <p className="text-[10px] text-white/40 mt-3 font-medium uppercase tracking-widest">Top Rated Counselors</p>
+                <p className="text-[10px] text-white/40 mt-3 font-medium uppercase tracking-widest leading-loose">Trusted by 2M+ <br/> Aspirants Yearly</p>
               </div>
             </div>
 
             {/* Form */}
-            <div className="flex-1 p-8">
-              <div className="mb-8">
-                <h2 className="text-2xl font-medium text-ink tracking-tight mb-1">Get Free Counselling</h2>
-                <p className="text-sm text-ink-3">Fill in your details to get a callback.</p>
+            <div className="flex-1 p-10">
+              <div className="mb-10">
+                <h2 className="text-3xl font-medium text-slate-900 tracking-tight mb-2" style={{ fontFamily: 'Georgia, serif' }}>
+                  Apply for Guidance
+                </h2>
+                <p className="text-sm text-slate-500 font-medium">Professional admission support in minutes.</p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="grid grid-cols-2 gap-5">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-ink uppercase tracking-wider ml-1">Full Name</label>
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
                     <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-4" size={16} />
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
                       <input
                         name={FIELD_IDS.name}
                         type="text"
                         required
-                        className="w-full pl-10 pr-4 py-2 bg-surface-2 border border-border rounded-xl text-sm focus:border-gold outline-none transition-all"
+                        placeholder="John Doe"
+                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:border-[#38b6ff] focus:bg-white outline-none transition-all"
                       />
                     </div>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-ink uppercase tracking-wider ml-1">Phone</label>
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Phone</label>
                     <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-4" size={16} />
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
                       <input
                         name={FIELD_IDS.phone}
                         type="tel"
                         required
-                        className="w-full pl-10 pr-4 py-2 bg-surface-2 border border-border rounded-xl text-sm focus:border-gold outline-none transition-all"
-                        placeholder="+91"
+                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:border-[#38b6ff] focus:bg-white outline-none transition-all"
+                        placeholder="+91 00000 00000"
                       />
                     </div>
                   </div>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-ink uppercase tracking-wider ml-1">Email address</label>
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email address</label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-4" size={16} />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
                     <input
                       name={FIELD_IDS.email}
                       type="email"
                       required
-                      className="w-full pl-10 pr-4 py-2 bg-surface-2 border border-border rounded-xl text-sm focus:border-gold outline-none transition-all"
+                      placeholder="hello@example.com"
+                      className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:border-[#38b6ff] focus:bg-white outline-none transition-all"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-ink uppercase tracking-wider ml-1">Stream Interested</label>
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Selected Stream</label>
                   <div className="relative">
-                    <GraduationCap className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-4" size={16} />
+                    <GraduationCap className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
                     <select
                       name={FIELD_IDS.stream}
                       required
-                      className="w-full pl-10 pr-4 py-2 bg-surface-2 border border-border rounded-xl text-sm focus:border-gold outline-none appearance-none transition-all"
+                      className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:border-[#38b6ff] focus:bg-white outline-none appearance-none transition-all cursor-pointer"
                     >
-                      <option value="">Select Stream</option>
-                      <option value="Engineering">Engineering</option>
-                      <option value="Medical">Medical</option>
-                      <option value="Management">Management</option>
-                      <option value="Law">Law</option>
-                      <option value="Other">Other</option>
+                      <option value="">Choose Course Category</option>
+                      <option value="Engineering">Engineering & Tech</option>
+                      <option value="Medical">Medical & Sciences</option>
+                      <option value="Management">Management (MBA)</option>
+                      <option value="Law">Legal Studies</option>
+                      <option value="Other">Other Disciplines</option>
                     </select>
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-ink uppercase tracking-wider ml-1">Preferred College (Optional)</label>
-                  <div className="relative">
-                    <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-4" size={16} />
-                    <input
-                      name={FIELD_IDS.preferredCollege}
-                      type="text"
-                      className="w-full pl-10 pr-4 py-2 bg-surface-2 border border-border rounded-xl text-sm focus:border-gold outline-none transition-all"
-                      placeholder="e.g. IIT Bombay"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-ink uppercase tracking-wider ml-1">Your Queries</label>
-                  <div className="relative">
-                    <MessageSquare className="absolute left-3 top-3 text-ink-4" size={16} />
-                    <textarea
-                      name={FIELD_IDS.message}
-                      className="w-full pl-10 pr-4 py-2 bg-surface-2 border border-border rounded-xl text-sm focus:border-gold outline-none min-h-[80px] transition-all"
-                      placeholder="Tell us about your requirements..."
-                    />
                   </div>
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 bg-gold text-midnight text-sm font-bold rounded-xl hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-2 mt-4 shadow-lg shadow-gold/20"
+                  className="w-full py-4 bg-[#38b6ff] text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2 mt-6 shadow-xl shadow-[#38b6ff]/20"
                 >
-                  {loading ? <Loader2 className="animate-spin" size={18} /> : 'Book Free Session'}
+                  {loading ? <Loader2 className="animate-spin" size={18} /> : (
+                    <>Submit Application <TrendingUp size={16} /></>
+                  )}
                 </button>
               </form>
             </div>
