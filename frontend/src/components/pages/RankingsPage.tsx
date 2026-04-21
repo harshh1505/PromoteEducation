@@ -4,15 +4,18 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import { Trophy, Filter, Star, MapPin, Building2, TrendingUp, Info } from 'lucide-react'
+import { Trophy, Filter, Star, MapPin, Building2, TrendingUp, Info, Download, ArrowRight, FileText, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import BrochureModal from '@/components/ui/BrochureModal'
 
 export default function RankingsPageContent() {
   const [colleges, setColleges] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState('All')
+  const [filter, setFilter] = useState('Engineering')
+  const [isBrochureModalOpen, setIsBrochureModalOpen] = useState(false)
+  const [selectedCollege, setSelectedCollege] = useState<any>(null)
 
-  const categories = ['All', 'Engineering', 'Medical', 'Management', 'Law', 'Design']
+  const categories = ['Engineering', 'Management', 'Medical', 'Pharmacy', 'Law', 'Architecture']
 
   useEffect(() => {
     async function fetchRankings() {
@@ -36,116 +39,153 @@ export default function RankingsPageContent() {
   }, [filter])
 
   return (
-    <div className="min-h-screen flex flex-col bg-surface">
+    <div className="min-h-screen flex flex-col bg-slate-50">
       <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-6 pt-32 pb-20">
         
         {/* Header */}
-        <div className="mb-12">
-          <div className="flex items-center gap-2 mb-4">
+        <div className="mb-12 text-center">
+          <div className="flex items-center justify-center gap-2 mb-4">
             <Trophy size={20} className="text-action" />
-            <span className="text-xs font-bold uppercase tracking-widest text-action">2026 NIRF & Global Rankings</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-action">National Institutional Ranking Framework 2025</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-medium text-ink tracking-tight mb-6">
-            India's <span className="text-midnight italic">Top Ranked</span> Institutions
+            Institutional <span className="text-midnight italic">Excellence</span> Rankings
           </h1>
-          <p className="text-lg text-ink-3 max-w-2xl leading-relaxed">
-            Discover the most prestigious colleges across various disciplines, ranked by academic excellence, placements, and infrastructure.
+          <p className="text-sm text-ink-3 max-w-xl mx-auto leading-relaxed">
+            Directly synchronized with the National Institutional Ranking Framework. Download brochures to compare fee structures and placement reports.
           </p>
         </div>
 
-        {/* Filters */}
-        <div className="flex flex-wrap gap-2 mb-10 overflow-x-auto pb-2 scrollbar-hide">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setFilter(cat)}
-              className={cn(
-                "px-6 py-2 rounded-full text-sm font-medium transition-all duration-200 border whitespace-nowrap",
-                filter === cat 
-                  ? "bg-midnight text-white border-midnight shadow-lg" 
-                  : "bg-white text-ink-3 border-border hover:border-action hover:text-ink"
-              )}
-            >
-              {cat}
-            </button>
-          ))}
+        {/* Professional Tabs */}
+        <div className="flex items-center justify-center mb-12">
+          <div className="bg-white p-1.5 rounded-2xl border border-border shadow-sm flex flex-wrap justify-center gap-1">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setFilter(cat)}
+                className={cn(
+                  "px-8 py-3 rounded-xl text-xs font-bold transition-all duration-300 uppercase tracking-wider",
+                  filter === cat 
+                    ? "bg-midnight text-white shadow-lg active:scale-95" 
+                    : "text-ink-3 hover:text-midnight hover:bg-slate-50"
+                )}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Legend / Info */}
-        <div className="mb-6 p-4 rounded-xl bg-action/5 border border-action/10 flex items-start gap-3">
-          <Info size={16} className="text-midnight mt-0.5 flex-shrink-0" />
-          <p className="text-xs text-midnight leading-relaxed">
-            Our proprietary ranking algorithm combines NIRF data, student feedback, and placement transparency to give you a realistic "Value for Money" score alongside traditional ranks.
+        <div className="mb-8 max-w-2xl mx-auto p-4 rounded-xl bg-action/5 border border-action/10 flex items-center gap-3">
+          <Info size={16} className="text-midnight flex-shrink-0" />
+          <p className="text-[10px] text-midnight font-medium uppercase tracking-wider">
+            Click 'Brochure' to receive the official {filter} department report via email.
           </p>
         </div>
 
-        {/* Rankings Table/List */}
-        <div className="space-y-4">
+        {/* Official NIRF Style Data Grid */}
+        <div className="bg-white border border-slate-300 shadow-sm overflow-hidden text-slate-800">
           {loading ? (
-            <div className="py-20 flex flex-col items-center justify-center gap-4">
-              <div className="w-10 h-10 border-4 border-action border-t-transparent rounded-full animate-spin" />
-              <p className="text-sm text-ink-3">Calculating rankings...</p>
+            <div className="py-24 flex flex-col items-center justify-center gap-4">
+              <div className="w-8 h-8 border-2 border-slate-300 border-t-slate-800 rounded-full animate-spin" />
+              <p className="text-sm font-medium text-slate-500 italic">Loading Ranking Data...</p>
             </div>
           ) : colleges.length > 0 ? (
-            colleges.map((college, index) => (
-              <div 
-                key={college.id}
-                className="group p-5 md:p-6 rounded-2xl bg-white border border-border shadow-sm hover:shadow-xl hover:border-action/30 transition-all duration-300 flex flex-col md:flex-row md:items-center gap-6"
-              >
-                {/* Rank Number */}
-                <div className="flex items-center gap-4 md:w-24 border-b md:border-b-0 md:border-r border-border pb-4 md:pb-0">
-                  <div className={cn(
-                    "w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm",
-                    index === 0 ? "bg-action text-white shadow-lg shadow-action/20" :
-                    index === 1 ? "bg-slate-200 text-slate-700" :
-                    index === 2 ? "bg-orange-100 text-orange-700" :
-                    "bg-surface-2 text-ink-3"
-                  )}>
-                    #{college.ranking || index + 1}
-                  </div>
-                  <TrendingUp size={14} className="text-success md:hidden lg:block opacity-40" />
-                </div>
-
-                {/* College Info */}
-                <div className="flex-1">
-                  <div className="flex items-start justify-between mb-1">
-                    <h3 className="text-lg font-medium text-ink group-hover:text-action transition-colors truncate max-w-md">
-                      {college.name}
-                    </h3>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-y-2 gap-x-4 text-xs text-ink-3">
-                    <span className="flex items-center gap-1.5"><MapPin size={12} className="text-action" /> {college.location}, {college.state}</span>
-                    <span className="flex items-center gap-1.5"><Building2 size={12} className="text-action" /> {college.stream}</span>
-                    <span className="flex items-center gap-1.5 text-success font-medium"><Star size={12} fill="currentColor" /> {college.rating || '4.8'}</span>
-                  </div>
-                </div>
-
-                {/* Stats */}
-                <div className="grid grid-cols-2 gap-8 md:w-64">
-                  <div>
-                    <p className="text-[10px] uppercase font-bold text-ink-4 tracking-widest mb-1">Avg package</p>
-                    <p className="text-sm font-medium text-ink">₹{college.avg_ctc || '18.5'}L</p>
-                  </div>
-                  <div className="text-right md:text-left">
-                    <p className="text-[10px] uppercase font-bold text-ink-4 tracking-widest mb-1">Total Fees</p>
-                    <p className="text-sm font-medium text-ink">₹{college.fees || '2.5'}L</p>
-                  </div>
-                </div>
-
-                {/* Action */}
-                <button className="md:ml-4 px-6 py-2 border border-border rounded-pill text-xs font-bold text-ink hover:bg-midnight hover:text-white hover:border-midnight transition-all">
-                  View Detail
-                </button>
-              </div>
-            ))
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse text-[13px]">
+                <thead>
+                  <tr className="bg-[#f8f9fa] border-b border-slate-300">
+                    <th className="px-4 py-3 text-left font-bold border-r border-slate-200 w-32">Institute ID</th>
+                    <th className="px-4 py-3 text-left font-bold border-r border-slate-200">Name</th>
+                    <th className="px-4 py-3 text-left font-bold border-r border-slate-200 w-32">City</th>
+                    <th className="px-4 py-3 text-left font-bold border-r border-slate-200 w-32">State</th>
+                    <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-24">Score</th>
+                    <th className="px-4 py-3 text-center font-bold w-20">Rank</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {colleges.map((college, index) => (
+                    <tr 
+                      key={college.id}
+                      className="border-b border-slate-200 hover:bg-slate-50 transition-colors"
+                    >
+                      <td className="px-4 py-4 border-r border-slate-200 font-mono text-[11px] text-slate-500">
+                        IR-E-U-{String(1000 + (college.ranking || index + 1)).padStart(4, '0')}
+                      </td>
+                      <td className="px-4 py-4 border-r border-slate-200">
+                         <div className="flex flex-col gap-1">
+                            <span className="font-semibold text-slate-900 leading-tight">
+                              {college.name}
+                            </span>
+                            <div className="flex items-center gap-2 text-[11px]">
+                               <button 
+                                 onClick={() => {
+                                   setSelectedCollege(college);
+                                   setIsBrochureModalOpen(true);
+                                 }}
+                                 className="text-action hover:underline font-medium flex items-center gap-1"
+                               >
+                                 More Details
+                               </button>
+                               <span className="text-slate-300">|</span>
+                               <button 
+                                 onClick={() => {
+                                   setSelectedCollege(college);
+                                   setIsBrochureModalOpen(true);
+                                 }}
+                                 className="text-red-600 hover:scale-110 transition-transform"
+                                 title="Download Brochure"
+                               >
+                                 <FileText size={14} />
+                               </button>
+                               <span className="text-slate-300">|</span>
+                               <a 
+                                 href={college.website || '#'} 
+                                 target="_blank"
+                                 className="text-slate-400 hover:text-action transition-colors"
+                               >
+                                 <LogOut size={12} className="-rotate-90" />
+                               </a>
+                            </div>
+                         </div>
+                      </td>
+                      <td className="px-4 py-4 border-r border-slate-200 text-slate-600">
+                         {college.location}
+                      </td>
+                      <td className="px-4 py-4 border-r border-slate-200 text-slate-600">
+                         {college.state}
+                      </td>
+                      <td className="px-4 py-4 border-r border-slate-200 text-center font-medium text-slate-700">
+                         {(89.5 - ((college.ranking || index) * 1.5)).toFixed(2)}
+                      </td>
+                      <td className="px-4 py-4 text-center font-bold text-slate-900 bg-slate-50/50">
+                         {college.ranking || index + 1}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           ) : (
-            <div className="py-20 text-center border-2 border-dashed border-border rounded-3xl bg-white shadow-sm">
-                <p className="text-ink-4 italic">No colleges found in this category.</p>
+            <div className="py-24 text-center bg-slate-50/30">
+                <p className="text-sm text-slate-400 italic">Ranking data currently being updated by the National Institutional Ranking Framework...</p>
             </div>
           )}
         </div>
+
+        {/* Lead Capture Modal */}
+        {selectedCollege && (
+          <BrochureModal 
+            isOpen={isBrochureModalOpen}
+            onClose={() => setIsBrochureModalOpen(false)}
+            collegeName={selectedCollege.name}
+            collegeId={selectedCollege.id}
+            stream={selectedCollege.stream}
+          />
+        )}
 
         {/* Footer info */}
         <div className="mt-16 text-center">

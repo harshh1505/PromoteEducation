@@ -18,14 +18,14 @@ export default function MockTestSection() {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <div className="w-4 h-px bg-action" />
-              <span className="text-xs font-bold text-action uppercase tracking-[0.2em]">Prep Center</span>
+              <span className="text-xs font-bold text-action uppercase tracking-[0.2em]">Examination Preparation Center</span>
             </div>
             <h2 className="text-3xl md:text-5xl font-medium text-ink tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>
-              Simulate <span className="text-action">Real Exam</span> Environment
+              Simulate <span className="text-action">Real Examination</span> Environment
             </h2>
           </div>
           <button className="flex items-center gap-2 text-ink font-bold text-sm hover:text-action transition-all">
-             Browse 50+ Mock Tests <ArrowRight size={16} />
+             Browse 50+ Practice Simulation Tests <ArrowRight size={16} />
           </button>
         </div>
 
@@ -35,13 +35,19 @@ export default function MockTestSection() {
               <div className="w-12 h-12 rounded-2xl bg-action/5 flex items-center justify-center text-action mb-6 transition-colors group-hover:bg-action group-hover:text-white">
                 <ClipboardCheck size={24} />
               </div>
-              <h3 className="text-lg font-bold text-ink mb-2">{test.name}</h3>
-              <p className="text-xs text-ink-3 mb-6 uppercase tracking-wider font-bold">{test.type}</p>
+              <h3 className="text-sm font-bold text-ink mb-2 leading-tight">
+                {test.name === 'JEE Main 2026' ? 'Joint Entrance Examination - Main 2026' :
+                 test.name === 'NEET UG 2026' ? 'National Eligibility cum Entrance Test 2026' :
+                 test.name === 'CUET 2026' ? 'Common University Entrance Test 2026' :
+                 test.name === 'BITSAT 2026' ? 'Birla Institute of Technology and Science 2026' :
+                 test.name}
+              </h3>
+              <p className="text-[10px] text-ink-3 mb-6 uppercase tracking-wider font-bold">{test.type}</p>
               
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
                   <p className="text-[10px] text-ink-4 uppercase font-bold tracking-widest">Duration</p>
-                  <p className="text-xs font-bold text-ink">{test.duration}</p>
+                  <p className="text-xs font-bold text-ink">{test.duration.replace('min', 'minutes')}</p>
                 </div>
                 <div>
                   <p className="text-[10px] text-ink-4 uppercase font-bold tracking-widest">Questions</p>

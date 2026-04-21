@@ -21,10 +21,10 @@ export default function PYQSection() {
           <div>
             <div className="flex items-center gap-2 mb-3">
               <div className="w-4 h-px bg-action" />
-              <span className="text-xs font-bold text-action uppercase tracking-[0.2em]">Questions Bank</span>
+              <span className="text-xs font-bold text-action uppercase tracking-[0.2em]">Previous Year Question Repository</span>
             </div>
             <h2 className="text-3xl md:text-5xl font-medium text-ink tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>
-              Master The <span className="text-midnight italic">Patterns</span>
+              Official <span className="text-midnight italic">Question</span> Papers
             </h2>
           </div>
           
@@ -46,8 +46,16 @@ export default function PYQSection() {
                   <FileText size={20} />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-ink">{paper.exam} {paper.year}</h4>
-                  <p className="text-[10px] text-ink-3 uppercase font-bold tracking-widest">{paper.shift}</p>
+                  <h4 className="text-[11px] font-bold text-ink leading-tight">
+                    {paper.exam === 'JEE Main' ? 'Joint Entrance Examination - Main' :
+                     paper.exam === 'NEET UG' ? 'National Eligibility cum Entrance Test - Undergraduate' :
+                     paper.exam === 'CAT' ? 'Common Admission Test' :
+                     paper.exam === 'JEE Advanced' ? 'Joint Entrance Examination - Advanced' :
+                     paper.exam === 'CUET UG' ? 'Common University Entrance Test - Undergraduate' :
+                     paper.exam === 'UPSC CSE' ? 'Union Public Service Commission - CSE' :
+                     paper.exam} {paper.year}
+                  </h4>
+                  <p className="text-[9px] text-ink-3 uppercase font-bold tracking-widest mt-0.5">{paper.shift}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
