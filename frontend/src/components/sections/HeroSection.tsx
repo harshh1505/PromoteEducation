@@ -176,7 +176,7 @@ export default function HeroSection() {
               Counseling 2026
             </button>
           </div>
->
+{'>'}
 
         </div>
 
