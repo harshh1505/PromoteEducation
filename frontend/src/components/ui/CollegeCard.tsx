@@ -3,6 +3,7 @@ import type { College } from '@/types'
 import { formatCTC, formatFee, cn } from '@/lib/utils'
 import { useState } from 'react'
 import LeadModal from './LeadModal'
+import ReviewModal from './ReviewModal'
 
 interface CollegeCardProps {
   college: College
@@ -10,6 +11,7 @@ interface CollegeCardProps {
 
 export default function CollegeCard({ college }: CollegeCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isReviewOpen, setIsReviewOpen] = useState(false)
 
   return (
     <>
@@ -64,12 +66,17 @@ export default function CollegeCard({ college }: CollegeCardProps) {
                   {formatFee(college.totalFee)} <span className="text-slate-400 text-[10px] font-medium">Total Fees</span>
                 </p>
             </div>
-            <div className="text-right">
+            <div className="text-right flex flex-col items-end">
                 <div className="flex items-center gap-0.5 text-amber-500 mb-0.5">
                   <Star size={12} fill="currentColor" />
                   <span className="text-xs font-bold text-slate-900">{college.rating || '4.5'}</span>
                 </div>
-                <p className="text-[9px] text-slate-400 font-medium">58 reviews</p>
+                <button 
+                  onClick={() => setIsReviewOpen(true)}
+                  className="text-[9px] text-sky-600 font-black uppercase tracking-tighter hover:underline"
+                >
+                  Rate & Review
+                </button>
             </div>
           </div>
 
@@ -120,6 +127,12 @@ export default function CollegeCard({ college }: CollegeCardProps) {
         collegeName={college.name}
         collegeLogo={college.logo}
         stream={college.stream}
+      />
+
+      <ReviewModal 
+        isOpen={isReviewOpen}
+        onClose={() => setIsReviewOpen(false)}
+        collegeName={college.name}
       />
     </>
   )

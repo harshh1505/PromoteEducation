@@ -1,6 +1,7 @@
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import HeroSection from '@/components/sections/HeroSection'
+import LivePulse from '@/components/sections/LivePulse'
 import StatsBar from '@/components/sections/StatsBar'
 import CollegesSection from '@/components/sections/CollegesSection'
 import PopularCitiesSection from '@/components/sections/PopularCitiesSection'
@@ -17,6 +18,7 @@ export default function HomePage() {
     <main>
       <Navbar />
       <HeroSection />
+      <LivePulse />
       <StatsBar />
       <CollegesSection />
       <PopularCitiesSection />
