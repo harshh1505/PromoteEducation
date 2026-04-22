@@ -3,13 +3,16 @@ export interface College {
   name: string
   location: string
   state: string
-  ranking: number
-  rankingBody?: string
   stream: string
   type: 'government' | 'private' | 'deemed'
   avgCTC: string
   totalFee: string
   verified: boolean
+  image?: string
+  logo?: string
+  numCourses?: number
+  establishmentYear?: number
+  rating?: number
 }
 
 export interface Exam {

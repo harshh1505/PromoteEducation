@@ -17,8 +17,8 @@ export function formatFee(value: number | string | null | undefined): string {
   if (!value) return 'N/A'
   const num = typeof value === 'string' ? parseFloat(value) : value
   if (isNaN(num as number)) return value.toString()
-  if (num < 1) return `₹${(num * 100).toFixed(0)}K/yr`
-  return `₹${num}L/yr`
+  if (num < 1) return `₹${(num * 100).toFixed(0)}K`
+  return `₹${num}L`
 }
 
 export function getTypeColor(type: string): string {

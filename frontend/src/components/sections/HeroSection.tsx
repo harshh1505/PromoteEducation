@@ -128,36 +128,38 @@ export default function HeroSection() {
           {/* Combined Search Bar */}
           <div className="relative max-w-4xl mx-auto mb-6 group">
              <div className={cn(
-               "flex items-center gap-3 p-1 rounded-pill shadow-2xl transition-all duration-300",
+               "flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 p-2 sm:p-1 rounded-[24px] sm:rounded-pill shadow-2xl transition-all duration-300",
                focused ? "bg-white ring-4 ring-gold/20" : "bg-white/95"
              )}>
-                <div className="pl-5 text-ink-4">
-                  <Search size={18} />
+                <div className="flex items-center flex-1">
+                  <div className="pl-4 sm:pl-5 text-ink-4">
+                    <Search size={18} />
+                  </div>
+                  <input 
+                    type="text"
+                    placeholder="Search Colleges, Courses, Exams..."
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setTimeout(() => setFocused(false), 200)}
+                    className="flex-1 bg-transparent px-2 py-3 sm:py-2.5 text-xs sm:text-sm font-medium text-ink outline-none border-none placeholder:text-ink-4"
+                  />
                 </div>
-                <input 
-                  type="text"
-                  placeholder="Search Colleges, Courses, Exams, Questions and Articles"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  onFocus={() => setFocused(true)}
-                  onBlur={() => setTimeout(() => setFocused(false), 200)}
-                  className="flex-1 bg-transparent px-2 py-2.5 text-sm font-medium text-ink outline-none border-none placeholder:text-ink-4"
-                />
-                <button className="px-8 py-2.5 bg-action text-white font-bold rounded-pill hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-action/20">
+                <button className="px-8 py-3 sm:py-2.5 bg-action text-white text-xs sm:text-sm font-bold rounded-[18px] sm:rounded-pill hover:brightness-110 active:scale-95 transition-all shadow-lg shadow-action/20">
                    Search
                 </button>
              </div>
 
              {/* Search Results Dropdown */}
              {focused && results.length > 0 && (
-               <div className="absolute top-full left-0 right-0 mt-3 bg-white rounded-3xl overflow-hidden shadow-2xl border border-border animate-in slide-in-from-top-2 duration-200">
+               <div className="absolute top-full left-0 right-0 mt-3 bg-white rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl border border-border animate-in slide-in-from-top-2 duration-200 z-[60]">
                   {results.map((res, i) => (
                     <button 
                       key={i}
-                      className="w-full flex flex-col items-start px-6 py-4 hover:bg-surface-2 transition-colors border-b border-border last:border-0"
+                      className="w-full flex flex-col items-start px-5 md:px-6 py-3 md:py-4 hover:bg-surface-2 transition-colors border-b border-border last:border-0"
                     >
-                       <span className="text-sm font-bold text-ink">{res.name}</span>
-                       <span className="text-[10px] text-ink-3 uppercase tracking-wider">{res.stream} • {res.location}</span>
+                       <span className="text-xs md:text-sm font-bold text-ink">{res.name}</span>
+                       <span className="text-[9px] md:text-[10px] text-ink-3 uppercase tracking-wider">{res.stream} • {res.location}</span>
                     </button>
                   ))}
                </div>
@@ -165,15 +167,16 @@ export default function HeroSection() {
           </div>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <button className="w-full sm:w-auto px-10 py-4 bg-action text-white font-bold rounded-2xl hover:brightness-110 hover:-translate-y-1 transition-all shadow-xl shadow-action/30 flex items-center justify-center gap-2">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
+            <button className="w-full sm:w-auto px-8 sm:px-10 py-3.5 sm:py-4 bg-action text-white text-sm font-bold rounded-xl md:rounded-2xl hover:brightness-110 hover:-translate-y-1 transition-all shadow-xl shadow-action/30 flex items-center justify-center gap-2">
               Find Top Colleges
               <ArrowRight size={18} />
             </button>
-            <button className="w-full sm:w-auto px-10 py-4 bg-white/10 hover:bg-white/20 text-white font-bold border border-white/30 rounded-2xl transition-all flex items-center justify-center gap-2">
+            <button className="w-full sm:w-auto px-8 sm:px-10 py-3.5 sm:py-4 bg-white/10 hover:bg-white/20 text-white text-sm font-bold border border-white/30 rounded-xl md:rounded-2xl transition-all flex items-center justify-center gap-2">
               Counseling 2026
             </button>
           </div>
+>
 
         </div>
 

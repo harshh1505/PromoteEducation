@@ -290,8 +290,8 @@ export default function Navbar() {
             {/* Mobile Hamburger */}
             <button
               className={cn(
-                "md:hidden p-1 transition-colors",
-                scrolled ? "text-ink" : "text-white/70"
+                "md:hidden p-2 transition-colors rounded-lg",
+                scrolled ? "text-slate-900 bg-slate-100" : "text-white bg-white/10"
               )}
               onClick={() => setMobileOpen(!mobileOpen)}
             >
@@ -303,13 +303,13 @@ export default function Navbar() {
         {/* Mobile Menu */}
         {mobileOpen && (
           <div
-            className="md:hidden border-t"
-            style={{ background: 'var(--midnight-2)', borderColor: 'rgba(255,255,255,0.08)' }}
+            className="md:hidden border-t fixed inset-x-0 bottom-0 top-14 z-[45] overflow-y-auto"
+            style={{ background: 'var(--midnight)', borderColor: 'rgba(255,255,255,0.08)' }}
           >
-            <div className="px-6 py-4 flex flex-col gap-1">
+            <div className="px-6 py-6 flex flex-col gap-2">
               {user && (
-                <div className="flex items-center gap-3 py-3 mb-2 border-b border-white/5">
-                  <div className="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center text-gold text-sm font-bold">
+                <div className="flex items-center gap-4 py-4 mb-4 border-b border-white/5">
+                  <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center text-gold text-lg font-bold">
                     {user.email?.[0].toUpperCase()}
                   </div>
                   <div>
@@ -323,18 +323,18 @@ export default function Navbar() {
                   <a
                     href={item.href}
                     onClick={() => { setActiveItem(item.label); !item.hasMegaMenu && setMobileOpen(false) }}
-                    className="flex items-center justify-between text-white/70 hover:text-white py-2.5 text-sm border-b border-white/5 last:border-0"
+                    className="flex items-center justify-between text-white/70 hover:text-white py-3 text-base font-medium border-b border-white/5 last:border-0"
                   >
                     {item.label}
-                    {item.hasMegaMenu && <ChevronDown size={14} />}
+                    {item.hasMegaMenu && <ChevronDown size={16} className={cn("transition-transform", activeItem === item.label && "rotate-180")} />}
                   </a>
                   
                   {item.hasMegaMenu && (
-                    <div className="pl-4 py-2 space-y-6">
+                    <div className="pl-4 py-4 space-y-8 animate-in fade-in slide-in-from-left-2">
                       {exploreGroups.map(group => (
                         <div key={group.title}>
-                          <p className="text-[10px] uppercase font-bold text-white/30 tracking-widest mb-3">{group.title}</p>
-                          <div className="grid gap-4">
+                          <p className="text-[10px] uppercase font-black text-white/30 tracking-widest mb-4">{group.title}</p>
+                          <div className="grid gap-5">
                             {group.items.map(subItem => {
                               const Icon = IconMap[subItem.icon]
                               return (
@@ -342,14 +342,14 @@ export default function Navbar() {
                                   key={subItem.label} 
                                   href={subItem.href} 
                                   onClick={() => setMobileOpen(false)}
-                                  className="flex items-center gap-3"
+                                  className="flex items-center gap-4 group"
                                 >
-                                  <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center text-gold">
-                                    {Icon && <Icon size={14} />}
+                                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gold group-active:bg-gold group-active:text-midnight transition-colors">
+                                    {Icon && <Icon size={18} />}
                                   </div>
                                   <div className="flex flex-col">
-                                    <span className="text-sm text-white/80">{subItem.label}</span>
-                                    {subItem.badge && <span className="text-[9px] text-gold font-bold">{subItem.badge}</span>}
+                                    <span className="text-sm text-white/80 font-medium">{subItem.label}</span>
+                                    {subItem.badge && <span className="text-[10px] text-gold font-bold">{subItem.badge}</span>}
                                   </div>
                                 </a>
                               )
@@ -361,29 +361,31 @@ export default function Navbar() {
                   )}
                 </div>
               ))}
-              {!user && (
+              <div className="mt-8 grid gap-3">
+                {!user && (
+                  <button
+                    onClick={() => { setAuthVisible(true); setMobileOpen(false) }}
+                    className="w-full py-3.5 rounded-xl text-sm font-bold text-white border border-white/20 bg-white/5 active:scale-95 transition-all"
+                  >
+                    Sign in
+                  </button>
+                )}
                 <button
-                  onClick={() => { setAuthVisible(true); setMobileOpen(false) }}
-                  className="mt-4 w-full py-2.5 rounded-pill text-sm font-medium text-white border border-white/20 hover:bg-white/5"
+                  onClick={() => { setCounsellingVisible(true); setMobileOpen(false) }}
+                  className="w-full py-3.5 rounded-xl text-sm font-bold active:scale-95 transition-all shadow-lg shadow-gold/20"
+                  style={{ background: 'var(--gold)', color: 'var(--midnight)' }}
                 >
-                  Sign in
+                  Get counselling
                 </button>
-              )}
-              <button
-                onClick={() => { setCounsellingVisible(true); setMobileOpen(false) }}
-                className="mt-2 w-full py-2.5 rounded-pill text-sm font-medium transition-all duration-150"
-                style={{ background: 'var(--gold)', color: 'var(--midnight)', borderRadius: '999px' }}
-              >
-                Get counselling
-              </button>
-              {user && (
-                <button 
-                  onClick={handleSignOut}
-                  className="mt-4 w-full py-2.5 text-sm font-medium text-red-400 border border-red-400/20 rounded-pill"
-                >
-                  Sign out
-                </button>
-              )}
+                {user && (
+                  <button 
+                    onClick={handleSignOut}
+                    className="mt-4 w-full py-3.5 text-sm font-bold text-red-400 border border-red-400/20 rounded-xl active:scale-95 transition-all"
+                  >
+                    Sign out
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         )}

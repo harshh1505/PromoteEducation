@@ -1,64 +1,126 @@
-import { ArrowRight, GitCompare, MapPin, CheckCircle } from 'lucide-react'
+import { ArrowRight, MapPin, CheckCircle, Star, Download, GitCompare, ChevronRight } from 'lucide-react'
 import type { College } from '@/types'
-import { formatCTC, formatFee } from '@/lib/utils'
+import { formatCTC, formatFee, cn } from '@/lib/utils'
+import { useState } from 'react'
+import LeadModal from './LeadModal'
 
 interface CollegeCardProps {
   college: College
 }
 
 export default function CollegeCard({ college }: CollegeCardProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   return (
-    <div className="group bg-white rounded-[32px] border border-slate-100 overflow-hidden hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500 flex flex-col h-full hover:-translate-y-2">
-      {/* Visual Header / Rank Badge */}
-      <div className="aspect-[16/9] bg-slate-50 relative overflow-hidden">
-        <div className="absolute top-4 right-4 z-10 bg-slate-900 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg">
-          Rank #{college.ranking}
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-0" />
+    <>
+      <div className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full border-b-4 border-b-slate-100 hover:border-b-sky-500">
         
-        {/* Stream & Logo Representation */}
-        <div className="absolute bottom-4 left-6 z-10 flex items-center gap-3">
-           <div className="w-10 h-10 bg-white rounded-xl shadow-md flex items-center justify-center p-2">
-              <span className="text-slate-900 font-black text-sm">{college.name.charAt(0)}</span>
-           </div>
-           <div className="flex flex-col">
-              <span className="text-[10px] font-bold text-sky-500 uppercase tracking-widest">{college.stream}</span>
-           </div>
+        {/* Visual Header - Collegedunia style */}
+        <div className="aspect-[16/8] relative overflow-hidden">
+          <img 
+            src={college.image || 'https://images.unsplash.com/photo-1562774053-701939374585?w=800'} 
+            alt={college.name} 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent" />
+          
+          {/* Top Badges */}
+          <div className="absolute top-3 right-3 flex items-center gap-2">
+            <div className="bg-sky-500 text-white text-[9px] font-black px-2 py-0.5 rounded-md shadow-lg">
+              {college.rating || '4.5'}/5
+            </div>
+          </div>
+
+          {/* Content Overlay */}
+          <div className="absolute bottom-3 left-4 right-4 flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-white p-1 flex-shrink-0 shadow-xl">
+                <img 
+                  src={college.logo || `https://ui-avatars.com/api/?name=${college.name}&background=random`} 
+                  alt="logo" 
+                  className="w-full h-full rounded-full object-contain"
+                />
+            </div>
+            <div className="min-w-0">
+                <h3 className="text-white font-bold text-sm leading-tight line-clamp-1">
+                  {college.name}
+                </h3>
+                <p className="text-white/70 text-[10px] flex items-center gap-1 mt-0.5">
+                  <MapPin size={10} /> {college.location}, {college.state} | {college.type}
+                </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Info Section */}
+        <div className="p-4 flex flex-col flex-1">
+          
+          {/* Course & Fees info */}
+          <div className="flex justify-between items-start mb-4">
+            <div>
+                <p className="text-[11px] font-bold text-slate-900 line-clamp-1 mb-1">
+                  {college.stream} Program
+                </p>
+                <p className="text-sky-600 font-black text-sm">
+                  {formatFee(college.totalFee)} <span className="text-slate-400 text-[10px] font-medium">Total Fees</span>
+                </p>
+            </div>
+            <div className="text-right">
+                <div className="flex items-center gap-0.5 text-amber-500 mb-0.5">
+                  <Star size={12} fill="currentColor" />
+                  <span className="text-xs font-bold text-slate-900">{college.rating || '4.5'}</span>
+                </div>
+                <p className="text-[9px] text-slate-400 font-medium">58 reviews</p>
+            </div>
+          </div>
+
+          <div className="h-px bg-slate-100 mb-4" />
+
+          {/* Stats Row - AdmissionCampus style */}
+          <div className="grid grid-cols-2 gap-4 mb-5 border-l-2 border-l-sky-500/20 pl-3">
+            <div>
+                <p className="text-[9px] text-slate-400 uppercase font-bold tracking-wider mb-0.5">No. of Courses</p>
+                <p className="text-xs font-black text-slate-800">{college.numCourses || '12'}</p>
+            </div>
+            <div className="border-l border-slate-100 pl-4">
+                <p className="text-[9px] text-slate-400 uppercase font-bold tracking-wider mb-0.5">Estb. Year</p>
+                <p className="text-xs font-black text-slate-800">{college.establishmentYear || '1998'}</p>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="mt-auto space-y-2">
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="w-full py-2.5 border border-sky-500 text-sky-600 text-[10px] md:text-[11px] font-black uppercase tracking-widest rounded-lg hover:bg-sky-50 transition-colors flex items-center justify-center gap-2"
+            >
+              Courses & fees <ChevronRight size={14} />
+            </button>
+            
+            <div className="grid grid-cols-2 gap-2">
+                <button 
+                  onClick={() => setIsModalOpen(true)}
+                  className="py-2.5 border border-slate-200 text-slate-600 text-[9px] md:text-[10px] font-bold rounded-lg hover:bg-slate-50 transition-colors flex items-center justify-center gap-1.5"
+                >
+                  Brochure <Download size={12} />
+                </button>
+                <button 
+                  onClick={() => setIsModalOpen(true)}
+                  className="py-2.5 bg-slate-900 text-white text-[9px] md:text-[10px] font-bold rounded-lg hover:bg-slate-800 transition-colors flex items-center justify-center gap-1.5"
+                >
+                  Apply Now <ArrowRight size={12} />
+                </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="p-6 pt-2 flex flex-col flex-1">
-        <h3 className="text-lg font-bold text-slate-900 mb-2 line-clamp-1 leading-tight group-hover:text-sky-500 transition-colors">
-          {college.name}
-        </h3>
-        
-        <div className="flex items-center gap-1.5 text-xs text-slate-400 font-medium mb-6">
-          <MapPin size={12} className="text-sky-500" />
-          {college.location}, {college.state}
-        </div>
-
-        <div className="grid grid-cols-2 gap-4 mb-8">
-           <div className="bg-slate-50 p-3 rounded-2xl">
-              <p className="text-[9px] uppercase font-bold text-slate-400 tracking-widest mb-1">Avg Package</p>
-              <p className="text-sm font-black text-slate-800">{formatCTC(college.avgCTC)}</p>
-           </div>
-           <div className="bg-slate-50 p-3 rounded-2xl">
-              <p className="text-[9px] uppercase font-bold text-slate-400 tracking-widest mb-1">Annual Fee</p>
-              <p className="text-sm font-black text-slate-800">{formatFee(college.totalFee)}</p>
-           </div>
-        </div>
-
-        <div className="mt-auto flex items-center justify-between pt-4 border-t border-slate-50">
-           <button className="text-xs font-black uppercase tracking-widest text-slate-900 hover:text-sky-500 transition-colors flex items-center gap-2 group/btn">
-             View College <ArrowRight size={14} className="transition-transform group-hover/btn:translate-x-1" />
-           </button>
-           {college.verified && (
-             <div className="flex items-center gap-1.5 text-[10px] font-bold text-green-600 bg-green-50 px-3 py-1 rounded-full">
-                <CheckCircle size={12} /> Verified
-             </div>
-           )}
-        </div>
-      </div>
-    </div>
+      <LeadModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        collegeName={college.name}
+        collegeLogo={college.logo}
+        stream={college.stream}
+      />
+    </>
   )
 }

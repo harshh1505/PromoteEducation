@@ -7,10 +7,44 @@ import { cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
 import type { College, Stream } from '@/types'
 
+const featuredColleges: College[] = [
+  {
+    id: '1',
+    name: 'IEM Kolkata',
+    location: 'Kolkata',
+    state: 'West Bengal',
+    stream: 'Engineering',
+    type: 'private',
+    avgCTC: '12.8',
+    totalFee: '9.45',
+    verified: true,
+    image: 'https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/iemKolkata.jpg',
+    logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0N9rV099XW-k0uO3v9X_v8Q9yF_X_Xw&s',
+    numCourses: 24,
+    establishmentYear: 1989,
+    rating: 4.6
+  },
+  {
+    id: '2',
+    name: 'Heritage Institute of Technology',
+    location: 'Kolkata',
+    state: 'West Bengal',
+    stream: 'Engineering',
+    type: 'private',
+    avgCTC: '10.8',
+    totalFee: '6.95',
+    verified: true,
+    image: 'https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/hitKolkata.jpg',
+    logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2V_f6_9v4_8_8_8_8_8&s',
+    numCourses: 18,
+    establishmentYear: 2001,
+    rating: 4.4
+  },
+  // Add more colleges here
+]
+
 export default function CollegesSection() {
-  const [colleges, setColleges] = useState<College[]>([])
   const [activeStream, setActiveStream] = useState<string>('All')
-  const [loading, setLoading] = useState(true)
 
   const filters = [
     { label: 'All', value: 'All' },
@@ -22,26 +56,9 @@ export default function CollegesSection() {
     { label: 'Architecture', value: 'Architecture' }
   ]
 
-  useEffect(() => {
-    async function fetchColleges() {
-      setLoading(true)
-      let query = supabase.from('colleges').select('*')
-      if (activeStream !== 'All') {
-        query = query.ilike('stream', activeStream)
-      }
-      const { data, error } = await query.order('ranking', { ascending: true }).limit(6)
-      if (!error) {
-        setColleges((data || []).map((c: any) => ({
-          ...c,
-          rankingBody: 'NIRF 2025',
-          avgCTC: c.avg_ctc,
-          totalFee: c.total_fee,
-        })))
-      }
-      setLoading(false)
-    }
-    fetchColleges()
-  }, [activeStream])
+  const filteredColleges = featuredColleges.filter(c => 
+    activeStream === 'All' || c.stream === activeStream
+  )
 
   return (
     <section id="colleges" className="py-20 bg-white">
@@ -54,10 +71,10 @@ export default function CollegesSection() {
               <span className="text-[11px] font-bold text-sky-500 uppercase tracking-[0.2em]">NIRF 2025</span>
             </div>
             <h2 className="text-4xl md:text-5xl font-medium text-slate-900 tracking-tight mb-2" style={{ fontFamily: 'Georgia, serif' }}>
-              Top ranked colleges
+              Our Top-Ranked Colleges
             </h2>
             <p className="text-sm text-slate-500 font-medium">
-              Based on National Institutional Ranking Framework 2025 listings and placement records.
+              Carefully curated selection of India's most prestigious institutions based on academic excellence and placement records.
             </p>
           </div>
           <button 
@@ -85,25 +102,17 @@ export default function CollegesSection() {
           ))}
         </div>
 
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="aspect-[4/5] rounded-[32px] bg-slate-50 animate-pulse" />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {colleges.length > 0 ? (
-              colleges.map((college) => (
-                <CollegeCard key={college.id} college={college} />
-              ))
-            ) : (
-              <div className="col-span-full py-20 text-center rounded-[32px] bg-slate-50 border border-dashed border-slate-200">
-                <p className="text-slate-400 italic font-medium">Synchronizing latest ranking data...</p>
-              </div>
-            )}
-          </div>
-        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredColleges.length > 0 ? (
+            filteredColleges.map((college) => (
+              <CollegeCard key={college.id} college={college} />
+            ))
+          ) : (
+            <div className="col-span-full py-20 text-center rounded-[32px] bg-slate-50 border border-dashed border-slate-200">
+              <p className="text-slate-400 italic font-medium">No colleges found in this category.</p>
+            </div>
+          )}
+        </div>
       </div>
     </section>
   )
