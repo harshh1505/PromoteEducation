@@ -185,3 +185,12 @@ body {
 .animate-marquee-reverse:hover {
   animation-play-state: paused;
 }
+
+/* Utilities */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { 
-  Menu, X, ChevronDown, User, LogOut, 
+  Menu, X, ChevronDown, ChevronRight, ArrowRight, User, LogOut, 
   Trophy, GraduationCap, MessageSquare, Bell, Building2, 
   Target, FileText, Coins, Globe, ClipboardList, 
   BookOpen, Newspaper, IndianRupee, HelpCircle, 
@@ -18,6 +18,21 @@ const navItems = [
   { label: 'Explore', href: '#', hasMegaMenu: true },
   { label: 'Tools', href: '/tools', hasDropdown: false },
   { label: 'Rankings', href: '/rankings', hasDropdown: false },
+  { label: 'About Us', href: '/about', hasDropdown: false },
+  { label: 'FAQ', href: '/faq', hasDropdown: false },
+]
+
+const topCategories = [
+  { label: 'All Courses', href: '/courses' },
+  { label: 'B.Tech', href: '/courses/btech' },
+  { label: 'MBA', href: '/courses/mba' },
+  { label: 'M.Tech', href: '/courses/mtech' },
+  { label: 'MBBS', href: '/courses/mbbs' },
+  { label: 'B.Com', href: '/courses/bcom' },
+  { label: 'B.Sc', href: '/courses/bsc' },
+  { label: 'BA', href: '/courses/ba' },
+  { label: 'BBA', href: '/courses/bba' },
+  { label: 'BCA', href: '/courses/bca' },
 ]
 
 interface ExploreItem {
@@ -66,12 +81,16 @@ const exploreGroups: ExploreGroup[] = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [activeItem, setActiveItem] = useState('Explore')
+  const [activeItem, setActiveItem] = useState('Home')
   const [authVisible, setAuthVisible] = useState(false)
   const [counsellingVisible, setCounsellingVisible] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [userDropdown, setUserDropdown] = useState(false)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState<any[]>([])
+  const [searchFocused, setSearchFocused] = useState(false)
+  const [isSearching, setIsSearching] = useState(false)
 
   const IconMap: any = {
     Trophy, GraduationCap, MessageSquare, Bell, Building2, 
@@ -99,6 +118,33 @@ export default function Navbar() {
     }
   }, [])
 
+  // Navbar live search logic
+  useEffect(() => {
+    const fetchResults = async () => {
+      const trimmedQuery = searchQuery.trim()
+      if (trimmedQuery.length < 2) {
+        setSearchResults([])
+        return
+      }
+      setIsSearching(true)
+      const { data, error } = await supabase
+        .from('colleges')
+        .select('name, location, stream')
+        .or(`name.ilike.%${trimmedQuery}%,location.ilike.%${trimmedQuery}%,stream.ilike.%${trimmedQuery}%`)
+        .limit(5)
+
+      if (!error && data) {
+        setSearchResults(data)
+      } else {
+        console.error('Search error:', error)
+      }
+      setIsSearching(false)
+    }
+
+    const timer = setTimeout(fetchResults, 300)
+    return () => clearTimeout(timer)
+  }, [searchQuery])
+
   const handleSignOut = async () => {
     await supabase.auth.signOut()
     setUserDropdown(false)
@@ -106,286 +152,312 @@ export default function Navbar() {
 
   return (
     <>
-      <header
-        className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-0 shadow-sm bg-white/95 backdrop-blur-md border-b border-border'
-        )}
-      >
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-between h-14">
-
-            {/* Logo */}
-            <a href="/" className="flex items-center gap-3 group">
-              <div className="relative w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-midnight/10 transition-transform duration-300 group-hover:scale-105">
-                <img 
-                  src="/images/carousel/PromoteEducationLogo.jpeg" 
-                  alt="Promote Education"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="flex flex-col -gap-1">
-                <span className="font-bold text-lg tracking-tight leading-none" style={{ color: 'var(--gold-dark)', fontFamily: 'var(--font-display)' }}>
-                  Promote
-                </span>
-                <span className="font-bold text-lg tracking-tight leading-none" style={{ color: 'var(--action)', fontFamily: 'var(--font-display)' }}>
-                  Education
-                </span>
-              </div>
-            </a>
-
-            {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-1">
-              {navItems.map((item) => (
-                <div 
-                  key={item.label}
-                  className="relative h-14 flex items-center"
-                  onMouseEnter={() => item.hasMegaMenu && setMegaMenuOpen(true)}
-                  onMouseLeave={() => item.hasMegaMenu && setMegaMenuOpen(false)}
-                >
-                  <a
-                    href={item.href}
-                    onClick={() => setActiveItem(item.label)}
-                    className={cn(
-                      'nav-link-underline flex items-center gap-1 px-3 py-1.5 text-sm font-medium transition-colors duration-150',
-                      activeItem === item.label
-                        ? 'text-midnight active'
-                        : 'text-ink-2 hover:text-midnight'
-                    )}
-                  >
-                    {item.label}
-                    {item.hasMegaMenu && (
-                      <ChevronDown size={12} className={cn("opacity-60 transition-transform duration-200", megaMenuOpen && "rotate-180")} />
-                    )}
-                  </a>
-
-                  {item.hasMegaMenu && megaMenuOpen && (
-                    <div 
-                      className="absolute top-14 left-1/2 -translate-x-1/2 w-[720px] bg-white rounded-2xl shadow-2xl border border-border p-8 grid grid-cols-2 gap-10 animate-in fade-in slide-in-from-top-2 duration-300"
-                      onMouseEnter={() => setMegaMenuOpen(true)}
-                    >
-                      {exploreGroups.map((group) => (
-                        <div key={group.title}>
-                          <h4 className="text-[10px] uppercase font-bold text-ink-4 tracking-widest mb-4">
-                            {group.title}
-                          </h4>
-                          <div className="grid gap-1">
-                            {group.items.map((subItem) => {
-                              const Icon = IconMap[subItem.icon]
-                              return (
-                                <a
-                                  key={subItem.label}
-                                  href={subItem.href}
-                                  className="group/item flex items-center justify-between p-2 rounded-xl hover:bg-surface-2 transition-all"
-                                >
-                                  <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-lg bg-surface-2 flex items-center justify-center text-ink-3 group-hover/item:bg-midnight group-hover/item:text-gold transition-colors">
-                                      {Icon && <Icon size={16} />}
-                                    </div>
-                                    <div className="flex flex-col">
-                                      <span className="text-sm font-medium text-ink-2 group-hover/item:text-ink">
-                                        {subItem.label}
-                                      </span>
-                                      {subItem.badge && (
-                                        <span className="text-[9px] font-bold text-green-600 uppercase tracking-tighter">
-                                          {subItem.badge}
-                                        </span>
-                                      )}
-                                    </div>
-                                  </div>
-                                  {subItem.status && (
-                                    <span className="text-[10px] bg-midnight text-gold px-1.5 py-0.5 rounded-full font-bold">
-                                      {subItem.status}
-                                    </span>
-                                  )}
-                                </a>
-                              )
-                            })}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+      <header className={cn(
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+        scrolled ? 'translate-y-0' : 'translate-y-0'
+      )}>
+        {/* Top Row: Main Nav & Search */}
+        <div className="bg-slate-900 border-b border-white/5 py-3 md:py-2">
+          <div className="max-w-[1440px] mx-auto px-4 md:px-6 flex items-center justify-between gap-4 md:gap-8">
+            
+            {/* Logo Section */}
+            <div className="flex items-center gap-4 md:gap-8 shrink-0">
+              <a href="/" className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0">
+                   <img 
+                    src="/images/carousel/PromoteEducationLogo.jpeg" 
+                    alt="Logo"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-              ))}
-            </nav>
-
-            {/* Right Actions */}
-            <div className="hidden md:flex items-center gap-3">
-              {user ? (
-                <div className="relative">
-                  <button
-                    onClick={() => setUserDropdown(!userDropdown)}
-                    className={cn(
-                      "flex items-center gap-2 px-3 py-1.5 rounded-pill border transition-all border-border hover:bg-surface-2"
-                    )}
-                  >
-                    <div className="w-6 h-6 rounded-full bg-gold/10 flex items-center justify-center text-gold text-[10px] font-bold">
-                      {user.email?.[0].toUpperCase()}
-                    </div>
-                    <span className={cn("text-sm text-ink-2")}>
-                      {user.email?.split('@')[0]}
-                    </span>
-                    <ChevronDown size={14} className="text-ink-4" />
-                  </button>
-
-                  {userDropdown && (
-                    <div 
-                      className="absolute top-full right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-border py-1 z-[60]"
-                      onMouseLeave={() => setUserDropdown(false)}
-                    >
-                      <div className="px-4 py-2 border-b border-border mb-1">
-                        <p className="text-[10px] uppercase font-bold text-ink-4 tracking-widest">Signed in as</p>
-                        <p className="text-xs font-medium text-ink truncate">{user.email}</p>
-                      </div>
-                      <button 
-                        onClick={() => { window.location.href = '/dashboard'; setUserDropdown(false) }}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-ink-2 hover:bg-surface-2 transition-colors"
-                      >
-                        <User size={14} /> My Dashboard
-                      </button>
-                      <button 
-                        onClick={handleSignOut}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                      >
-                        <LogOut size={14} /> Sign out
-                      </button>
-                    </div>
-                  )}
+                <div className="flex flex-col -gap-1 hidden sm:flex">
+                  <span className="font-black text-sm text-white tracking-tighter leading-none">PROMOTE</span>
+                  <span className="font-black text-sm text-sky-400 tracking-tighter leading-none">EDUCATION</span>
                 </div>
-              ) : (
-                <button
-                  onClick={() => setAuthVisible(true)}
-                  className={cn(
-                    "text-sm transition-colors duration-150 px-2 font-medium text-ink-3 hover:text-midnight"
-                  )}
-                >
-                  Sign in
-                </button>
-              )}
-                <a
-                  href="https://wa.me/919900116101"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(
-                    "flex items-center gap-2 px-3 py-1.5 rounded-pill transition-all duration-300 hover:bg-green-50 text-green-600 border border-green-100"
-                  )}
-                >
-                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .004 5.412.001 12.045c0 2.12.554 4.189 1.602 6.04L0 24l6.105-1.602a11.832 11.832 0 005.937 1.598h.005c6.637 0 12.048-5.412 12.05-12.046a11.83 11.83 0 00-3.536-8.52z" />
-                  </svg>
-                  <span className="text-xs font-bold">Contact</span>
-                </a>
-                <button
-                  onClick={() => setCounsellingVisible(true)}
-                  className="text-sm font-bold px-5 py-2 rounded-pill transition-all duration-300 hover:brightness-105 active:scale-95 shadow-lg shadow-gold/20"
-                  style={{
-                    background: 'var(--gold)',
-                    color: '#fff',
-                  }}
-                >
-                  Get counselling
-                </button>
+              </a>
+
+              <div className="hidden lg:flex items-center gap-2 pl-4 border-l border-white/10 group cursor-pointer">
+                <div className="flex flex-col">
+                  <span className="text-[10px] text-white/40 font-bold uppercase tracking-widest leading-none mb-1 flex items-center gap-1">
+                    <GraduationCap size={10} className="text-sky-500" /> Select Goal & City
+                  </span>
+                  <div className="flex items-center gap-1 text-white group-hover:text-sky-400 transition-colors">
+                    <span className="text-xs font-bold">Select Goal</span>
+                    <ChevronDown size={12} className="opacity-40" />
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {/* Mobile Hamburger */}
-            <button
-              className={cn(
-                "md:hidden p-2 transition-colors rounded-lg",
-                scrolled ? "text-slate-900 bg-slate-100" : "text-white bg-white/10"
+            {/* Desktop Search Bar (Functional) */}
+            <div className="hidden md:flex flex-1 max-w-2xl relative group">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-sky-400 transition-colors">
+                <Search size={16} />
+              </div>
+              <input 
+                type="text"
+                placeholder="Search for Colleges, Exams, Courses and More..."
+                className="w-full bg-white/10 border border-white/10 rounded-xl py-2.5 pl-11 pr-4 text-sm text-white placeholder:text-white/30 focus:outline-none focus:bg-white focus:text-slate-900 transition-all font-medium"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
+              />
+              
+              {/* Live Results Dropdown */}
+              {searchFocused && (searchQuery.trim().length >= 2) && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden z-[70] animate-in slide-in-from-top-2">
+                  {isSearching ? (
+                    <div className="p-8 text-center">
+                       <div className="w-6 h-6 border-2 border-sky-500 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                       <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest">Searching Institutions...</p>
+                    </div>
+                  ) : searchResults.length > 0 ? (
+                    <div className="py-2">
+                      <div className="px-5 py-2 mb-1">
+                        <p className="text-[10px] uppercase font-black text-slate-400 tracking-widest">Top Matches</p>
+                      </div>
+                      {searchResults.map((res, i) => (
+                        <button 
+                          key={i}
+                          onClick={() => { window.location.href = `/colleges?search=${encodeURIComponent(res.name)}` }}
+                          className="w-full flex items-center gap-4 px-5 py-3.5 hover:bg-slate-50 text-left transition-colors group"
+                        >
+                          <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-sky-500 group-hover:text-white transition-all shadow-sm">
+                            <Building2 size={18} />
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-sm font-bold text-slate-900 group-hover:text-sky-600 transition-colors leading-tight">{res.name}</span>
+                            <span className="text-[10px] text-slate-400 uppercase font-black tracking-wider mt-0.5">{res.stream} • {res.location}</span>
+                          </div>
+                          <ChevronRight size={14} className="ml-auto text-slate-200 group-hover:text-sky-500 transition-colors" />
+                        </button>
+                      ))}
+                      <div className="p-2 mt-1 border-t border-slate-50">
+                        <button 
+                          onClick={() => window.location.href = '/colleges'}
+                          className="w-full py-2 text-[11px] font-bold text-sky-600 hover:bg-sky-50 rounded-lg transition-colors flex items-center justify-center gap-2"
+                        >
+                          View all results <ArrowRight size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-10 text-center">
+                       <Search size={24} className="mx-auto text-slate-200 mb-3" />
+                       <p className="text-sm font-bold text-slate-900 mb-1">No colleges found</p>
+                       <p className="text-xs text-slate-400">We couldn't find any results for "{searchQuery}"</p>
+                    </div>
+                  )}
+                </div>
               )}
-              onClick={() => setMobileOpen(!mobileOpen)}
-            >
-              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
+
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hidden lg:block">
+                <FileEdit size={16} />
+              </div>
+            </div>
+
+            {/* Action Items */}
+            <div className="flex items-center gap-3 md:gap-5 shrink-0">
+               <div className="hidden xl:flex flex-col items-center">
+                  <button className="flex items-center gap-2 text-white hover:text-sky-400 transition-colors">
+                    <FileEdit size={16} className="text-sky-500" />
+                    <span className="text-xs font-bold">Write a Review</span>
+                  </button>
+               </div>
+
+               <div className="w-px h-8 bg-white/10 hidden md:block" />
+
+               <button 
+                 onClick={() => setMegaMenuOpen(!megaMenuOpen)}
+                 className="flex items-center gap-2 text-white/80 hover:text-white transition-colors"
+               >
+                 <div className="grid grid-cols-2 gap-0.5 w-4 h-4">
+                    {[1,2,3,4].map(i => <div key={i} className="bg-current rounded-[1px]" />)}
+                 </div>
+                 <span className="text-xs font-bold hidden lg:block">Explore</span>
+               </button>
+
+               <button className="relative p-2 text-white/60 hover:text-white transition-colors">
+                 <Bell size={20} />
+                 <span className="absolute top-2 right-2 w-2 h-2 bg-sky-500 rounded-full border-2 border-slate-900" />
+               </button>
+
+               {user ? (
+                 <div className="relative">
+                   <button 
+                    onClick={() => setUserDropdown(!userDropdown)}
+                    className="flex items-center gap-2 p-1 pl-2 rounded-full border border-white/10 hover:bg-white/5 transition-all"
+                   >
+                     <div className="w-7 h-7 rounded-full bg-sky-500 flex items-center justify-center text-white text-[10px] font-bold">
+                       {user.email?.[0].toUpperCase()}
+                     </div>
+                     <ChevronDown size={14} className="text-white/40 mr-1" />
+                   </button>
+                   
+                   {userDropdown && (
+                    <div className="absolute top-full right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-slate-100 py-2 z-[60] animate-in slide-in-from-top-2">
+                       <div className="px-4 py-3 border-b border-slate-50 mb-1">
+                          <p className="text-[10px] uppercase font-black text-slate-400 tracking-widest">Signed in as</p>
+                          <p className="text-xs font-bold text-slate-900 truncate">{user.email}</p>
+                       </div>
+                       <a href="/dashboard" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50">
+                          <User size={16} /> My Dashboard
+                       </a>
+                       <button onClick={handleSignOut} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50">
+                          <LogOut size={16} /> Sign out
+                       </button>
+                    </div>
+                   )}
+                 </div>
+               ) : (
+                 <button 
+                   onClick={() => setAuthVisible(true)}
+                   className="w-8 h-8 md:w-auto md:px-4 md:py-2 rounded-full border border-white/20 text-white text-xs font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-2"
+                 >
+                   <User size={14} className="md:hidden" />
+                   <span className="hidden md:inline text-white">Sign in</span>
+                 </button>
+               )}
+
+               <button 
+                 onClick={() => setMobileOpen(!mobileOpen)}
+                 className="md:hidden p-2 text-white"
+               >
+                 {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+               </button>
+            </div>
           </div>
         </div>
 
+        {/* Bottom Row: Secondary Nav & Categories */}
+        <div className="bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm hidden md:block">
+          <div className="max-w-[1440px] mx-auto px-4 md:px-6 flex items-center justify-between h-11 overflow-x-auto no-scrollbar">
+            <div className="flex items-center gap-6">
+              {navItems.map((item) => (
+                <a 
+                  key={item.label}
+                  href={item.href}
+                  className={cn(
+                    "text-xs font-bold whitespace-nowrap transition-colors",
+                    activeItem === item.label ? "text-sky-600" : "text-slate-600 hover:text-slate-900"
+                  )}
+                  onClick={() => setActiveItem(item.label)}
+                >
+                  {item.label}
+                </a>
+              ))}
+              <div className="w-px h-4 bg-slate-200" />
+              <div className="flex items-center gap-5">
+                {topCategories.map((cat) => (
+                  <a 
+                    key={cat.label} 
+                    href={cat.href}
+                    className="text-[11px] font-medium text-slate-500 hover:text-sky-600 whitespace-nowrap transition-colors"
+                  >
+                    {cat.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-6 pl-6 bg-gradient-to-r from-transparent via-white to-white sticky right-0">
+               <a href="/abroad" className="flex items-center gap-1.5 text-[11px] font-bold text-slate-700 hover:text-sky-600 transition-colors whitespace-nowrap">
+                  <Globe size={13} className="text-sky-500" /> Study Abroad
+               </a>
+               <a href="/tools" className="flex items-center gap-1.5 text-[11px] font-bold text-slate-700 hover:text-sky-600 transition-colors whitespace-nowrap">
+                  <Target size={13} className="text-sky-500" /> Course Finder
+               </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Mega Menu Overlay */}
+        {megaMenuOpen && (
+          <div 
+            className="absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-2xl animate-in slide-in-from-top-4 duration-300"
+            onMouseLeave={() => setMegaMenuOpen(false)}
+          >
+            <div className="max-w-7xl mx-auto px-8 py-12 grid grid-cols-3 gap-16">
+               {exploreGroups.map(group => (
+                 <div key={group.title}>
+                    <h5 className="text-[10px] uppercase font-black text-slate-400 tracking-[0.2em] mb-6">{group.title}</h5>
+                    <div className="grid gap-2">
+                       {group.items.map(subItem => {
+                         const Icon = IconMap[subItem.icon]
+                         return (
+                           <a 
+                             key={subItem.label} 
+                             href={subItem.href}
+                             className="group flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 transition-all"
+                           >
+                             <div className="flex items-center gap-4">
+                                <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-sky-400 transition-all">
+                                   {Icon && <Icon size={16} />}
+                                </div>
+                                <div className="flex flex-col">
+                                   <span className="text-sm font-bold text-slate-700 group-hover:text-slate-900">{subItem.label}</span>
+                                   {subItem.badge && <span className="text-[10px] text-green-600 font-bold">{subItem.badge}</span>}
+                                </div>
+                             </div>
+                             {subItem.status && <span className="text-[9px] bg-sky-100 text-sky-600 px-1.5 py-0.5 rounded font-black uppercase tracking-tighter">{subItem.status}</span>}
+                           </a>
+                         )
+                       })}
+                    </div>
+                 </div>
+               ))}
+               <div className="bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden">
+                  <div className="relative z-10">
+                    <h6 className="text-2xl font-black mb-2 leading-tight">Compare Colleges & Find Your Best Fit</h6>
+                    <p className="text-white/60 text-sm mb-6 leading-relaxed">Use our advanced tools to compare rankings, fees, and placements.</p>
+                    <button className="px-6 py-3 bg-white text-slate-900 font-bold rounded-xl hover:bg-sky-400 transition-all active:scale-95 text-sm">Start Comparing</button>
+                  </div>
+                  <Target size={120} className="absolute -bottom-10 -right-10 text-white/5" />
+               </div>
+            </div>
+          </div>
+        )}
+
         {/* Mobile Menu */}
         {mobileOpen && (
-          <div
-            className="md:hidden border-t fixed inset-x-0 bottom-0 top-14 z-[45] overflow-y-auto"
-            style={{ background: 'var(--midnight)', borderColor: 'rgba(255,255,255,0.08)' }}
-          >
-            <div className="px-6 py-6 flex flex-col gap-2">
-              {user && (
-                <div className="flex items-center gap-4 py-4 mb-4 border-b border-white/5">
-                  <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center text-gold text-lg font-bold">
-                    {user.email?.[0].toUpperCase()}
+          <div className="md:hidden fixed inset-0 top-14 bg-white z-[45] overflow-y-auto">
+            <div className="p-6 space-y-8">
+               <div className="relative">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                  <input 
+                    type="text" 
+                    placeholder="Search Colleges..."
+                    className="w-full pl-11 pr-4 py-3 bg-slate-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  />
+               </div>
+
+               <div className="space-y-4">
+                  <p className="text-[10px] uppercase font-black text-slate-400 tracking-widest">Main Menu</p>
+                  <div className="grid gap-2">
+                     {navItems.map(item => (
+                       <a 
+                        key={item.label} 
+                        href={item.href}
+                        className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl text-sm font-bold text-slate-900 active:bg-sky-50 transition-colors"
+                       >
+                         {item.label}
+                         <ChevronDown size={16} className="-rotate-90 opacity-20" />
+                       </a>
+                     ))}
                   </div>
-                  <div>
-                    <p className="text-sm text-white font-medium">{user.email?.split('@')[0]}</p>
-                    <p className="text-[10px] text-white/40 uppercase tracking-widest">Active Student</p>
+               </div>
+
+               <div className="space-y-4">
+                  <p className="text-[10px] uppercase font-black text-slate-400 tracking-widest">Explore Categories</p>
+                  <div className="flex flex-wrap gap-2">
+                     {topCategories.map(cat => (
+                       <a key={cat.label} href={cat.href} className="px-4 py-2 bg-slate-100 rounded-lg text-xs font-bold text-slate-600 active:bg-sky-600 active:text-white transition-all">
+                         {cat.label}
+                       </a>
+                     ))}
                   </div>
-                </div>
-              )}
-              {navItems.map((item) => (
-                <div key={item.label}>
-                  <a
-                    href={item.href}
-                    onClick={() => { setActiveItem(item.label); !item.hasMegaMenu && setMobileOpen(false) }}
-                    className="flex items-center justify-between text-white/70 hover:text-white py-3 text-base font-medium border-b border-white/5 last:border-0"
-                  >
-                    {item.label}
-                    {item.hasMegaMenu && <ChevronDown size={16} className={cn("transition-transform", activeItem === item.label && "rotate-180")} />}
-                  </a>
-                  
-                  {item.hasMegaMenu && (
-                    <div className="pl-4 py-4 space-y-8 animate-in fade-in slide-in-from-left-2">
-                      {exploreGroups.map(group => (
-                        <div key={group.title}>
-                          <p className="text-[10px] uppercase font-black text-white/30 tracking-widest mb-4">{group.title}</p>
-                          <div className="grid gap-5">
-                            {group.items.map(subItem => {
-                              const Icon = IconMap[subItem.icon]
-                              return (
-                                <a 
-                                  key={subItem.label} 
-                                  href={subItem.href} 
-                                  onClick={() => setMobileOpen(false)}
-                                  className="flex items-center gap-4 group"
-                                >
-                                  <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gold group-active:bg-gold group-active:text-midnight transition-colors">
-                                    {Icon && <Icon size={18} />}
-                                  </div>
-                                  <div className="flex flex-col">
-                                    <span className="text-sm text-white/80 font-medium">{subItem.label}</span>
-                                    {subItem.badge && <span className="text-[10px] text-gold font-bold">{subItem.badge}</span>}
-                                  </div>
-                                </a>
-                              )
-                            })}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-              <div className="mt-8 grid gap-3">
-                {!user && (
-                  <button
-                    onClick={() => { setAuthVisible(true); setMobileOpen(false) }}
-                    className="w-full py-3.5 rounded-xl text-sm font-bold text-white border border-white/20 bg-white/5 active:scale-95 transition-all"
-                  >
-                    Sign in
-                  </button>
-                )}
-                <button
-                  onClick={() => { setCounsellingVisible(true); setMobileOpen(false) }}
-                  className="w-full py-3.5 rounded-xl text-sm font-bold active:scale-95 transition-all shadow-lg shadow-gold/20"
-                  style={{ background: 'var(--gold)', color: 'var(--midnight)' }}
-                >
-                  Get counselling
-                </button>
-                {user && (
-                  <button 
-                    onClick={handleSignOut}
-                    className="mt-4 w-full py-3.5 text-sm font-bold text-red-400 border border-red-400/20 rounded-xl active:scale-95 transition-all"
-                  >
-                    Sign out
-                  </button>
-                )}
-              </div>
+               </div>
             </div>
           </div>
         )}
