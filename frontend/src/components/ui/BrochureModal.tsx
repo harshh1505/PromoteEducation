@@ -1,18 +1,63 @@
 'use client'
 
 import React, { useState } from 'react'
-import { X, Mail, Phone, User, Download, CheckCircle2, Loader2 } from 'lucide-react'
+import { X, Mail, Phone, User, Download, CheckCircle2, Loader2, Info, Share2, Bell } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+
+type ModalMode = 'brochure' | 'details' | 'share' | 'remind'
+
+const MODAL_CONFIG: Record<ModalMode, {
+  title: string
+  highlight: string
+  description: (name: string) => string
+  buttonText: string
+  buttonIcon: React.ReactNode
+  source: string
+}> = {
+  brochure: {
+    title: 'Download',
+    highlight: 'Brochure',
+    description: (name) => `Enter your details to receive the official brochure and fee structure for ${name}.`,
+    buttonText: 'Send Me the Brochure',
+    buttonIcon: <Download size={18} />,
+    source: 'brochure_download',
+  },
+  details: {
+    title: 'View',
+    highlight: 'College Details',
+    description: (name) => `Enter your details to unlock the full profile, placement stats, and reviews for ${name}.`,
+    buttonText: 'View Full Details',
+    buttonIcon: <Info size={18} />,
+    source: 'college_details',
+  },
+  share: {
+    title: 'Share',
+    highlight: 'College Info',
+    description: (name) => `Enter your details to share the profile of ${name} with friends and family.`,
+    buttonText: 'Share Now',
+    buttonIcon: <Share2 size={18} />,
+    source: 'share_college',
+  },
+  remind: {
+    title: 'Set',
+    highlight: 'Exam Reminder',
+    description: (name) => `Enter your details and we'll remind you about important dates and deadlines for ${name}.`,
+    buttonText: 'Set Reminder',
+    buttonIcon: <Bell size={18} />,
+    source: 'exam_reminder',
+  },
+}
 
 interface BrochureModalProps {
   isOpen: boolean
   onClose: () => void
   collegeName: string
-  collegeId: string
+  collegeId?: string
   stream: string
+  mode?: ModalMode
 }
 
-export default function BrochureModal({ isOpen, onClose, collegeName, collegeId, stream }: BrochureModalProps) {
+export default function BrochureModal({ isOpen, onClose, collegeName, collegeId, stream, mode = 'brochure' }: BrochureModalProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -20,6 +65,8 @@ export default function BrochureModal({ isOpen, onClose, collegeName, collegeId,
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+
+  const config = MODAL_CONFIG[mode]
 
   if (!isOpen) return null
 
@@ -35,22 +82,53 @@ export default function BrochureModal({ isOpen, onClose, collegeName, collegeId,
             full_name: formData.name,
             email: formData.email,
             phone: formData.phone,
-            college_id: collegeId,
+            ...(collegeId ? { college_id: collegeId } : {}),
             college_name: collegeName,
             stream: stream,
-            source: 'brochure_download'
+            source: config.source
           }
         ])
 
       if (error) throw error
       setIsSuccess(true)
-      
-      // Auto-close after 2 seconds on success
-      setTimeout(() => {
-        onClose()
-        setIsSuccess(false)
-        setFormData({ name: '', email: '', phone: '' })
-      }, 2500)
+
+      if (mode === 'details') {
+        // Redirect to college detail page after a brief success message
+        setTimeout(() => {
+          const slug = collegeName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+          window.location.href = `/college/${slug}`
+        }, 1500)
+      } else if (mode === 'share') {
+        // Trigger native share after success
+        const shareUrl = `${window.location.origin}/college/${collegeName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`
+        setTimeout(async () => {
+          if (navigator.share) {
+            try {
+              await navigator.share({
+                title: collegeName,
+                text: `Check out ${collegeName} on Promote Education — rankings, fees, placements & more.`,
+                url: shareUrl,
+              })
+            } catch {
+              // User cancelled or share failed — silently ignore
+            }
+          } else {
+            // Fallback: copy to clipboard
+            await navigator.clipboard.writeText(shareUrl)
+            alert('Link copied to clipboard!')
+          }
+          onClose()
+          setIsSuccess(false)
+          setFormData({ name: '', email: '', phone: '' })
+        }, 1500)
+      } else {
+        // Brochure / Remind: auto-close after success
+        setTimeout(() => {
+          onClose()
+          setIsSuccess(false)
+          setFormData({ name: '', email: '', phone: '' })
+        }, 2500)
+      }
 
     } catch (err) {
       console.error('Lead capture error:', err)
@@ -58,6 +136,13 @@ export default function BrochureModal({ isOpen, onClose, collegeName, collegeId,
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  const successMessages: Record<ModalMode, string> = {
+    brochure: `We've sent the official brochure of <strong>${collegeName}</strong> to your email. Our counselor will contact you shortly.`,
+    details: `Redirecting you to the full profile of <strong>${collegeName}</strong>...`,
+    share: `Preparing to share <strong>${collegeName}</strong>...`,
+    remind: `Reminder set! We'll notify you about all important dates for <strong>${collegeName}</strong>.`,
   }
 
   return (
@@ -77,10 +162,10 @@ export default function BrochureModal({ isOpen, onClose, collegeName, collegeId,
             <div className="w-20 h-20 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircle2 size={40} />
             </div>
-            <h3 className="text-2xl font-bold text-ink mb-2">Request Received!</h3>
-            <p className="text-ink-3 text-sm leading-relaxed">
-              We've sent the official brochure of <span className="font-bold text-ink">{collegeName}</span> to your email. Our counselor will contact you shortly.
-            </p>
+            <h3 className="text-2xl font-bold text-ink mb-2">
+              {mode === 'details' ? 'Redirecting...' : mode === 'share' ? 'Sharing...' : 'Request Received!'}
+            </h3>
+            <p className="text-ink-3 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: successMessages[mode] }} />
           </div>
         ) : (
           <div className="p-10">
@@ -89,9 +174,9 @@ export default function BrochureModal({ isOpen, onClose, collegeName, collegeId,
                 <div className="w-8 h-px bg-action" />
                 <span className="text-[10px] font-bold text-action uppercase tracking-[0.2em]">Promote Education</span>
               </div>
-              <h3 className="text-2xl font-bold text-ink mb-2">Download <span className="text-action">Brochure</span></h3>
+              <h3 className="text-2xl font-bold text-ink mb-2">{config.title} <span className="text-action">{config.highlight}</span></h3>
               <p className="text-ink-3 text-sm leading-relaxed">
-                Enter your details to receive the internal placement report and fee structure for <span className="font-bold text-ink">{collegeName}</span>.
+                {config.description(collegeName)}
               </p>
             </div>
 
@@ -152,7 +237,7 @@ export default function BrochureModal({ isOpen, onClose, collegeName, collegeId,
                   </>
                 ) : (
                   <>
-                    <Download size={18} /> Send Me the Brochure
+                    {config.buttonIcon} {config.buttonText}
                   </>
                 )}
               </button>

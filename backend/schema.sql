@@ -5,35 +5,19 @@ EXCEPTION
     WHEN duplicate_object THEN null;
 END $$;
 
--- 2. Colleges Table (Includes Ranking Data)
+-- 2. Colleges Table
 CREATE TABLE IF NOT EXISTS colleges (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   name TEXT NOT NULL,
   location TEXT NOT NULL,
   state TEXT NOT NULL,
-  
-  -- Ranking Details
   ranking INTEGER,
-  ranking_body TEXT DEFAULT 'NIRF',
-  
-  -- Specialized Categories: 
-  -- University, College, Engineering, Management, Pharmacy, 
-  -- Medical, Dental, Law, Architecture, Agriculture
-  stream TEXT NOT NULL, 
-  
+  stream TEXT NOT NULL,
   type college_type DEFAULT 'private',
-  avg_ctc NUMERIC(10, 2),
-  highest_ctc NUMERIC(10, 2),
-  cutoff TEXT,
-  cutoff_exam TEXT,
-  tags TEXT[] DEFAULT '{}',
-  accreditation TEXT[] DEFAULT '{}',
-  established INTEGER,
-  total_fee NUMERIC(10, 2),
-  verified BOOLEAN DEFAULT false,
-  logo_url TEXT,
-  website TEXT
+  avg_ctc TEXT,
+  total_fee TEXT,
+  verified BOOLEAN DEFAULT false
 );
 
 -- 3. Exams Table
@@ -70,14 +54,12 @@ ALTER TABLE exams ENABLE ROW LEVEL SECURITY;
 ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
 
 -- 6. Create Public Access Policies (Read-only for everyone)
+DROP POLICY IF EXISTS "Allow public read access for colleges" ON colleges;
+DROP POLICY IF EXISTS "Allow public read access for exams" ON exams;
+DROP POLICY IF EXISTS "Allow public read access for reviews" ON reviews;
 CREATE POLICY "Allow public read access for colleges" ON colleges FOR SELECT USING (true);
 CREATE POLICY "Allow public read access for exams" ON exams FOR SELECT USING (true);
 CREATE POLICY "Allow public read access for reviews" ON reviews FOR SELECT USING (true);
-
-
------------------------------------------------------------------------------------
--- NEW QUERIES: CORE AUTH & PROFILES SYNC (RUN THESE NEXT)
------------------------------------------------------------------------------------
 
 -- 7. Profiles Table (Linked to Auth.Users)
 CREATE TABLE IF NOT EXISTS profiles (
@@ -91,6 +73,8 @@ CREATE TABLE IF NOT EXISTS profiles (
 
 -- 8. Enable RLS on profiles
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Users can view their own profile" ON profiles;
+DROP POLICY IF EXISTS "Users can update their own profile" ON profiles;
 CREATE POLICY "Users can view their own profile" ON profiles FOR SELECT USING (auth.uid() = id);
 CREATE POLICY "Users can update their own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
 
@@ -124,6 +108,8 @@ CREATE TABLE IF NOT EXISTS leads (
 
 -- 11. Enable RLS on leads
 ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Allow public insert for leads" ON leads;
+DROP POLICY IF EXISTS "Admins can view all leads" ON leads;
 CREATE POLICY "Allow public insert for leads" ON leads FOR INSERT WITH CHECK (true);
 CREATE POLICY "Admins can view all leads" ON leads FOR SELECT USING (
   EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')

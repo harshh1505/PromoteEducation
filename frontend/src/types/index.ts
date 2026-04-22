@@ -4,19 +4,11 @@ export interface College {
   location: string
   state: string
   ranking: number
-  rankingBody: string
+  rankingBody?: string
   stream: string
   type: 'government' | 'private' | 'deemed'
-  avgCTC: number
-  highestCTC: number
-  cutoff: string
-  cutoffExam: string
-  tags: string[]
-  accreditation: string[]
-  established: number
-  totalFee: number
-  matchScore?: number
-  admissionChance?: number
+  avgCTC: string
+  totalFee: string
   verified: boolean
 }
 

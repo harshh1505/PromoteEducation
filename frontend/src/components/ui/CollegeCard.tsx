@@ -1,6 +1,6 @@
 import { ArrowRight, GitCompare, MapPin, CheckCircle } from 'lucide-react'
 import type { College } from '@/types'
-import { formatCTC } from '@/lib/utils'
+import { formatCTC, formatFee } from '@/lib/utils'
 
 interface CollegeCardProps {
   college: College
@@ -44,7 +44,7 @@ export default function CollegeCard({ college }: CollegeCardProps) {
            </div>
            <div className="bg-slate-50 p-3 rounded-2xl">
               <p className="text-[9px] uppercase font-bold text-slate-400 tracking-widest mb-1">Annual Fee</p>
-              <p className="text-sm font-black text-slate-800">₹{college.totalFee} Lacs</p>
+              <p className="text-sm font-black text-slate-800">{formatFee(college.totalFee)}</p>
            </div>
         </div>
 

@@ -5,14 +5,20 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatCTC(value: number): string {
-  if (value >= 100) return `₹${value}Cr`
-  return `₹${value}L`
+export function formatCTC(value: number | string | null | undefined): string {
+  if (!value) return 'N/A'
+  const num = typeof value === 'string' ? parseFloat(value) : value
+  if (isNaN(num as number)) return value.toString()
+  if (num >= 100) return `₹${num}Cr`
+  return `₹${num}L`
 }
 
-export function formatFee(value: number): string {
-  if (value < 1) return `₹${(value * 100).toFixed(0)}K/yr`
-  return `₹${value}L/yr`
+export function formatFee(value: number | string | null | undefined): string {
+  if (!value) return 'N/A'
+  const num = typeof value === 'string' ? parseFloat(value) : value
+  if (isNaN(num as number)) return value.toString()
+  if (num < 1) return `₹${(num * 100).toFixed(0)}K/yr`
+  return `₹${num}L/yr`
 }
 
 export function getTypeColor(type: string): string {

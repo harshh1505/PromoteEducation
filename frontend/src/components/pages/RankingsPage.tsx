@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import { Trophy, Filter, Star, MapPin, Building2, TrendingUp, Info, Download, ArrowRight, FileText, LogOut } from 'lucide-react'
+import { Trophy, Filter, Star, MapPin, Building2, TrendingUp, Info, Download, ArrowRight, FileText, Share2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import BrochureModal from '@/components/ui/BrochureModal'
 
@@ -18,6 +18,7 @@ export default function RankingsPageContent() {
   const [filter, setFilter] = useState(cityParam ? 'All' : 'Engineering')
   const [isBrochureModalOpen, setIsBrochureModalOpen] = useState(false)
   const [selectedCollege, setSelectedCollege] = useState<any>(null)
+  const [modalMode, setModalMode] = useState<'brochure' | 'details' | 'share'>('brochure')
 
   const categories = ['All', 'Engineering', 'Management', 'Medical', 'Pharmacy', 'Law', 'Architecture']
 
@@ -132,6 +133,7 @@ export default function RankingsPageContent() {
                                <button 
                                  onClick={() => {
                                    setSelectedCollege(college);
+                                   setModalMode('details');
                                    setIsBrochureModalOpen(true);
                                  }}
                                  className="text-action hover:underline font-medium flex items-center gap-1"
@@ -142,6 +144,7 @@ export default function RankingsPageContent() {
                                <button 
                                  onClick={() => {
                                    setSelectedCollege(college);
+                                   setModalMode('brochure');
                                    setIsBrochureModalOpen(true);
                                  }}
                                  className="text-red-600 hover:scale-110 transition-transform"
@@ -150,13 +153,17 @@ export default function RankingsPageContent() {
                                  <FileText size={14} />
                                </button>
                                <span className="text-slate-300">|</span>
-                               <a 
-                                 href={college.website || '#'} 
-                                 target="_blank"
+                               <button 
+                                 onClick={() => {
+                                   setSelectedCollege(college);
+                                   setModalMode('share');
+                                   setIsBrochureModalOpen(true);
+                                 }}
                                  className="text-slate-400 hover:text-action transition-colors"
+                                 title="Share College"
                                >
-                                 <LogOut size={12} className="-rotate-90" />
-                               </a>
+                                 <Share2 size={12} />
+                               </button>
                             </div>
                          </div>
                       </td>
@@ -167,10 +174,10 @@ export default function RankingsPageContent() {
                          {college.state}
                       </td>
                       <td className="px-4 py-4 border-r border-slate-200 text-center font-bold text-slate-700 bg-slate-50/30">
-                         {college['Average Package'] || '-'}
+                         {college.avg_ctc ? `${college.avg_ctc} LPA` : '-'}
                       </td>
                       <td className="px-4 py-4 border-r border-slate-200 text-center font-medium text-slate-600">
-                         {college['Total Fees'] || '-'}
+                         {college.total_fee ? `${college.total_fee} Lakhs` : '-'}
                       </td>
                       <td className="px-4 py-4 border-r border-slate-200 text-center font-medium text-slate-700">
                          {(89.5 - ((college.ranking || index) * 1.5)).toFixed(2)}
@@ -198,6 +205,7 @@ export default function RankingsPageContent() {
             collegeName={selectedCollege.name}
             collegeId={selectedCollege.id}
             stream={selectedCollege.stream}
+            mode={modalMode}
           />
         )}
 

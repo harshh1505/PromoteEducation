@@ -34,8 +34,8 @@ export default function CollegesSection() {
         setColleges((data || []).map((c: any) => ({
           ...c,
           rankingBody: 'NIRF 2025',
-          avgCTC: c['Average Package'],
-          totalFee: c['Total Fees'],
+          avgCTC: c.avg_ctc,
+          totalFee: c.total_fee,
         })))
       }
       setLoading(false)
