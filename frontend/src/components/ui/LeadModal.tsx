@@ -256,7 +256,7 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
                    {!user && (
                      <div className="pt-4 text-center border-t border-slate-100/50 mt-4">
                         <p className="text-[11px] text-slate-600">
-                          Already Registered? <button type="button" onClick={() => setShowAuthModal(true)} className="text-red-600 font-black hover:underline">Login</button>
+                          Already Registered? <button type="button" onClick={() => setShowAuthModal(true)} className="text-red-600 font-black hover:underline">Login Now</button>
                         </p>
                      </div>
                    )}

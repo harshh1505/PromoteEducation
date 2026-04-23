@@ -64,18 +64,19 @@ export default function HeroSection() {
   }, [query])
 
   return (
-    <section className="relative h-[95vh] w-full overflow-hidden flex items-center justify-center">
+    <section className="relative min-h-screen w-full overflow-hidden flex items-center justify-center py-20 md:py-0">
       
       {/* Background Carousel */}
       {carouselImages.map((img, idx) => (
         <div
           key={idx}
           className={cn(
-            "absolute inset-0 transition-all duration-[2000ms] ease-in-out",
-            currentSlide === idx ? "opacity-100 scale-100 rotate-0" : "opacity-0 scale-110 rotate-1"
+            "absolute inset-0 transition-all duration-[2500ms] ease-in-out",
+            currentSlide === idx ? "opacity-100 scale-100" : "opacity-0 scale-110"
           )}
         >
-          <div className="absolute inset-0 bg-midnight/60 z-10" />
+          {/* Subtle Gradient Overlay for Readability while keeping college visible */}
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/20 to-slate-900/60 z-10" />
           <img 
             src={img.url} 
             alt={img.alt} 
@@ -84,30 +85,17 @@ export default function HeroSection() {
         </div>
       ))}
 
-      {/* Slide Navigation Buttons */}
-      <button 
-        onClick={() => setCurrentSlide((prev) => (prev - 1 + carouselImages.length) % carouselImages.length)}
-        className="absolute left-6 z-30 p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all hidden md:block"
-      >
-        <ChevronLeft size={20} />
-      </button>
-      <button 
-        onClick={() => setCurrentSlide((prev) => (prev + 1) % carouselImages.length)}
-        className="absolute right-6 z-30 p-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all hidden md:block"
-      >
-        <ChevronRight size={20} />
-      </button>
-
-      {/* Main Glassmorphism Card */}
-      <div className="relative z-20 max-w-6xl w-full px-6 flex flex-col items-center">
+      {/* Main Content Area - Pushed slightly below center for balance */}
+      <div className="relative z-20 max-w-4xl w-full px-6 flex flex-col items-center justify-center translate-y-4 md:translate-y-10">
         
-        <div className="w-full px-6 md:px-12 py-6 md:py-8 rounded-[40px] bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl animate-in fade-in zoom-in duration-700">
+        <div className="w-full px-6 md:px-10 py-8 md:py-10 rounded-[40px] bg-white/[0.02] backdrop-blur-sm border border-white/10 shadow-2xl animate-in fade-in zoom-in duration-700 text-center">
           
-          <div className="text-center mb-6">
-            <h1 className="text-3xl md:text-5xl font-medium text-white mb-2 tracking-tight leading-tight">
-              Top <span className="text-gold">Colleges in India 2025</span>: NIRF Rankings & Admissions
+          <div className="mb-6">
+            <h1 className="text-4xl md:text-5xl font-black text-white mb-3 tracking-tighter leading-[1.1]">
+              Top <span className="text-sky-400">Colleges in India 2025</span>
+              <span className="block text-xl md:text-2xl font-medium text-white/90 mt-1">NIRF Rankings & Admissions</span>
             </h1>
-            <p className="text-white/50 text-sm md:text-base max-w-3xl mx-auto font-light leading-relaxed">
+            <p className="text-white/60 text-sm md:text-base max-w-2xl mx-auto font-medium leading-relaxed">
               Complete admission guidance for Engineering, Management, and Medical across India based on latest data.
             </p>
           </div>
@@ -176,8 +164,6 @@ export default function HeroSection() {
               Counseling 2026
             </button>
           </div>
-{'>'}
-
         </div>
 
         {/* Bottom Trust Badges */}

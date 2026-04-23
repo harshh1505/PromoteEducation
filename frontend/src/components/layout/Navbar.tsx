@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
 import AuthModal from '@/components/ui/AuthModal'
 import CounsellingModal from '@/components/ui/CounsellingModal'
+import GoalModal from '@/components/ui/GoalModal'
 
 const navItems = [
   { label: 'Home', href: '/', hasMegaMenu: false },
@@ -28,11 +29,8 @@ const topCategories = [
   { label: 'MBA', href: '/courses/mba' },
   { label: 'M.Tech', href: '/courses/mtech' },
   { label: 'MBBS', href: '/courses/mbbs' },
-  { label: 'B.Com', href: '/courses/bcom' },
-  { label: 'B.Sc', href: '/courses/bsc' },
-  { label: 'BA', href: '/courses/ba' },
-  { label: 'BBA', href: '/courses/bba' },
-  { label: 'BCA', href: '/courses/bca' },
+  { label: 'BDS', href: '/courses/bds' },
+  { label: 'B.Sc Nursing', href: '/courses/bsc-nursing' },
 ]
 
 interface ExploreItem {
@@ -84,6 +82,7 @@ export default function Navbar() {
   const [activeItem, setActiveItem] = useState('Home')
   const [authVisible, setAuthVisible] = useState(false)
   const [counsellingVisible, setCounsellingVisible] = useState(false)
+  const [goalVisible, setGoalVisible] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [userDropdown, setUserDropdown] = useState(false)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
@@ -176,7 +175,10 @@ export default function Navbar() {
                 </div>
               </a>
 
-              <div className="hidden lg:flex items-center gap-2 pl-4 border-l border-white/10 group cursor-pointer">
+              <div 
+                onClick={() => setGoalVisible(true)}
+                className="hidden lg:flex items-center gap-2 pl-4 border-l border-white/10 group cursor-pointer"
+              >
                 <div className="flex flex-col">
                   <span className="text-[10px] text-white/40 font-bold uppercase tracking-widest leading-none mb-1 flex items-center gap-1">
                     <GraduationCap size={10} className="text-sky-500" /> Select Goal & City
@@ -427,9 +429,28 @@ export default function Navbar() {
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                   <input 
                     type="text" 
-                    placeholder="Search Colleges..."
+                    placeholder="Search Colleges, Exams..."
                     className="w-full pl-11 pr-4 py-3 bg-slate-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                   />
+                  {searchQuery.length >= 2 && searchResults.length > 0 && (
+                    <div className="mt-2 bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden">
+                      {searchResults.map((res, i) => (
+                        <button 
+                          key={i}
+                          onClick={() => { window.location.href = `/colleges?search=${encodeURIComponent(res.name)}`; setMobileOpen(false); }}
+                          className="w-full flex items-center gap-3 px-4 py-3 border-b border-slate-50 last:border-0 hover:bg-slate-50"
+                        >
+                          <Building2 size={14} className="text-slate-400" />
+                          <div className="flex flex-col text-left">
+                            <span className="text-[11px] font-bold text-slate-900">{res.name}</span>
+                            <span className="text-[9px] text-slate-400 uppercase tracking-tighter">{res.location}</span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                </div>
 
                <div className="space-y-4">
@@ -463,7 +484,15 @@ export default function Navbar() {
         )}
       </header>
 
-      <CounsellingModal isOpen={counsellingVisible} onClose={() => setCounsellingVisible(false)} />
+      <CounsellingModal 
+        isOpen={counsellingVisible}
+        onClose={() => setCounsellingVisible(false)}
+      />
+
+      <GoalModal 
+        isOpen={goalVisible}
+        onClose={() => setGoalVisible(false)}
+      />
       <AuthModal isOpen={authVisible} onClose={() => setAuthVisible(false)} />
     </>
   )

@@ -12,6 +12,8 @@ import CompareSection from '@/components/sections/CompareSection'
 import LoanSection from '@/components/sections/LoanSection'
 import NewsSection from '@/components/sections/NewsSection'
 import ReviewsSection from '@/components/sections/ReviewsSection'
+import WhyChooseUsSection from '@/components/sections/WhyChooseUsSection'
+import NewsletterSection from '@/components/sections/NewsletterSection'
 
 export default function HomePage() {
   return (
@@ -21,6 +23,7 @@ export default function HomePage() {
       <LivePulse />
       <StatsBar />
       <CollegesSection />
+      <WhyChooseUsSection />
       <PopularCitiesSection />
       <ExamsSection />
       <MockTestSection />
@@ -29,6 +32,7 @@ export default function HomePage() {
       <LoanSection />
       <NewsSection />
       <ReviewsSection />
+      <NewsletterSection />
       <Footer />
     </main>
   )
