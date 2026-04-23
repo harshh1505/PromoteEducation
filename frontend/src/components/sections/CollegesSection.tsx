@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
 import type { College, Stream } from '@/types'
 
-const featuredColleges: College[] = [
+export const featuredColleges: College[] = [
   {
     id: 'engineering-1',
     name: 'IEM Kolkata',

@@ -5,13 +5,17 @@ import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import {
-    ArrowRight, Award, Target, Users, BookOpen, ChevronRight,
+    ArrowRight, Award, Target, Users, BookOpen, ChevronLeft, ChevronRight,
     Shield, TrendingUp, Sparkles, Globe, MessageSquare, Quote, ExternalLink,
     Rocket, Heart, Lightbulb, Stethoscope, GraduationCap,
     Briefcase, Code, Palette, Search, Clock, FileCheck, ClipboardList,
     CheckCircle2, Star, Zap, Gamepad2, Compass, Trophy,
     Dice1, Dice2, Dice3, Dice4, Dice5, Dice6
 } from 'lucide-react'
+import CollegeCard from '@/components/ui/CollegeCard'
+import { College } from '@/types'
+import { featuredColleges } from '@/components/sections/CollegesSection'
+import { newsItems } from '@/components/sections/NewsSection'
 import { cn } from '@/lib/utils'
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -69,43 +73,7 @@ const educationQuotes = [
     { text: "If you think education is expensive, try ignorance.", author: "Derek Bok" }
 ]
 
-const insights = [
-    {
-        title: 'JEE Mains 2026 Result (Today) LIVE: Final Answer Key OUT; NTA Session 2 Scorecard Link Soon @...',
-        excerpt: 'JEE Mains 2026 session 2 final answer key is out. JEE Mains 2026 result for the session 2 exam will be out anytime soon, TODAY, Ap...',
-        author: 'Mamona Majumder',
-        date: 'Apr 20, 2026',
-        isLive: true,
-        comments: 1,
-        shares: 7,
-        image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=200&q=80'
-    },
-    {
-        title: 'ICSE, ISC Results 2026 @results.cisce.org Live Updates: Check Expected CISCE Results Date &...',
-        excerpt: 'ISC, ICSE results 2026 will be announced soon at cisce.org and results.cisce.org. Students can check results by logging with the...',
-        author: 'Anangsha Patra',
-        date: 'Apr 20, 2026',
-        isLive: true,
-        comments: 4,
-        shares: 113,
-        image: 'https://images.unsplash.com/photo-1454165833767-02654a59637f?w=200&q=80'
-    },
-    {
-        title: 'Chef Salary in India 2025: Average Pay, Growth, and Top Hotel Packages',
-        excerpt: 'The food and hospitality industry in India has seen big growth in recent years. Starting from luxury bars, family restaurants, to smal...',
-        author: 'Porishmita Paul',
-        date: 'Apr 20, 2026',
-        isLive: false,
-        views: 940,
-        image: 'https://images.unsplash.com/photo-1577214282282-e474bd2d6a06?w=200&q=80'
-    },
-]
 
-const topColleges = [
-    { name: 'IIT Delhi', logo: 'https://upload.wikimedia.org/wikipedia/en/f/fd/IIT_Delhi_logo.png' },
-    { name: 'AIIMS Delhi', logo: 'https://upload.wikimedia.org/wikipedia/en/0/08/All_India_Institute_of_Medical_Sciences_Delhi_logo.png' },
-    { name: 'IIM Bangalore', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/ef/IIM_Bangalore_Logo.svg/1200px-IIM_Bangalore_Logo.svg.png' },
-]
 
 const leadership = [
     { name: 'Ritesh Rastogi', role: 'MD & Founder', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop' },
@@ -121,6 +89,8 @@ const gameOptions = [
     { id: 'business', label: 'Business', result: 'IIMs and top B-Schools require profile building + CAT excellence.', icon: Briefcase },
     { id: 'design', label: 'Creative', result: 'NID or NIFT could be your destination. Build a stellar portfolio.', icon: Palette },
 ]
+
+const suggestedColleges = featuredColleges
 
 // ─── Board Config ─────────────────────────────────────────────────────────────
 
@@ -503,6 +473,28 @@ export default function AboutPage() {
         setDailyQuote(educationQuotes[day % 50])
     }, [])
 
+    const [topCollegesPage, setTopCollegesPage] = useState(0)
+    const itemsPerMiniPage = 2
+    const totalMiniPages = Math.ceil(featuredColleges.length / itemsPerMiniPage)
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTopCollegesPage((prev) => (prev + 1) % totalMiniPages)
+        }, 6000)
+        return () => clearInterval(interval)
+    }, [totalMiniPages])
+
+    const [newsPage, setNewsPage] = useState(0)
+    const itemsPerNewsPage = 3
+    const totalNewsPages = Math.ceil(newsItems.length / itemsPerNewsPage)
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setNewsPage((prev) => (prev + 1) % totalNewsPages)
+        }, 8000)
+        return () => clearInterval(interval)
+    }, [totalNewsPages])
+
     return (
         <main className="min-h-screen bg-white selection:bg-sky-500 selection:text-white font-body">
             <Navbar />
@@ -591,17 +583,33 @@ export default function AboutPage() {
 
                         {/* Right Column: News & Colleges (Already Polished) */}
                         <div className="lg:col-span-5 space-y-8">
-                            {/* Latest News & Articles Section */}
+                            {/* Latest News & Articles Section (Sliding) */}
                             <div className="bg-white border border-slate-100 rounded-[32px] p-8 shadow-2xl shadow-sky-900/5">
                                 <div className="flex items-center justify-between mb-10">
                                     <h3 className="text-slate-900 font-display text-2xl">Latest News & Articles</h3>
-                                    <Link href="/news" className="text-sky-500 font-bold text-[10px] uppercase tracking-widest flex items-center gap-2 group">
-                                        Explore All <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                                    </Link>
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex items-center gap-1.5 mr-2">
+                                            <button 
+                                                onClick={() => setNewsPage((prev) => (prev - 1 + totalNewsPages) % totalNewsPages)}
+                                                className="w-8 h-8 rounded-full border border-slate-100 flex items-center justify-center text-slate-400 hover:text-sky-500 hover:border-sky-100 transition-all"
+                                            >
+                                                <ChevronLeft size={16} />
+                                            </button>
+                                            <button 
+                                                onClick={() => setNewsPage((prev) => (prev + 1) % totalNewsPages)}
+                                                className="w-8 h-8 rounded-full border border-slate-100 flex items-center justify-center text-slate-400 hover:text-sky-500 hover:border-sky-100 transition-all"
+                                            >
+                                                <ChevronRight size={16} />
+                                            </button>
+                                        </div>
+                                        <Link href="/news" className="text-sky-500 font-bold text-[10px] uppercase tracking-widest flex items-center gap-2 group">
+                                            Explore All <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                                        </Link>
+                                    </div>
                                 </div>
-                                <div className="space-y-10">
-                                    {insights.map((it, i) => (
-                                        <div key={i} className="flex gap-6 group cursor-pointer border-b border-slate-50 pb-10 last:border-0 last:pb-0">
+                                <div className="space-y-10 min-h-[400px]">
+                                    {newsItems.slice(newsPage * itemsPerNewsPage, (newsPage + 1) * itemsPerNewsPage).map((it, i) => (
+                                        <div key={i} className="flex gap-6 group cursor-pointer border-b border-slate-50 pb-10 last:border-0 last:pb-0 animate-in fade-in slide-in-from-bottom-4 duration-700">
                                             <div className="flex-1">
                                                 <div className="flex items-start gap-2 mb-2">
                                                     {it.isLive && (
@@ -620,27 +628,6 @@ export default function AboutPage() {
                                                     <span className="text-[9px] text-slate-300">•</span>
                                                     <p className="text-[9px] text-slate-400 font-medium">{it.date}</p>
                                                 </div>
-
-                                                <div className="flex items-center gap-4 mt-3">
-                                                    {it.comments !== undefined && (
-                                                        <div className="flex items-center gap-1 text-sky-500">
-                                                            <MessageSquare size={10} fill="currentColor" className="opacity-20" />
-                                                            <span className="text-[8px] font-black uppercase tracking-widest">{it.comments} Comments</span>
-                                                        </div>
-                                                    )}
-                                                    {it.shares !== undefined && (
-                                                        <div className="flex items-center gap-1 text-sky-500">
-                                                            <ArrowRight size={10} className="rotate-[-45deg]" />
-                                                            <span className="text-[8px] font-black uppercase tracking-widest">{it.shares} Shares</span>
-                                                        </div>
-                                                    )}
-                                                    {it.views !== undefined && (
-                                                        <div className="flex items-center gap-1 text-sky-500">
-                                                            <Globe size={10} className="opacity-40" />
-                                                            <span className="text-[8px] font-black uppercase tracking-widest">{it.views} Views</span>
-                                                        </div>
-                                                    )}
-                                                </div>
                                             </div>
 
                                             <div className="w-20 h-20 rounded-xl overflow-hidden shadow-sm shrink-0 self-start group-hover:scale-105 transition-transform">
@@ -651,23 +638,54 @@ export default function AboutPage() {
                                 </div>
                             </div>
 
-                            {/* Top Colleges Card */}
+                            {/* Compact Top Institutions Card (Sliding) */}
                             <div className="bg-sky-500 rounded-[32px] p-8 relative overflow-hidden group shadow-2xl shadow-sky-500/20">
                                 <Globe size={100} className="absolute -bottom-10 -right-10 text-white/20 group-hover:rotate-12 transition-transform duration-700" />
-                                <h3 className="text-white font-display text-xl mb-6 relative z-10">Top Institutions</h3>
-                                <div className="grid grid-cols-3 gap-4 relative z-10">
-                                    {topColleges.map((c, i) => (
-                                        <div key={i} className="aspect-square bg-white rounded-2xl p-3 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-                                            <img src={c.logo} alt={c.name} className="max-w-full max-h-full object-contain" />
+                                
+                                <div className="flex items-center justify-between mb-6 relative z-10">
+                                    <h3 className="text-white font-display text-xl">Top Institutions</h3>
+                                    <div className="flex items-center gap-2">
+                                        <button 
+                                            onClick={() => setTopCollegesPage((prev) => (prev - 1 + totalMiniPages) % totalMiniPages)}
+                                            className="w-8 h-8 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all"
+                                        >
+                                            <ChevronLeft size={16} />
+                                        </button>
+                                        <button 
+                                            onClick={() => setTopCollegesPage((prev) => (prev + 1) % totalMiniPages)}
+                                            className="w-8 h-8 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all"
+                                        >
+                                            <ChevronRight size={16} />
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+                                    {featuredColleges.slice(topCollegesPage * itemsPerMiniPage, (topCollegesPage + 1) * itemsPerMiniPage).map((college) => (
+                                        <div key={college.id} className="animate-in fade-in slide-in-from-right-4 duration-700">
+                                            <CollegeCard college={college} />
                                         </div>
                                     ))}
                                 </div>
-                                <Link href="/colleges" className="mt-8 flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-widest hover:underline">
-                                    Explore All 1000+ Partners <ChevronRight size={14} />
-                                </Link>
+
+                                <div className="mt-8 flex items-center justify-between relative z-10">
+                                    <Link href="/colleges" className="flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-widest hover:underline group/link">
+                                        Explore All Partners <ChevronRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
+                                    </Link>
+                                    <div className="flex gap-1.5">
+                                        {Array.from({ length: totalMiniPages }).map((_, i) => (
+                                            <div 
+                                                key={i} 
+                                                className={cn(
+                                                    "h-1 rounded-full transition-all duration-500",
+                                                    topCollegesPage === i ? "w-4 bg-white" : "w-1 bg-white/30"
+                                                )} 
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </section>

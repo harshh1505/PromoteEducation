@@ -3,7 +3,7 @@
 import React from 'react'
 import { ArrowRight, MessageSquare, Share2, Eye, ChevronRight } from 'lucide-react'
 
-const newsItems = [
+export const newsItems = [
   {
     isLive: true,
     title: 'JEE Mains 2026 Result (Today) LIVE: Final Answer Key OUT; NTA Session 2 Scorecard Link Soon @...',
