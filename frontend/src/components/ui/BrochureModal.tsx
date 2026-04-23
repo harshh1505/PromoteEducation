@@ -65,6 +65,7 @@ export default function BrochureModal({ isOpen, onClose, collegeName, collegeId,
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [agreed, setAgreed] = useState(false)
 
   const config = MODAL_CONFIG[mode]
 
@@ -269,10 +270,27 @@ export default function BrochureModal({ isOpen, onClose, collegeName, collegeId,
                   </div>
                 </div>
 
+                <div className="flex items-start gap-2 px-2 mt-2">
+                  <div className="flex items-center h-5 mt-0.5">
+                    <input 
+                      id="terms-brochure"
+                      type="checkbox"
+                      required
+                      checked={agreed}
+                      onChange={(e) => setAgreed(e.target.checked)}
+                      className="w-4 h-4 text-sky-600 bg-white border-slate-300 rounded focus:ring-sky-500 transition-all cursor-pointer"
+                    />
+                  </div>
+                  <label htmlFor="terms-brochure" className="text-[10px] text-slate-500 font-bold leading-normal cursor-pointer select-none uppercase tracking-wider">
+                    I agree to receive info via call/SMS/email and accept the 
+                    <a href="/terms" className="text-sky-500 hover:underline mx-1">Terms & Conditions</a>
+                  </label>
+                </div>
+
                 <button 
                   type="submit" 
-                  disabled={isSubmitting}
-                  className="w-full bg-slate-900 text-white py-6 rounded-[32px] font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-800 transition-all shadow-2xl shadow-slate-900/20 flex items-center justify-center gap-3 disabled:opacity-70 active:scale-[0.98]"
+                  disabled={isSubmitting || !agreed}
+                  className="w-full bg-slate-900 text-white py-6 rounded-[32px] font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-800 transition-all shadow-2xl shadow-slate-900/20 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
                 >
                   {isSubmitting ? (
                     <>
@@ -286,9 +304,6 @@ export default function BrochureModal({ isOpen, onClose, collegeName, collegeId,
                 </button>
               </form>
               
-              <p className="mt-8 text-center text-[10px] text-slate-400 font-bold leading-relaxed uppercase tracking-wider">
-                By clicking the button above, you agree to our <a href="/terms" className="text-sky-500 hover:underline">Terms</a> & allow counselors to contact you.
-              </p>
             </>
           )}
         </div>

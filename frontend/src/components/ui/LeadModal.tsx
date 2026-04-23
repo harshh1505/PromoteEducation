@@ -26,6 +26,7 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [agreed, setAgreed] = useState(false)
 
   useEffect(() => {
     async function checkUser() {
@@ -241,17 +242,31 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
                       </select>
                    </div>
 
+                   <div className="flex items-start gap-2 px-2 mt-4">
+                      <div className="flex items-center h-5 mt-0.5">
+                         <input 
+                           id="terms-lead"
+                           type="checkbox"
+                           required
+                           checked={agreed}
+                           onChange={(e) => setAgreed(e.target.checked)}
+                           className="w-4 h-4 text-green-600 bg-white border-slate-300 rounded focus:ring-green-500 transition-all cursor-pointer"
+                         />
+                      </div>
+                      <label htmlFor="terms-lead" className="text-[10px] text-slate-500 leading-normal cursor-pointer select-none">
+                        I agree to receive communications from Promote Education via email/call/SMS and accept the 
+                        <a href="/terms" className="text-red-600 font-black hover:underline mx-1">Terms & Conditions</a>
+                      </label>
+                   </div>
+
                    <button 
                      type="submit"
-                     disabled={isSubmitting}
-                     className="w-full bg-[#002B5B] text-white py-3.5 md:py-4 rounded-xl font-bold text-xs md:text-sm hover:bg-[#001F42] transition-all shadow-xl shadow-blue-900/10 flex items-center justify-center gap-2 disabled:opacity-70 active:scale-[0.99] mt-2"
+                     disabled={isSubmitting || !agreed}
+                     className="w-full bg-[#002B5B] text-white py-3.5 md:py-4 rounded-xl font-bold text-xs md:text-sm hover:bg-[#001F42] transition-all shadow-xl shadow-blue-900/10 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.99] mt-4"
                    >
                       {isSubmitting ? <Loader2 className="animate-spin" size={16} /> : 'Submit'}
                    </button>
 
-                   <p className="text-[10px] text-center text-slate-500 mt-4 px-2">
-                      By submitting this form, you accept and agree to our <a href="/terms" className="text-red-600 font-black hover:underline">Terms & Conditions</a>
-                   </p>
 
                    {!user && (
                      <div className="pt-4 text-center border-t border-slate-100/50 mt-4">

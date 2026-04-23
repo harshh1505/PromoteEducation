@@ -19,6 +19,7 @@ export default function ReviewModal({ isOpen, onClose, collegeName }: ReviewModa
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [user, setUser] = useState<any>(null)
+  const [agreed, setAgreed] = useState(false)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -167,10 +168,27 @@ export default function ReviewModal({ isOpen, onClose, collegeName }: ReviewModa
                 </div>
               </div>
 
+               {/* T&C Checkbox */}
+              <div className="flex items-start gap-2 px-1">
+                <div className="flex items-center h-5 mt-0.5">
+                  <input 
+                    id="terms-review"
+                    type="checkbox"
+                    required
+                    checked={agreed}
+                    onChange={(e) => setAgreed(e.target.checked)}
+                    className="w-4 h-4 text-sky-600 bg-slate-50 border-slate-200 rounded focus:ring-sky-500 transition-all cursor-pointer"
+                  />
+                </div>
+                <label htmlFor="terms-review" className="text-[10px] text-slate-500 font-bold leading-normal cursor-pointer select-none uppercase tracking-wider">
+                  I agree to the <a href="/terms" className="text-sky-500 hover:underline mx-1">Terms & Conditions</a> for submitting reviews
+                </label>
+              </div>
+
               <button
                 type="submit"
-                disabled={loading}
-                className="w-full bg-slate-900 text-white py-4 rounded-2xl text-sm font-black uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center justify-center gap-3 shadow-xl shadow-slate-900/10 active:scale-95 disabled:opacity-50"
+                disabled={loading || !agreed}
+                className="w-full bg-slate-900 text-white py-4 rounded-2xl text-sm font-black uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center justify-center gap-3 shadow-xl shadow-slate-900/10 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
