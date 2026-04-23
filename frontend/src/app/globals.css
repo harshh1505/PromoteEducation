@@ -37,10 +37,10 @@
   padding: 0;
 }
 
-html {
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
 }
 
 body {
@@ -48,6 +48,11 @@ body {
   background-color: var(--surface);
   color: var(--ink);
   line-height: 1.7;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
 }
 
 .font-display {

@@ -286,7 +286,7 @@ export default function CollegesSection() {
 
   return (
     <section id="colleges" className="py-24 bg-slate-50/50 overflow-x-hidden">
-      <div className="max-w-[1600px] mx-auto px-6">
+      <div className="w-full max-w-[1600px] mx-auto px-6">
         
         <div className="mb-12">
           <div className="flex items-center gap-2 mb-3">

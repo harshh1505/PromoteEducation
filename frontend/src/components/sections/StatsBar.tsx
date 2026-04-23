@@ -7,8 +7,8 @@ const stats = [
 
 export default function StatsBar() {
   return (
-    <section style={{ background: 'var(--surface-2)', borderTop: '0.5px solid var(--border)', borderBottom: '0.5px solid var(--border)' }}>
-      <div className="max-w-7xl mx-auto px-6 py-8">
+    <section className="overflow-hidden" style={{ background: 'var(--surface-2)', borderTop: '0.5px solid var(--border)', borderBottom: '0.5px solid var(--border)' }}>
+      <div className="w-full max-w-7xl mx-auto px-6 py-8">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-0 md:divide-x" style={{ '--tw-divide-opacity': 1 } as React.CSSProperties}>
           {stats.map((stat, i) => (
             <div key={i} className="text-center md:px-8">

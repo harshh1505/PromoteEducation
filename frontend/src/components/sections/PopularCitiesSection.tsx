@@ -49,7 +49,7 @@ export default function PopularCitiesSection() {
         </h2>
       </div>
 
-      <div className="relative">
+      <div className="relative overflow-hidden">
         {/* Infinite Scroller */}
         <div className="flex animate-marquee hover:[animation-play-state:paused]">
           {[...allCities, ...allCities, ...allCities].map((city, i) => (

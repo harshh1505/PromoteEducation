@@ -89,7 +89,7 @@ export default function ExamsSection() {
         </div>
 
         {/* Top Exams — Marquee */}
-        <div className="relative mb-14">
+        <div className="relative mb-14 overflow-hidden">
           <div className="flex animate-marquee-slow hover:[animation-play-state:paused]">
             {[...topExams, ...topExams, ...topExams].map((exam, idx) => {
               const Icon = exam.icon
@@ -178,7 +178,7 @@ export default function ExamsSection() {
               </span>
             </div>
 
-            <div className="relative">
+            <div className="relative overflow-hidden">
               <div className="flex animate-marquee hover:[animation-play-state:paused]">
                 {loading ? (
                   [1, 2, 3, 4, 5, 6].map(i => (

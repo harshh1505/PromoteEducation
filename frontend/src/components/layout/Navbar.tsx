@@ -157,7 +157,7 @@ export default function Navbar() {
       )}>
         {/* Top Row: Main Nav & Search */}
         <div className="bg-slate-900 border-b border-white/5 py-3 md:py-2">
-          <div className="max-w-[1440px] mx-auto px-4 md:px-6 flex items-center justify-between gap-4 md:gap-8">
+          <div className="w-full max-w-[1440px] mx-auto px-4 md:px-6 flex items-center justify-between gap-4 md:gap-8">
             
             {/* Logo Section */}
             <div className="flex items-center gap-4 md:gap-8 shrink-0">
@@ -334,7 +334,7 @@ export default function Navbar() {
 
         {/* Bottom Row: Secondary Nav & Categories */}
         <div className="bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm hidden md:block">
-          <div className="max-w-[1440px] mx-auto px-4 md:px-6 flex items-center justify-between h-11 overflow-x-auto no-scrollbar">
+          <div className="w-full max-w-[1440px] mx-auto px-4 md:px-6 flex items-center justify-between h-11 overflow-x-auto no-scrollbar">
             <div className="flex items-center gap-6">
               {navItems.map((item) => (
                 <a 

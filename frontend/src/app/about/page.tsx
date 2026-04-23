@@ -503,7 +503,7 @@ export default function AboutPage() {
             <section className="relative pt-[120px] pb-20 overflow-hidden bg-slate-50">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,182,255,0.05),transparent)] pointer-events-none" />
 
-                <div className="max-w-[1440px] mx-auto px-6 relative z-10">
+                <div className="w-full max-w-[1440px] mx-auto px-6 relative z-10">
                     <div className="grid lg:grid-cols-12 gap-16 items-start">
 
                         {/* Left Column: Extensive Text & Interactive Game */}
@@ -692,7 +692,7 @@ export default function AboutPage() {
 
             {/* ── THE MANIFESTO: WHY CHOOSE US, MISSION & VISION ────────────────── */}
             <section className="py-20 bg-white relative overflow-hidden">
-                <div className="max-w-[1440px] mx-auto px-6">
+                <div className="w-full max-w-[1440px] mx-auto px-6">
                     <div className="grid lg:grid-cols-2 gap-24 items-center mb-20">
                         <div>
                             <div className="inline-flex items-center gap-3 mb-8">
@@ -754,7 +754,7 @@ export default function AboutPage() {
 
             {/* ── DESCRIPTIVE DIFFERENTIATORS (Light Blue/White Mix) ─────────────── */}
             <section className="py-20 bg-slate-50 border-y border-slate-100 relative overflow-hidden">
-                <div className="max-w-[1440px] mx-auto px-6 relative z-10">
+                <div className="w-full max-w-[1440px] mx-auto px-6 relative z-10">
                     <div className="text-center mb-16">
                         <span className="text-[10px] font-black text-sky-600 uppercase tracking-[0.4em] mb-4 block text-center">The Differentiators</span>
                         <h2 className="font-display text-4xl md:text-5xl text-slate-900 text-center">What sets us apart</h2>
@@ -809,7 +809,7 @@ export default function AboutPage() {
 
             {/* ── THE BLUEPRINT (White) ────────────────────────────────────────── */}
             <section className="py-20 bg-white">
-                <div className="max-w-[1440px] mx-auto px-6">
+                <div className="w-full max-w-[1440px] mx-auto px-6">
                     <div className="text-center mb-16">
                         <span className="text-[10px] font-black text-sky-600 uppercase tracking-[0.4em] mb-4 block text-center">The Blueprint</span>
                         <h2 className="font-display text-4xl md:text-5xl text-slate-900 tracking-tight text-center">How We Work <br /><span className="text-sky-500 italic text-3xl">(simple, structured)</span></h2>
@@ -837,7 +837,7 @@ export default function AboutPage() {
 
             {/* ── CORE VALUES (Light theme) ─────────────────────────────────────── */}
             <section className="py-20 bg-slate-50 border-y border-slate-100">
-                <div className="max-w-[1440px] mx-auto px-6">
+                <div className="w-full max-w-[1440px] mx-auto px-6">
                     <div className="text-center mb-16">
                         <span className="text-[10px] font-black text-sky-600 uppercase tracking-[0.4em] mb-4 block text-center">Our DNA</span>
                         <h2 className="font-display text-4xl md:text-5xl text-slate-900 mb-6 text-center">Our core values</h2>
@@ -864,7 +864,7 @@ export default function AboutPage() {
 
             {/* ── THE TEAM (White) ─────────────────────────────────────────────── */}
             <section className="py-20 bg-white">
-                <div className="max-w-[1440px] mx-auto px-6">
+                <div className="w-full max-w-[1440px] mx-auto px-6">
                     <div className="text-center mb-12">
                         <h2 className="font-display text-4xl md:text-5xl text-slate-900 text-center">The Leadership</h2>
                     </div>

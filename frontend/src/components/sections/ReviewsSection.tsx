@@ -92,7 +92,7 @@ export default function ReviewsSection() {
           </div>
         ) : (
           /* Infinite Scroller for Default View */
-          <div className="relative">
+          <div className="relative overflow-hidden">
             <div className="flex animate-marquee-slow hover:[animation-play-state:paused]">
               {[...reviews, ...reviews, ...reviews].map((review, idx) => (
                 <div key={`${review.id}-${idx}`} className="mx-4 w-[350px] flex-shrink-0">
