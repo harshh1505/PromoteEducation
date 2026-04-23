@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import { ArrowRight, ChevronLeft, ChevronRight, Verified } from 'lucide-react'
 import CollegeCard from '@/components/ui/CollegeCard'
+import LeadModal from '@/components/ui/LeadModal'
+import ReviewModal from '@/components/ui/ReviewModal'
 import { cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
 import type { College, Stream } from '@/types'
@@ -582,6 +584,10 @@ export default function CollegesSection() {
   const [activeStream, setActiveStream] = useState<string>('All')
   const [page, setPage] = useState(0)
   const [itemsPerPage, setItemsPerPage] = useState(4)
+  
+  // Modal states
+  const [leadCollege, setLeadCollege] = useState<College | null>(null)
+  const [reviewCollege, setReviewCollege] = useState<College | null>(null)
 
   // Responsive items per page
   useEffect(() => {
@@ -688,7 +694,11 @@ export default function CollegesSection() {
               {currentColleges.length > 0 ? (
                 currentColleges.map((college) => (
                   <div key={college.id} className="transform transition-transform hover:-translate-y-2 duration-300">
-                    <CollegeCard college={college} />
+                    <CollegeCard 
+                      college={college} 
+                      onOpenLead={(c) => setLeadCollege(c)}
+                      onOpenReview={(c) => setReviewCollege(c)}
+                    />
                   </div>
                 ))
               ) : (
@@ -711,6 +721,21 @@ export default function CollegesSection() {
             ))}
         </div>
       </div>
+
+      {/* Section-level Modals to escape stacking context issues */}
+      <LeadModal 
+        isOpen={!!leadCollege}
+        onClose={() => setLeadCollege(null)}
+        collegeName={leadCollege?.name || ''}
+        collegeLogo={leadCollege?.logo}
+        stream={leadCollege?.stream || ''}
+      />
+
+      <ReviewModal 
+        isOpen={!!reviewCollege}
+        onClose={() => setReviewCollege(null)}
+        collegeName={reviewCollege?.name || ''}
+      />
 
       <style jsx>{`
         @keyframes slideRight {

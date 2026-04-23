@@ -7,11 +7,11 @@ import ReviewModal from './ReviewModal'
 
 interface CollegeCardProps {
   college: College
+  onOpenLead?: (college: College) => void
+  onOpenReview?: (college: College) => void
 }
 
-export default function CollegeCard({ college }: CollegeCardProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isReviewOpen, setIsReviewOpen] = useState(false)
+export default function CollegeCard({ college, onOpenLead, onOpenReview }: CollegeCardProps) {
 
   return (
     <>
@@ -72,7 +72,7 @@ export default function CollegeCard({ college }: CollegeCardProps) {
                   <span className="text-xs font-bold text-slate-900">{college.rating || '4.5'}</span>
                 </div>
                 <button 
-                  onClick={() => setIsReviewOpen(true)}
+                  onClick={() => onOpenReview?.(college)}
                   className="text-[9px] text-sky-600 font-black uppercase tracking-tighter hover:underline"
                 >
                   Rate & Review
@@ -97,7 +97,7 @@ export default function CollegeCard({ college }: CollegeCardProps) {
           {/* Action Buttons */}
           <div className="mt-auto space-y-2">
             <button 
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => onOpenLead?.(college)}
               className="w-full py-2.5 border border-sky-500 text-sky-600 text-[10px] md:text-[11px] font-black uppercase tracking-widest rounded-lg hover:bg-sky-50 transition-colors flex items-center justify-center gap-2"
             >
               Courses & fees <ChevronRight size={14} />
@@ -105,13 +105,13 @@ export default function CollegeCard({ college }: CollegeCardProps) {
             
             <div className="grid grid-cols-2 gap-2">
                 <button 
-                  onClick={() => setIsModalOpen(true)}
+                  onClick={() => onOpenLead?.(college)}
                   className="py-2.5 border border-slate-200 text-slate-600 text-[9px] md:text-[10px] font-bold rounded-lg hover:bg-slate-50 transition-colors flex items-center justify-center gap-1.5"
                 >
                   Brochure <Download size={12} />
                 </button>
                 <button 
-                  onClick={() => setIsModalOpen(true)}
+                  onClick={() => onOpenLead?.(college)}
                   className="py-2.5 bg-slate-900 text-white text-[9px] md:text-[10px] font-bold rounded-lg hover:bg-slate-800 transition-colors flex items-center justify-center gap-1.5"
                 >
                   Apply Now <ArrowRight size={12} />
@@ -121,19 +121,6 @@ export default function CollegeCard({ college }: CollegeCardProps) {
         </div>
       </div>
 
-      <LeadModal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        collegeName={college.name}
-        collegeLogo={college.logo}
-        stream={college.stream}
-      />
-
-      <ReviewModal 
-        isOpen={isReviewOpen}
-        onClose={() => setIsReviewOpen(false)}
-        collegeName={college.name}
-      />
     </>
   )
 }
