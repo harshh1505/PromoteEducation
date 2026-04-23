@@ -8,7 +8,7 @@ async function testSupabase() {
     const { data, error, count } = await supabase
       .from('articles')
       .select('*', { count: 'exact', head: true })
-    
+
     if (error) {
       console.error('Error fetching articles:', error.message)
       if (error.message.includes('relation "public.articles" does not exist')) {

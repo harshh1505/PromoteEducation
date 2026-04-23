@@ -18,3 +18,9 @@ VALUES
 INSERT INTO reviews (student_name, initials, college_name, course, year, rating, review_text, verified, pros, cons)
 VALUES
 ('Arjun Mehta', 'AM', 'IIT Bombay', 'B.Tech CSE', 2024, 5, 'The research culture here is unmatched in India...', true, '{"Research opportunities", "Placements"}', '{"Intense competition"}');
+
+INSERT INTO articles (title, excerpt, category, tag, read_time, date, author, author_role, views, image, is_hot, is_featured, level)
+VALUES 
+('The Ultimate B.Tech Admission Guide 2026: From JEE to Your Dream College', 'Everything you need to know — JEE Main & Advanced strategy, JOSAA counseling rounds, category-wise cutoffs, and how to build your college preference list like a topper.', 'Admission Guide', 'Must Read', '18 min read', 'Apr 20, 2026', 'Ritesh Rastogi', 'MD & Founder', '1.2L', 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1200&auto=format&fit=crop', true, true, 'beginner'),
+('CSE vs ECE vs Mechanical: Which B.Tech Branch Has the Best ROI in 2026?', 'A data-driven comparison of placements, average packages, growth trajectories, and market demand for India''s top three B.Tech specializations.', 'Branch Deep-Dives', 'Data Report', '14 min read', 'Apr 18, 2026', 'Aman Rastogi', 'Managing Director', '87K', 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1200&auto=format&fit=crop', false, true, 'beginner'),
+('IIT vs NIT vs Private Universities: An Honest 2026 Comparison', 'Beyond the brand name — faculty quality, research output, placement consistency, fee structures, and which tier actually makes sense for your profile.', 'College Reviews', 'Deep Analysis', '22 min read', 'Apr 15, 2026', 'Somnath Ghosh', 'Head of Operations', '2.1L', 'https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=1200&auto=format&fit=crop', true, true, 'beginner');
