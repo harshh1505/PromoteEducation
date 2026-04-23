@@ -1,0 +1,1004 @@
+'use client'
+
+import React, { useState, useEffect, useCallback } from 'react'
+import Link from 'next/link'
+import Navbar from '@/components/layout/Navbar'
+import Footer from '@/components/layout/Footer'
+import {
+    ArrowRight, Award, Target, Users, BookOpen, ChevronRight,
+    Shield, TrendingUp, Sparkles, Globe, MessageSquare, Quote, ExternalLink,
+    Rocket, Heart, Lightbulb, Stethoscope, GraduationCap,
+    Briefcase, Code, Palette, Search, Clock, FileCheck, ClipboardList,
+    CheckCircle2, Star, Zap, Gamepad2, Compass, Trophy,
+    Dice1, Dice2, Dice3, Dice4, Dice5, Dice6
+} from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+// ─── Data ────────────────────────────────────────────────────────────────────
+
+const educationQuotes = [
+    { text: "Education is the most powerful weapon which you can use to change the world.", author: "Nelson Mandela" },
+    { text: "The roots of education are bitter, but the fruit is sweet.", author: "Aristotle" },
+    { text: "Investment in knowledge pays the best interest.", author: "Benjamin Franklin" },
+    { text: "Education is not preparation for life; education is life itself.", author: "John Dewey" },
+    { text: "The beautiful thing about learning is that no one can take it away from you.", author: "B.B. King" },
+    { text: "Knowledge is power. Information is liberating. Education is the premise of progress.", author: "Kofi Annan" },
+    { text: "Live as if you were to die tomorrow. Learn as if you were to live forever.", author: "Mahatma Gandhi" },
+    { text: "Education is the passport to the future, for tomorrow belongs to those who prepare for it today.", author: "Malcolm X" },
+    { text: "The goal of education is the advancement of knowledge and the dissemination of truth.", author: "John F. Kennedy" },
+    { text: "Develop a passion for learning. If you do, you will never cease to grow.", author: "Anthony J. D'Angelo" },
+    { text: "Education is the movement from darkness to light.", author: "Allan Bloom" },
+    { text: "An investment in knowledge always pays the best interest.", author: "Benjamin Franklin" },
+    { text: "Learning is not attained by chance, it must be sought for with ardor and attended to with diligence.", author: "Abigail Adams" },
+    { text: "The mind is not a vessel to be filled, but a fire to be kindled.", author: "Plutarch" },
+    { text: "The purpose of education is to replace an empty mind with an open one.", author: "Malcolm Forbes" },
+    { text: "Education is simply the soul of a society as it passes from one generation to another.", author: "G.K. Chesterton" },
+    { text: "Change is the end result of all true learning.", author: "Leo Buscaglia" },
+    { text: "Intelligence plus character - that is the goal of true education.", author: "Martin Luther King Jr." },
+    { text: "The function of education is to teach one to think intensively and to think critically.", author: "Martin Luther King Jr." },
+    { text: "Learning never exhausts the mind.", author: "Leonardo da Vinci" },
+    { text: "He who opens a school door, closes a prison.", author: "Victor Hugo" },
+    { text: "Education is not the filling of a pail, but the lighting of a fire.", author: "William Butler Yeats" },
+    { text: "The direction in which education starts a man will determine his future in life.", author: "Plato" },
+    { text: "I have never let my schooling interfere with my education.", author: "Mark Twain" },
+    { text: "The capacity to learn is a gift; the ability to learn is a skill; the willingness to learn is a choice.", author: "Brian Herbert" },
+    { text: "The whole purpose of education is to turn mirrors into windows.", author: "Sydney J. Harris" },
+    { text: "Teachers open the door, but you must enter by yourself.", author: "Chinese Proverb" },
+    { text: "Education is the key to unlock the golden door of freedom.", author: "George Washington Carver" },
+    { text: "Learning is a treasure that will follow its owner everywhere.", author: "Chinese Proverb" },
+    { text: "Upon the subject of education, I can only say that I view it as the most important subject which we as a people may be engaged in.", author: "Abraham Lincoln" },
+    { text: "Education's purpose is to replace an empty mind with an open one.", author: "Malcolm Forbes" },
+    { text: "The expert in anything was once a beginner.", author: "Helen Hayes" },
+    { text: "Education is our passport to the future, for tomorrow belongs to the people who prepare for it today.", author: "Malcolm X" },
+    { text: "The foundation of every state is the education of its youth.", author: "Diogenes" },
+    { text: "Instruction ends in the schoolroom, but education ends only with life.", author: "Frederick W. Robertson" },
+    { text: "What sculpture is to a block of marble, education is to the human soul.", author: "Joseph Addison" },
+    { text: "Wisdom is not a product of schooling but of the lifelong attempt to acquire it.", author: "Albert Einstein" },
+    { text: "To educate a man in mind and not in morals is to educate a menace to society.", author: "Theodore Roosevelt" },
+    { text: "The highest result of education is tolerance.", author: "Helen Keller" },
+    { text: "Real learning comes about when the competitive spirit has ceased.", author: "Jiddu Krishnamurti" },
+    { text: "Formal education will make you a living; self-education will make you a fortune.", author: "Jim Rohn" },
+    { text: "Education is a better safeguard of liberty than a standing army.", author: "Edward Everett" },
+    { text: "All of life is a constant education.", author: "Eleanor Roosevelt" },
+    { text: "The aim of education is the knowledge, not of facts, but of values.", author: "William S. Burroughs" },
+    { text: "The task of the modern educator is not to cut down jungles, but to irrigate deserts.", author: "C.S. Lewis" },
+    { text: "Don't limit a child to your own learning, for he was born in another time.", author: "Rabindranath Tagore" },
+    { text: "Every student can learn, just not on the same day, or the same way.", author: "George Evans" },
+    { text: "Education is the ability to listen to almost anything without losing your temper or your self-confidence.", author: "Robert Frost" },
+    { text: "Great teachers empathize with kids, respect them, and believe that each one has something special that can be built upon.", author: "Ann Lieberman" },
+    { text: "If you think education is expensive, try ignorance.", author: "Derek Bok" }
+]
+
+const insights = [
+    {
+        title: 'JEE Mains 2026 Result (Today) LIVE: Final Answer Key OUT; NTA Session 2 Scorecard Link Soon @...',
+        excerpt: 'JEE Mains 2026 session 2 final answer key is out. JEE Mains 2026 result for the session 2 exam will be out anytime soon, TODAY, Ap...',
+        author: 'Mamona Majumder',
+        date: 'Apr 20, 2026',
+        isLive: true,
+        comments: 1,
+        shares: 7,
+        image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=200&q=80'
+    },
+    {
+        title: 'ICSE, ISC Results 2026 @results.cisce.org Live Updates: Check Expected CISCE Results Date &...',
+        excerpt: 'ISC, ICSE results 2026 will be announced soon at cisce.org and results.cisce.org. Students can check results by logging with the...',
+        author: 'Anangsha Patra',
+        date: 'Apr 20, 2026',
+        isLive: true,
+        comments: 4,
+        shares: 113,
+        image: 'https://images.unsplash.com/photo-1454165833767-02654a59637f?w=200&q=80'
+    },
+    {
+        title: 'Chef Salary in India 2025: Average Pay, Growth, and Top Hotel Packages',
+        excerpt: 'The food and hospitality industry in India has seen big growth in recent years. Starting from luxury bars, family restaurants, to smal...',
+        author: 'Porishmita Paul',
+        date: 'Apr 20, 2026',
+        isLive: false,
+        views: 940,
+        image: 'https://images.unsplash.com/photo-1577214282282-e474bd2d6a06?w=200&q=80'
+    },
+]
+
+const topColleges = [
+    { name: 'IIT Delhi', logo: 'https://upload.wikimedia.org/wikipedia/en/f/fd/IIT_Delhi_logo.png' },
+    { name: 'AIIMS Delhi', logo: 'https://upload.wikimedia.org/wikipedia/en/0/08/All_India_Institute_of_Medical_Sciences_Delhi_logo.png' },
+    { name: 'IIM Bangalore', logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/ef/IIM_Bangalore_Logo.svg/1200px-IIM_Bangalore_Logo.svg.png' },
+]
+
+const leadership = [
+    { name: 'Ritesh Rastogi', role: 'MD & Founder', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop' },
+    { name: 'Aman Rastogi', role: 'Managing Director', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=800&auto=format&fit=crop' },
+    { name: 'Somnath Ghosh', role: 'Head of Operations', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=800&auto=format&fit=crop' },
+    { name: 'Prothoma Ghosh', role: 'Head Tele-Counselor', image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop' },
+    { name: 'Ritu Choudhury', role: 'Media Head', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=800&auto=format&fit=crop' },
+]
+
+const gameOptions = [
+    { id: 'medical', label: 'Medicine', result: 'Aim for top AIIMS or state-govt colleges with our NEET strategy.', icon: Stethoscope },
+    { id: 'tech', label: 'Technology', result: 'IITs or Tier-1 private unis await. Focus on JEE & CS fundamentals.', icon: Code },
+    { id: 'business', label: 'Business', result: 'IIMs and top B-Schools require profile building + CAT excellence.', icon: Briefcase },
+    { id: 'design', label: 'Creative', result: 'NID or NIFT could be your destination. Build a stellar portfolio.', icon: Palette },
+]
+
+// ─── Board Config ─────────────────────────────────────────────────────────────
+
+// Snakes: head → tail (go DOWN)
+const SNAKES: Record<number, number> = {
+    17: 4,
+    54: 34,
+    62: 19,
+    64: 60,
+    87: 24,
+    93: 73,
+    95: 75,
+    99: 78,
+}
+
+// Ladders: base → top (go UP)
+const LADDERS: Record<number, number> = {
+    3: 22,
+    8: 30,
+    28: 84,
+    32: 44,
+    48: 67,
+    71: 91,
+    80: 99,
+}
+
+const DICE_ICONS = [Dice1, Dice2, Dice3, Dice4, Dice5, Dice6]
+
+// ─── Coordinate Helper ────────────────────────────────────────────────────────
+// Returns center % coordinates for a given square number (1–100) on a 10x10 board.
+// Row 0 = bottom (squares 1–10), Row 9 = top (squares 91–100).
+// Even rows (0,2,...) go left→right; odd rows (1,3,...) go right→left (snake numbering).
+function getCenter(square: number): { cx: number; cy: number } {
+    const idx = square - 1                      // 0-based
+    const row = Math.floor(idx / 10)            // 0 = bottom row
+    const col = idx % 10                        // 0–9
+
+    // In even rows, col 0 is left; in odd rows, col 0 is right
+    const visualCol = row % 2 === 0 ? col : 9 - col
+
+    // Each cell is 10% wide/tall; center is at +5%
+    const cx = visualCol * 10 + 5
+    // Row 0 → bottom → cy = 95%; Row 9 → top → cy = 5%
+    const cy = 95 - row * 10
+
+    return { cx, cy }
+}
+
+// ─── Component ───────────────────────────────────────────────────────────────
+
+const SnakeLadderGame: React.FC = () => {
+    const [position, setPosition] = useState(0)          // 0 = off-board (start)
+    const [isRolling, setIsRolling] = useState(false)
+    const [diceValue, setDiceValue] = useState(1)
+    const [gameStatus, setGameStatus] = useState<'ready' | 'playing' | 'won'>('ready')
+    const [message, setMessage] = useState('Roll the dice to begin your journey!')
+    const [highlight, setHighlight] = useState<number | null>(null)  // flashes snake/ladder destination
+
+    const rollDice = useCallback(() => {
+        if (isRolling || gameStatus === 'won') return
+
+        setIsRolling(true)
+        setHighlight(null)
+
+        // Animate dice face cycling
+        let ticks = 0
+        const interval = setInterval(() => {
+            setDiceValue(Math.floor(Math.random() * 6) + 1)
+            ticks++
+            if (ticks >= 8) clearInterval(interval)
+        }, 60)
+
+        const roll = Math.floor(Math.random() * 6) + 1
+
+        setTimeout(() => {
+            setDiceValue(roll)
+            setIsRolling(false)
+
+            const newRaw = position + roll
+
+            if (newRaw > 100) {
+                setMessage(`Need exactly ${100 - position} to finish. Try again!`)
+                return
+            }
+
+            if (newRaw === 100) {
+                setPosition(100)
+                setGameStatus('won')
+                setMessage('🎉 You reached 100! Congratulations!')
+                return
+            }
+
+            // Check snake or ladder
+            if (LADDERS[newRaw]) {
+                const dest = LADDERS[newRaw]
+                setPosition(dest)
+                setHighlight(dest)
+                setMessage(`🪜 Ladder! Climbed from ${newRaw} → ${dest}`)
+            } else if (SNAKES[newRaw]) {
+                const dest = SNAKES[newRaw]
+                setPosition(dest)
+                setHighlight(dest)
+                setMessage(`🐍 Snake! Slid from ${newRaw} → ${dest}`)
+            } else {
+                setPosition(newRaw)
+                setMessage(`Moved to square ${newRaw}. Roll again!`)
+            }
+
+            setGameStatus('playing')
+        }, 550)
+    }, [isRolling, gameStatus, position])
+
+    const resetGame = () => {
+        setPosition(0)
+        setGameStatus('ready')
+        setMessage('Roll the dice to begin your journey!')
+        setDiceValue(1)
+        setHighlight(null)
+    }
+
+    const DiceIcon = DICE_ICONS[diceValue - 1]
+
+    // Player token position
+    const playerPos = position > 0 ? getCenter(position) : null
+
+    return (
+        <div className="w-full max-w-4xl bg-white rounded-[40px] p-6 md:p-10 shadow-2xl border border-slate-100 relative overflow-hidden">
+            <div className="absolute -top-12 -right-12 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-12 -left-12 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="flex flex-col md:flex-row items-center md:items-stretch gap-8 md:gap-12 relative z-10">
+                {/* ── BOARD (LEFT) ─────────────────────────────────────────────────── */}
+                <div className="w-full max-w-[440px] aspect-square select-none shrink-0">
+                    <div className="relative w-full h-full">
+                        {/* Number Grid */}
+                        <div className="absolute inset-0 grid grid-cols-10 gap-[2px] p-0">
+                            {Array.from({ length: 100 }).map((_, i) => {
+                                const row = Math.floor(i / 10)
+                                const col = i % 10
+                                const boardRow = 9 - row
+                                const displayNum = boardRow % 2 === 0
+                                    ? boardRow * 10 + col + 1
+                                    : boardRow * 10 + (9 - col) + 1
+
+                                const isSnakeHead = SNAKES[displayNum] !== undefined
+                                const isLadderBase = LADDERS[displayNum] !== undefined
+                                const isPlayer = position === displayNum
+
+                                return (
+                                    <div
+                                        key={displayNum}
+                                        className={cn(
+                                            'flex items-center justify-center text-[8px] font-bold rounded-sm relative transition-all duration-300',
+                                            isPlayer
+                                                ? 'bg-sky-500 text-white z-30 ring-2 ring-white ring-offset-1 scale-110 shadow-lg'
+                                                : isSnakeHead
+                                                    ? 'bg-red-50 text-red-400'
+                                                    : isLadderBase
+                                                        ? 'bg-emerald-50 text-emerald-500'
+                                                        : 'bg-white text-slate-400 border border-slate-100',
+                                            highlight === displayNum && !isPlayer ? 'ring-2 ring-amber-400 bg-amber-50 text-amber-600' : ''
+                                        )}
+                                    >
+                                        {isPlayer ? (
+                                            <span className="relative z-10 text-white font-black">{displayNum}</span>
+                                        ) : (
+                                            displayNum
+                                        )}
+                                    </div>
+                                )
+                            })}
+                        </div>
+
+                        {/* SVG Overlay: Snakes & Ladders */}
+                        <svg
+                            className="absolute inset-0 w-full h-full pointer-events-none"
+                            viewBox="0 0 100 100"
+                            preserveAspectRatio="none"
+                        >
+                            <defs>
+                                <marker id="arrowGreen" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto">
+                                    <path d="M0,0 L4,2 L0,4 Z" fill="#10b981" />
+                                </marker>
+                            </defs>
+
+                            {/* Ladders */}
+                            {Object.entries(LADDERS).map(([startStr, end]) => {
+                                const start = parseInt(startStr)
+                                const s = getCenter(start)
+                                const e = getCenter(end)
+                                const dx = e.cx - s.cx
+                                const dy = e.cy - s.cy
+                                const len = Math.sqrt(dx * dx + dy * dy) || 1
+                                const px = (-dy / len) * 1.8
+                                const py = (dx / len) * 1.8
+                                const numRungs = 5
+                                return (
+                                    <g key={`ladder-${start}`} opacity="0.75">
+                                        <line x1={s.cx - px} y1={s.cy - py} x2={e.cx - px} y2={e.cy - py} stroke="#059669" strokeWidth="0.9" strokeLinecap="round" />
+                                        <line x1={s.cx + px} y1={s.cy + py} x2={e.cx + px} y2={e.cy + py} stroke="#059669" strokeWidth="0.9" strokeLinecap="round" />
+                                        {Array.from({ length: numRungs }).map((_, ri) => {
+                                            const t = (ri + 1) / (numRungs + 1)
+                                            const rx = s.cx + dx * t
+                                            const ry = s.cy + dy * t
+                                            return (
+                                                <line
+                                                    key={ri}
+                                                    x1={rx - px} y1={ry - py}
+                                                    x2={rx + px} y2={ry + py}
+                                                    stroke="#059669" strokeWidth="0.7" strokeLinecap="round"
+                                                />
+                                            )
+                                        })}
+                                    </g>
+                                )
+                            })}
+
+                            {/* Snakes */}
+                            {Object.entries(SNAKES).map(([headStr, tail]) => {
+                                const head = parseInt(headStr)
+                                const h = getCenter(head)
+                                const t = getCenter(tail)
+                                const midX = (h.cx + t.cx) / 2
+                                const midY = (h.cy + t.cy) / 2
+                                const perpOffset = (h.cx > t.cx ? 1 : -1) * 12
+                                const cpX = midX + perpOffset
+                                const cpY = midY
+                                const angle = Math.atan2(cpY - h.cy, cpX - h.cx) * (180 / Math.PI)
+
+                                return (
+                                    <g key={`snake-${head}`} opacity="0.95">
+                                        <path
+                                            d={`M ${h.cx} ${h.cy} Q ${cpX} ${cpY} ${t.cx} ${t.cy}`}
+                                            stroke="rgba(0,0,0,0.15)" strokeWidth="5" fill="none" strokeLinecap="round"
+                                        />
+                                        <path
+                                            d={`M ${h.cx} ${h.cy} Q ${cpX} ${cpY} ${t.cx} ${t.cy}`}
+                                            stroke="#ef4444" strokeWidth="3.5" fill="none" strokeLinecap="round"
+                                        />
+                                        <path
+                                            d={`M ${h.cx} ${h.cy} Q ${cpX} ${cpY} ${t.cx} ${t.cy}`}
+                                            stroke="#fca5a5" strokeWidth="1.2" fill="none" strokeLinecap="round"
+                                            strokeDasharray="2 4"
+                                        />
+                                        <g transform={`translate(${h.cx}, ${h.cy}) rotate(${angle + 90})`}>
+                                            <path d="M 0 0 L -0.8 -4 M 0 0 L 0.8 -4" stroke="#ef4444" strokeWidth="0.5" fill="none" />
+                                            <path d="M 0 -2.5 L 2.5 0 L 0 3.5 L -2.5 0 Z" fill="#dc2626" />
+                                            <circle cx="-0.8" cy="-0.5" r="0.5" fill="white" />
+                                            <circle cx="0.8" cy="-0.5" r="0.5" fill="white" />
+                                        </g>
+                                        <g transform={`translate(${t.cx}, ${t.cy}) rotate(${Math.atan2(t.cy - cpY, t.cx - cpX) * (180 / Math.PI)})`}>
+                                            <path d="M 0 0 L -2.5 -1.5 L -2.5 1.5 Z" fill="#b91c1c" />
+                                        </g>
+                                    </g>
+                                )
+                            })}
+
+                            {playerPos && position !== 0 && (
+                                <g>
+                                    <circle cx={playerPos.cx} cy={playerPos.cy} r="3.8" fill="#0ea5e9" opacity="0.25" />
+                                    <circle cx={playerPos.cx} cy={playerPos.cy} r="2.4" fill="#0ea5e9" stroke="white" strokeWidth="0.8" />
+                                    <circle cx={playerPos.cx} cy={playerPos.cy} r="1" fill="white" />
+                                </g>
+                            )}
+                        </svg>
+                    </div>
+                </div>
+
+                {/* ── CONTROLS (RIGHT) ─────────────────────────────────────────────── */}
+                <div className="flex-1 flex flex-col justify-center gap-8 md:border-l md:border-slate-100 md:pl-12">
+                    <div className="text-left">
+                        <p className={cn(
+                            'text-[10px] font-black uppercase tracking-[0.2em] mb-2',
+                            gameStatus === 'won' ? 'text-emerald-500' : 'text-slate-400'
+                        )}>
+                            {gameStatus === 'won' ? 'Victory!' : `Position: Square ${position}`}
+                        </p>
+                        <h3 className="text-xl font-bold text-slate-900 leading-tight">
+                            {message}
+                        </h3>
+                    </div>
+
+                    <div className="flex flex-row md:flex-col items-center md:items-start gap-6">
+                        {/* Dice Button */}
+                        <button
+                            onClick={rollDice}
+                            disabled={isRolling || gameStatus === 'won'}
+                            className={cn(
+                                'w-28 h-28 md:w-32 md:h-32 rounded-[40px] flex flex-col items-center justify-center gap-2 transition-all shadow-2xl',
+                                isRolling
+                                    ? 'bg-slate-100 scale-95 cursor-wait'
+                                    : gameStatus === 'won'
+                                        ? 'bg-emerald-400 opacity-40 cursor-not-allowed'
+                                        : 'bg-sky-500 hover:bg-sky-600 hover:-translate-y-2 active:scale-95 cursor-pointer'
+                            )}
+                            aria-label="Roll dice"
+                        >
+                            <DiceIcon
+                                className={cn(
+                                    'w-14 h-14 md:w-16 md:h-16',
+                                    isRolling ? 'text-slate-300 animate-spin' : 'text-white'
+                                )}
+                            />
+                            {!isRolling && (
+                                <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">Roll Dice</span>
+                            )}
+                        </button>
+
+                        {gameStatus !== 'ready' && (
+                            <button
+                                onClick={resetGame}
+                                className="px-8 py-4 bg-slate-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-slate-800 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-slate-900/20"
+                            >
+                                Restart Game
+                            </button>
+                        )}
+                    </div>
+
+                    {/* Legend */}
+                    <div className="grid grid-cols-2 md:grid-cols-1 gap-4 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        <span className="flex items-center gap-2 bg-emerald-50 py-2 px-3 rounded-xl border border-emerald-100/50">
+                            <span className="inline-block w-4 h-1 bg-emerald-500 rounded" />
+                            <span className="text-emerald-700">Ladders climb</span>
+                        </span>
+                        <span className="flex items-center gap-2 bg-red-50 py-2 px-3 rounded-xl border border-red-100/50">
+                            <span className="inline-block w-4 h-1 bg-red-400 rounded" />
+                            <span className="text-red-700">Snakes slide</span>
+                        </span>
+                    </div>
+
+                    {/* Win reward side note */}
+                    {gameStatus === 'won' && (
+                        <div className="p-8 bg-emerald-500 rounded-[40px] border border-emerald-400 text-white animate-in zoom-in duration-700 shadow-2xl shadow-emerald-500/30">
+                            <div className="flex items-center gap-4 mb-6">
+                                <div className="p-3 bg-white/20 rounded-2xl">
+                                    <Trophy className="w-8 h-8" />
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-emerald-100 mb-1">Legendary Status</p>
+                                    <p className="text-xl font-bold">Rewards Unlocked!</p>
+                                </div>
+                            </div>
+
+                            <div className="space-y-4 mb-8">
+                                <p className="text-[10px] font-black uppercase tracking-widest text-emerald-100/70 border-b border-emerald-400 pb-2">Exclusive Benefits:</p>
+                                <ul className="space-y-3">
+                                    {[
+                                        "1-on-1 Dedicated Senior Counselor",
+                                        "Direct Fast-Track College Appointments",
+                                        "Priority Documentation & SOP Support",
+                                        "Guaranteed Scholarship Eligibility Check"
+                                    ].map((benefit, i) => (
+                                        <li key={i} className="flex items-center gap-3 text-xs font-bold text-emerald-50">
+                                            <CheckCircle2 size={14} className="text-white shrink-0" />
+                                            {benefit}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            <div className="bg-white/10 rounded-2xl p-4 border border-white/10">
+                                <p className="text-[9px] font-black uppercase tracking-widest text-emerald-100 mb-1">Use Promo Code:</p>
+                                <p className="text-2xl font-black tracking-tight">PREMIUMFREE</p>
+                                <p className="text-[9px] font-medium text-emerald-50/80 mt-2 italic">Mention this during your free consultation!</p>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default function AboutPage() {
+    const [dailyQuote, setDailyQuote] = useState(educationQuotes[0])
+    const [gameResult, setGameResult] = useState<string | null>(null)
+
+    useEffect(() => {
+        const day = Math.floor((new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24))
+        setDailyQuote(educationQuotes[day % 50])
+    }, [])
+
+    return (
+        <main className="min-h-screen bg-white selection:bg-sky-500 selection:text-white font-body">
+            <Navbar />
+
+            {/* ── REDESIGNED HERO: TEXT-RICH & INTERACTIVE ──────────────────────── */}
+            <section className="relative pt-[120px] pb-20 overflow-hidden bg-slate-50">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,182,255,0.05),transparent)] pointer-events-none" />
+
+                <div className="max-w-[1440px] mx-auto px-6 relative z-10">
+                    <div className="grid lg:grid-cols-12 gap-16 items-start">
+
+                        {/* Left Column: Extensive Text & Interactive Game */}
+                        <div className="lg:col-span-7">
+                            <div className="inline-flex items-center gap-3 mb-8">
+                                <span className="w-10 h-[2.5px] bg-sky-500 rounded-full" />
+                                <span className="text-[10px] font-black text-sky-600 uppercase tracking-[0.3em]">Institutional Authority</span>
+                            </div>
+                            <h1 className="font-display text-4xl md:text-5xl lg:text-[54px] text-slate-900 leading-[1.1] tracking-tighter mb-8">
+                                Guidance that <br /> Defines Your <span className="text-sky-600">Destiny</span>.
+                            </h1>
+
+                            <div className="space-y-6 max-w-2xl mb-12">
+                                <p className="text-lg text-slate-700 leading-relaxed font-medium">
+                                    Promote Education stands as India's premier admissions authority, bridging the gap between student aspirations and institutional excellence. For over 15 years, we have meticulously analyzed the academic landscape to provide data-driven, empathetic counseling to over 50,000 students.
+                                </p>
+                                <p className="text-base text-slate-500 leading-relaxed">
+                                    Our mission is simple: To democratize high-end career guidance. We leverage proprietary institutional data, placement metrics, and real-world outcomes to ensure that your choice of college is a strategic step toward a lifelong career, not just a four-year degree.
+                                </p>
+                            </div>
+
+                            {/* Mini-Game: The Career Compass */}
+                            <div className="bg-white border border-sky-100 rounded-[40px] p-10 shadow-2xl shadow-sky-900/5 relative overflow-hidden group mb-12">
+                                <div className="absolute top-0 right-0 p-8 text-sky-500/5">
+                                    <Compass size={120} className="group-hover:rotate-45 transition-transform duration-1000" />
+                                </div>
+                                <div className="relative z-10">
+                                    <div className="flex items-center gap-3 mb-6">
+                                        <Gamepad2 size={24} className="text-sky-500" />
+                                        <h3 className="text-xl font-bold text-slate-900">The Career Compass</h3>
+                                    </div>
+                                    <p className="text-sm text-slate-500 mb-8 max-w-md">What's your primary field of interest? Pick one to see your ideal path recommendation.</p>
+
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                                        {gameOptions.map((opt) => (
+                                            <button
+                                                key={opt.id}
+                                                onClick={() => setGameResult(opt.result)}
+                                                className={`p-4 rounded-2xl border flex flex-col items-center gap-3 transition-all ${gameResult === opt.result
+                                                    ? 'bg-sky-500 border-sky-500 text-white'
+                                                    : 'bg-slate-50 border-slate-100 text-slate-600 hover:border-sky-300'
+                                                    }`}
+                                            >
+                                                <opt.icon size={20} />
+                                                <span className="text-[10px] font-black uppercase tracking-widest">{opt.label}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    {gameResult && (
+                                        <div className="p-6 bg-sky-50 border border-sky-200 rounded-2xl animate-in fade-in slide-in-from-top-4">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <Sparkles size={16} className="text-sky-500" />
+                                                <p className="text-[10px] font-black text-sky-600 uppercase tracking-widest">Your Strategy</p>
+                                            </div>
+                                            <p className="text-slate-900 font-bold leading-relaxed">{gameResult}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="max-w-xl bg-white border border-slate-200 p-8 rounded-3xl shadow-xl shadow-sky-900/5 mb-12 relative overflow-hidden group">
+                                <Quote className="absolute -top-4 -right-4 w-24 h-24 text-slate-50 group-hover:text-sky-50 transition-colors" />
+                                <p className="text-slate-800 text-xl font-medium leading-relaxed italic relative z-10">"{dailyQuote.text}"</p>
+                                <p className="text-sky-600 text-[11px] font-black mt-4 uppercase tracking-widest relative z-10">— {dailyQuote.author}</p>
+                            </div>
+
+                            <div className="flex flex-wrap gap-5">
+                                <button className="px-10 py-5 bg-sky-500 text-white font-bold rounded-2xl hover:bg-sky-600 transition-all hover:-translate-y-1 shadow-2xl shadow-sky-500/20 text-xs uppercase tracking-widest">
+                                    Book Free Consultation
+                                </button>
+                                <Link href="/courses" className="px-10 py-5 bg-white border border-slate-200 text-slate-900 font-bold rounded-2xl hover:bg-slate-50 transition-all text-xs uppercase tracking-widest text-center shadow-sm">
+                                    Explore Programs
+                                </Link>
+                            </div>
+                        </div>
+
+                        {/* Right Column: News & Colleges (Already Polished) */}
+                        <div className="lg:col-span-5 space-y-8">
+                            {/* Latest News & Articles Section */}
+                            <div className="bg-white border border-slate-100 rounded-[32px] p-8 shadow-2xl shadow-sky-900/5">
+                                <div className="flex items-center justify-between mb-10">
+                                    <h3 className="text-slate-900 font-display text-2xl">Latest News & Articles</h3>
+                                    <Link href="/news" className="text-sky-500 font-bold text-[10px] uppercase tracking-widest flex items-center gap-2 group">
+                                        Explore All <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                                    </Link>
+                                </div>
+                                <div className="space-y-10">
+                                    {insights.map((it, i) => (
+                                        <div key={i} className="flex gap-6 group cursor-pointer border-b border-slate-50 pb-10 last:border-0 last:pb-0">
+                                            <div className="flex-1">
+                                                <div className="flex items-start gap-2 mb-2">
+                                                    {it.isLive && (
+                                                        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-red-500 text-white text-[8px] font-black uppercase rounded-full animate-pulse shrink-0 mt-0.5">
+                                                            <div className="w-1 h-1 bg-white rounded-full" /> LIVE
+                                                        </span>
+                                                    )}
+                                                    <h4 className="text-slate-900 text-sm font-bold leading-snug group-hover:text-sky-600 transition-colors">
+                                                        {it.title}
+                                                    </h4>
+                                                </div>
+                                                <p className="text-slate-500 text-[11px] leading-relaxed line-clamp-2 mb-3">{it.excerpt}</p>
+
+                                                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                                                    <p className="text-[9px] font-bold text-slate-900">{it.author}</p>
+                                                    <span className="text-[9px] text-slate-300">•</span>
+                                                    <p className="text-[9px] text-slate-400 font-medium">{it.date}</p>
+                                                </div>
+
+                                                <div className="flex items-center gap-4 mt-3">
+                                                    {it.comments !== undefined && (
+                                                        <div className="flex items-center gap-1 text-sky-500">
+                                                            <MessageSquare size={10} fill="currentColor" className="opacity-20" />
+                                                            <span className="text-[8px] font-black uppercase tracking-widest">{it.comments} Comments</span>
+                                                        </div>
+                                                    )}
+                                                    {it.shares !== undefined && (
+                                                        <div className="flex items-center gap-1 text-sky-500">
+                                                            <ArrowRight size={10} className="rotate-[-45deg]" />
+                                                            <span className="text-[8px] font-black uppercase tracking-widest">{it.shares} Shares</span>
+                                                        </div>
+                                                    )}
+                                                    {it.views !== undefined && (
+                                                        <div className="flex items-center gap-1 text-sky-500">
+                                                            <Globe size={10} className="opacity-40" />
+                                                            <span className="text-[8px] font-black uppercase tracking-widest">{it.views} Views</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            <div className="w-20 h-20 rounded-xl overflow-hidden shadow-sm shrink-0 self-start group-hover:scale-105 transition-transform">
+                                                <img src={it.image} alt="" className="w-full h-full object-cover" />
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Top Colleges Card */}
+                            <div className="bg-sky-500 rounded-[32px] p-8 relative overflow-hidden group shadow-2xl shadow-sky-500/20">
+                                <Globe size={100} className="absolute -bottom-10 -right-10 text-white/20 group-hover:rotate-12 transition-transform duration-700" />
+                                <h3 className="text-white font-display text-xl mb-6 relative z-10">Top Institutions</h3>
+                                <div className="grid grid-cols-3 gap-4 relative z-10">
+                                    {topColleges.map((c, i) => (
+                                        <div key={i} className="aspect-square bg-white rounded-2xl p-3 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+                                            <img src={c.logo} alt={c.name} className="max-w-full max-h-full object-contain" />
+                                        </div>
+                                    ))}
+                                </div>
+                                <Link href="/colleges" className="mt-8 flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-widest hover:underline">
+                                    Explore All 1000+ Partners <ChevronRight size={14} />
+                                </Link>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            {/* ── THE MANIFESTO: WHY CHOOSE US, MISSION & VISION ────────────────── */}
+            <section className="py-20 bg-white relative overflow-hidden">
+                <div className="max-w-[1440px] mx-auto px-6">
+                    <div className="grid lg:grid-cols-2 gap-24 items-center mb-20">
+                        <div>
+                            <div className="inline-flex items-center gap-3 mb-8">
+                                <span className="w-10 h-[2px] bg-sky-500 rounded-full" />
+                                <span className="text-[11px] font-black text-sky-600 uppercase tracking-widest">About Promote Education</span>
+                            </div>
+                            <h2 className="font-display text-4xl md:text-5xl text-slate-900 mb-8 leading-[1.1] tracking-tight">
+                                Why Choose <br /> <span className="text-sky-500 underline decoration-sky-100 decoration-8 underline-offset-4">Promote Education?</span>
+                            </h2>
+                            <p className="text-lg text-slate-600 leading-relaxed font-medium mb-10">
+                                At Promote Education, we believe education is the foundation of success—and the right guidance changes everything. As a trusted admission consultancy in India, we help students secure seats in <span className="text-sky-900 font-bold border-b-2 border-sky-500/20">Medical, Engineering, Management</span>, and other professional programs across India and abroad.
+                            </p>
+                            <div className="flex items-center gap-12">
+                                <div className="group">
+                                    <p className="text-5xl font-black text-sky-900 tracking-tighter group-hover:text-sky-500 transition-colors">50K+</p>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">Counseled</p>
+                                </div>
+                                <div className="group">
+                                    <p className="text-5xl font-black text-sky-900 tracking-tighter group-hover:text-sky-500 transition-colors">15+</p>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">Years Exp</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="relative">
+                            <div className="aspect-[16/10] rounded-[48px] overflow-hidden shadow-2xl relative border-8 border-slate-50">
+                                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071" className="w-full h-full object-cover" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent" />
+                            </div>
+                            <div className="absolute -bottom-10 -left-10 bg-white p-8 rounded-[32px] shadow-2xl border border-slate-100 max-w-xs hidden md:block">
+                                <Quote size={32} className="text-sky-500 mb-4" />
+                                <p className="text-slate-700 font-medium italic leading-relaxed text-sm">"We don't just find you a college; we find you the right foundation for your entire career."</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Mission & Vision Cards */}
+                    <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                        <div className="bg-slate-50 rounded-[40px] p-12 border border-slate-100 relative group hover:bg-white hover:shadow-2xl transition-all duration-500">
+                            <div className="w-14 h-14 bg-sky-500 text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-sky-500/20 group-hover:scale-110 transition-transform">
+                                <Target size={28} />
+                            </div>
+                            <h3 className="text-2xl font-bold text-slate-900 mb-6">Our Mission</h3>
+                            <p className="text-slate-600 leading-relaxed font-medium">
+                                To democratize high-end career guidance by providing every student with data-backed, empathetic, and transparent admission support. We aim to ensure that financial or geographical barriers never prevent a deserving student from reaching their dream institution.
+                            </p>
+                        </div>
+                        <div className="bg-slate-50 rounded-[40px] p-12 border border-slate-100 relative group hover:bg-white hover:shadow-2xl transition-all duration-500">
+                            <div className="w-14 h-14 bg-sky-900 text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-sky-900/20 group-hover:scale-110 transition-transform">
+                                <TrendingUp size={28} />
+                            </div>
+                            <h3 className="text-2xl font-bold text-slate-900 mb-6">Our Vision</h3>
+                            <p className="text-slate-600 leading-relaxed font-medium">
+                                To become India's most trusted and technologically advanced educational gateway, where every academic journey is optimized for success through a perfect blend of human expertise and institutional intelligence.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ── DESCRIPTIVE DIFFERENTIATORS (Light Blue/White Mix) ─────────────── */}
+            <section className="py-20 bg-slate-50 border-y border-slate-100 relative overflow-hidden">
+                <div className="max-w-[1440px] mx-auto px-6 relative z-10">
+                    <div className="text-center mb-16">
+                        <span className="text-[10px] font-black text-sky-600 uppercase tracking-[0.4em] mb-4 block text-center">The Differentiators</span>
+                        <h2 className="font-display text-4xl md:text-5xl text-slate-900 text-center">What sets us apart</h2>
+                    </div>
+
+                    <div className="grid lg:grid-cols-2 gap-x-20 gap-y-16">
+                        {[
+                            {
+                                title: 'Student-first counseling',
+                                desc: 'Unbiased, research-backed guidance aligned to your goals. We don\'t just look at grades; we look at aspirations, budget, and long-term career viability.',
+                                icon: Heart
+                            },
+                            {
+                                title: 'Course & college fit',
+                                desc: 'Data-driven college shortlisting and course selection (India & abroad). We utilize a massive internal database of placement statistics and faculty quality scores.',
+                                icon: Target
+                            },
+                            {
+                                title: 'End-to-end admission support',
+                                desc: 'SOP/LOR guidance, accurate form filling, deadline tracking, mock interviews. We manage the paperwork so you can focus on your entrance exams.',
+                                icon: Sparkles
+                            },
+                            {
+                                title: 'Scholarship & loan help',
+                                desc: 'Pointers on scholarships and education loans (where eligible). Our financial advisors help navigate the complex world of student lending and grants.',
+                                icon: GraduationCap
+                            },
+                            {
+                                title: 'Network & experience',
+                                desc: 'Strong relationships with reputed institutions; transparent processes. Over 15 years, we\'ve built a network that provides students with inside insights into campus life.',
+                                icon: Globe
+                            },
+                            {
+                                title: 'Ethical & compliant',
+                                desc: 'We do not sell or guarantee seats—admissions are per official rules and merit. We maintain strict compliance with all institutional and government guidelines.',
+                                icon: Shield
+                            },
+                        ].map((item, i) => (
+                            <div key={i} className="flex gap-8 group">
+                                <div className="w-16 h-16 rounded-3xl bg-white border border-slate-200 flex items-center justify-center text-sky-500 group-hover:bg-sky-500 group-hover:text-white transition-all shrink-0 shadow-sm">
+                                    <item.icon size={28} />
+                                </div>
+                                <div>
+                                    <h3 className="text-2xl font-bold text-slate-900 mb-4 leading-tight group-hover:text-sky-600 transition-colors">{item.title}</h3>
+                                    <p className="text-slate-600 text-base leading-relaxed font-medium">{item.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ── THE BLUEPRINT (White) ────────────────────────────────────────── */}
+            <section className="py-20 bg-white">
+                <div className="max-w-[1440px] mx-auto px-6">
+                    <div className="text-center mb-16">
+                        <span className="text-[10px] font-black text-sky-600 uppercase tracking-[0.4em] mb-4 block text-center">The Blueprint</span>
+                        <h2 className="font-display text-4xl md:text-5xl text-slate-900 tracking-tight text-center">How We Work <br /><span className="text-sky-500 italic text-3xl">(simple, structured)</span></h2>
+                    </div>
+
+                    <div className="grid lg:grid-cols-5 gap-12">
+                        {[
+                            { step: '01', title: 'Profile & Goals', desc: 'Evaluate academics, interests, budget, timelines.' },
+                            { step: '02', title: 'Shortlist & Plan', desc: 'Create a Dream/Target/Safe list + application calendar.' },
+                            { step: '03', title: 'Docs & Forms', desc: 'SOP/LOR/resume polish, error-free applications.' },
+                            { step: '04', title: 'Interview & Results', desc: 'Mock interviews, status tracking, next steps.' },
+                            { step: '05', title: 'Financials & Onboarding', desc: 'Scholarship/loan guidance, joining formalities.' },
+                        ].map((s, i) => (
+                            <div key={i} className="flex flex-col items-center text-center group">
+                                <div className="w-20 h-20 rounded-full bg-slate-50 border-4 border-white flex items-center justify-center mb-8 shadow-xl group-hover:bg-sky-500 group-hover:text-white transition-all">
+                                    <span className="text-2xl font-black text-slate-900 group-hover:text-white">{s.step}</span>
+                                </div>
+                                <h4 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-sky-600 transition-colors">{s.title}</h4>
+                                <p className="text-slate-500 text-sm leading-relaxed font-medium">{s.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ── CORE VALUES (Light theme) ─────────────────────────────────────── */}
+            <section className="py-20 bg-slate-50 border-y border-slate-100">
+                <div className="max-w-[1440px] mx-auto px-6">
+                    <div className="text-center mb-16">
+                        <span className="text-[10px] font-black text-sky-600 uppercase tracking-[0.4em] mb-4 block text-center">Our DNA</span>
+                        <h2 className="font-display text-4xl md:text-5xl text-slate-900 mb-6 text-center">Our core values</h2>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+                        {[
+                            { title: 'Trust', desc: 'Building lasting relationships through transparency and integrity.', icon: Shield },
+                            { title: 'Excellence', desc: 'Committed to delivering the highest quality guidance and support.', icon: Award },
+                            { title: 'Empathy', desc: 'Understanding and addressing each student\'s unique needs.', icon: Heart },
+                            { title: 'Innovation', desc: 'Embracing new technologies to enhance the admission process.', icon: Lightbulb },
+                        ].map((v, i) => (
+                            <div key={i} className="text-center group p-10 bg-white rounded-3xl shadow-lg shadow-sky-900/5 hover:shadow-xl transition-all border border-slate-100">
+                                <div className="w-16 h-16 rounded-2xl bg-sky-50 mx-auto flex items-center justify-center text-sky-500 mb-8 group-hover:bg-sky-500 group-hover:text-white transition-all">
+                                    <v.icon size={28} />
+                                </div>
+                                <h3 className="text-xl font-bold text-slate-900 mb-4 group-hover:text-sky-600 transition-colors">{v.title}</h3>
+                                <p className="text-sm text-slate-500 leading-relaxed font-medium">{v.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ── THE TEAM (White) ─────────────────────────────────────────────── */}
+            <section className="py-20 bg-white">
+                <div className="max-w-[1440px] mx-auto px-6">
+                    <div className="text-center mb-12">
+                        <h2 className="font-display text-4xl md:text-5xl text-slate-900 text-center">The Leadership</h2>
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-12">
+                        {leadership.map((member, i) => (
+                            <div key={i} className="text-center group">
+                                <div className="aspect-[4/5] rounded-[32px] overflow-hidden mb-8 shadow-xl relative border-4 border-slate-50">
+                                    <img src={member.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" />
+                                </div>
+                                <h4 className="text-lg font-bold text-slate-900 mb-1 group-hover:text-sky-600 transition-colors">{member.name}</h4>
+                                <p className="text-[10px] font-black text-sky-500 uppercase tracking-widest">{member.role}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ── THE CHALLENGE: SNAKE & LADDERS (Interactive Reward) ───────────── */}
+            <section className="pb-20 px-6">
+                <div className="max-w-[1440px] mx-auto">
+                    <div className="bg-slate-50 rounded-[64px] p-8 md:p-20 relative overflow-hidden border border-slate-100 shadow-sm">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(14,165,233,0.03),transparent)] pointer-events-none" />
+
+                        <div className="relative z-10 flex flex-col items-center text-center">
+                            {/* Text Content */}
+                            <div className="w-full mb-16">
+                                <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-sky-500/10 border border-sky-500/20 mb-8">
+                                    <Sparkles size={14} className="text-sky-600" />
+                                    <span className="text-[10px] font-black text-sky-600 uppercase tracking-widest">Exclusive Reward</span>
+                                </div>
+                                <h2 className="font-display text-4xl md:text-6xl text-slate-900 mb-6 tracking-tight leading-tight">
+                                    The Path to <span className="text-sky-600 italic">Success</span> isn't Linear.
+                                </h2>
+                                <p className="text-slate-500 text-sm md:text-base mb-12 leading-relaxed mx-auto max-w-2xl font-medium">
+                                    Reach the final square to unlock <strong>Free Premium Admission Support</strong>. Our journey is full of leaps (ladders) and lessons (snakes) — just like your career.
+                                </p>
+
+                                {/* Permanent Reward Cards */}
+                                <div className="w-full max-w-7xl mx-auto grid md:grid-cols-[1.1fr_0.9fr] gap-10 text-left mb-24 px-4">
+
+                                    {/* Winner's Reward Card */}
+                                    <div className="rounded-[40px] bg-white border border-slate-100 shadow-xl shadow-sky-900/5 p-12 xl:p-16 flex flex-col justify-between gap-16 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
+
+                                        <div className="pb-10 border-b border-slate-100">
+                                            <div className="flex items-start gap-6 mb-10">
+                                                <div className="w-16 h-16 rounded-2xl bg-sky-500 flex items-center justify-center shadow-lg shadow-sky-500/25 shrink-0 group-hover:scale-110 transition-transform duration-500">
+                                                    <Trophy className="text-white w-8 h-8" />
+                                                </div>
+
+                                                <div>
+                                                    <h4 className="text-slate-900 font-bold text-3xl leading-tight">
+                                                        Winner's Reward
+                                                    </h4>
+                                                    <p className="text-sky-600 text-xs font-bold uppercase tracking-[0.2em] mt-2">
+                                                        Premium Admission Support — Free
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <p className="text-slate-500 text-[15px] leading-relaxed max-w-md font-medium">
+                                                Reach square 100 and unlock India's most comprehensive admission package — worth ₹15,000 — at zero cost. Our experts handle everything so you focus on what matters: your entrance exams.
+                                            </p>
+                                        </div>
+
+                                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                            {[
+                                                { t: "1-on-1 Senior Counselor", d: "Dedicated expert for your entire admission journey" },
+                                                { t: "Direct College Appointments", d: "Fast-track access, no waiting queues" },
+                                                { t: "Priority SOP & LOR Writing", d: "Editorial-grade documents that stand out" },
+                                                { t: "Scholarship Eligibility Audit", d: "Identify every grant and fee waiver you qualify for" },
+                                            ].map((item, i) => (
+                                                <li key={i} className="flex items-start gap-4">
+                                                    <div className="w-6 h-6 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center shrink-0 mt-1">
+                                                        <CheckCircle2 size={14} className="text-emerald-500" />
+                                                    </div>
+
+                                                    <div>
+                                                        <p className="text-slate-900 text-sm font-semibold leading-tight mb-1">
+                                                            {item.t}
+                                                        </p>
+                                                        <p className="text-slate-400 text-xs leading-relaxed font-medium">
+                                                            {item.d}
+                                                        </p>
+                                                    </div>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+
+
+                                    {/* How to Win Card */}
+                                    <div className="rounded-[40px] bg-gradient-to-br from-sky-50 to-white border border-sky-100 p-12 xl:p-16 flex flex-col justify-between gap-16 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
+
+                                        <div className="pb-10 border-b border-sky-100/50">
+                                            <div className="flex items-start gap-6 mb-10">
+                                                <div className="w-16 h-16 rounded-2xl bg-white flex items-center justify-center shadow-sm shrink-0 group-hover:rotate-12 transition-transform duration-500">
+                                                    <Sparkles className="text-sky-600 w-8 h-8" />
+                                                </div>
+
+                                                <div>
+                                                    <h4 className="text-slate-900 font-bold text-3xl leading-tight">
+                                                        How to Win?
+                                                    </h4>
+                                                    <p className="text-sky-600 text-xs font-bold uppercase tracking-[0.2em] mt-2">
+                                                        Simple Rules, Big Reward
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <p className="text-slate-600 text-[15px] leading-relaxed mb-6 max-w-md font-medium">
+                                                Roll the dice and navigate from square 1 to square{" "}
+                                                <span className="text-sky-600 font-semibold underline underline-offset-4 decoration-sky-300">
+                                                    100
+                                                </span>. Land exactly on 100 to win.
+                                            </p>
+
+                                            <p className="text-slate-500 text-sm italic leading-relaxed font-medium">
+                                                "Every setback on this board is a lesson. Every ladder is the result of preparation."
+                                            </p>
+                                        </div>
+
+                                        <div className="flex flex-col gap-5 mt-2">
+                                            <span className="w-full px-6 py-4 rounded-2xl bg-white border border-emerald-200 text-xs font-bold text-emerald-600 uppercase tracking-wider flex items-center gap-3 shadow-sm">
+                                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                                Green ladders — climb higher faster
+                                            </span>
+
+                                            <span className="w-full px-6 py-4 rounded-2xl bg-white border border-red-200 text-xs font-bold text-red-500 uppercase tracking-wider flex items-center gap-3 shadow-sm">
+                                                <span className="w-2 h-2 rounded-full bg-red-500" />
+                                                Red snakes — learn & strategize
+                                            </span>
+
+                                            <span className="w-full px-6 py-5 rounded-2xl bg-sky-500 text-sm font-bold text-white uppercase tracking-wider flex items-center gap-3 shadow-lg shadow-sky-500/20">
+                                                <Trophy size={16} />
+                                                Land on 100 — unlock premium support
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            {/* The Game */}
+                            <div className="w-full flex justify-center">
+                                <SnakeLadderGame />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <Footer />
+        </main>
+    )
+}
