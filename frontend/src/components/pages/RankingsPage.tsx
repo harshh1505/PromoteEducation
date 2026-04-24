@@ -21,6 +21,7 @@ export default function RankingsPageContent() {
   const [isBrochureModalOpen, setIsBrochureModalOpen] = useState(false)
   const [selectedCollege, setSelectedCollege] = useState<any>(null)
   const [modalMode, setModalMode] = useState<'brochure' | 'details' | 'share' | 'remind'>('brochure')
+  const [visibleCount, setVisibleCount] = useState(20)
 
   const handleAction = (college: any, mode: 'brochure' | 'details' | 'share') => {
     if (isAuthorized && mode !== 'share') {
@@ -45,6 +46,7 @@ export default function RankingsPageContent() {
   useEffect(() => {
     async function fetchRankings() {
       setLoading(true)
+      setVisibleCount(20) // Reset count on filter change
       let query = supabase
         .from('colleges')
         .select('*')
@@ -68,6 +70,8 @@ export default function RankingsPageContent() {
     }
     fetchRankings()
   }, [filter, cityParam])
+
+  const displayedColleges = colleges.slice(0, visibleCount)
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
@@ -125,78 +129,92 @@ export default function RankingsPageContent() {
               <p className="text-sm font-medium text-slate-500 italic">Loading Ranking Data...</p>
             </div>
           ) : colleges.length > 0 ? (
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-[13px]">
-                <thead>
-                  <tr className="bg-[#f8f9fa] border-b border-slate-300">
-                    <th className="px-4 py-3 text-left font-bold border-r border-slate-200">Name</th>
-                    <th className="px-4 py-3 text-left font-bold border-r border-slate-200 w-32">City</th>
-                    <th className="px-4 py-3 text-left font-bold border-r border-slate-200 w-32">State</th>
-                    <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-28">Avg Package</th>
-                    <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-28">Total Fees</th>
-                    <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-24">Score</th>
-                    <th className="px-4 py-3 text-center font-bold w-20">Rank</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {colleges.map((college, index) => (
-                    <tr 
-                      key={college.id}
-                      className="border-b border-slate-200 hover:bg-slate-50 transition-colors"
-                    >
-                      <td className="px-4 py-4 border-r border-slate-200">
-                         <div className="flex flex-col gap-1">
-                            <span className="font-semibold text-slate-900 leading-tight">
-                              {college.name}
-                            </span>
-                            <div className="flex items-center gap-2 text-[11px]">
-                               <button 
-                                 onClick={() => handleAction(college, 'details')}
-                                 className="text-action hover:underline font-medium flex items-center gap-1"
-                               >
-                                 More Details
-                               </button>
-                               <span className="text-slate-300">|</span>
-                               <button 
-                                 onClick={() => handleAction(college, 'brochure')}
-                                 className="text-red-600 hover:scale-110 transition-transform"
-                                 title="Download Brochure"
-                                >
-                                 <FileText size={14} />
-                               </button>
-                               <span className="text-slate-300">|</span>
-                               <button 
-                                 onClick={() => handleAction(college, 'share')}
-                                 className="text-slate-400 hover:text-action transition-colors"
-                                 title="Share College"
-                               >
-                                 <Share2 size={12} />
-                               </button>
-                            </div>
-                         </div>
-                      </td>
-                      <td className="px-4 py-4 border-r border-slate-200 text-slate-600">
-                         {college.location}
-                      </td>
-                      <td className="px-4 py-4 border-r border-slate-200 text-slate-600">
-                         {college.state}
-                      </td>
-                      <td className="px-4 py-4 border-r border-slate-200 text-center font-bold text-slate-700 bg-slate-50/30">
-                         {college.avg_ctc ? `${college.avg_ctc} LPA` : '-'}
-                      </td>
-                      <td className="px-4 py-4 border-r border-slate-200 text-center font-medium text-slate-600">
-                         {college.total_fee ? `${college.total_fee} Lakhs` : '-'}
-                      </td>
-                      <td className="px-4 py-4 border-r border-slate-200 text-center font-medium text-slate-700">
-                         {(89.5 - ((college.ranking || index) * 1.5)).toFixed(2)}
-                      </td>
-                      <td className="px-4 py-4 text-center font-bold text-slate-900 bg-slate-50/50">
-                         {college.ranking || index + 1}
-                      </td>
+            <div className="flex flex-col">
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse text-[13px]">
+                  <thead>
+                    <tr className="bg-[#f8f9fa] border-b border-slate-300">
+                      <th className="px-4 py-3 text-left font-bold border-r border-slate-200">Name</th>
+                      <th className="px-4 py-3 text-left font-bold border-r border-slate-200 w-32">City</th>
+                      <th className="px-4 py-3 text-left font-bold border-r border-slate-200 w-32">State</th>
+                      <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-28">Avg Package</th>
+                      <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-28">Total Fees</th>
+                      <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-24">Score</th>
+                      <th className="px-4 py-3 text-center font-bold w-20">Rank</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {displayedColleges.map((college, index) => (
+                      <tr 
+                        key={college.id}
+                        className="border-b border-slate-200 hover:bg-slate-50 transition-colors"
+                      >
+                        <td className="px-4 py-4 border-r border-slate-200">
+                           <div className="flex flex-col gap-1">
+                              <span className="font-semibold text-slate-900 leading-tight">
+                                {college.name}
+                              </span>
+                              <div className="flex items-center gap-2 text-[11px]">
+                                 <button 
+                                   onClick={() => handleAction(college, 'details')}
+                                   className="text-action hover:underline font-medium flex items-center gap-1"
+                                 >
+                                   More Details
+                                 </button>
+                                 <span className="text-slate-300">|</span>
+                                 <button 
+                                   onClick={() => handleAction(college, 'brochure')}
+                                   className="text-red-600 hover:scale-110 transition-transform"
+                                   title="Download Brochure"
+                                  >
+                                   <FileText size={14} />
+                                 </button>
+                                 <span className="text-slate-300">|</span>
+                                 <button 
+                                   onClick={() => handleAction(college, 'share')}
+                                   className="text-slate-400 hover:text-action transition-colors"
+                                   title="Share College"
+                                 >
+                                   <Share2 size={12} />
+                                 </button>
+                              </div>
+                           </div>
+                        </td>
+                        <td className="px-4 py-4 border-r border-slate-200 text-slate-600">
+                           {college.location}
+                        </td>
+                        <td className="px-4 py-4 border-r border-slate-200 text-slate-600">
+                           {college.state}
+                        </td>
+                        <td className="px-4 py-4 border-r border-slate-200 text-center font-bold text-slate-700 bg-slate-50/30">
+                           {college.avg_ctc ? `${college.avg_ctc} LPA` : '-'}
+                        </td>
+                        <td className="px-4 py-4 border-r border-slate-200 text-center font-medium text-slate-600">
+                           {college.total_fee ? `${college.total_fee} Lakhs` : '-'}
+                        </td>
+                        <td className="px-4 py-4 border-r border-slate-200 text-center font-medium text-slate-700">
+                           {(89.5 - ((college.ranking || index) * 1.5)).toFixed(2)}
+                        </td>
+                        <td className="px-4 py-4 text-center font-bold text-slate-900 bg-slate-50/50">
+                           {college.ranking || index + 1}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {visibleCount < colleges.length && (
+                <div className="p-8 flex justify-center bg-slate-50/50 border-t border-slate-200">
+                  <button
+                    onClick={() => setVisibleCount(prev => prev + 20)}
+                    className="group flex items-center gap-2 px-8 py-3 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all shadow-sm active:scale-95"
+                  >
+                    Load More Rankings
+                    <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <div className="py-24 text-center bg-slate-50/30">
