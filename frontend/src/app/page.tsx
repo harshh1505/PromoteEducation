@@ -14,6 +14,7 @@ import NewsSection from '@/components/sections/NewsSection'
 import ReviewsSection from '@/components/sections/ReviewsSection'
 import WhyChooseUsSection from '@/components/sections/WhyChooseUsSection'
 import NewsletterSection from '@/components/sections/NewsletterSection'
+import KnowledgeCenter from '@/components/sections/KnowledgeCenter'
 
 export default function HomePage() {
   return (
@@ -31,6 +32,7 @@ export default function HomePage() {
       <CompareSection />
       <LoanSection />
       <NewsSection />
+      <KnowledgeCenter />
       <ReviewsSection />
       <NewsletterSection />
       <Footer />
