@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/dashboard', '/auth/'],
     },
-    sitemap: 'https://promoteeducation.in/sitemap.xml',
+    sitemap: 'https://promoteducation.com/sitemap.xml',
   }
 }

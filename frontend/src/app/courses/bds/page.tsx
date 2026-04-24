@@ -8,7 +8,7 @@ import { supabase } from '@/lib/supabase'
 import {
   ArrowRight, BookOpen, Clock, Eye, TrendingUp, Star,
   ChevronRight, Search, Filter, Tag, Users, Flame,
-  GraduationCap, Code, Briefcase, FlaskConical, Globe,
+  GraduationCap, Briefcase, FlaskConical, Globe,
   Cpu, BarChart3, Layers, Award, Zap, MessageCircle,
   Calendar, User, ArrowUpRight, Bookmark, Share2,
   ChevronDown, Play, FileText, Hash, Trophy, Target,
@@ -51,9 +51,9 @@ type ResourceCard = {
 const CATEGORIES = [
   { id: 'all', label: 'All Articles', icon: Layers, count: 240 },
   { id: 'admission', label: 'Admission Guide', icon: GraduationCap, count: 48 },
-  { id: 'branches', label: 'Branch Deep-Dives', icon: Code, count: 36 },
-  { id: 'colleges', label: 'College Reviews', icon: Building, count: 52 },
-  { id: 'exams', label: 'JEE & Entrance', icon: FileText, count: 29 },
+  { id: 'specializations', label: 'Specializations', icon: FlaskConical, count: 36 },
+  { id: 'colleges', label: 'Dental College Reviews', icon: Building, count: 52 },
+  { id: 'exams', label: 'NEET & Entrance', icon: FileText, count: 29 },
   { id: 'career', label: 'Careers & Salaries', icon: Briefcase, count: 44 },
   { id: 'campus', label: 'Campus Life', icon: Users, count: 31 },
 ]
@@ -61,234 +61,53 @@ const CATEGORIES = [
 const LEVEL_CONFIG: Record<string, { label: string; color: string; bg: string; ring: string }> = {
   beginner: { label: 'Class 10–12', color: '#10b981', bg: '#ecfdf5', ring: '#a7f3d0' },
   intermediate: { label: 'Aspirant', color: '#0ea5e9', bg: '#f0f9ff', ring: '#bae6fd' },
-  advanced: { label: 'B.Tech Year 1–2', color: '#8b5cf6', bg: '#f5f3ff', ring: '#ddd6fe' },
+  advanced: { label: 'BDS Year 1–2', color: '#8b5cf6', bg: '#f5f3ff', ring: '#ddd6fe' },
   expert: { label: 'Career Track', color: '#f59e0b', bg: '#fffbeb', ring: '#fde68a' },
 }
-
-const FEATURED_ARTICLES: Article[] = [
-  {
-    id: '1',
-    title: 'The Ultimate B.Tech Admission Guide 2026: From JEE to Your Dream College',
-    excerpt: 'Everything you need to know — JEE Main & Advanced strategy, JOSAA counseling rounds, category-wise cutoffs, and how to build your college preference list like a topper.',
-    category: 'Admission Guide',
-    tag: 'Must Read',
-    readTime: '18 min read',
-    date: 'Apr 20, 2026',
-    author: 'Ritesh Rastogi',
-    authorRole: 'MD & Founder',
-    views: '1.2L',
-    image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1200&auto=format&fit=crop',
-    isHot: true,
-    isFeatured: true,
-    level: 'beginner',
-  },
-  {
-    id: '2',
-    title: 'CSE vs ECE vs Mechanical: Which B.Tech Branch Has the Best ROI in 2026?',
-    excerpt: 'A data-driven comparison of placements, average packages, growth trajectories, and market demand for India\'s top three B.Tech specializations.',
-    category: 'Branch Deep-Dives',
-    tag: 'Data Report',
-    readTime: '14 min read',
-    date: 'Apr 18, 2026',
-    author: 'Aman Rastogi',
-    authorRole: 'Managing Director',
-    views: '87K',
-    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1200&auto=format&fit=crop',
-    isFeatured: true,
-    level: 'beginner',
-  },
-  {
-    id: '3',
-    title: 'IIT vs NIT vs Private Universities: An Honest 2026 Comparison',
-    excerpt: 'Beyond the brand name — faculty quality, research output, placement consistency, fee structures, and which tier actually makes sense for your profile.',
-    category: 'College Reviews',
-    tag: 'Deep Analysis',
-    readTime: '22 min read',
-    date: 'Apr 15, 2026',
-    author: 'Somnath Ghosh',
-    authorRole: 'Head of Operations',
-    views: '2.1L',
-    image: 'https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=1200&auto=format&fit=crop',
-    isHot: true,
-    isFeatured: true,
-    level: 'beginner',
-  },
-]
-
-const ARTICLES: Article[] = [
-  {
-    id: '4',
-    title: 'JEE Main 2026 Paper Analysis: Subject-wise Difficulty & Score Predictor',
-    excerpt: 'Detailed session-wise breakdown with expected cutoffs for NIT+ colleges and rank prediction model.',
-    category: 'JEE & Entrance',
-    tag: 'Breaking',
-    readTime: '8 min',
-    date: 'Apr 21, 2026',
-    author: 'Prothoma Ghosh',
-    authorRole: 'Head Tele-Counselor',
-    views: '56K',
-    image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=600&auto=format&fit=crop',
-    isHot: true,
-    level: 'beginner',
-  },
-  {
-    id: '5',
-    title: 'Top 10 Private Engineering Colleges in India 2026: Placement Data & Fees',
-    excerpt: 'NIRF-ranked private institutes with verified median packages, infrastructure scores, and value-for-money index.',
-    category: 'College Reviews',
-    tag: 'Rankings',
-    readTime: '12 min',
-    date: 'Apr 19, 2026',
-    author: 'Ritu Choudhury',
-    authorRole: 'Media Head',
-    views: '1.4L',
-    image: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=600&auto=format&fit=crop',
-    level: 'beginner',
-  },
-  {
-    id: '6',
-    title: 'AI & Machine Learning Specialization in B.Tech: Is It Worth It in 2026?',
-    excerpt: 'Market demand, curriculum gaps, top colleges offering it, and whether a separate AI/ML degree beats a CSE+certification combo.',
-    category: 'Branch Deep-Dives',
-    tag: 'Trending',
-    readTime: '10 min',
-    date: 'Apr 17, 2026',
-    author: 'Aman Rastogi',
-    authorRole: 'Managing Director',
-    views: '94K',
-    image: 'https://images.unsplash.com/photo-1677442135703-1787eea5ce01?q=80&w=600&auto=format&fit=crop',
-    isHot: true,
-    level: 'intermediate',
-  },
-  {
-    id: '7',
-    title: 'JOSAA Counseling 2026: Round-by-Round Strategy for Maximum Seat Gain',
-    excerpt: 'Float vs. freeze decisions, choice-filling order, withdrawal deadlines, and how toppers play the counseling game.',
-    category: 'Admission Guide',
-    tag: 'Strategy',
-    readTime: '15 min',
-    date: 'Apr 16, 2026',
-    author: 'Ritesh Rastogi',
-    authorRole: 'MD & Founder',
-    views: '78K',
-    image: 'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?q=80&w=600&auto=format&fit=crop',
-    level: 'intermediate',
-  },
-  {
-    id: '8',
-    title: 'B.Tech CSE Salary in India 2026: Fresher to 10 Years — Real Numbers',
-    excerpt: 'Tier-1 vs Tier-2 college packages, service vs product companies, startup vs MNC, and how location affects your CTC.',
-    category: 'Careers & Salaries',
-    tag: 'Data',
-    readTime: '11 min',
-    date: 'Apr 14, 2026',
-    author: 'Somnath Ghosh',
-    authorRole: 'Head of Operations',
-    views: '2.8L',
-    image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=600&auto=format&fit=crop',
-    level: 'advanced',
-  },
-  {
-    id: '9',
-    title: 'First Year B.Tech Survival Guide: What No One Tells You',
-    excerpt: 'From CGPA strategy and lab credits to internship hustle in Sem 1 — the unwritten rulebook for engineering freshers.',
-    category: 'Campus Life',
-    tag: 'Guide',
-    readTime: '9 min',
-    date: 'Apr 12, 2026',
-    author: 'Prothoma Ghosh',
-    authorRole: 'Head Tele-Counselor',
-    views: '1.1L',
-    image: 'https://images.unsplash.com/photo-1541339907198-e08756ebafe3?q=80&w=600&auto=format&fit=crop',
-    level: 'advanced',
-  },
-  {
-    id: '10',
-    title: 'Gate Exam After B.Tech: IIT M.Tech vs Direct Placement — What Pays More?',
-    excerpt: 'The real ROI of 2 years + GATE vs. direct placement + 2 years of experience. Numbers that will surprise you.',
-    category: 'Careers & Salaries',
-    tag: 'Analysis',
-    readTime: '13 min',
-    date: 'Apr 11, 2026',
-    author: 'Aman Rastogi',
-    authorRole: 'Managing Director',
-    views: '67K',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop',
-    level: 'expert',
-  },
-  {
-    id: '11',
-    title: 'Data Science vs Software Engineering: Which Career Path in 2026?',
-    excerpt: 'Role breakdown, day-in-the-life, salary bands at FAANG/startups, and which skill stacks make you irreplaceable.',
-    category: 'Careers & Salaries',
-    tag: 'Career Map',
-    readTime: '16 min',
-    date: 'Apr 9, 2026',
-    author: 'Ritu Choudhury',
-    authorRole: 'Media Head',
-    views: '1.9L',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop',
-    level: 'expert',
-  },
-  {
-    id: '12',
-    title: 'Dual Degree B.Tech + MBA: Is the 5-Year Integrated Program Worth It?',
-    excerpt: 'IIT vs private university integrated programs, what you give up, what you gain, and the companies that prefer dual degrees.',
-    category: 'Admission Guide',
-    tag: 'Special',
-    readTime: '10 min',
-    date: 'Apr 7, 2026',
-    author: 'Ritesh Rastogi',
-    authorRole: 'MD & Founder',
-    views: '45K',
-    image: 'https://images.unsplash.com/photo-1613312328068-c9b6b76c9e8a?q=80&w=600&auto=format&fit=crop',
-    level: 'intermediate',
-  },
-]
 
 const JOURNEY_LEVELS = [
   {
     level: 'beginner' as const,
     title: 'Class 10 – 12',
     subtitle: 'The Foundation',
-    description: 'Stream selection, understanding B.Tech, JEE basics, and building the right mindset.',
+    description: 'understanding BDS, NEET basics, and building the right mindset.',
     articles: 48,
     icon: '🌱',
-    topics: ['PCM Stream Choice', 'What is B.Tech?', 'JEE vs BITSAT vs State Exams', 'Branch Awareness', 'Study Plans'],
+    topics: ['PCB Stream Choice', 'What is BDS?', 'NEET UG Strategy', 'Dentistry Awareness', 'Study Plans'],
   },
   {
     level: 'intermediate' as const,
-    title: 'JEE Aspirant',
+    title: 'NEET Aspirant',
     subtitle: 'The Grind',
-    description: 'Exam strategy, college shortlisting, counseling navigation, and application mastery.',
+    description: 'Exam strategy, Dental College shortlisting, MCC counseling navigation, and application mastery.',
     articles: 64,
     icon: '⚡',
-    topics: ['JEE Mains Strategy', 'JEE Advanced Prep', 'JOSAA Counseling', 'College Shortlisting', 'SOP & Documents'],
+    topics: ['NEET UG Strategy', 'Physics for NEET', 'Chemistry for NEET', 'Biology for NEET', 'Counseling Guide'],
   },
   {
     level: 'advanced' as const,
-    title: 'B.Tech Student',
+    title: 'BDS Student',
     subtitle: 'The Build',
-    description: 'Semester survival, CGPA management, internships, projects, and campus placement prep.',
+    description: 'First Year BDS Survival Guide, clinics, patient management, and MDS entrance prep.',
     articles: 71,
-    icon: '🔨',
-    topics: ['CGPA Strategy', 'Internship Hunt', 'DSA & CP Roadmap', 'Research Projects', 'Placement Prep'],
+    icon: '🦷',
+    topics: ['Anatomy & Physiology', 'Dental Materials', 'Pre-clinical Prosthodontics', 'Clinical Postings', 'NEET-MDS Prep'],
   },
   {
     level: 'expert' as const,
-    title: 'Post B.Tech',
+    title: 'Post BDS',
     subtitle: 'The Launch',
-    description: 'Career tracks, salary negotiation, higher education, GATE, MBA, and international options.',
+    description: 'Career tracks, dentist salary negotiation, MDS, and international dental licensing.',
     articles: 57,
     icon: '🚀',
-    topics: ['Placement Season', 'GATE 2026', 'MS Abroad', 'Startup vs MNC', 'Salary Negotiation'],
+    topics: ['NEET-MDS 2026', 'Private Practice', 'Dentist Salary Guide', 'MDS Specializations', 'Overseas Licensing'],
   },
 ]
 
 const TRENDING_TOPICS = [
-  'JEE Main 2026', 'CSE Placements', 'IIT Bombay', 'AI/ML Branch',
-  'JOSAA Round 2', 'Private Colleges', 'NIT Trichy', 'B.Tech Fees',
-  'BITSAT 2026', 'B.Tech vs BCA', 'Lateral Entry', 'Remote Internships',
+  'NEET UG 2026', 'NEET-MDS Prep', 'AIIMS Dental', 'Dentist Salary',
+  'MCC Counseling', 'Private Dental Colleges', 'MDS in Orthodontics', 'BDS Fees',
+  'Dentistry Career', 'BDS vs MBBS', 'Dental Clinics', 'Overseas Licensing',
 ]
 
 const STATS = [
@@ -301,8 +120,8 @@ const STATS = [
 const FREE_RESOURCES: ResourceCard[] = [
   {
     icon: '📋',
-    title: 'College Preference List Tool',
-    description: 'Interactive tool to rank colleges based on your JEE rank, branch interest, and location preferences.',
+    title: 'Dental College Preference List Tool',
+    description: 'Interactive tool to rank dental colleges based on your NEET rank, location preferences, and patient flow.',
     cta: 'Build Your List',
     color: '#0284c7',
     bg: '#f0f9ff',
@@ -310,8 +129,8 @@ const FREE_RESOURCES: ResourceCard[] = [
   },
   {
     icon: '📊',
-    title: 'Cutoff Analyzer 2025',
-    description: 'Download previous year JEE cutoffs for all NITs, IIITs, and GFTIs in a single spreadsheet.',
+    title: 'NEET Cutoff Analyzer 2025',
+    description: 'Download previous year NEET cutoffs for all Govt and Private Dental Colleges in a single spreadsheet.',
     cta: 'Download Excel',
     color: '#059669',
     bg: '#ecfdf5',
@@ -319,8 +138,8 @@ const FREE_RESOURCES: ResourceCard[] = [
   },
   {
     icon: '🎯',
-    title: 'Branch Selector Quiz',
-    description: 'A 12-question quiz that recommends branches based on your interests, skills, and career goals.',
+    title: 'MDS Specialization Selector',
+    description: 'A 12-question quiz that recommends MDS branches based on your interests, skills, and career goals.',
     cta: 'Take Quiz',
     color: '#7c3aed',
     bg: '#f5f3ff',
@@ -339,21 +158,21 @@ const FREE_RESOURCES: ResourceCard[] = [
 
 const TESTIMONIALS = [
   {
-    quote: "This blog single-handedly guided my B.Tech admission journey. The JOSAA counseling guide saved me from making huge mistakes.",
+    quote: "This blog single-handedly guided my BDS admission journey. The MCC counseling guide saved me from making huge mistakes.",
     name: "Rahul Sharma",
-    detail: "IIT Delhi, CSE '28",
+    detail: "MAMC Delhi, BDS '28",
     avatar: "RS",
   },
   {
-    quote: "The branch comparison articles helped me choose ECE over lower-tier CSE. Best decision of my life. Now placed at Qualcomm.",
+    quote: "The specialization comparison articles helped me choose Orthodontics over Periodontics. Best decision of my life.",
     name: "Priya Patel",
-    detail: "NIT Surathkal, ECE '26",
+    detail: "GDC Mumbai, MDS '26",
     avatar: "PP",
   },
   {
-    quote: "I was confused between private universities. The college reviews and ROI analysis gave me the clarity I needed. No regret.",
+    quote: "I was confused between private dental colleges. The dental college reviews and patient flow analysis gave me the clarity I needed.",
     name: "Arjun Nair",
-    detail: "BITS Pilani, Mechanical '27",
+    detail: "Manipal Dental, BDS '27",
     avatar: "AN",
   },
 ]
@@ -385,52 +204,7 @@ const TagBadge = ({ tag, hot }: { tag: string; hot?: boolean }) => (
   </span>
 )
 
-const ArticleCard = ({ article, size = 'normal' }: { article: Article; size?: 'normal' | 'compact' }) => {
-  if (size === 'compact') {
-    return (
-      <article style={{
-        display: 'flex', gap: '16px', alignItems: 'flex-start',
-        padding: '16px 0',
-        borderBottom: '1px solid #e6f2fc',
-        cursor: 'pointer',
-      }}
-        className="group"
-      >
-        <div style={{
-          width: '72px', height: '72px', borderRadius: '10px',
-          overflow: 'hidden', flexShrink: 0, background: '#e6f2fc',
-        }}>
-          <img src={article.image} alt={article.title}
-            style={{
-              width: '100%', height: '100%', objectFit: 'cover',
-              transition: 'transform 0.4s',
-            }}
-            className="group-hover:scale-105"
-          />
-        </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '6px' }}>
-            <TagBadge tag={article.tag} hot={article.isHot} />
-          </div>
-          <h4 style={{
-            fontSize: '13px', fontWeight: 700, color: '#0b2b44',
-            lineHeight: 1.45, marginBottom: '6px',
-            display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
-          }}
-            className="group-hover:text-sky-600 transition-colors"
-          >
-            {article.title}
-          </h4>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '10px', color: '#4b6b84', fontWeight: 500 }}>{article.readTime}</span>
-            <span style={{ fontSize: '10px', color: '#cbd5e1' }}>•</span>
-            <span style={{ fontSize: '10px', color: '#4b6b84', fontWeight: 500 }}>{article.views} views</span>
-          </div>
-        </div>
-      </article>
-    )
-  }
-
+const ArticleCard = ({ article }: { article: Article }) => {
   return (
     <article
       className="group"
@@ -601,14 +375,14 @@ const TestimonialCard = ({ testimonial }: { testimonial: typeof TESTIMONIALS[0] 
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function BtechBlogPage() {
+export default function BdsBlogPage() {
   const [activeCategory, setActiveCategory] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [activeLevel, setActiveLevel] = useState<string | null>(null)
   const [visibleCount, setVisibleCount] = useState(8)
-  const [email, setEmail] = useState('')
   const [articles, setArticles] = useState<Article[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [fetchError, setFetchError] = useState<string | null>(null)
 
   useEffect(() => {
     async function loadArticles() {
@@ -617,17 +391,17 @@ export default function BtechBlogPage() {
         const { data, error } = await supabase
           .from('articles')
           .select('*')
+          .eq('category', 'bds')
           .order('created_at', { ascending: false })
 
         if (error) throw error
         
         if (data) {
-          console.log(`[Supabase] Fetched ${data.length} articles`)
           const mappedArticles: Article[] = data.map(item => ({
             id: item.id,
             title: item.title,
             excerpt: item.excerpt,
-            category: item.category,
+            category: item.sub_category || item.category,
             tag: item.tag || '',
             readTime: item.read_time || '',
             date: item.date || '',
@@ -642,7 +416,7 @@ export default function BtechBlogPage() {
           setArticles(mappedArticles)
         }
       } catch (err: any) {
-        console.error('[Supabase] Error loading articles:', err)
+        console.error('[Supabase] Error loading BDS articles:', err)
         setFetchError(err.message || 'Failed to connect to database')
       } finally {
         setIsLoading(false)
@@ -651,14 +425,12 @@ export default function BtechBlogPage() {
     loadArticles()
   }, [])
 
-  const [fetchError, setFetchError] = useState<string | null>(null)
-
   const filteredArticles = articles.filter(a => {
     const activeCategoryLabel = CATEGORIES.find(c => c.id === activeCategory)?.label || ''
     
     const catMatch = activeCategory === 'all' || 
-      a.category.toLowerCase().includes(activeCategoryLabel.toLowerCase().replace(' articles', '').replace('s', '')) ||
-      activeCategoryLabel.toLowerCase().includes(a.category.toLowerCase().replace('s', ''))
+      a.category.toLowerCase().includes(activeCategoryLabel.toLowerCase().replace(' articles', '').replace(' & entrance', '').trim()) ||
+      activeCategoryLabel.toLowerCase().includes(a.category.toLowerCase().trim())
       
     const levelMatch = !activeLevel || a.level === activeLevel
     const searchMatch = !searchQuery || 
@@ -728,6 +500,12 @@ export default function BtechBlogPage() {
         @media (min-width: 1024px) {
           .featured-grid { grid-template-columns: 1fr 1fr; }
         }
+        @media (max-width: 1023px) {
+          .featured-hero-card {
+            grid-row: auto !important;
+            min-height: 400px !important;
+          }
+        }
         .stats-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
@@ -735,19 +513,6 @@ export default function BtechBlogPage() {
         }
         @media (min-width: 768px) {
           .stats-grid { grid-template-columns: repeat(4, 1fr); gap: 0; }
-        }
-        @media (max-width: 767px) {
-          .stats-item {
-            border-right: none !important;
-            padding-left: 0 !important;
-            padding-right: 0 !important;
-          }
-        }
-        @media (max-width: 1023px) {
-          .featured-hero-card {
-            grid-row: auto !important;
-            min-height: 400px !important;
-          }
         }
       ` }} />
 
@@ -758,22 +523,15 @@ export default function BtechBlogPage() {
         background: 'linear-gradient(135deg, #e6f2fc 0%, #f0f7ff 50%, #f4f9fd 100%)',
         padding: '140px 0 80px', position: 'relative', overflow: 'hidden',
       }}>
-        {/* Subtle grid texture */}
         <div style={{
           position: 'absolute', inset: 0, opacity: 0.03,
           backgroundImage: 'linear-gradient(#0ea5e9 1px, transparent 1px), linear-gradient(90deg, #0ea5e9 1px, transparent 1px)',
           backgroundSize: '40px 40px',
         }} />
-        {/* Glow orbs */}
         <div style={{
           position: 'absolute', left: '-100px', top: '50%', transform: 'translateY(-50%)',
           width: '500px', height: '500px', borderRadius: '50%',
           background: 'radial-gradient(circle, rgba(14,165,233,0.06) 0%, transparent 70%)', pointerEvents: 'none'
-        }} />
-        <div style={{
-          position: 'absolute', right: '-80px', bottom: '-100px',
-          width: '400px', height: '400px', borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(56,189,248,0.04) 0%, transparent 70%)', pointerEvents: 'none'
         }} />
 
         <div className="container" style={{ position: 'relative', zIndex: 1 }}>
@@ -784,7 +542,7 @@ export default function BtechBlogPage() {
                 fontSize: '11px', fontWeight: 700, color: '#0284c7',
                 letterSpacing: '0.3em', textTransform: 'uppercase'
               }}>
-                B.Tech Knowledge Hub · 240+ Articles
+                BDS Knowledge Hub · 240+ Articles
               </span>
             </div>
 
@@ -792,15 +550,15 @@ export default function BtechBlogPage() {
               fontSize: 'clamp(40px, 6vw, 80px)', color: '#0b2b44',
               lineHeight: 0.95, letterSpacing: '-0.02em', marginBottom: '28px',
             }}>
-              Everything B.Tech.<br />
-              <em style={{ color: '#0284c7' }}>Nothing Held Back.</em>
+              Everything BDS.<br />
+              <em style={{ color: '#0284c7' }}>Mastering Dentistry.</em>
             </h1>
 
             <p className="hero-fade" style={{
               fontSize: '17px', color: '#4b6b84', lineHeight: 1.75,
               marginBottom: '40px', maxWidth: '560px',
             }}>
-              From picking the right stream in Class 10 to negotiating your first ₹30 LPA package — India's most comprehensive B.Tech content platform, built by counselors who've guided 50,000+ students.
+              Your complete dental career guide. India's most comprehensive resource for NEET UG dental prep, clinical procedures, and MDS roadmap.
             </p>
 
             {/* Search bar */}
@@ -813,7 +571,7 @@ export default function BtechBlogPage() {
                 className="search-input"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                placeholder="Search articles..."
+                placeholder="Search NEET dental strategy, Govt vs Private BDS, MDS entrance..."
                 style={{
                   width: '100%', padding: '16px 100px 16px 50px',
                   background: '#ffffff', border: '1px solid #d9ecfa',
@@ -836,7 +594,7 @@ export default function BtechBlogPage() {
               <span style={{ fontSize: '11px', color: '#4b6b84', fontWeight: 600, alignSelf: 'center', marginRight: '4px' }}>
                 Trending:
               </span>
-              {TRENDING_TOPICS.slice(0, 6).map(t => (
+              {TRENDING_TOPICS.map(t => (
                 <button
                   key={t}
                   className="tag-chip"
@@ -887,7 +645,7 @@ export default function BtechBlogPage() {
         </div>
       </section>
 
-      {/* ── JOURNEY LEVELS ────────────────────────────────────────────────────── */}
+      {/* ── JOURNEY ───────────────────────────────────────────────────────────── */}
       <section style={{ padding: '72px 0', background: '#ffffff', borderBottom: '1px solid #e6f2fc' }}>
         <div className="container">
           <div style={{
@@ -899,15 +657,12 @@ export default function BtechBlogPage() {
                 fontSize: '11px', fontWeight: 700, color: '#0284c7',
                 letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '8px'
               }}>
-                Your Journey
+                Dental Roadmap
               </p>
               <h2 className="section-title font-display">
-                Content for every stage — 0 to 100
+                The BDS Journey — Student to Specialist
               </h2>
             </div>
-            <p style={{ fontSize: '14px', color: '#4b6b84', maxWidth: '320px', lineHeight: 1.65 }}>
-              Filter by where you are right now. Each level has curated articles, guides, and tools.
-            </p>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
@@ -943,7 +698,7 @@ export default function BtechBlogPage() {
                   }}>
                     {jl.subtitle}
                   </p>
-                  <p style={{ fontSize: '13px', color: '#4b6b84', lineHeight: 1.65, marginBottom: '16px' }}>
+                  <p style={{ fontSize: '13px', color: '#4b6b84', lineHeight: 1.6, marginBottom: '16px' }}>
                     {jl.description}
                   </p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -953,12 +708,6 @@ export default function BtechBlogPage() {
                         background: '#ffffff', border: '1px solid #d9ecfa', color: '#4b6b84', fontWeight: 500,
                       }}>{t}</span>
                     ))}
-                    <span style={{
-                      fontSize: '10px', padding: '3px 10px', borderRadius: '99px',
-                      background: '#ffffff', border: '1px solid #d9ecfa', color: '#94a3b8'
-                    }}>
-                      +{jl.topics.length - 3} more
-                    </span>
                   </div>
                 </div>
               )
@@ -967,7 +716,7 @@ export default function BtechBlogPage() {
         </div>
       </section>
 
-      {/* ── FREE RESOURCES (fills vacant space meaningfully) ──────────────────── */}
+      {/* ── RESOURCES ────────────────────────────────────────────────────────── */}
       <section style={{ padding: '72px 0', background: '#f0f7ff' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '48px' }}>
@@ -975,14 +724,11 @@ export default function BtechBlogPage() {
               fontSize: '11px', fontWeight: 700, color: '#0284c7',
               letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '12px'
             }}>
-              Free Tools & Resources
+              Dental Toolkit
             </p>
             <h2 className="section-title font-display" style={{ marginBottom: '12px' }}>
-              Everything you need, <span style={{ color: '#0284c7' }}>completely free</span>
+              Free BDS <span style={{ color: '#0284c7' }}>Preparation Tools</span>
             </h2>
-            <p style={{ fontSize: '15px', color: '#4b6b84', maxWidth: '520px', margin: '0 auto', lineHeight: 1.6 }}>
-              We've built these tools after counseling 50,000+ students. No signup required for most.
-            </p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px' }}>
             {FREE_RESOURCES.map((res, i) => (
@@ -992,7 +738,7 @@ export default function BtechBlogPage() {
         </div>
       </section>
 
-      {/* ── FEATURED ARTICLES ─────────────────────────────────────────────────── */}
+      {/* ── ARTICLES ─────────────────────────────────────────────────────────── */}
       <section style={{ padding: '72px 0', background: '#ffffff' }}>
         <div className="container">
           <div style={{
@@ -1008,21 +754,21 @@ export default function BtechBlogPage() {
                 Editor's Picks
               </h2>
             </div>
-            <button style={{
+            <Link href="/articles" style={{
               display: 'flex', alignItems: 'center', gap: '6px',
-              fontSize: '12px', fontWeight: 700, color: '#0284c7', background: 'none',
-              border: 'none', cursor: 'pointer', letterSpacing: '0.05em', textTransform: 'uppercase'
+              fontSize: '12px', fontWeight: 700, color: '#0284c7',
+              letterSpacing: '0.05em', textTransform: 'uppercase'
             }}>
               View All <ArrowRight size={14} />
-            </button>
+            </Link>
           </div>
 
           <div className="featured-grid" style={{ marginBottom: '20px' }}>
             {/* Large hero card */}
             {isLoading ? (
-              <div style={{ 
-                gridRow: 'span 2', borderRadius: '20px', background: '#e6f2fc', 
-                minHeight: '480px', animation: 'pulse 2s infinite' 
+              <div style={{
+                gridRow: 'span 2', borderRadius: '20px', background: '#e6f2fc',
+                minHeight: '480px', animation: 'pulse 2s infinite'
               }} />
             ) : articles.filter(a => a.isFeatured).length > 0 && (
               <article className="group featured-hero-card" style={{
@@ -1046,7 +792,7 @@ export default function BtechBlogPage() {
                   display: 'flex', flexDirection: 'column', justifyContent: 'flex-end'
                 }}>
                   <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
-                    <TagBadge tag={articles.filter(a => a.isFeatured)[0].tag} hot={articles.filter(a => a.isFeatured)[0].isHot} />
+                    <TagBadge tag={articles.filter(a => a.isFeatured)[0].tag || 'Featured'} hot={articles.filter(a => a.isFeatured)[0].isHot} />
                     <LevelBadge level={articles.filter(a => a.isFeatured)[0].level} />
                   </div>
                   <p style={{
@@ -1126,7 +872,7 @@ export default function BtechBlogPage() {
                     display: 'flex', flexDirection: 'column', justifyContent: 'flex-end'
                   }}>
                     <div style={{ display: 'flex', gap: '6px', marginBottom: '10px' }}>
-                      <TagBadge tag={a.tag} hot={a.isHot} />
+                      <TagBadge tag={a.tag || 'Clinical'} hot={a.isHot} />
                       <LevelBadge level={a.level} />
                     </div>
                     <p style={{
@@ -1162,185 +908,76 @@ export default function BtechBlogPage() {
               ))
             )}
           </div>
-        </div>
-      </section>
 
-      {/* ── KNOWLEDGE BASE (Articles) ─────────────────────────────────────────── */}
-      <section style={{ padding: '80px 0', background: '#f4f9fd' }}>
-        <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-            <h2 className="section-title font-display">Knowledge Base</h2>
-            <p style={{ fontSize: '15px', color: '#4b6b84', marginTop: '8px' }}>India's most detailed engineering articles, guides and reviews.</p>
+          <div style={{ textAlign: 'center', marginTop: '64px', marginBottom: '48px' }}>
+            <h2 className="section-title font-display">Dental Insights</h2>
           </div>
 
-          <div style={{ width: '100%' }}>
-            {/* Category tabs */}
-            <div style={{
-              display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '12px',
-              marginBottom: '36px', scrollbarWidth: 'none', justifyContent: 'center'
-            }}>
-              {CATEGORIES.map(cat => {
-                const isActive = activeCategory === cat.id
-                return (
-                  <button
-                    key={cat.id}
-                    className="cat-pill"
-                    onClick={() => { setActiveCategory(cat.id); setVisibleCount(8); }}
-                    style={{
-                      display: 'flex', alignItems: 'center', gap: '6px',
-                      padding: '9px 20px', borderRadius: '99px', border: 'none',
-                      fontSize: '12px', fontWeight: 700, letterSpacing: '0.03em',
-                      fontFamily: "'DM Sans', sans-serif",
-                      background: isActive ? '#0ea5e9' : '#ffffff',
-                      color: isActive ? '#fff' : '#4b6b84',
-                      boxShadow: isActive ? '0 4px 14px rgba(14,165,233,0.25)' : '0 1px 4px rgba(0,0,0,0.04)',
-                      transition: 'all 0.2s',
-                    }}
-                  >
-                    <cat.icon size={13} />
-                    {cat.label}
-                    <span style={{
-                      fontSize: '10px', padding: '1px 6px', borderRadius: '99px',
-                      background: isActive ? 'rgba(255,255,255,0.2)' : '#e6f2fc',
-                      color: isActive ? 'rgba(255,255,255,0.8)' : '#4b6b84',
-                    }}>
-                      {cat.count}
-                    </span>
-                  </button>
-                )
-              })}
-            </div>
-
-            {/* Active filters display */}
-            {(activeLevel || searchQuery) && (
-              <div style={{
-                display: 'flex', alignItems: 'center', gap: '10px',
-                marginBottom: '32px', flexWrap: 'wrap', justifyContent: 'center'
-              }}>
-                <span style={{ fontSize: '12px', color: '#4b6b84', fontWeight: 500 }}>
-                  Showing {filteredArticles.length} results
-                </span>
-                {activeLevel && (
-                  <span style={{
-                    display: 'flex', alignItems: 'center', gap: '6px',
-                    fontSize: '11px', padding: '4px 12px', borderRadius: '99px',
-                    background: '#f0f9ff', border: '1px solid #bae6fd', color: '#0284c7', fontWeight: 600
-                  }}>
-                    {LEVEL_CONFIG[activeLevel].label}
-                    <button onClick={() => setActiveLevel(null)}
-                      style={{
-                        background: 'none', border: 'none', color: '#0284c7',
-                        cursor: 'pointer', fontSize: '14px', lineHeight: 1
-                      }}>×</button>
-                  </span>
-                )}
-                {searchQuery && (
-                  <span style={{
-                    display: 'flex', alignItems: 'center', gap: '6px',
-                    fontSize: '11px', padding: '4px 12px', borderRadius: '99px',
-                    background: '#f0f9ff', border: '1px solid #bae6fd', color: '#0284c7', fontWeight: 600
-                  }}>
-                    "{searchQuery}"
-                    <button onClick={() => setSearchQuery('')}
-                      style={{
-                        background: 'none', border: 'none', color: '#0284c7',
-                        cursor: 'pointer', fontSize: '14px', lineHeight: 1
-                      }}>×</button>
-                  </span>
-                )}
-              </div>
-            )}
-
-            {/* Articles grid */}
-            {isLoading ? (
-              <div className="responsive-grid-4">
-                {[...Array(8)].map((_, i) => (
-                  <div key={i} style={{ borderRadius: '16px', background: '#e6f2fc', minHeight: '320px', animation: `pulse 2s infinite ${i * 0.1}s` }} />
-                ))}
-              </div>
-            ) : filteredArticles.length > 0 ? (
-              <>
-                <div className="responsive-grid-4" style={{ marginBottom: '48px' }}>
-                  {filteredArticles.slice(0, visibleCount).map(a => (
-                    <ArticleCard key={a.id} article={a} />
-                  ))}
-                </div>
-
-                {filteredArticles.length > visibleCount && (
-                  <div style={{ textAlign: 'center' }}>
-                    <button
-                      onClick={() => setVisibleCount(prev => prev + 8)}
-                      style={{
-                        padding: '16px 48px', background: '#ffffff', border: '1.5px solid #d9ecfa',
-                        borderRadius: '12px', fontSize: '13px', fontWeight: 700, color: '#0b2b44',
-                        cursor: 'pointer', letterSpacing: '0.05em', transition: 'all 0.2s',
-                        fontFamily: "'DM Sans', sans-serif",
-                      }}
-                      onMouseEnter={e => {
-                        (e.currentTarget as HTMLElement).style.borderColor = '#0ea5e9'
-                          ; (e.currentTarget as HTMLElement).style.color = '#0284c7'
-                      }}
-                      onMouseLeave={e => {
-                        (e.currentTarget as HTMLElement).style.borderColor = '#d9ecfa'
-                          ; (e.currentTarget as HTMLElement).style.color = '#0b2b44'
-                      }}
-                    >
-                      Load More Articles
-                    </button>
-                  </div>
-                )}
-              </>
-            ) : fetchError ? (
-              <div style={{
-                textAlign: 'center', padding: '60px 24px', background: '#fef2f2',
-                borderRadius: '20px', border: '1px solid #fecaca'
-              }}>
-                <Flame size={40} style={{ color: '#ef4444', marginBottom: '16px' }} />
-                <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#991b1b', marginBottom: '8px' }}>
-                  Database Connection Issue
-                </h3>
-                <p style={{ fontSize: '14px', color: '#b91c1c', maxWidth: '400px', margin: '0 auto' }}>
-                  {fetchError}. This usually happens if Row Level Security (RLS) is active but no public read policy is defined.
-                </p>
-                <button 
-                  onClick={() => window.location.reload()}
+          <div style={{
+            display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '12px',
+            marginBottom: '36px', scrollbarWidth: 'none', justifyContent: 'center'
+          }}>
+            {CATEGORIES.map(cat => {
+              const isActive = activeCategory === cat.id
+              return (
+                <button
+                  key={cat.id}
+                  className="cat-pill"
+                  onClick={() => { setActiveCategory(cat.id); setVisibleCount(8); }}
                   style={{
-                    marginTop: '20px', padding: '10px 20px', background: '#ef4444',
-                    color: 'white', border: 'none', borderRadius: '8px', fontWeight: 600,
-                    cursor: 'pointer'
+                    display: 'flex', alignItems: 'center', gap: '6px',
+                    padding: '9px 20px', borderRadius: '99px', border: 'none',
+                    fontSize: '12px', fontWeight: 700,
+                    background: isActive ? '#0ea5e9' : '#ffffff',
+                    color: isActive ? '#fff' : '#4b6b84',
+                    boxShadow: isActive ? '0 4px 14px rgba(14,165,233,0.25)' : '0 1px 4px rgba(0,0,0,0.04)',
+                    transition: 'all 0.2s',
                   }}
                 >
-                  Retry Connection
+                  <cat.icon size={13} />
+                  {cat.label}
                 </button>
-              </div>
-            ) : (
-              <div style={{ textAlign: 'center', padding: '80px 0' }}>
-                <p style={{ fontSize: '48px', marginBottom: '16px' }}>📚</p>
-                <p style={{ fontSize: '18px', fontWeight: 700, color: '#0b2b44', marginBottom: '8px' }}>
-                  No articles found
-                </p>
-                <p style={{ fontSize: '14px', color: '#4b6b84' }}>
-                  Try a different search or category filter.
-                </p>
-              </div>
-            )}
+              )
+            })}
           </div>
+
+          {isLoading ? (
+            <div className="responsive-grid-4">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} style={{ borderRadius: '16px', background: '#e6f2fc', minHeight: '320px', animation: 'pulse 2s infinite' }} />
+              ))}
+            </div>
+          ) : (
+            <>
+              <div className="responsive-grid-4">
+                {filteredArticles.slice(0, visibleCount).map(a => (
+                  <ArticleCard key={a.id} article={a} />
+                ))}
+              </div>
+              {filteredArticles.length > visibleCount && (
+                <div style={{ textAlign: 'center', marginTop: '48px' }}>
+                  <button
+                    onClick={() => setVisibleCount(prev => prev + 8)}
+                    style={{
+                      padding: '16px 48px', background: '#ffffff', border: '1.5px solid #d9ecfa',
+                      borderRadius: '12px', fontSize: '13px', fontWeight: 700, color: '#0b2b44',
+                      cursor: 'pointer', transition: 'all 0.2s',
+                    }}
+                  >
+                    Load More Articles
+                  </button>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </section>
 
-      {/* ── TESTIMONIALS (meaningful vacant space) ────────────────────────────── */}
+      {/* ── TESTIMONIALS ──────────────────────────────────────────────────────── */}
       <section style={{ padding: '72px 0', background: '#ffffff', borderTop: '1px solid #e6f2fc' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-            <p style={{
-              fontSize: '11px', fontWeight: 700, color: '#0284c7',
-              letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '12px'
-            }}>
-              Student Stories
-            </p>
-            <h2 className="section-title font-display">
-              Trusted by <span style={{ color: '#0284c7' }}>thousands</span> of engineers
-            </h2>
+            <h2 className="section-title font-display">Dental Student Stories</h2>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
             {TESTIMONIALS.map((t, i) => (
@@ -1354,96 +991,28 @@ export default function BtechBlogPage() {
       <section style={{ padding: '72px 0', background: '#f0f7ff' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-            <p style={{
-              fontSize: '11px', fontWeight: 700, color: '#0284c7',
-              letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '12px'
-            }}>
-              Complete Guides
-            </p>
-            <h2 className="section-title font-display">
-              Everything you need, organized
-            </h2>
+            <h2 className="section-title font-display">Dental Specializations</h2>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
             {[
-              { icon: '📐', title: 'JEE Complete Guide', count: '28 articles', color: '#fee2e2', border: '#fca5a5', text: '#dc2626' },
-              { icon: '🏛️', title: 'Top 100 Colleges', count: '52 reviews', color: '#f0f9ff', border: '#bae6fd', text: '#0369a1' },
-              { icon: '💻', title: 'CSE Deep Dive', count: '19 articles', color: '#ecfdf5', border: '#a7f3d0', text: '#059669' },
-              { icon: '🩺', title: 'B.Tech vs MBBS', count: '11 articles', color: '#fdf4ff', border: '#e879f9', text: '#a21caf' },
-              { icon: '💰', title: 'Salary Reports', count: '24 articles', color: '#fffbeb', border: '#fde68a', text: '#d97706' },
-              { icon: '🌍', title: 'Study Abroad', count: '17 articles', color: '#f0f9ff', border: '#bae6fd', text: '#0369a1' },
+              { icon: '🦷', title: 'Orthodontics', count: '38 articles', color: '#fee2e2', border: '#fca5a5', text: '#dc2626' },
+              { icon: '🛠️', title: 'Prosthodontics', count: '29 articles', color: '#f0f9ff', border: '#bae6fd', text: '#0369a1' },
+              { icon: '🩸', title: 'Oral Surgery', count: '25 articles', color: '#ecfdf5', border: '#a7f3d0', text: '#059669' },
+              { icon: '👧', title: 'Pedodontics', count: '31 articles', color: '#fdf4ff', border: '#e879f9', text: '#a21caf' },
+              { icon: '🩺', title: 'Periodontics', count: '27 articles', color: '#fffbeb', border: '#fde68a', text: '#d97706' },
+              { icon: '📷', title: 'Oral Radiology', count: '18 articles', color: '#f0f9ff', border: '#bae6fd', text: '#0369a1' },
             ].map((g, i) => (
               <div key={i} style={{
                 padding: '24px', borderRadius: '14px', cursor: 'pointer',
                 background: g.color, border: `1px solid ${g.border}`,
                 transition: 'transform 0.2s, box-shadow 0.2s',
-              }}
-                onMouseEnter={e => {
-                  (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)'
-                    ; (e.currentTarget as HTMLElement).style.boxShadow = `0 12px 32px ${g.border}`
-                }}
-                onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'
-                    ; (e.currentTarget as HTMLElement).style.boxShadow = 'none'
-                }}
-              >
+              }}>
                 <div style={{ fontSize: '28px', marginBottom: '12px' }}>{g.icon}</div>
-                <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#0b2b44', marginBottom: '4px' }}>
-                  {g.title}
-                </h3>
-                <p style={{
-                  fontSize: '11px', fontWeight: 700, color: g.text,
-                  letterSpacing: '0.08em', textTransform: 'uppercase'
-                }}>
-                  {g.count}
-                </p>
+                <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#0b2b44', marginBottom: '4px' }}>{g.title}</h3>
+                <p style={{ fontSize: '11px', fontWeight: 700, color: g.text, textTransform: 'uppercase' }}>{g.count}</p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── BOTTOM CTA ────────────────────────────────────────────────────────── */}
-      <section style={{ background: 'linear-gradient(135deg, #e6f2fc 0%, #d9ecfa 100%)', padding: '80px 0' }}>
-        <div className="container" style={{ textAlign: 'center' }}>
-          <p style={{
-            fontSize: '11px', fontWeight: 700, color: '#0284c7',
-            letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '16px'
-          }}>
-            Still Have Questions?
-          </p>
-          <h2 className="font-display" style={{
-            fontSize: 'clamp(32px, 5vw, 60px)',
-            color: '#0b2b44', lineHeight: 0.95, letterSpacing: '-0.02em', marginBottom: '20px'
-          }}>
-            Talk to an Expert.<br />
-            <em style={{ color: '#0284c7' }}>It's Free.</em>
-          </h2>
-          <p style={{
-            fontSize: '16px', color: '#4b6b84', maxWidth: '440px',
-            margin: '0 auto 40px', lineHeight: 1.75
-          }}>
-            Reading is great. But a 30-minute call with our counselors will save you months of confusion.
-          </p>
-          <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button style={{
-              padding: '15px 36px', background: '#0ea5e9', color: '#fff',
-              border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: 700,
-              cursor: 'pointer', letterSpacing: '0.06em', textTransform: 'uppercase',
-              fontFamily: "'DM Sans', sans-serif",
-            }}>
-              Book Free Counseling →
-            </button>
-            <button style={{
-              padding: '15px 36px', background: '#ffffff', color: '#0b2b44',
-              border: '1px solid #d9ecfa', borderRadius: '10px',
-              fontSize: '13px', fontWeight: 700, cursor: 'pointer',
-              letterSpacing: '0.06em', textTransform: 'uppercase',
-              fontFamily: "'DM Sans', sans-serif",
-            }}>
-              Browse All Articles
-            </button>
           </div>
         </div>
       </section>

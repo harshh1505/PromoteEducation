@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react'
 import { ArrowRight, ChevronLeft, ChevronRight, Verified } from 'lucide-react'
 import CollegeCard from '@/components/ui/CollegeCard'
 import LeadModal from '@/components/ui/LeadModal'
+import { useLeadCapture } from '@/hooks/useLeadCapture'
 import ReviewModal from '@/components/ui/ReviewModal'
 import { cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
 import type { College, Stream } from '@/types'
+import { useRouter } from 'next/navigation'
 
 export const featuredColleges: College[] = [
   // 1-4 WB
@@ -581,6 +583,7 @@ export const featuredColleges: College[] = [
 ]
 
 export default function CollegesSection() {
+  const router = useRouter()
   const [activeStream, setActiveStream] = useState<string>('All')
   const [page, setPage] = useState(0)
   const [itemsPerPage, setItemsPerPage] = useState(4)
@@ -634,8 +637,20 @@ export default function CollegesSection() {
     return () => clearInterval(interval)
   }, [totalPages, activeStream])
 
+  const { isAuthorized } = useLeadCapture()
+
+  const handleOpenLead = async (college: College) => {
+    if (isAuthorized) {
+      // If authorized (via localStorage or session), redirect directly
+      router.push(`/colleges/${college.id}`)
+    } else {
+      // If not authorized, open lead modal
+      setLeadCollege(college)
+    }
+  }
+
   return (
-    <section id="colleges" className="py-24 bg-slate-50/50 overflow-x-hidden">
+    <section id="colleges" className="py-24 relative overflow-hidden bg-slate-50">
       <div className="w-full max-w-[1600px] mx-auto px-6">
         
         <div className="mb-12">
@@ -696,7 +711,7 @@ export default function CollegesSection() {
                   <div key={college.id} className="transform transition-transform hover:-translate-y-2 duration-300">
                     <CollegeCard 
                       college={college} 
-                      onOpenLead={(c) => setLeadCollege(c)}
+                      onOpenLead={handleOpenLead}
                       onOpenReview={(c) => setReviewCollege(c)}
                     />
                   </div>
@@ -729,6 +744,7 @@ export default function CollegesSection() {
         collegeName={leadCollege?.name || ''}
         collegeLogo={leadCollege?.logo}
         stream={leadCollege?.stream || ''}
+        collegeId={leadCollege?.id}
       />
 
       <ReviewModal 

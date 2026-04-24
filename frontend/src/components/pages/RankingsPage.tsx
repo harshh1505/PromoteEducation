@@ -8,17 +8,37 @@ import Footer from '@/components/layout/Footer'
 import { Trophy, Filter, Star, MapPin, Building2, TrendingUp, Info, Download, ArrowRight, FileText, Share2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import BrochureModal from '@/components/ui/BrochureModal'
+import { useLeadCapture } from '@/hooks/useLeadCapture'
 
 export default function RankingsPageContent() {
   const searchParams = useSearchParams()
   const cityParam = searchParams.get('city')
   
+  const { isAuthorized } = useLeadCapture()
   const [colleges, setColleges] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState(cityParam ? 'All' : 'Engineering')
   const [isBrochureModalOpen, setIsBrochureModalOpen] = useState(false)
   const [selectedCollege, setSelectedCollege] = useState<any>(null)
-  const [modalMode, setModalMode] = useState<'brochure' | 'details' | 'share'>('brochure')
+  const [modalMode, setModalMode] = useState<'brochure' | 'details' | 'share' | 'remind'>('brochure')
+
+  const handleAction = (college: any, mode: 'brochure' | 'details' | 'share') => {
+    if (isAuthorized && mode !== 'share') {
+      if (mode === 'details') {
+        const slug = college.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+        window.location.href = `/college/${slug}`
+        return
+      }
+      if (mode === 'brochure') {
+        alert(`Brochure for ${college.name} has been sent to your registered email!`)
+        return
+      }
+    }
+    
+    setSelectedCollege(college)
+    setModalMode(mode)
+    setIsBrochureModalOpen(true)
+  }
 
   const categories = ['All', 'Engineering', 'Management', 'Medical', 'Pharmacy', 'Law', 'Architecture']
 
@@ -131,22 +151,14 @@ export default function RankingsPageContent() {
                             </span>
                             <div className="flex items-center gap-2 text-[11px]">
                                <button 
-                                 onClick={() => {
-                                   setSelectedCollege(college);
-                                   setModalMode('details');
-                                   setIsBrochureModalOpen(true);
-                                 }}
+                                 onClick={() => handleAction(college, 'details')}
                                  className="text-action hover:underline font-medium flex items-center gap-1"
                                >
                                  More Details
                                </button>
                                <span className="text-slate-300">|</span>
                                <button 
-                                 onClick={() => {
-                                   setSelectedCollege(college);
-                                   setModalMode('brochure');
-                                   setIsBrochureModalOpen(true);
-                                 }}
+                                 onClick={() => handleAction(college, 'brochure')}
                                  className="text-red-600 hover:scale-110 transition-transform"
                                  title="Download Brochure"
                                 >
@@ -154,11 +166,7 @@ export default function RankingsPageContent() {
                                </button>
                                <span className="text-slate-300">|</span>
                                <button 
-                                 onClick={() => {
-                                   setSelectedCollege(college);
-                                   setModalMode('share');
-                                   setIsBrochureModalOpen(true);
-                                 }}
+                                 onClick={() => handleAction(college, 'share')}
                                  className="text-slate-400 hover:text-action transition-colors"
                                  title="Share College"
                                >

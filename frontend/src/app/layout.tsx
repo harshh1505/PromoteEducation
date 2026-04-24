@@ -20,14 +20,14 @@ export const metadata: Metadata = {
   authors: [{ name: 'Promote Education Team' }],
   creator: 'Promote Education',
   publisher: 'Promote Education Technologies',
-  metadataBase: new URL('https://promoteeducation.in'), // Replace with your actual domain
+  metadataBase: new URL('https://promoteducation.com'), // Replace with your actual domain
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: 'Promote Education — Find Your Dream College in India',
     description: "Compare rankings, fees, and placements for 50,000+ institutions. India's most trusted college discovery platform.",
-    url: 'https://promoteeducation.in',
+    url: 'https://promoteducation.com',
     siteName: 'Promote Education',
     images: [
       {
@@ -75,8 +75,8 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
     "name": "Promote Education",
-    "url": "https://promoteeducation.in",
-    "logo": "https://promoteeducation.in/logo.png",
+    "url": "https://promoteducation.com",
+    "logo": "https://promoteducation.com/logo.png",
     "sameAs": [
       "https://facebook.com/promoteeducation",
       "https://twitter.com/promoteedu",
@@ -90,7 +90,7 @@ export default function RootLayout({
     },
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://promoteeducation.in/search?q={search_term_string}",
+      "target": "https://promoteducation.com/search?q={search_term_string}",
       "query-input": "required name=search_term_string"
     }
   }

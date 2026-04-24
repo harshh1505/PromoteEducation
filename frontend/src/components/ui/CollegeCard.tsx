@@ -100,7 +100,7 @@ export default function CollegeCard({ college, onOpenLead, onOpenReview }: Colle
               onClick={() => onOpenLead?.(college)}
               className="w-full py-2.5 border border-sky-500 text-sky-600 text-[10px] md:text-[11px] font-black uppercase tracking-widest rounded-lg hover:bg-sky-50 transition-colors flex items-center justify-center gap-2"
             >
-              Courses & fees <ChevronRight size={14} />
+              Read more <ChevronRight size={14} />
             </button>
             
             <div className="grid grid-cols-2 gap-2">

@@ -79,7 +79,6 @@ const leadership = [
     { name: 'Ritesh Rastogi', role: 'MD & Founder', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop' },
     { name: 'Aman Rastogi', role: 'Managing Director', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=800&auto=format&fit=crop' },
     { name: 'Somnath Ghosh', role: 'Head of Operations', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=800&auto=format&fit=crop' },
-    { name: 'Prothoma Ghosh', role: 'Head Tele-Counselor', image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop' },
     { name: 'Ritu Choudhury', role: 'Media Head', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=800&auto=format&fit=crop' },
 ]
 

@@ -92,7 +92,7 @@ export default function HeroSection() {
           
           <div className="mb-6">
             <h1 className="text-4xl md:text-5xl font-black text-white mb-3 tracking-tighter leading-[1.1]">
-              Top <span className="text-sky-400">Colleges in India 2025</span>
+              Top <span className="text-sky-400">Colleges in India 2026</span>
               <span className="block text-xl md:text-2xl font-medium text-white/90 mt-1">NIRF Rankings & Admissions</span>
             </h1>
             <p className="text-white/60 text-sm md:text-base max-w-2xl mx-auto font-medium leading-relaxed">

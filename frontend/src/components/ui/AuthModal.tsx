@@ -39,8 +39,8 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           },
         })
         if (error) throw error
-        alert('Check your email for the confirmation link!')
       }
+      localStorage.setItem('lead_captured', 'true')
       onClose()
     } catch (err: any) {
       setError(err.message)

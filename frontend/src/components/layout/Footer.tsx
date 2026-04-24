@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 const footerLinks = {
   Colleges: ['Engineering', 'Medical', 'MBA', 'Law', 'Design', 'Arts & Commerce'],
   Exams: ['JEE Main', 'NEET', 'CAT', 'GRE', 'GATE', 'GMAT'],
-  Courses: ['B.Tech', 'MBBS', 'MBA', 'LLB', 'BCA', 'B.Design'],
+  Courses: ['B.Tech', 'MBA', 'M.Tech', 'B.Sc Nursing', 'MBBS', 'BDS'],
   Company: ['About', 'Contact Us', 'FAQ', 'Sitemap'],
 }
 
@@ -36,13 +36,27 @@ export default function Footer() {
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<any[]>([])
   const [focused, setFocused] = useState(false)
+  const [activeOffice, setActiveOffice] = useState(0)
   const [showMapOptions, setShowMapOptions] = useState(false)
 
-  const officeAddressFull = "Ecosuite Business Tower, Street No. 676, Action Area II, Action Area IID, Newtown, Kolkata, West Bengal 700161"
-  
-  // Link formats
-  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(officeAddressFull)}`
-  const appleMapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(officeAddressFull)}`
+  const offices = [
+    {
+      city: 'Kolkata',
+      address: "Ecosuite Business Tower, Street No. 676, Action Area II, Action Area IID, Newtown, Kolkata, West Bengal 700161",
+    },
+    {
+      city: 'Bangalore',
+      address: "S5, Hiprofiles Business center, 1/A CHURCH STREET, Bangalore - 560001. Opposite - Tata Starbucks coffee shop",
+    },
+    {
+      city: 'Delhi',
+      address: "U-179 Office no - 303 The Eduguide, 3rd floor near Laxmi nagar metro station gate no 4. Landmark kotak Mahindra Bank Shakarpur Laxmi Nagar 110092",
+    }
+  ]
+
+  const activeAddress = offices[activeOffice].address
+  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activeAddress)}`
+  const appleMapsUrl = `https://maps.apple.com/?q=${encodeURIComponent(activeAddress)}`
 
   // Live search logic
   useEffect(() => {
@@ -107,7 +121,11 @@ export default function Footer() {
                   {links.map((link) => (
                     <li key={link}>
                       <a
-                        href={category === 'Company' ? `/${link.toLowerCase().replace(/ /g, '-')}` : '#'}
+                        href={
+                          category === 'Company' ? `/${link.toLowerCase().replace(/ /g, '-')}` : 
+                          category === 'Courses' ? `/courses/${link.toLowerCase().replace(/ /g, '-').replace(/\./g, '')}` : 
+                          '#'
+                        }
                         className="text-[13px] text-slate-400 hover:text-sky-400 transition-colors whitespace-nowrap"
                       >
                         {link}
@@ -184,26 +202,54 @@ export default function Footer() {
                 </div>
 
                 <div className="relative">
-                   <h4 className="text-[9px] font-black mb-4 tracking-[0.15em] text-slate-500 uppercase">Office</h4>
+                   <h4 className="text-[9px] font-black mb-4 tracking-[0.15em] text-slate-500 uppercase">Our Presence</h4>
+                   
+                   <div className="flex flex-wrap gap-2 mb-6">
+                      {offices.map((office, idx) => (
+                        <button 
+                          key={office.city}
+                          onClick={() => {
+                            setActiveOffice(idx)
+                            setShowMapOptions(true)
+                          }}
+                          className={cn(
+                            "text-[10px] font-bold px-3 py-1.5 rounded-lg border transition-all duration-300",
+                            activeOffice === idx 
+                              ? "bg-sky-500 border-sky-500 text-white shadow-lg shadow-sky-500/20" 
+                              : "bg-white/5 border-white/10 text-slate-400 hover:text-white hover:border-white/20"
+                          )}
+                        >
+                          {office.city}
+                        </button>
+                      ))}
+                   </div>
+
                    <div 
                      className="group/address cursor-pointer"
                      onClick={() => setShowMapOptions(!showMapOptions)}
                    >
                       <div className="flex gap-4">
                          <MapPin size={18} className="text-sky-500 shrink-0 mt-1 group-hover/address:scale-125 transition-transform" />
-                         <p className="text-[11px] text-slate-400 leading-relaxed font-medium group-hover/address:text-white transition-colors">
-                           Ecosuite Business Tower, Street No. 676, <br />
-                           Action Area II, Action Area IID, Newtown, <br />
-                           Kolkata, West Bengal 700161
-                         </p>
+                         <div className="flex flex-col gap-1">
+                            <span className="text-[10px] font-black text-sky-500 uppercase tracking-widest">{offices[activeOffice].city} Office</span>
+                            <p className="text-[11px] text-slate-400 leading-relaxed font-medium group-hover/address:text-white transition-colors">
+                              {offices[activeOffice].address}
+                            </p>
+                         </div>
                       </div>
                    </div>
 
                    {/* Map Options Dropdown */}
                    {showMapOptions && (
                      <div className="absolute bottom-full left-0 mb-4 w-48 bg-white rounded-xl shadow-2xl border border-slate-100 overflow-hidden z-[70] animate-in slide-in-from-bottom-2">
-                        <div className="p-3 bg-slate-50 border-b border-slate-100">
-                           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Open in Maps</span>
+                        <div className="p-3 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+                           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{offices[activeOffice].city} Maps</span>
+                           <button 
+                             onClick={(e) => { e.stopPropagation(); setShowMapOptions(false); }}
+                             className="text-slate-400 hover:text-slate-900 transition-colors"
+                           >
+                             <Search size={12} className="rotate-45" />
+                           </button>
                         </div>
                         <a 
                           href={googleMapsUrl}

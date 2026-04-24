@@ -6,7 +6,7 @@ import {
   Trophy, GraduationCap, MessageSquare, Bell, Building2, 
   Target, FileText, Coins, Globe, ClipboardList, 
   BookOpen, Newspaper, IndianRupee, HelpCircle, 
-  CheckSquare, Search, FileEdit 
+  CheckSquare, Search, FileEdit, BarChart3 
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
@@ -18,6 +18,7 @@ const navItems = [
   { label: 'Home', href: '/', hasMegaMenu: false },
   { label: 'Explore', href: '#', hasMegaMenu: true },
   { label: 'Tools', href: '/tools', hasDropdown: false },
+  { label: 'Exams', href: '/exams', hasDropdown: false },
   { label: 'Rankings', href: '/rankings', hasDropdown: false },
   { label: 'About Us', href: '/about', hasDropdown: false },
   { label: 'FAQ', href: '/faq', hasDropdown: false },
@@ -364,6 +365,9 @@ export default function Navbar() {
             </div>
 
             <div className="flex items-center gap-6 pl-6 bg-gradient-to-r from-transparent via-white to-white sticky right-0">
+               <a href="/cutoffs" className="flex items-center gap-1.5 text-[11px] font-bold text-amber-700 hover:text-amber-800 transition-colors whitespace-nowrap bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200/60 shadow-sm ring-4 ring-amber-500/5 animate-pulse-slow">
+                  <BarChart3 size={13} className="text-amber-500" /> Cutoffs
+               </a>
                <a href="/abroad" className="flex items-center gap-1.5 text-[11px] font-bold text-slate-700 hover:text-sky-600 transition-colors whitespace-nowrap">
                   <Globe size={13} className="text-sky-500" /> Study Abroad
                </a>

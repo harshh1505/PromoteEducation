@@ -5,6 +5,7 @@ import { ArrowRight, ExternalLink, Calendar, Users, Bell, GraduationCap, Stethos
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import type { Exam } from '@/types'
+import { useLeadCapture } from '@/hooks/useLeadCapture'
 import BrochureModal from '@/components/ui/BrochureModal'
 
 const topExams = [
@@ -29,6 +30,7 @@ const streamColors: Record<string, { bg: string; text: string; border: string }>
 }
 
 export default function ExamsSection() {
+  const { isAuthorized } = useLeadCapture()
   const [upcomingExams, setUpcomingExams] = useState<Exam[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedExam, setSelectedExam] = useState<Exam | null>(null)
@@ -51,7 +53,30 @@ export default function ExamsSection() {
   }, [])
 
   const handleRemindClick = (exam: Exam) => {
+    if (isAuthorized) {
+      alert(`Reminder set for ${exam.name}! We'll notify you of any updates.`)
+      return
+    }
     setSelectedExam(exam)
+    setIsModalOpen(true)
+  }
+
+  const handleDetailsClick = (e: React.MouseEvent, exam: any) => {
+    e.preventDefault()
+    if (isAuthorized) {
+      window.location.href = `/exams/${exam.slug}`
+      return
+    }
+    setSelectedExam({
+      id: exam.slug,
+      name: exam.name,
+      fullName: exam.fullName,
+      stream: exam.stream,
+      date: 'TBA',
+      registrationDeadline: 'TBA',
+      applicants: exam.applicants,
+      conductedBy: 'TBA'
+    } as Exam)
     setIsModalOpen(true)
   }
 
@@ -139,13 +164,13 @@ export default function ExamsSection() {
 
                     {/* Actions */}
                     <div className="flex items-center gap-2">
-                      <Link
-                        href={`/exams/${exam.slug}`}
+                      <button
+                        onClick={(e) => handleDetailsClick(e, exam)}
                         className="flex-1 text-center text-[10px] font-medium py-1.5 rounded-lg transition-colors duration-150"
                         style={{ color: 'var(--action)', background: 'var(--surface-2)' }}
                       >
                         Details
-                      </Link>
+                      </button>
                       <a
                         href={exam.applyLink}
                         target="_blank"
@@ -269,7 +294,8 @@ export default function ExamsSection() {
           onClose={() => setIsModalOpen(false)}
           collegeName={selectedExam.name}
           stream={selectedExam.stream || 'General'}
-          mode="remind"
+          mode={selectedExam.conductedBy === 'TBA' ? 'details' : 'remind'}
+          targetUrl={selectedExam.conductedBy === 'TBA' ? `/exams/${selectedExam.id}` : undefined}
         />
       )}
     </section>

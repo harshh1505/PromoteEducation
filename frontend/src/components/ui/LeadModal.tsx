@@ -1,8 +1,9 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { X, CheckCircle2, Loader2, User, Mail, Phone, MapPin, GraduationCap, Building2 } from 'lucide-react'
+import { X, CheckCircle2, Loader2, User, Mail, Phone, MapPin, GraduationCap, Building2, Lock, Eye, EyeOff } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 
 import AuthModal from './AuthModal'
 
@@ -12,17 +13,21 @@ interface LeadModalProps {
   collegeName: string
   collegeLogo?: string
   stream: string
+  collegeId?: string
 }
 
-export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, stream }: LeadModalProps) {
+export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, stream, collegeId }: LeadModalProps) {
+  const router = useRouter()
   const [user, setUser] = useState<any>(null)
   const [showAuthModal, setShowAuthModal] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     city: '',
-    course: ''
+    course: '',
+    password: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -66,6 +71,25 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
     setIsSubmitting(true)
 
     try {
+      // 1. If not logged in, try to sign up
+      if (!user) {
+        const { data: authData, error: authError } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password || Math.random().toString(36).slice(-10), // fallback random password if they didn't provide one
+          options: {
+            data: {
+              full_name: formData.name,
+              phone: formData.phone,
+              city: formData.city
+            },
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+          }
+        })
+        if (authError) throw authError
+        console.log('User signed up:', authData.user)
+      }
+
+      // 2. Insert into leads table
       const { error } = await supabase
         .from('leads')
         .insert([
@@ -81,14 +105,21 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
         ])
 
       if (error) throw error
+      
+      localStorage.setItem('lead_captured', 'true')
       setIsSuccess(true)
+      
+      // 3. Redirect to college page after a short delay
       setTimeout(() => {
         onClose()
         setIsSuccess(false)
-      }, 3000)
-    } catch (err) {
-      console.error('Lead capture error:', err)
-      alert('Something went wrong. Please try again.')
+        if (collegeId) {
+          router.push(`/colleges/${collegeId}`)
+        }
+      }, 1500)
+    } catch (err: any) {
+      console.error('Registration error:', err)
+      alert(err.message || 'Something went wrong. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
@@ -241,6 +272,27 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
                          <option value="Other">Other</option>
                       </select>
                    </div>
+
+                    {!user && (
+                      <div className="relative">
+                        <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                        <input 
+                          required
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Create Password*"
+                          className="w-full pl-10 pr-12 py-2.5 md:py-3 bg-white border border-slate-200 rounded-xl text-xs md:text-sm focus:ring-2 focus:ring-green-500/20 focus:border-green-500 outline-none transition-all"
+                          value={formData.password}
+                          onChange={(e) => setFormData({...formData, password: e.target.value})}
+                        />
+                        <button 
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                        >
+                          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                        </button>
+                      </div>
+                    )}
 
                    <div className="flex items-start gap-2 px-2 mt-4">
                       <div className="flex items-center h-5 mt-0.5">
