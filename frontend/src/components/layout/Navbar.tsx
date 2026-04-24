@@ -162,17 +162,17 @@ export default function Navbar() {
 
             {/* Logo Section */}
             <div className="flex items-center gap-4 md:gap-8 shrink-0">
-              <a href="/" className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0">
+              <a href="/" className="flex items-center gap-2.5 group">
+                <div className="w-11 h-11 rounded-full border border-sky-500/20 overflow-hidden bg-white flex-shrink-0 shadow-lg group-hover:border-sky-500 transition-all duration-300 relative">
                   <img
-                    src="/images/carousel/PromoteEducationLogo.jpeg"
-                    alt="Logo"
-                    className="w-full h-full object-cover"
+                    src="/images/PromoteEducationLogo.png"
+                    alt="Promote Education"
+                    className="w-full h-full object-contain scale-[1.2] -translate-y-[1px]"
                   />
                 </div>
-                <div className="flex flex-col -gap-1 hidden sm:flex">
-                  <span className="font-black text-sm text-white tracking-tighter leading-none">PROMOTE</span>
-                  <span className="font-black text-sm text-sky-400 tracking-tighter leading-none">EDUCATION</span>
+                <div className="flex flex-col items-center -space-y-0.5">
+                  <span className="font-black text-[11px] md:text-xs text-white tracking-widest leading-tight">PROMOTE</span>
+                  <span className="font-black text-[11px] md:text-xs text-sky-400 tracking-widest leading-tight">EDUCATION</span>
                 </div>
               </a>
 
@@ -273,12 +273,18 @@ export default function Navbar() {
 
               <button
                 onClick={() => setMegaMenuOpen(!megaMenuOpen)}
-                className="flex items-center gap-2 text-white/80 hover:text-white transition-colors"
+                className={cn(
+                  "flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all",
+                  megaMenuOpen ? "bg-white text-slate-900" : "text-white/80 hover:text-white hover:bg-white/10"
+                )}
               >
-                <div className="grid grid-cols-2 gap-0.5 w-4 h-4">
-                  {[1, 2, 3, 4].map(i => <div key={i} className="bg-current rounded-[1px]" />)}
+                <div className="grid grid-cols-2 gap-0.5 w-3.5 h-3.5">
+                  {[1, 2, 3, 4].map(i => (
+                    <div key={i} className={cn("rounded-[1px]", megaMenuOpen ? "bg-sky-500" : "bg-current")} />
+                  ))}
                 </div>
-                <span className="text-xs font-bold hidden lg:block">Explore</span>
+                <span className="text-xs font-bold uppercase tracking-wide">Explore</span>
+                <ChevronDown size={14} className={cn("transition-transform duration-300", megaMenuOpen ? "rotate-180" : "")} />
               </button>
 
               <button className="relative p-2 text-white/60 hover:text-white transition-colors">
@@ -338,17 +344,25 @@ export default function Navbar() {
           <div className="w-full max-w-[1440px] mx-auto px-4 md:px-6 flex items-center justify-between h-11 overflow-x-auto no-scrollbar">
             <div className="flex items-center gap-6">
               {navItems.map((item) => (
-                <a
+                <button
                   key={item.label}
-                  href={item.href}
+                  onClick={(e) => {
+                    if (item.label === 'Explore') {
+                      e.preventDefault()
+                      setMegaMenuOpen(!megaMenuOpen)
+                    } else {
+                      setActiveItem(item.label)
+                      window.location.href = item.href
+                    }
+                  }}
                   className={cn(
-                    "text-xs font-bold whitespace-nowrap transition-colors",
-                    activeItem === item.label ? "text-sky-600" : "text-slate-600 hover:text-slate-900"
+                    "text-xs font-bold whitespace-nowrap transition-colors flex items-center gap-1",
+                    (activeItem === item.label || (item.label === 'Explore' && megaMenuOpen)) ? "text-sky-600" : "text-slate-600 hover:text-slate-900"
                   )}
-                  onClick={() => setActiveItem(item.label)}
                 >
                   {item.label}
-                </a>
+                  {item.label === 'Explore' && <ChevronDown size={12} className={cn("transition-transform", megaMenuOpen ? "rotate-180" : "")} />}
+                </button>
               ))}
               <div className="w-px h-4 bg-slate-200" />
               <div className="flex items-center gap-5">
@@ -380,50 +394,64 @@ export default function Navbar() {
 
         {/* Mega Menu Overlay */}
         {megaMenuOpen && (
-          <div
-            className="absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-2xl animate-in slide-in-from-top-4 duration-300"
-            onMouseLeave={() => setMegaMenuOpen(false)}
-          >
-            <div className="max-w-7xl mx-auto px-8 py-12 grid grid-cols-3 gap-16">
-              {exploreGroups.map(group => (
-                <div key={group.title}>
-                  <h5 className="text-[10px] uppercase font-black text-slate-400 tracking-[0.2em] mb-6">{group.title}</h5>
-                  <div className="grid gap-2">
-                    {group.items.map(subItem => {
-                      const Icon = IconMap[subItem.icon]
-                      return (
-                        <a
-                          key={subItem.label}
-                          href={subItem.href}
-                          className="group flex items-center justify-between p-2.5 rounded-xl hover:bg-slate-50 transition-all"
-                        >
-                          <div className="flex items-center gap-4">
-                            <div className="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-sky-400 transition-all">
-                              {Icon && <Icon size={16} />}
+          <>
+            {/* Backdrop Overlay - Covers page content but stays below header */}
+            <div 
+              className="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-40 animate-in fade-in duration-500"
+              onClick={() => setMegaMenuOpen(false)}
+            />
+            
+            <div
+              className="absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-2xl animate-in slide-in-from-top-2 duration-300 z-50"
+            >
+            <div className="max-w-6xl mx-auto px-6 py-8 grid grid-cols-12 gap-8">
+              {/* Groups Section */}
+              <div className="col-span-8 grid grid-cols-2 gap-x-12 gap-y-2">
+                {exploreGroups.map(group => (
+                  <div key={group.title}>
+                    <h5 className="text-[9px] uppercase font-black text-slate-400 tracking-[0.2em] mb-4">{group.title}</h5>
+                    <div className="space-y-1">
+                      {group.items.map(subItem => {
+                        const Icon = IconMap[subItem.icon]
+                        return (
+                          <a
+                            key={subItem.label}
+                            href={subItem.href}
+                            className="group flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 transition-all"
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-sky-500 group-hover:text-white transition-all shadow-sm">
+                                {Icon && <Icon size={13} />}
+                              </div>
+                              <div className="flex flex-col">
+                                <span className="text-xs font-bold text-slate-700 group-hover:text-sky-600 transition-colors leading-none">{subItem.label}</span>
+                                {subItem.badge && <span className="text-[8px] text-green-600 font-bold mt-1 uppercase tracking-tighter">{subItem.badge}</span>}
+                              </div>
                             </div>
-                            <div className="flex flex-col">
-                              <span className="text-sm font-bold text-slate-700 group-hover:text-slate-900">{subItem.label}</span>
-                              {subItem.badge && <span className="text-[10px] text-green-600 font-bold">{subItem.badge}</span>}
-                            </div>
-                          </div>
-                          {subItem.status && <span className="text-[9px] bg-sky-100 text-sky-600 px-1.5 py-0.5 rounded font-black uppercase tracking-tighter">{subItem.status}</span>}
-                        </a>
-                      )
-                    })}
+                            {subItem.status && <span className="text-[8px] bg-sky-100 text-sky-600 px-1.5 py-0.5 rounded font-black uppercase tracking-tighter">{subItem.status}</span>}
+                          </a>
+                        )
+                      })}
+                    </div>
                   </div>
-                </div>
-              ))}
-              <div className="bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden">
+                ))}
+              </div>
+
+              {/* Sidebar Feature */}
+              <div className="col-span-4 bg-slate-950 rounded-2xl p-6 text-white relative overflow-hidden flex flex-col justify-center border border-white/5">
                 <div className="relative z-10">
-                  <h6 className="text-2xl font-black mb-2 leading-tight">Compare Colleges & Find Your Best Fit</h6>
-                  <p className="text-white/60 text-sm mb-6 leading-relaxed">Use our advanced tools to compare rankings, fees, and placements.</p>
-                  <button className="px-6 py-3 bg-white text-slate-900 font-bold rounded-xl hover:bg-sky-400 transition-all active:scale-95 text-sm">Start Comparing</button>
+                  <h6 className="text-lg font-black mb-1.5 leading-tight">Need Help Finding a College?</h6>
+                  <p className="text-white/50 text-[11px] mb-4 leading-relaxed font-medium">Use our advanced tools to compare rankings, fees, and placements in seconds.</p>
+                  <button className="px-5 py-2 bg-sky-500 text-white font-bold rounded-lg hover:bg-sky-600 transition-all active:scale-95 text-[10px] uppercase tracking-widest shadow-lg shadow-sky-500/20">
+                    Start Comparing
+                  </button>
                 </div>
-                <Target size={120} className="absolute -bottom-10 -right-10 text-white/5" />
+                <Target size={100} className="absolute -bottom-6 -right-6 text-white/5 rotate-12" />
               </div>
             </div>
           </div>
-        )}
+        </>
+      )}
 
         {/* Mobile Menu */}
         {mobileOpen && (

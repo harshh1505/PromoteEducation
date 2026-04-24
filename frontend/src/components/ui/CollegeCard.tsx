@@ -22,7 +22,11 @@ export default function CollegeCard({ college, onOpenLead, onOpenReview }: Colle
           <img 
             src={college.image || 'https://images.unsplash.com/photo-1562774053-701939374585?w=800'} 
             alt={college.name} 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-opacity duration-500"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = 'https://images.unsplash.com/photo-1562774053-701939374585?w=800'; // Reliable Unsplash Fallback
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent" />
           

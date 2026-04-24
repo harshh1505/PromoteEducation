@@ -120,6 +120,10 @@ export default function NewsSection() {
                   src={item.image} 
                   alt="" 
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = 'https://images.unsplash.com/photo-1510074377623-8cf13fb86c08?w=400'; // News Fallback
+                  }}
                 />
               </div>
             </div>

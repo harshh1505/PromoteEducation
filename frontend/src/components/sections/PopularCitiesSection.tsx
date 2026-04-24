@@ -25,6 +25,10 @@ const CityCard = ({ city }: { city: any }) => (
         src={city.image} 
         alt={city.name} 
         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        onError={(e) => {
+          const target = e.target as HTMLImageElement;
+          target.src = 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800'; // Generic City Fallback
+        }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-midnight/90 via-transparent to-transparent opacity-80" />
       <div className="absolute bottom-4 left-0 right-0 text-center px-2">

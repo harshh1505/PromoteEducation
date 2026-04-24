@@ -35,12 +35,20 @@ const trustBadges = [
   { label: 'Placement Stats', icon: Award },
 ]
 
+const localFallbacks = [
+  "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1920", // College Campus
+  "https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=1920", // University Building
+  "https://images.unsplash.com/photo-1523050853064-802160043f21?auto=format&fit=crop&q=80&w=1920", // Library/Hall
+  "https://images.unsplash.com/photo-1498243639391-f1f074e04996?auto=format&fit=crop&q=80&w=1920"  // Modern Campus
+]
+
 export default function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [focused, setFocused] = useState(false)
+  const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({})
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -71,7 +79,7 @@ export default function HeroSection() {
   }, [query])
 
   return (
-    <section className="relative min-h-screen w-full overflow-hidden flex items-center justify-center py-20 md:py-0">
+    <section className="relative min-h-screen w-full overflow-hidden flex items-center justify-center py-20 md:py-0 bg-slate-950">
       
       {/* Background Carousel */}
       {carouselImages.map((url, idx) => (
@@ -85,10 +93,11 @@ export default function HeroSection() {
           {/* Deep Gradient Overlay to hide artifacts and pop text */}
           <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/30 to-slate-900/80 z-10" />
           <img 
-            src={getOptimizedUrl(url)} 
+            src={imageErrors[idx] ? localFallbacks[idx % localFallbacks.length] : getOptimizedUrl(url)} 
             alt={`College Campus ${idx + 1}`} 
             className="w-full h-full object-cover" 
             style={{ imageRendering: 'auto' }}
+            onError={() => setImageErrors(prev => ({ ...prev, [idx]: true }))}
             // @ts-ignore
             fetchpriority={currentSlide === idx ? "high" : "low"}
           />
@@ -100,7 +109,18 @@ export default function HeroSection() {
         
         <div className="w-full px-6 md:px-10 py-8 md:py-10 rounded-[40px] bg-white/[0.02] backdrop-blur-sm border border-white/10 shadow-2xl animate-in fade-in zoom-in duration-700 text-center">
           
-          <div className="mb-6">
+          <div className="mb-6 flex flex-col items-center">
+            {/* Hero Logo */}
+            <div className="mb-6 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+              <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-white/20 overflow-hidden bg-white shadow-2xl relative mx-auto">
+                <img
+                  src="/images/PromoteEducationLogo.png"
+                  alt="Promote Education"
+                  className="w-full h-full object-contain scale-[1.2] -translate-y-[2px]"
+                />
+              </div>
+            </div>
+
             <h1 className="text-4xl md:text-5xl font-black text-white mb-3 tracking-tighter leading-[1.1]">
               Top <span className="text-sky-400">Colleges in India 2026</span>
               <span className="block text-xl md:text-2xl font-medium text-white/90 mt-1">NIRF Rankings & Admissions</span>

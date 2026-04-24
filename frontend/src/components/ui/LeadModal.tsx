@@ -181,6 +181,10 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
                         src={collegeLogo || `https://ui-avatars.com/api/?name=${collegeName}&background=random`} 
                         alt="logo" 
                         className="w-full h-full object-contain" 
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(collegeName)}&background=random`;
+                        }}
                       />
                    </div>
                    <div>
