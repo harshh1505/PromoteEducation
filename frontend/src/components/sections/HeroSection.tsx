@@ -6,13 +6,20 @@ import { supabase } from '@/lib/supabase'
 import { cn } from '@/lib/utils'
 
 const carouselImages = [
-  { url: "/images/carousel/aiimsdelhi.webp", alt: "AIIMS New Delhi - Top Medical College in India Rankings" },
-  { url: "/images/carousel/iitdelhi.jpg", alt: "IIT Delhi - Premier Engineering Institution Campus" },
-  { url: "/images/carousel/iitguwahati.avif", alt: "IIT Guwahati - Top Tech University Landscape" },
-  { url: "/images/carousel/kiitbhubaneswar.jpg", alt: "KIIT Bhubaneswar - Excellence in Engineering and Management" },
-  { url: "/images/carousel/srmktr.jpg", alt: "SRM University Kattankulathur - Private University Rankings" },
-  { url: "/images/carousel/iitbhu.jpg", alt: "IIT BHU Varanasi - Historic Engineering College Excellence" }
+  "https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/amitynoida.jpg",
+  "https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/bitsgoa.webp",
+  "https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/coepPune.jpg",
+  "https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/mitwpu.webp",
+  "https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/parulUniversity.webp",
+  "https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/sapthagiriNps.webp"
 ]
+
+// Optimization helper for Supabase Storage
+const getOptimizedUrl = (url: string) => {
+  return url.replace('/object/public/', '/render/image/public/') + '?width=1920&quality=80&format=webp';
+}
+
+
 
 const stats = [
   { label: '6000+ Institutions', icon: GraduationCap },
@@ -67,7 +74,7 @@ export default function HeroSection() {
     <section className="relative min-h-screen w-full overflow-hidden flex items-center justify-center py-20 md:py-0">
       
       {/* Background Carousel */}
-      {carouselImages.map((img, idx) => (
+      {carouselImages.map((url, idx) => (
         <div
           key={idx}
           className={cn(
@@ -75,12 +82,15 @@ export default function HeroSection() {
             currentSlide === idx ? "opacity-100 scale-100" : "opacity-0 scale-110"
           )}
         >
-          {/* Subtle Gradient Overlay for Readability while keeping college visible */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/20 to-slate-900/60 z-10" />
+          {/* Deep Gradient Overlay to hide artifacts and pop text */}
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/30 to-slate-900/80 z-10" />
           <img 
-            src={img.url} 
-            alt={img.alt} 
+            src={getOptimizedUrl(url)} 
+            alt={`College Campus ${idx + 1}`} 
             className="w-full h-full object-cover" 
+            style={{ imageRendering: 'auto' }}
+            // @ts-ignore
+            fetchpriority={currentSlide === idx ? "high" : "low"}
           />
         </div>
       ))}

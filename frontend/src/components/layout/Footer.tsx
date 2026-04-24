@@ -3,14 +3,14 @@
 import { useState, useEffect } from 'react'
 import { 
   Search, ChevronRight, Facebook, Instagram, Youtube, Linkedin, 
-  Send, Mail, Phone, MapPin, ExternalLink 
+  Send, Mail, Phone, MapPin, ExternalLink, HelpCircle 
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { cn } from '@/lib/utils'
 
 const footerLinks = {
   Colleges: ['Engineering', 'Medical', 'MBA', 'Law', 'Design', 'Arts & Commerce'],
-  Exams: ['JEE Main', 'NEET', 'CAT', 'GRE', 'GATE', 'GMAT'],
+  Exams: ['JEE Main', 'JEE Advanced', 'NEET UG', 'CAT', 'GATE', 'CLAT', 'NIFT', 'CUET UG'],
   Courses: ['B.Tech', 'MBA', 'M.Tech', 'B.Sc Nursing', 'MBBS', 'BDS'],
   Company: ['About', 'Contact Us', 'FAQ', 'Sitemap'],
 }
@@ -98,15 +98,24 @@ export default function Footer() {
             <p className="text-sm mb-6 text-slate-400 leading-relaxed pr-4">
               India's most trusted college discovery platform. Helping students and parents make confident decisions.
             </p>
-            <div className="flex gap-3">
-              {['iOS App', 'Android'].map((app) => (
-                <button
-                  key={app}
-                  className="text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-full border border-white/10 text-slate-500 hover:text-white hover:bg-white/5 transition-all"
-                >
-                  {app}
-                </button>
-              ))}
+            <div className="flex flex-col gap-4">
+              <div className="flex gap-3">
+                {['iOS App', 'Android'].map((app) => (
+                  <button
+                    key={app}
+                    className="text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-full border border-white/10 text-slate-500 hover:text-white hover:bg-white/5 transition-all"
+                  >
+                    {app}
+                  </button>
+                ))}
+              </div>
+              <a 
+                href="/faq"
+                className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-sky-400 transition-colors"
+              >
+                <HelpCircle size={14} className="text-sky-500" /> 
+                Frequently Asked Questions
+              </a>
             </div>
           </div>
 
@@ -124,6 +133,7 @@ export default function Footer() {
                         href={
                           category === 'Company' ? `/${link.toLowerCase().replace(/ /g, '-')}` : 
                           category === 'Courses' ? `/courses/${link.toLowerCase().replace(/ /g, '-').replace(/\./g, '')}` : 
+                          category === 'Exams' ? `/exams/${link.toLowerCase().replace(/ /g, '-')}` :
                           '#'
                         }
                         className="text-[13px] text-slate-400 hover:text-sky-400 transition-colors whitespace-nowrap"
