@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function EventsPage() {
   // Replace this YouTube ID with the desired video ID. 
   // It is currently set to a placeholder video.
-  const youtubeVideoId = "dQw4w9WgXcQ" 
+  const youtubeVideoId = "NkhcoEVXFa8" 
 
   return (
     <div className="min-h-screen flex flex-col bg-white">

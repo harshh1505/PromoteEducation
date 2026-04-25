@@ -80,10 +80,10 @@ const educationQuotes = [
 
 
 const leadership = [
-    { name: 'Ritesh Rastogi', role: 'MD & Founder', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop' },
-    { name: 'Aman Rastogi', role: 'Managing Director', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=800&auto=format&fit=crop' },
-    { name: 'Somnath Ghosh', role: 'Head of Operations', image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=800&auto=format&fit=crop' },
-    { name: 'Ritu Choudhury', role: 'Media Head', image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=800&auto=format&fit=crop' },
+    { name: 'Ritesh Rastogi', role: 'MD & Founder', image: '/images/leadership/RiteshRastogi.jpeg' },
+    { name: 'Aman Rastogi', role: 'Managing Director', image: '/images/leadership/AmanRastogi.jpeg' },
+    { name: 'Somnath Ghosh', role: 'Head of Operations', image: '/images/leadership/SomnathGhosh.jpeg' },
+    { name: 'Ritu Choudhury', role: 'Media Head', image: '/images/leadership/RituChoudhury.jpeg' },
 ]
 
 const gameOptions = [
@@ -888,7 +888,7 @@ export default function AboutPage() {
                     <div className="text-center mb-12">
                         <h2 className="font-display text-4xl md:text-5xl text-slate-900 text-center">The Leadership</h2>
                     </div>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-12">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-12 max-w-5xl mx-auto">
                         {leadership.map((member, i) => (
                             <div key={i} className="text-center group">
                                 <div className="aspect-[4/5] rounded-[32px] overflow-hidden mb-8 shadow-xl relative border-4 border-slate-50">

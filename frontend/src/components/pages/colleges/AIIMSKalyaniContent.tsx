@@ -175,9 +175,9 @@ export default function AIIMSKalyaniContent() {
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Also Read</p>
                     <div className="space-y-6">
                         {featuredColleges
-                            .filter(c => c.state === 'West Bengal' && c.id !== 'aiims-kalyani')
+                            .filter((c: any) => c.state === 'West Bengal' && c.id !== 'aiims-kalyani')
                             .slice(0, 3)
-                            .map((c, i) => (
+                            .map((c: any, i: number) => (
                             <Link 
                                 key={c.id} 
                                 href={`/colleges/${c.id}`}
