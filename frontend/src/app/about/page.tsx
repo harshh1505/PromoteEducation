@@ -1043,6 +1043,7 @@ export default function AboutPage() {
                 isOpen={!!selectedCollege} 
                 onClose={() => setSelectedCollege(null)} 
                 collegeName={selectedCollege.name} 
+                stream={selectedCollege.stream}
               />
             )}
             {reviewCollege && (
