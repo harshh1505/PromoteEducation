@@ -80,10 +80,10 @@ const educationQuotes = [
 
 
 const leadership = [
-    { name: 'Ritesh Rastogi', role: 'MD & Founder', image: '/images/leadership/RiteshRastogi.jpeg' },
-    { name: 'Aman Rastogi', role: 'Managing Director', image: '/images/leadership/AmanRastogi.jpeg' },
-    { name: 'Somnath Ghosh', role: 'Head of Operations', image: '/images/leadership/SomnathGhosh.jpeg' },
-    { name: 'Ritu Choudhury', role: 'Media Head', image: '/images/leadership/RituChoudhury.jpeg' },
+    { name: 'Ritesh Rastogi', role: 'MD & Founder', image: '/images/Leadership/RiteshRastogi.jpeg' },
+    { name: 'Aman Rastogi', role: 'Managing Director', image: '/images/Leadership/AmanRastogi.jpeg' },
+    { name: 'Somnath Ghosh', role: 'Head of Operations', image: '/images/Leadership/SomnathGhosh.jpeg' },
+    { name: 'Ritu Choudhury', role: 'Media Head', image: '/images/Leadership/RituChoudhury.jpeg' },
 ]
 
 const gameOptions = [
