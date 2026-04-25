@@ -12,7 +12,7 @@ interface LeadModalProps {
   onClose: () => void
   collegeName: string
   collegeLogo?: string
-  stream: string
+  stream?: string
   collegeId?: string
 }
 
