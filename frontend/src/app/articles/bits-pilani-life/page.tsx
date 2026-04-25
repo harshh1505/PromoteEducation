@@ -53,7 +53,7 @@ export default function Page() {
 </div>
             <h2 className="text-3xl font-black text-slate-900 mt-12 mb-6">Placements 2024–25</h2>
             <div className="overflow-x-auto rounded-2xl border border-slate-100 mb-8"><table className="w-full text-sm"><thead><tr className="bg-slate-900 text-white"><th className="p-4 text-left font-black">Metric</th><th className="p-4 text-center font-black">Pilani</th><th className="p-4 text-center font-black">Goa</th></tr></thead><tbody className="divide-y divide-slate-50">
-{[['Highest Package','₹2.05 Cr (Int'l)','₹1.8 Cr (Int'l)'],['Average Package','₹21.4 LPA','₹19.8 LPA'],['Placement %','98%+','96%+'],['Top Recruiters','Google, Microsoft, Goldman Sachs','Qualcomm, Samsung, Cisco'],].map(([m,p,g])=>(<tr key={m} className="hover:bg-slate-50"><td className="p-4 font-bold text-slate-700">{m}</td><td className="p-4 text-center text-sky-600 font-bold">{p}</td><td className="p-4 text-center text-slate-500">{g}</td></tr>))}
+{[['Highest Package','₹2.05 Cr (Int\'l)','₹1.8 Cr (Int\'l)'],['Average Package','₹21.4 LPA','₹19.8 LPA'],['Placement %','98%+','96%+'],['Top Recruiters','Google, Microsoft, Goldman Sachs','Qualcomm, Samsung, Cisco'],].map(([m,p,g])=>(<tr key={m} className="hover:bg-slate-50"><td className="p-4 font-bold text-slate-700">{m}</td><td className="p-4 text-center text-sky-600 font-bold">{p}</td><td className="p-4 text-center text-slate-500">{g}</td></tr>))}
 </tbody></table></div>
             <h2 className="text-3xl font-black text-slate-900 mt-12 mb-6">Related Guides</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

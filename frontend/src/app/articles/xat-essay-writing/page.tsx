@@ -6,7 +6,7 @@ import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'How to Write the XAT Essay Structure, Topics & Examples | Promote Education',
-  description: 'XAT's Essay Writing component (required by XLRI and select institutes) tests your ability to construct a coherent, well-argued essay in 20 minutes. Learn the winning structure, common topic themes, and sample essays.',
+  description: 'XAT\'s Essay Writing component (required by XLRI and select institutes) tests your ability to construct a coherent, well-argued essay in 20 minutes. Learn the winning structure, common topic themes, and sample essays.',
 }
 
 export default function Page() {

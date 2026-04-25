@@ -6,7 +6,7 @@ import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'XLRI HRM vs BM Which Programme Should You Choose? | Promote Education',
-  description: 'A detailed comparison of XLRI's flagship MBA programmes — Human Resource Management (HRM) and Business Management (BM). Covers curriculum, placements, XAT cutoffs, and career trajectories.',
+  description: 'A detailed comparison of XLRI\'s flagship MBA programmes — Human Resource Management (HRM) and Business Management (BM). Covers curriculum, placements, XAT cutoffs, and career trajectories.',
 }
 
 export default function Page() {

@@ -6,7 +6,7 @@ import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'The Bonus Question Strategy How to Score 390+ | Promote Education',
-  description: 'BITSAT's bonus questions are the ultimate secret weapon. If you complete all 130 questions, you unlock 12 additional questions that can push your score past 390. Learn exactly when to attempt them and when not to.',
+  description: 'BITSAT\'s bonus questions are the ultimate secret weapon. If you complete all 130 questions, you unlock 12 additional questions that can push your score past 390. Learn exactly when to attempt them and when not to.',
 }
 
 export default function Page() {

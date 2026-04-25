@@ -17,6 +17,10 @@ import { College } from '@/types'
 import { featuredColleges } from '@/components/sections/CollegesSection'
 import { newsItems } from '@/components/sections/NewsSection'
 import { cn } from '@/lib/utils'
+import { useRouter } from 'next/navigation'
+import { useLeadCapture } from '@/hooks/useLeadCapture'
+import LeadModal from '@/components/ui/LeadModal'
+import ReviewModal from '@/components/ui/ReviewModal'
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
@@ -464,8 +468,21 @@ const SnakeLadderGame: React.FC = () => {
 }
 
 export default function AboutPage() {
+    const router = useRouter()
+    const { isAuthorized } = useLeadCapture()
+    
     const [dailyQuote, setDailyQuote] = useState(educationQuotes[0])
     const [gameResult, setGameResult] = useState<string | null>(null)
+    const [selectedCollege, setSelectedCollege] = useState<College | null>(null)
+    const [reviewCollege, setReviewCollege] = useState<College | null>(null)
+
+    const handleOpenLead = async (college: College) => {
+      if (isAuthorized) {
+        router.push(`/colleges/${college.id}`)
+      } else {
+        setSelectedCollege(college)
+      }
+    }
 
     useEffect(() => {
         const day = Math.floor((new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24))
@@ -662,7 +679,11 @@ export default function AboutPage() {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
                                     {featuredColleges.slice(topCollegesPage * itemsPerMiniPage, (topCollegesPage + 1) * itemsPerMiniPage).map((college) => (
                                         <div key={college.id} className="animate-in fade-in slide-in-from-right-4 duration-700">
-                                            <CollegeCard college={college} />
+                                            <CollegeCard 
+                                              college={college} 
+                                              onOpenLead={handleOpenLead}
+                                              onOpenReview={(c) => setReviewCollege(c)}
+                                            />
                                         </div>
                                     ))}
                                 </div>
@@ -1016,6 +1037,21 @@ export default function AboutPage() {
             </section>
 
             <Footer />
+            {/* Modals */}
+            {selectedCollege && (
+              <LeadModal 
+                isOpen={!!selectedCollege} 
+                onClose={() => setSelectedCollege(null)} 
+                collegeName={selectedCollege.name} 
+              />
+            )}
+            {reviewCollege && (
+              <ReviewModal
+                isOpen={!!reviewCollege}
+                onClose={() => setReviewCollege(null)}
+                collegeName={reviewCollege.name}
+              />
+            )}
         </main>
     )
 }
