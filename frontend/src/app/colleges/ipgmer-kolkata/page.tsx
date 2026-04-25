@@ -117,7 +117,7 @@ export default function IPGMERKolkataPage() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         collegeName="IPGMER, Kolkata"
-        collegeId="wb-med-3"
+        collegeId="ipgmer-kolkata"
         stream="Medical"
         mode={modalMode}
       />

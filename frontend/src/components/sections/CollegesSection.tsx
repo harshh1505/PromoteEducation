@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation'
 export const featuredColleges: College[] = [
   // 1-4 WB
   {
-    id: 'wb-med-1',
+    id: 'aiims-kalyani',
     name: 'AIIMS Kalyani',
     location: 'Kalyani',
     state: 'West Bengal',
@@ -30,7 +30,7 @@ export const featuredColleges: College[] = [
     rating: 4.9
   },
   {
-    id: 'wb-med-2',
+    id: 'medical-college-kolkata',
     name: 'Medical College Kolkata',
     location: 'Kolkata',
     state: 'West Bengal',
@@ -46,7 +46,7 @@ export const featuredColleges: College[] = [
     rating: 4.8
   },
   {
-    id: 'wb-med-3',
+    id: 'ipgmer-kolkata',
     name: 'IPGMER, Kolkata',
     location: 'Kolkata',
     state: 'West Bengal',
@@ -62,7 +62,7 @@ export const featuredColleges: College[] = [
     rating: 4.7
   },
   {
-    id: 'wb-med-4',
+    id: 'rg-kar-medical-college-kolkata',
     name: 'RG Kar Medical College',
     location: 'Kolkata',
     state: 'West Bengal',
@@ -79,7 +79,7 @@ export const featuredColleges: College[] = [
   },
   // 1-4 KA
   {
-    id: 'ka-med-1',
+    id: 'bmcri-bangalore',
     name: 'Bangalore Medical College and Research Institute (BMCRI)',
     location: 'Bangalore',
     state: 'Karnataka',
@@ -95,7 +95,7 @@ export const featuredColleges: College[] = [
     rating: 4.8
   },
   {
-    id: 'ka-med-2',
+    id: 'mmcri-mysore',
     name: 'Mysore Medical College and Research Institute (MMCRI)',
     location: 'Mysore',
     state: 'Karnataka',
@@ -111,7 +111,7 @@ export const featuredColleges: College[] = [
     rating: 4.7
   },
   {
-    id: 'ka-med-3',
+    id: 'kims-hubballi',
     name: 'Karnataka Institute of Medical Sciences (KIMS)',
     location: 'Hubballi',
     state: 'Karnataka',
@@ -127,7 +127,7 @@ export const featuredColleges: College[] = [
     rating: 4.5
   },
   {
-    id: 'ka-med-4',
+    id: 'atal-bihari-medical-college-bangalore',
     name: 'Shri Atal Bihari Vajpayee Medical College & Research Institute',
     location: 'Bangalore',
     state: 'Karnataka',
@@ -144,7 +144,7 @@ export const featuredColleges: College[] = [
   },
   // 5-8 WB
   {
-    id: 'wb-med-5',
+    id: 'nrs-medical-college-kolkata',
     name: 'Nilratan Sircar Medical College',
     location: 'Kolkata',
     state: 'West Bengal',
@@ -160,7 +160,7 @@ export const featuredColleges: College[] = [
     rating: 4.6
   },
   {
-    id: 'wb-med-6',
+    id: 'kpc-medical-college-kolkata',
     name: 'KPC Medical College & Hospital',
     location: 'Kolkata',
     state: 'West Bengal',
@@ -176,7 +176,7 @@ export const featuredColleges: College[] = [
     rating: 4.4
   },
   {
-    id: 'wb-med-7',
+    id: 'sks-medical-college-durgapur',
     name: 'SKS Medical College',
     location: 'Durgapur',
     state: 'West Bengal',
@@ -192,7 +192,7 @@ export const featuredColleges: College[] = [
     rating: 4.1
   },
   {
-    id: 'wb-med-8',
+    id: 'jis-medical-school-howrah',
     name: 'JIS School of Medical Science',
     location: 'Howrah',
     state: 'West Bengal',
@@ -209,7 +209,7 @@ export const featuredColleges: College[] = [
   },
   // 5-8 KA
   {
-    id: 'ka-med-5',
+    id: 'mims-mandya',
     name: 'Mandya Institute of Medical Sciences (MIMS)',
     location: 'Mandya',
     state: 'Karnataka',
@@ -225,7 +225,7 @@ export const featuredColleges: College[] = [
     rating: 4.3
   },
   {
-    id: 'ka-med-6',
+    id: 'bims-belagavi',
     name: 'Belagavi Institute of Medical Sciences (BIMS)',
     location: 'Belagavi',
     state: 'Karnataka',
@@ -241,7 +241,7 @@ export const featuredColleges: College[] = [
     rating: 4.3
   },
   {
-    id: 'ka-med-7',
+    id: 'gims-gadag',
     name: 'Gadag Institute of Medical Sciences (GIMS)',
     location: 'Gadag',
     state: 'Karnataka',
@@ -257,7 +257,7 @@ export const featuredColleges: College[] = [
     rating: 4.2
   },
   {
-    id: 'ka-med-8',
+    id: 'gims-kalaburagi',
     name: 'Gulbarga Institute of Medical Sciences (GIMS)',
     location: 'Kalaburagi',
     state: 'Karnataka',
@@ -274,7 +274,7 @@ export const featuredColleges: College[] = [
   },
   // 9-12 WB
   {
-    id: 'wb-med-9',
+    id: 'gouri-devi-medical-college-durgapur',
     name: 'GOURI DEVI INSTITUTE OF MEDICAL SCIENCES',
     location: 'Durgapur',
     state: 'West Bengal',
@@ -290,7 +290,7 @@ export const featuredColleges: College[] = [
     rating: 4.3
   },
   {
-    id: 'wb-med-10',
+    id: 'iq-city-medical-college-durgapur',
     name: 'IQ City Medical College Hospital',
     location: 'Durgapur',
     state: 'West Bengal',
@@ -306,7 +306,7 @@ export const featuredColleges: College[] = [
     rating: 4.4
   },
   {
-    id: 'wb-med-11',
+    id: 'icare-medical-college-haldia',
     name: 'ICARE Institute of Medical Science',
     location: 'Haldia',
     state: 'West Bengal',
@@ -322,7 +322,7 @@ export const featuredColleges: College[] = [
     rating: 4.3
   },
   {
-    id: 'wb-med-12',
+    id: 'srims-durgapur',
     name: 'SANAKA MEDICAL COLLEGE (SRIMS)',
     location: 'Durgapur',
     state: 'West Bengal',
@@ -339,7 +339,7 @@ export const featuredColleges: College[] = [
   },
   // 9-12 KA
   {
-    id: 'ka-med-9',
+    id: 'hims-hassan',
     name: 'Hassan Institute of Medical Sciences (HIMS)',
     location: 'Hassan',
     state: 'Karnataka',
@@ -355,7 +355,7 @@ export const featuredColleges: College[] = [
     rating: 4.3
   },
   {
-    id: 'ka-med-10',
+    id: 'kims-karwar',
     name: 'Karwar Institute of Medical Sciences (KIMS)',
     location: 'Karwar',
     state: 'Karnataka',
@@ -371,7 +371,7 @@ export const featuredColleges: College[] = [
     rating: 4.1
   },
   {
-    id: 'ka-med-11',
+    id: 'brims-bidar',
     name: 'Bidar Institute of Medical Sciences (BRIMS)',
     location: 'Bidar',
     state: 'Karnataka',
@@ -387,7 +387,7 @@ export const featuredColleges: College[] = [
     rating: 4.2
   },
   {
-    id: 'ka-med-12',
+    id: 'esic-medical-college-bangalore',
     name: 'ESIC Medical College and PGIMSR',
     location: 'Bangalore',
     state: 'Karnataka',
@@ -404,7 +404,7 @@ export const featuredColleges: College[] = [
   },
   // Remaining WB (13)
   {
-    id: 'wb-med-13',
+    id: 'jims-medical-college-kolkata',
     name: 'JIMS HOSPITAL - CENTRAL CAMPUS',
     location: 'Kolkata',
     state: 'West Bengal',
@@ -421,7 +421,7 @@ export const featuredColleges: College[] = [
   },
   // Remaining KA (13-22)
   {
-    id: 'ka-med-13',
+    id: 'st-johns-medical-college-bangalore',
     name: "St. John's Medical College",
     location: 'Bangalore',
     state: 'Karnataka',
@@ -437,7 +437,7 @@ export const featuredColleges: College[] = [
     rating: 4.9
   },
   {
-    id: 'ka-med-14',
+    id: 'ramaiah-medical-college-bangalore',
     name: 'M.S. Ramaiah Medical College',
     location: 'Bangalore',
     state: 'Karnataka',
@@ -453,7 +453,7 @@ export const featuredColleges: College[] = [
     rating: 4.7
   },
   {
-    id: 'ka-med-15',
+    id: 'kmc-mangalore',
     name: 'Kasturba Medical College (KMC)',
     location: 'Mangalore',
     state: 'Karnataka',
@@ -469,7 +469,7 @@ export const featuredColleges: College[] = [
     rating: 4.8
   },
   {
-    id: 'ka-med-16',
+    id: 'kims-bangalore',
     name: 'Kempegowda Institute of Medical Sciences (KIMS)',
     location: 'Bangalore',
     state: 'Karnataka',
@@ -485,7 +485,7 @@ export const featuredColleges: College[] = [
     rating: 4.4
   },
   {
-    id: 'ka-med-17',
+    id: 'father-muller-medical-college-mangalore',
     name: 'Father Muller Institute of Medical Education',
     location: 'Mangalore',
     state: 'Karnataka',
@@ -501,7 +501,7 @@ export const featuredColleges: College[] = [
     rating: 4.5
   },
   {
-    id: 'ka-med-18',
+    id: 'jjm-medical-college-davanagere',
     name: 'JJM Medical College',
     location: 'Davanagere',
     state: 'Karnataka',
@@ -517,7 +517,7 @@ export const featuredColleges: College[] = [
     rating: 4.3
   },
   {
-    id: 'ka-med-19',
+    id: 'vydehi-medical-college-bangalore',
     name: 'Vydehi Institute of Medical Sciences & Research Centre',
     location: 'Bangalore',
     state: 'Karnataka',
@@ -533,7 +533,7 @@ export const featuredColleges: College[] = [
     rating: 4.3
   },
   {
-    id: 'ka-med-20',
+    id: 'aj-medical-college-mangalore',
     name: 'AJ Institute of Medical Sciences and Research Centre',
     location: 'Mangalore',
     state: 'Karnataka',
@@ -549,7 +549,7 @@ export const featuredColleges: College[] = [
     rating: 4.2
   },
   {
-    id: 'ka-med-21',
+    id: 'adichunchanagiri-medical-college-mandya',
     name: 'Adichunchanagiri Institute of Medical Sciences',
     location: 'Mandya',
     state: 'Karnataka',
@@ -565,7 +565,7 @@ export const featuredColleges: College[] = [
     rating: 4.1
   },
   {
-    id: 'ka-med-22',
+    id: 'bgs-medical-college-bangalore',
     name: 'BGS Global Institute of Medical Sciences',
     location: 'Bangalore',
     state: 'Karnataka',

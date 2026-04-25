@@ -9,9 +9,8 @@ import { supabase } from '@/lib/supabase'
 import { cn } from '@/lib/utils'
 
 const footerLinks = {
-  Colleges: ['Engineering', 'Medical', 'MBA', 'Law', 'Design', 'Arts & Commerce'],
-  Exams: ['JEE Main', 'JEE Advanced', 'NEET UG', 'CAT', 'GATE', 'CLAT', 'NIFT', 'CUET UG'],
-  Courses: ['B.Tech', 'MBA', 'M.Tech', 'B.Sc Nursing', 'MBBS', 'BDS'],
+  Exams: ['JEE Main', 'NEET', 'CAT', 'CUET', 'All exams'],
+  Courses: ['BTech', 'MBA', 'MBBS', 'BDS', 'Others'],
   Company: ['About', 'Contact Us', 'FAQ', 'Sitemap'],
 }
 
@@ -86,18 +85,18 @@ export default function Footer() {
 
           {/* Brand col */}
           <div className="col-span-2 md:col-span-3">
-            <div className="flex items-center gap-4 mb-6">
-              <a href="/" className="flex items-center gap-3 group">
-                <div className="w-12 h-12 rounded-full border border-white/10 overflow-hidden bg-white flex-shrink-0 shadow-xl transition-all duration-300 group-hover:border-sky-500">
+            <div className="flex items-center gap-6 mb-10">
+              <a href="/" className="flex items-center gap-5 group">
+                <div className="w-20 h-20 -ml-2 rounded-full border border-white/10 overflow-hidden bg-white flex-shrink-0 shadow-2xl transition-all duration-300 group-hover:border-sky-500 group-hover:scale-105 transform">
                   <img
                     src="/images/PromoteEducationLogo.png"
                     alt="Promote Education"
                     className="w-full h-full object-contain scale-[1.2] -translate-y-[1px]"
                   />
                 </div>
-                <div className="flex flex-col items-center -space-y-0.5">
-                  <span className="font-black text-[11px] md:text-xs text-white tracking-widest leading-tight">PROMOTE</span>
-                  <span className="font-black text-[11px] md:text-xs text-sky-400 tracking-widest leading-tight">EDUCATION</span>
+                <div className="flex flex-col items-center -space-y-2">
+                  <span className="font-black text-[18px] md:text-[22px] text-white tracking-[0.2em] leading-tight">PROMOTE</span>
+                  <span className="font-black text-[18px] md:text-[22px] text-sky-400 tracking-[0.2em] leading-tight">EDUCATION</span>
                 </div>
               </a>
             </div>
@@ -122,6 +121,22 @@ export default function Footer() {
                 <HelpCircle size={14} className="text-sky-500" />
                 Frequently Asked Questions
               </a>
+              <div className="mt-20 ml-1">
+                <h4 className="text-[9px] font-black mb-4 tracking-[0.15em] text-slate-500 uppercase">
+                  More from us
+                </h4>
+                <div className="flex gap-6">
+                  {['Careers', 'Events', 'News', 'Media'].map(link => (
+                    <a
+                      key={link}
+                      href={`/${link.toLowerCase()}`}
+                      className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-white transition-colors"
+                    >
+                      {link}
+                    </a>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -137,6 +152,8 @@ export default function Footer() {
                     <li key={link}>
                       <a
                         href={
+                          link === 'All exams' ? '/exams' :
+                          link === 'Others' ? '/courses' :
                           category === 'Company' ? `/${link.toLowerCase().replace(/ /g, '-')}` :
                             category === 'Courses' ? `/courses/${link.toLowerCase().replace(/ /g, '-').replace(/\./g, '')}` :
                               category === 'Exams' ? `/exams/${link.toLowerCase().replace(/ /g, '-')}` :
@@ -146,6 +163,24 @@ export default function Footer() {
                       >
                         {link}
                       </a>
+                      {link === 'Contact Us' && (
+                        <div className="mt-3 flex flex-col gap-2">
+                          <a
+                            href="tel:+919900116101"
+                            className="text-[11px] text-slate-500 hover:text-emerald-500 transition-colors flex items-center gap-2"
+                          >
+                            <span className="w-1 h-1 rounded-full bg-emerald-500" />
+                            +91 99001 16101
+                          </a>
+                          <a
+                            href="mailto:info@promoteducation.com"
+                            className="text-[11px] text-slate-500 hover:text-sky-500 transition-colors flex items-center gap-2"
+                          >
+                            <span className="w-1 h-1 rounded-full bg-sky-500" />
+                            info@promoteducation.com
+                          </a>
+                        </div>
+                      )}
                     </li>
                   ))}
                 </ul>

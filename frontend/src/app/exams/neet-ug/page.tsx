@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import ExamBlogPage, { ExamInfo } from '@/components/pages/ExamBlogPage'
+import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 
 export const metadata: Metadata = {
   title: 'NEET UG 2026 — Eligibility, Syllabus, Dates & Preparation Tips',

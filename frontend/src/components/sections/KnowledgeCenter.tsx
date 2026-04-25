@@ -2,6 +2,7 @@
 
 import { GraduationCap, BookOpen, Building2, Users, ArrowRight, CheckCircle2, Info, Star, HelpCircle, MapPin } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import Link from 'next/link'
 
 export default function KnowledgeCenter() {
   const faqs = [
@@ -11,15 +12,15 @@ export default function KnowledgeCenter() {
     },
     {
       q: "What is the admission process for AIIMS Kalyani MBBS?",
-      a: "Admission to AIIMS Kalyani MBBS is based on NEET-UG scores, followed by centralized counselling conducted by the Medical Counselling Committee (MCC)."
+      a: <>Admission to AIIMS Kalyani MBBS is based on <Link href="/exams/neet-ug" className="text-sky-600 font-bold hover:underline">NEET-UG</Link> scores, followed by centralized counselling conducted by the Medical Counselling Committee (MCC).</>
     }
   ]
 
   const courses = [
-    { name: "MBBS", eligibility: "Class 12 (PCB + English) with 60% (Gen/OBC)", entrance: "NEET-UG" },
-    { name: "B.Sc. Nursing (Hons.)", eligibility: "Class 12 (PCB + English) with 55% (Gen/OBC)", entrance: "AIIMS B.Sc Entrance" },
-    { name: "MD / MS", eligibility: "MBBS degree + 1-year internship", entrance: "INI-CET" },
-    { name: "DM / M.Ch", eligibility: "MD/MS in relevant specialty", entrance: "INI-SS" },
+    { name: "MBBS", eligibility: "Class 12 (PCB + English) with 60% (Gen/OBC)", entrance: <Link href="/exams/neet-ug" className="hover:underline">NEET-UG</Link> },
+    { name: "B.Sc. Nursing (Hons.)", eligibility: "Class 12 (PCB + English) with 55% (Gen/OBC)", entrance: <Link href="/exams/aiims-entrance" className="hover:underline">AIIMS B.Sc Entrance</Link> },
+    { name: "MD / MS", eligibility: "MBBS degree + 1-year internship", entrance: <Link href="/exams/ini-cet" className="hover:underline">INI-CET</Link> },
+    { name: "DM / M.Ch", eligibility: "MD/MS in relevant specialty", entrance: <Link href="/exams/ini-ss" className="hover:underline">INI-SS</Link> },
     { name: "Ph.D. Programs", eligibility: "MD/MS/M.Sc or equivalent", entrance: "Entrance + Interview" }
   ]
 
@@ -88,8 +89,8 @@ export default function KnowledgeCenter() {
               <h3 className="text-2xl font-bold text-slate-900 mt-12 mb-6">AIIMS Kalyani Admission Process</h3>
               <p className="text-slate-700 leading-loose">
                 The competition for the <strong>AIIMS Kalyani admission process</strong> is unimaginably competitive. 
-                For undergraduate programs like MBBS, students must qualify for <strong>NEET-UG</strong> followed by centralized MCC counselling. 
-                Postgraduate candidates (MD/MS) need to clear the <strong>INI-CET</strong>, while superspeciality courses require <strong>INI-SS</strong> qualification.
+                For undergraduate programs like MBBS, students must qualify for <Link href="/exams/neet-ug" className="text-sky-600 font-bold hover:underline">NEET-UG</Link> followed by centralized MCC counselling. 
+                Postgraduate candidates (MD/MS) need to clear the <Link href="/exams/ini-cet" className="text-sky-600 font-bold hover:underline">INI-CET</Link>, while superspeciality courses require <Link href="/exams/ini-ss" className="text-sky-600 font-bold hover:underline">INI-SS</Link> qualification.
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-10">
@@ -178,7 +179,7 @@ export default function KnowledgeCenter() {
                     { label: "Status", value: "Institute of National Importance" },
                     { label: "Campus Size", value: "179 Acres" },
                     { label: "State", value: "West Bengal" },
-                    { label: "Entrance", value: "NEET-UG / INI-CET" }
+                    { label: "Entrance", value: <>NEET-UG / INI-CET</> }
                   ].map((info, i) => (
                     <div key={i} className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors">
                       <span className="text-xs font-medium text-slate-500">{info.label}</span>

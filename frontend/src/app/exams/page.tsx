@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import ExamsListPage from '@/components/pages/ExamsListPage'
+import ExamsListPage from '@/components/pages/exams/ExamsListPage'
 
 export const metadata: Metadata = {
   title: 'Top Entrance Exams in India 2025 — Complete Guide | Promote Education',
