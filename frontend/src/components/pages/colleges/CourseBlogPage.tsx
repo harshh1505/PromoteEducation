@@ -3,7 +3,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Link from 'next/link'
 import { ArrowLeft, BookOpen, Target, CheckCircle2, ChevronRight, GraduationCap, Building2, Star, Users, ArrowRight, Briefcase, ArrowUpRight } from 'lucide-react'
-import { CourseInfo } from '../../types/courses'
+import { CourseInfo } from '@/types/courses'
 
 interface CourseBlogPageProps {
   course: CourseInfo
