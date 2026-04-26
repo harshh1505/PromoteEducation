@@ -109,11 +109,11 @@ export default function BrochureModal({
             window.location.href = targetUrl
           } else {
             const slug = collegeName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
-            window.location.href = `/college/${slug}`
+            window.location.href = `/colleges/${slug}`
           }
         }, 1500)
       } else if (mode === 'share') {
-        const shareUrl = `${window.location.origin}/college/${collegeName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`
+        const shareUrl = `${window.location.origin}/colleges/${collegeName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`
         setTimeout(async () => {
           if (navigator.share) {
             try {

@@ -26,8 +26,8 @@ export default function RankingsPageContent() {
   const handleAction = (college: any, mode: 'brochure' | 'details' | 'share') => {
     if (isAuthorized && mode !== 'share') {
       if (mode === 'details') {
-        const slug = college.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
-        window.location.href = `/college/${slug}`
+        const targetSlug = college.slug || college.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+        window.location.href = `/colleges/${targetSlug}`
         return
       }
       if (mode === 'brochure') {
@@ -134,13 +134,12 @@ export default function RankingsPageContent() {
                 <table className="w-full border-collapse text-[13px]">
                   <thead>
                     <tr className="bg-[#f8f9fa] border-b border-slate-300">
-                      <th className="px-4 py-3 text-left font-bold border-r border-slate-200">Name</th>
+                      <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-20">Rank</th>
+                      <th className="px-4 py-3 text-left font-bold border-r border-slate-200">College Name</th>
+                      <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-32">Average Package</th>
+                      <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-32">Total Fees</th>
                       <th className="px-4 py-3 text-left font-bold border-r border-slate-200 w-32">City</th>
-                      <th className="px-4 py-3 text-left font-bold border-r border-slate-200 w-32">State</th>
-                      <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-28">Avg Package</th>
-                      <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-28">Total Fees</th>
-                      <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-24">Score</th>
-                      <th className="px-4 py-3 text-center font-bold w-20">Rank</th>
+                      <th className="px-4 py-3 text-left font-bold w-32">State</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -149,6 +148,9 @@ export default function RankingsPageContent() {
                         key={college.id}
                         className="border-b border-slate-200 hover:bg-slate-50 transition-colors"
                       >
+                        <td className="px-4 py-4 text-center font-bold text-slate-900 border-r border-slate-200 bg-slate-50/50">
+                           #{college.ranking || index + 1}
+                        </td>
                         <td className="px-4 py-4 border-r border-slate-200">
                            <div className="flex flex-col gap-1">
                               <span className="font-semibold text-slate-900 leading-tight">
@@ -159,7 +161,7 @@ export default function RankingsPageContent() {
                                    onClick={() => handleAction(college, 'details')}
                                    className="text-action hover:underline font-medium flex items-center gap-1"
                                  >
-                                   More Details
+                                   View Details
                                  </button>
                                  <span className="text-slate-300">|</span>
                                  <button 
@@ -180,23 +182,17 @@ export default function RankingsPageContent() {
                               </div>
                            </div>
                         </td>
+                        <td className="px-4 py-4 border-r border-slate-200 text-center font-bold text-slate-700 bg-slate-50/30">
+                           {college.avg_ctc || '-'}
+                        </td>
+                        <td className="px-4 py-4 border-r border-slate-200 text-center font-medium text-slate-600">
+                           {college.total_fee || '-'}
+                        </td>
                         <td className="px-4 py-4 border-r border-slate-200 text-slate-600">
                            {college.location}
                         </td>
-                        <td className="px-4 py-4 border-r border-slate-200 text-slate-600">
+                        <td className="px-4 py-4 text-slate-600">
                            {college.state}
-                        </td>
-                        <td className="px-4 py-4 border-r border-slate-200 text-center font-bold text-slate-700 bg-slate-50/30">
-                           {college.avg_ctc ? `${college.avg_ctc} LPA` : '-'}
-                        </td>
-                        <td className="px-4 py-4 border-r border-slate-200 text-center font-medium text-slate-600">
-                           {college.total_fee ? `${college.total_fee} Lakhs` : '-'}
-                        </td>
-                        <td className="px-4 py-4 border-r border-slate-200 text-center font-medium text-slate-700">
-                           {(89.5 - ((college.ranking || index) * 1.5)).toFixed(2)}
-                        </td>
-                        <td className="px-4 py-4 text-center font-bold text-slate-900 bg-slate-50/50">
-                           {college.ranking || index + 1}
                         </td>
                       </tr>
                     ))}
@@ -232,6 +228,7 @@ export default function RankingsPageContent() {
             collegeId={selectedCollege.id}
             stream={selectedCollege.stream}
             mode={modalMode}
+            targetUrl={`/colleges/${selectedCollege.slug || selectedCollege.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`}
           />
         )}
 
