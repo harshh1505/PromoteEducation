@@ -1,126 +1,48 @@
 import { MetadataRoute } from 'next'
+import { supabase } from '@/lib/supabase'
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://promoteducation.com'
-  const currentDate = new Date()
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = 'https://promote-education.vercel.app' // Replace with real domain
 
-  // Static Routes
-  const routes = [
+  // 1. Static Pages
+  const staticPages = [
     '',
-    '/courses',
-    '/rankings',
-    '/tools',
-    '/news',
-    '/loan-calculator',
+    '/colleges',
+    '/colleges/engineering',
+    '/colleges/medical',
     '/about',
-    '/faq',
-    '/privacy-policy',
-    '/terms-of-use',
-    '/disclaimer',
-    '/cookie-policy',
+    '/contact',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
-    lastModified: currentDate,
+    lastModified: new Date(),
     changeFrequency: 'daily' as const,
-    priority: route === '' ? 1.0 : 0.8,
+    priority: 1.0,
   }))
 
-  // Course Hubs
-  const courseRoutes = [
-    '/courses/btech',
-    '/courses/mba',
-    '/courses/mtech',
-    '/courses/bsc-nursing',
-    '/courses/mbbs',
-    '/courses/bds',
-  ].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: currentDate,
+  // 2. Individual College Pages
+  const { data: colleges } = await supabase.from('colleges').select('slug, updated_at')
+  const collegePages = colleges?.map((c) => ({
+    url: `${baseUrl}/colleges/${c.slug}`,
+    lastModified: c.updated_at ? new Date(c.updated_at) : new Date(),
     changeFrequency: 'weekly' as const,
-    priority: 0.9,
-  }))
+    priority: 0.8,
+  })) || []
 
-  // Exam Pages
-  const examRoutes = [
-    '/exams/jee-main',
-    '/exams/jee-advanced',
-    '/exams/neet-ug',
-    '/exams/cat',
-    '/exams/gate',
-    '/exams/clat',
-    '/exams/nift',
-    '/exams/cuet-ug',
-  ].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: currentDate,
-    changeFrequency: 'weekly' as const,
-    priority: 0.9,
-  }))
+  // 3. Traffic Magnet Pages (Location/Filters)
+  const streams = ['engineering', 'medical']
+  const cities = ['delhi', 'mumbai', 'bangalore', 'pune']
+  const magnetPages: any[] = []
 
-  // Article Pages (SEO Cluster)
-  const articleRoutes = [
-    '/articles/jee-main-eligibility-2026',
-    '/articles/jee-main-syllabus-2026',
-    '/articles/jee-main-exam-pattern',
-    '/articles/best-books-jee-main',
-    '/articles/jee-main-preparation-strategy',
-    '/articles/jee-main-vs-advanced-bitsat',
-    '/articles/colleges-accepting-jee-main',
-    '/articles/neet-eligibility-2026',
-    '/articles/neet-syllabus-2026',
-    '/articles/neet-exam-pattern',
-    '/articles/best-books-neet',
-    '/articles/neet-preparation-strategy',
-    '/articles/neet-vs-aiims-jipmer',
-    '/articles/colleges-accepting-neet',
-    '/articles/gate-eligibility-2026',
-    '/articles/gate-syllabus-2026',
-    '/articles/gate-exam-pattern',
-    '/articles/best-books-gate',
-    '/articles/gate-preparation-strategy',
-    '/articles/gate-vs-ese-cat',
-    '/articles/colleges-accepting-gate',
-    '/articles/nift-eligibility-2026',
-    '/articles/nift-syllabus-2026',
-    '/articles/nift-exam-pattern',
-    '/articles/best-books-nift',
-    '/articles/nift-preparation-strategy',
-    '/articles/nift-vs-nid-uceed',
-    '/articles/colleges-accepting-nift',
-    '/articles/jee-advanced-eligibility-2026',
-    '/articles/jee-advanced-syllabus-2026',
-    '/articles/jee-advanced-exam-pattern',
-    '/articles/best-books-jee-advanced',
-    '/articles/jee-advanced-preparation-strategy',
-    '/articles/jee-main-vs-jee-advanced',
-    '/articles/colleges-accepting-jee-advanced',
-    '/articles/cat-eligibility-2026',
-    '/articles/cat-syllabus-2026',
-    '/articles/cat-exam-pattern',
-    '/articles/best-books-cat',
-    '/articles/cat-preparation-strategy',
-    '/articles/cat-vs-xat-gmat',
-    '/articles/colleges-accepting-cat',
-    '/articles/clat-eligibility-2026',
-    '/articles/clat-syllabus-2026',
-    '/articles/clat-exam-pattern',
-    '/articles/best-books-clat',
-    '/articles/clat-preparation-strategy',
-    '/articles/clat-vs-ailet-lsat',
-    '/articles/colleges-accepting-clat',
-    '/articles/cuet-ug-eligibility-2026',
-    '/articles/cuet-ug-syllabus-2026',
-    '/articles/cuet-ug-exam-pattern',
-    '/articles/best-books-cuet-ug',
-    '/articles/cuet-ug-preparation-strategy',
-    '/articles/cuet-ug-vs-jee-neet',
-    '/articles/colleges-accepting-cuet-ug',
-  ].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: currentDate,
-    changeFrequency: 'weekly' as const,
-    priority: 0.7,
-  }))
+  streams.forEach(s => {
+    cities.forEach(c => {
+      magnetPages.push({
+        url: `${baseUrl}/colleges/${s}-in-${c}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+      })
+    })
+  })
 
-  return [...routes, ...courseRoutes, ...examRoutes, ...articleRoutes]
+  return [...staticPages, ...collegePages, ...magnetPages]
 }

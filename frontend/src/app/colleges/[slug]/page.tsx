@@ -8,8 +8,57 @@ import QuestionForm from '@/components/sections/QuestionForm'
 // SETTINGS
 // ===============================
 export const dynamicParams = true
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export const revalidate = 86400
+
+// STEP 3 & 4: DYNAMIC ROUTING & STATIC GENERATION
+export async function generateStaticParams() {
+  const streams = ['engineering', 'medical', 'management', 'law']
+  const cities = ['delhi', 'mumbai', 'bangalore', 'pune', 'hyderabad', 'chennai', 'kolkata']
+  const fees = [500000, 1000000, 2000000]
+  const packages = [5, 10, 20]
+
+  const pages: { slug: string }[] = []
+
+  // 1. Category Pages
+  streams.forEach(s => pages.push({ slug: s }))
+
+  // 2. Location Pages
+  streams.forEach(s => {
+    cities.forEach(c => pages.push({ slug: `${s}-in-${c}` }))
+  })
+
+  // 3. Fee Filter Pages
+  streams.forEach(s => {
+    fees.forEach(f => pages.push({ slug: `${s}-under-${f}` }))
+  })
+
+  // 4. Package Filter Pages
+  streams.forEach(s => {
+    packages.forEach(p => pages.push({ slug: `${s}-with-${p}-lpa` }))
+  })
+
+  // 5. Individual Colleges (ALL colleges for prebuild)
+  const { data: colleges } = await supabase.from('colleges').select('slug')
+  colleges?.forEach(c => {
+    if (c.slug && typeof c.slug === 'string') {
+      pages.push({ slug: c.slug })
+    }
+  })
+
+  return pages
+}
+
+function parsePageType(slug: string) {
+  const s = slug.toLowerCase()
+  if (s.includes('-in-')) return { type: 'location' }
+  if (s.includes('-under-')) return { type: 'fee' }
+  if (s.includes('-with-')) return { type: 'package' }
+  
+  const streams = ['engineering', 'medical', 'management', 'law', 'science', 'pharmacy', 'dental', 'architecture']
+  if (streams.includes(s)) return { type: 'category' }
+
+  return { type: 'college' }
+}
 
 // ===============================
 // TYPES
@@ -49,6 +98,29 @@ type College = {
   contact_email?: string
   meta_title?: string
   meta_description?: string
+  content?: {
+    overview: string
+    why_choose: string
+    placements: string
+    campus_life: string
+    admission: string
+    faqs?: { question: string; answer: string }[]
+  }
+  faqs?: { question: string; answer: string }[]
+}
+
+interface CategoryQuery {
+  stream: string
+  location: string
+}
+
+function parseSlug(slug: string): CategoryQuery | null {
+  const parts = slug.split('-in-')
+  if (parts.length < 2) return null
+  return {
+    stream: parts[0].replace(/-/g, ' '),
+    location: parts[1].replace(/-/g, ' ')
+  }
 }
 
 type Course = {
@@ -226,15 +298,108 @@ async function getCollegeData(slug: string) {
   }
 }
 
-async function getSimilarColleges(college: College): Promise<SimilarCollege[]> {
-  const { data } = await supabase
+// ===============================
+// CATEGORY SEARCH (Traffic Magnet)
+// ===============================
+
+async function CategoryView({ slug }: { slug: string }) {
+  const query = parseSlug(slug)
+  if (!query) return notFound()
+
+  const { data: colleges } = await supabase
     .from('colleges')
-    .select('name, slug, location, state, nirf_rank')
-    .neq('id', college.id)
-    .eq('stream', college.stream)
-    .order('nirf_rank', { ascending: true })
-    .limit(5)
-  return (data || []) as SimilarCollege[]
+    .select('*')
+    .ilike('stream', `%${query.stream}%`)
+    .or(`location.ilike.%${query.location}%,state.ilike.%${query.location}%`)
+    .order('nirf_rank', { ascending: true, nullsFirst: false })
+
+  if (!colleges || colleges.length === 0) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+        <div className="text-center max-w-md">
+          <h1 className="text-2xl font-bold text-slate-900 mb-4">No colleges found</h1>
+          <p className="text-slate-600 mb-8">We couldn't find any {query.stream} colleges in {query.location} yet.</p>
+          <Link href="/colleges" className="inline-block bg-sky-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-sky-700">
+            Explore All Colleges
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-50 pt-20">
+      {/* Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            itemListElement: colleges.map((c, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              name: c.name,
+              url: `https://promoteeducation.in/colleges/${c.slug}`,
+            })),
+          }),
+        }}
+      />
+      <section className="bg-slate-900 py-20 px-6">
+        <div className="max-w-6xl mx-auto text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 capitalize leading-tight">
+            Best {query.stream} Colleges in <span className="text-sky-400">{query.location}</span>
+          </h1>
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+            Compare top-rated {query.stream} institutions in {query.location} for 2026 admissions.
+          </p>
+        </div>
+      </section>
+
+      <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <div className="lg:col-span-2 space-y-6">
+          {colleges.map((college) => (
+            <Link key={college.id} href={`/colleges/${college.slug}`} className="block bg-white border border-slate-100 p-6 rounded-2xl hover:shadow-lg transition-all group">
+              <div className="flex justify-between items-start">
+                <div>
+                  <div className="flex gap-2 mb-2">
+                    <span className="bg-amber-50 text-amber-600 text-[10px] font-bold px-2 py-0.5 rounded border border-amber-100">NIRF #{college.nirf_rank || 'NA'}</span>
+                    <span className="bg-sky-50 text-sky-600 text-[10px] font-bold px-2 py-0.5 rounded border border-sky-100 uppercase">{college.stream}</span>
+                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 group-hover:text-sky-600 transition-colors">{college.name}</h3>
+                  <p className="text-sm text-slate-500 mt-1">{college.location}, {college.state}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Avg Package</p>
+                  <p className="text-sky-600 font-bold">₹{college.avg_package || 'N/A'} LPA</p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+        <div className="bg-white border border-slate-100 p-6 rounded-2xl h-fit sticky top-24">
+          <h4 className="text-lg font-bold text-slate-900 mb-4">Quick Guidance</h4>
+          <p className="text-sm text-slate-600 mb-6 leading-relaxed text-balance">Get help choosing the right {query.stream} college in {query.location} based on your rank and budget.</p>
+          <button className="w-full bg-slate-900 text-white py-3 rounded-xl font-bold hover:bg-slate-800 transition-all text-sm uppercase tracking-wide">Talk to Experts</button>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 pb-20">
+        <h2 className="text-lg font-bold mb-4">Explore More</h2>
+        <div className="flex gap-4 flex-wrap">
+          <Link href={`/colleges/${query.stream.replace(/\s+/g, '-').toLowerCase()}`} className="bg-white border border-slate-200 px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-sky-600 hover:border-sky-200 transition-all">
+            All {query.stream} Colleges
+          </Link>
+          <Link href="/colleges" className="bg-white border border-slate-200 px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-sky-600 hover:border-sky-200 transition-all">
+            All Colleges
+          </Link>
+          <Link href="/exams" className="bg-white border border-slate-200 px-4 py-2 rounded-lg text-sm text-slate-600 hover:text-sky-600 hover:border-sky-200 transition-all">
+            Entrance Exams
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 // ===============================
@@ -254,7 +419,19 @@ function formatFees(inr: number): string {
 // SEO METADATA
 // ===============================
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const data = await getCollegeData(params.slug)
+  const { slug } = params
+
+  if (slug.includes('-in-')) {
+    const query = parseSlug(slug)
+    if (query) {
+      return {
+        title: `Top ${query.stream} Colleges in ${query.location} 2026`,
+        description: `Explore best ${query.stream} colleges in ${query.location}. Check fees, placements, rankings and admission details.`,
+      }
+    }
+  }
+
+  const data = await getCollegeData(slug)
   if (!data) return { title: 'College Not Found' }
 
   const { college } = data
@@ -268,15 +445,127 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
+async function getSimilarColleges(college: any) {
+  // SMART MATCHING: Same stream + Same state for relevance
+  const { data } = await supabase
+    .from("colleges")
+    .select("name, slug, location, stream, nirf_rank")
+    .neq("id", college.id)
+    .eq("stream", college.stream)
+    .ilike("state", `%${college.state}%`) // Step 4: Local relevance
+    .order("nirf_rank", { ascending: true })
+    .limit(4)
+
+  return data || []
+}
+
 // ===============================
 // PAGE
 // ===============================
-export default async function CollegeProfile({ params }: { params: { slug: string } }) {
+async function ListingPage({ slug, type }: { slug: string, type: string }) {
+  const clean = (s: string) => s.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
+  
+  let title = ""
+  let query = supabase.from('colleges').select('*')
+  let stream = ""
+  let location = ""
+  let filterVal = 0
+
+  // 1. PARSE SLUG DETAILS
+  if (type === 'location') {
+    const parts = slug.split('-in-')
+    stream = parts[0]
+    location = parts[1]
+    title = `Best ${clean(stream)} Colleges in ${clean(location)} 2026`
+    query = query.ilike('stream', stream).ilike('location', `%${location}%`)
+  } else if (type === 'fee') {
+    const parts = slug.split('-under-')
+    stream = parts[0]
+    filterVal = parseInt(parts[1])
+    title = `Best ${clean(stream)} Colleges Under ₹${filterVal.toLocaleString()} Fees`
+    query = query.ilike('stream', stream).lte('total_fee', filterVal)
+  } else if (type === 'package') {
+    const parts = slug.split('-with-')
+    stream = parts[0]
+    filterVal = parseInt(parts[1].replace('-lpa', ''))
+    title = `Top ${clean(stream)} Colleges with ₹${filterVal} LPA+ Average Package`
+    query = query.ilike('stream', stream).gte('avg_package', filterVal)
+  } else if (type === 'category') {
+    stream = slug
+    title = `Best ${clean(stream)} Colleges in India 2026: Rankings & Fees`
+    query = query.ilike('stream', stream)
+  }
+
+  const { data: colleges } = await query.order('nirf_rank', { ascending: true, nullsFirst: false }).limit(20)
+
+  return (
+    <div className="min-h-screen bg-slate-50 pt-32 pb-20 px-6">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-3xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+          {title}
+        </h1>
+        
+        <p className="text-lg text-slate-500 mb-12 max-w-3xl leading-relaxed">
+          Explore the top-rated {stream} institutions {location ? `in ${clean(location)}` : 'in India'}. 
+          Our 2026 guide covers detailed placement statistics, NIRF rankings, and fee structures to help you make an informed decision.
+        </p>
+
+        <div className="grid grid-cols-1 gap-6 mb-16">
+          {colleges?.map((c) => (
+            <Link key={c.id} href={`/colleges/${c.slug}`} className="bg-white border border-slate-100 p-6 rounded-2xl hover:shadow-xl transition-all group flex flex-col md:flex-row justify-between items-center gap-6">
+              <div>
+                <div className="flex gap-2 mb-3">
+                  <span className="bg-amber-50 text-amber-600 text-[10px] font-bold px-2 py-0.5 rounded border border-amber-100">NIRF #{c.nirf_rank || 'NA'}</span>
+                  <span className="bg-sky-50 text-sky-600 text-[10px] font-bold px-2 py-0.5 rounded border border-sky-100 uppercase">{c.stream}</span>
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 group-hover:text-sky-600 transition-colors">{c.name}</h3>
+                <p className="text-sm text-slate-500 mt-1">{c.location}, {c.state}</p>
+              </div>
+              <div className="flex items-center gap-8 text-right">
+                <div>
+                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Avg Package</p>
+                  <p className="text-sky-600 font-bold text-lg">₹{c.avg_package || 'N/A'} LPA</p>
+                </div>
+                <div className="w-10 h-10 bg-slate-900 text-white rounded-full flex items-center justify-center group-hover:bg-sky-600 transition-colors">→</div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* SEO INTERNAL LINKS */}
+        <div className="pt-10 border-t border-slate-200">
+          <h2 className="text-xl font-bold text-slate-900 mb-6">Explore More Comparisons</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {colleges?.slice(0, 6).map((c1, i) => {
+              const c2 = colleges[i + 1]
+              if (!c2) return null
+              return (
+                <Link key={i} href={`/compare/${c1.slug}-vs-${c2.slug}`} className="text-sm text-sky-600 hover:underline">
+                  {c1.name} vs {c2.name}
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default async function CollegePage({ params }: any) {
+  const pageInfo = parsePageType(params.slug)
+
+  // 🏛️ HANDLE LISTING PAGES (Category, Location, Filters)
+  if (pageInfo.type !== 'college') {
+    return <ListingPage slug={params.slug} type={pageInfo.type} />
+  }
+
+  // 🎓 HANDLE INDIVIDUAL COLLEGE PROFILE
   const data = await getCollegeData(params.slug)
   if (!data) return notFound()
 
   const { college, courses, placement, cutoffs, rankings, faqs: dbFaqs, reviews, gallery, scholarships, important_dates } = data
-  const similar = await getSimilarColleges(college)
+  const similarColleges = await getSimilarColleges(college)
 
   // 1. General/Smart FAQs (Always present, auto-generated from stats)
   const generalFaqs = [
@@ -321,32 +610,54 @@ export default async function CollegeProfile({ params }: { params: { slug: strin
         })
       }} />
 
+      {/* FAQ Schema */}
+      {college.faqs && college.faqs.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: college.faqs.map((faq: any) => ({
+                "@type": "Question",
+                name: faq.question,
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: faq.answer,
+                },
+              })),
+            }),
+          }}
+        />
+      )}
+
       {/* ── HEADER ── */}
       <header style={{ position: 'relative', color: '#fff', padding: '18px 24px 0', overflow: 'hidden' }}>
-        
+
         {/* CAROUSEL BACKGROUND */}
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0 }}>
           {gallery.length > 0 ? (
             <div style={{ width: '100%', height: '100%', position: 'relative' }}>
               {gallery.map((img, idx) => (
-                <div 
+                <div
                   key={img.id}
-                  style={{ 
-                    position: 'absolute', 
-                    top: 0, 
-                    left: 0, 
-                    width: '100%', 
-                    height: '100%', 
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
                     backgroundImage: `linear-gradient(to bottom, rgba(26,53,87,0.85), rgba(26,53,87,0.95)), url(${img.image_url})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     opacity: 0,
                     animation: `heroFade ${gallery.length * 5}s infinite`,
                     animationDelay: `${idx * 5}s`
-                  }} 
+                  }}
                 />
               ))}
-              <style dangerouslySetInnerHTML={{ __html: `
+              <style dangerouslySetInnerHTML={{
+                __html: `
                 @keyframes heroFade {
                   0% { opacity: 0; }
                   5% { opacity: 1; }
@@ -464,8 +775,8 @@ export default async function CollegeProfile({ params }: { params: { slug: strin
           {/* OVERVIEW */}
           <section id="overview" style={{ background: '#fff', borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', overflow: 'hidden', padding: '24px' }}>
             <h2 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '16px', color: '#0f172a' }}>About {college.name}</h2>
-            <p style={{ fontSize: '15px', color: '#475569', lineHeight: 1.7, marginBottom: '24px' }}>{college.description}</p>
-            
+            <p style={{ fontSize: '15px', color: '#475569', lineHeight: 1.7, marginBottom: '24px' }}>{college.content?.overview || college.description}</p>
+
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', padding: '20px', background: '#f8fafc', borderRadius: '12px' }}>
               {[
                 { label: 'Established', val: college.established },
@@ -480,6 +791,62 @@ export default async function CollegeProfile({ params }: { params: { slug: strin
               ))}
             </div>
           </section>
+
+          {college.content?.why_choose && (
+            <section className="mb-10">
+              <h2 className="text-2xl font-semibold mb-4 text-slate-900">Why Choose {college.name}</h2>
+              <p className="text-gray-600 leading-relaxed mb-4">{college.content.why_choose}</p>
+              <p className="text-sm">
+                Explore more <a href={`/colleges/${college.stream?.toLowerCase()}`} className="text-sky-600 font-semibold hover:underline">top {college.stream} colleges</a> and compare their academic ratings.
+              </p>
+            </section>
+          )}
+
+          {college.content?.placements && (
+            <section className="mb-10">
+              <h2 className="text-2xl font-semibold mb-4 text-slate-900">Placement Insights</h2>
+              <p className="text-gray-600 leading-relaxed mb-4">{college.content.placements}</p>
+              <p className="text-sm">
+                Discover <a href="/colleges/placements" className="text-sky-600 font-semibold hover:underline">placement trends</a> across top institutions and see how {college.name} stacks up.
+              </p>
+            </section>
+          )}
+
+          {college.content?.campus_life && (
+            <section className="mb-10">
+              <h2 className="text-2xl font-semibold mb-4 text-slate-900">Campus Life</h2>
+              <p className="text-gray-600 leading-relaxed mb-4">{college.content.campus_life}</p>
+              <p className="text-sm">
+                Check out <a href="/campus-facilities" className="text-sky-600 font-semibold hover:underline">campus facilities</a> and student reviews for {college.stream} students.
+              </p>
+            </section>
+          )}
+
+          {college.content?.admission && (
+            <section className="mb-10">
+              <h2 className="text-2xl font-semibold mb-4 text-slate-900">Admission Process</h2>
+              <p className="text-gray-600 leading-relaxed mb-4">{college.content.admission}</p>
+              <p className="text-sm">
+                Stay updated with <a href="/exams" className="text-sky-600 font-semibold hover:underline">upcoming entrance exam dates</a> and admission deadlines for 2026.
+              </p>
+            </section>
+          )}
+
+          {college.faqs && college.faqs.length > 0 && (
+            <section className="mb-10">
+              <h2 className="text-2xl font-semibold mb-4">FAQs</h2>
+              <div className="space-y-6">
+                {college.faqs.map((faq: any, i: number) => (
+                  <div key={i}>
+                    <p className="font-semibold text-slate-900 mb-2">{faq.question}</p>
+                    <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+
 
           {/* COURSES */}
           <section id="courses-fees" style={{ background: '#fff', borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
@@ -682,7 +1049,7 @@ export default async function CollegeProfile({ params }: { params: { slug: strin
               )) : (
                 <div style={{ padding: '40px', textAlign: 'center', color: '#9ca3af', fontStyle: 'italic' }}>Be the first to review {college.name}!</div>
               )}
-              
+
               <div style={{ padding: '24px 0' }}>
                 <ReviewForm collegeId={college.id} />
               </div>
@@ -710,25 +1077,50 @@ export default async function CollegeProfile({ params }: { params: { slug: strin
             </div>
           </section>
 
-          {/* Similar Colleges */}
-          <section style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e5e7eb', overflow: 'hidden' }}>
-            <div style={{ padding: '13px 16px', borderBottom: '1px solid #e5e7eb' }}>
-              <h2 style={{ fontSize: '14px', fontWeight: 700 }}>Similar {college.stream} Colleges</h2>
-            </div>
-            <div style={{ padding: '14px 16px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
-              {similar.map((c) => (
-                <Link
-                  key={c.slug}
-                  href={`/colleges/${c.slug}`}
-                  style={{ display: 'block', padding: '12px', borderRadius: '8px', border: '1px solid #e5e7eb', textDecoration: 'none', transition: 'border-color 0.15s' }}
-                >
-                  <div style={{ fontSize: '10px', fontWeight: 700, color: '#e67e00', marginBottom: '4px' }}>NIRF #{c.nirf_rank}</div>
-                  <div style={{ fontSize: '12px', fontWeight: 700, color: '#1a5fa8', lineHeight: 1.3 }}>{c.name}</div>
-                  <div style={{ fontSize: '10px', color: '#6b7280', marginTop: '2px', textTransform: 'uppercase' as const, letterSpacing: '0.3px' }}>{c.location}</div>
-                </Link>
-              ))}
-            </div>
-          </section>
+          {similarColleges.length > 0 && (
+            <section className="mb-10 pt-16 border-t border-slate-100">
+              <h2 className="text-2xl font-semibold mb-8">
+                Similar Colleges
+              </h2>
+
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                {similarColleges.map((c: any) => (
+                  <a
+                    key={c.slug}
+                    href={`/colleges/${c.slug}`}
+                    className="border border-slate-100 p-6 rounded-2xl hover:shadow-lg transition-all hover:border-sky-100 group"
+                  >
+                    <h3 className="font-bold text-slate-900 group-hover:text-sky-600 transition-colors mb-2">{c.name}</h3>
+                    <p className="text-sm text-slate-400 font-medium">{c.location}</p>
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
+          
+{/* Comparison Section (Automated) */}
+{similarColleges.length > 0 && (
+  <section className="pt-16 border-t border-slate-100">
+    <h2 className="text-xl font-bold mb-6 text-slate-900 flex items-center gap-2">
+      <svg className="w-5 h-5 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+      </svg>
+      Compare {college.short_name || college.name} with Similar Colleges
+    </h2>
+    <div className="flex flex-col gap-3">
+      {similarColleges.map((c: any) => (
+        <Link 
+          key={c.slug} 
+          href={`/compare/${college.slug}-vs-${c.slug}`}
+          className="text-sky-600 hover:text-sky-700 font-medium flex items-center gap-2 group transition-all"
+        >
+          <span className="w-1.5 h-1.5 bg-sky-600 rounded-full opacity-40 group-hover:opacity-100 transition-opacity"></span>
+          Compare {college.name} vs {c.name}
+        </Link>
+      ))}
+    </div>
+  </section>
+)}
 
         </div>
 
@@ -794,13 +1186,13 @@ export default async function CollegeProfile({ params }: { params: { slug: strin
           )}
 
           {/* Similar Colleges Sidebar */}
-          {similar.length > 0 && (
+          {similarColleges.length > 0 && (
             <div style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e5e7eb', overflow: 'hidden' }}>
               <div style={{ padding: '11px 14px', borderBottom: '1px solid #e5e7eb' }}>
                 <h2 style={{ fontSize: '14px', fontWeight: 700 }}>Compare Colleges</h2>
               </div>
               <div style={{ padding: '4px 14px' }}>
-                {similar.map((c) => (
+                {similarColleges.map((c: any) => (
                   <Link key={c.slug} href={`/colleges/${c.slug}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid #f3f4f6', textDecoration: 'none' }}>
                     <div>
                       <div style={{ fontSize: '12px', fontWeight: 600, color: '#1a5fa8', lineHeight: 1.3 }}>{c.name}</div>
