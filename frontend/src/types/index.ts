@@ -41,6 +41,20 @@ export interface Review {
   cons: string[]
 }
 
+export interface Testimonial {
+  id: string
+  studentName: string
+  initials: string
+  college: string
+  course?: string
+  year: number
+  rating: number
+  reviewText: string
+  verified: boolean
+  pros: string[]
+  cons: string[]
+}
+
 export interface FilterOption {
   label: string
   value: string

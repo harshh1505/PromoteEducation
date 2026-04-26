@@ -11,7 +11,7 @@ import PYQSection from '@/components/sections/PYQSection'
 import CompareSection from '@/components/sections/CompareSection'
 import LoanSection from '@/components/sections/LoanSection'
 import NewsSection from '@/components/sections/NewsSection'
-import ReviewsSection from '@/components/sections/ReviewsSection'
+import TestimonialsSection from '@/components/sections/TestimonialsSection'
 import WhyChooseUsSection from '@/components/sections/WhyChooseUsSection'
 import NewsletterSection from '@/components/sections/NewsletterSection'
 
@@ -31,7 +31,7 @@ export default function HomePage() {
       <CompareSection />
       <LoanSection />
       <NewsSection />
-      <ReviewsSection />
+      <TestimonialsSection />
       <NewsletterSection />
       <Footer />
     </main>
