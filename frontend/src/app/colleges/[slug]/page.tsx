@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import ReviewForm from '@/components/sections/ReviewForm'
 import QuestionForm from '@/components/sections/QuestionForm'
+import ScrollReveal from '@/components/ui/ScrollReveal'
 
 // ===============================
 // SETTINGS
@@ -101,12 +102,23 @@ type College = {
   content?: {
     overview: string
     why_choose: string
-    placements: string
+    placement_insights: string
     campus_life: string
     admission: string
     faqs?: { question: string; answer: string }[]
+    placements?: Placement | null
+    rankings?: Ranking[]
+    reviews?: Review[]
+    courses?: Course[]
+    cutoffs?: Cutoff[]
+    gallery?: GalleryItem[]
+    scholarships?: Scholarship[]
+    important_dates?: ImportantDate[]
   }
-  faqs?: { question: string; answer: string }[]
+}
+
+function safeArray<T>(data: T[] | undefined | null): T[] {
+  return Array.isArray(data) ? data : []
 }
 
 interface CategoryQuery {
@@ -284,8 +296,25 @@ async function getCollegeData(slug: string) {
       .order('event_date', { ascending: true }),
   ])
 
+  // Merge fetched data into college.content for the UI
+  const updatedCollege = {
+    ...college,
+    content: {
+      ...college.content,
+      placement_insights: college.content?.placements || '',
+      placements: (placements.data?.[0] || null) as Placement | null,
+      rankings: (rankings.data || []) as Ranking[],
+      reviews: (reviews.data || []) as Review[],
+      courses: (courses.data || []) as Course[],
+      cutoffs: (cutoffs.data || []) as Cutoff[],
+      gallery: (gallery.data || []) as GalleryItem[],
+      scholarships: (scholarships.data || []) as Scholarship[],
+      important_dates: (important_dates.data || []) as ImportantDate[],
+    }
+  }
+
   return {
-    college: college as College,
+    college: updatedCollege as College,
     courses: (courses.data || []) as Course[],
     placement: (placements.data?.[0] || null) as Placement | null,
     cutoffs: (cutoffs.data || []) as Cutoff[],
@@ -418,6 +447,18 @@ function formatFees(inr: number): string {
 // ===============================
 // SEO METADATA
 // ===============================
+// ── COMPONENTS ──
+function Section({ title, children }: { title: string, children: React.ReactNode }) {
+  return (
+    <div className="bg-white/80 backdrop-blur-md border border-gray-200/60 rounded-2xl p-8 shadow-md hover:shadow-xl transition">
+      <h2 className="text-xl font-semibold mb-4 text-slate-900">{title}</h2>
+      <div className="text-slate-600 leading-relaxed">
+        {children}
+      </div>
+    </div>
+  )
+}
+
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const { slug } = params
 
@@ -564,8 +605,16 @@ export default async function CollegePage({ params }: any) {
   const data = await getCollegeData(params.slug)
   if (!data) return notFound()
 
-  const { college, courses, placement, cutoffs, rankings, faqs: dbFaqs, reviews, gallery, scholarships, important_dates } = data
+  const { college, faqs: dbFaqs } = data
   const similarColleges = await getSimilarColleges(college)
+
+  const courses = safeArray(college.content?.courses)
+  const rankings = safeArray(college.content?.rankings)
+  const reviews = safeArray(college.content?.reviews)
+  const cutoffs = safeArray(college.content?.cutoffs)
+  const gallery = safeArray(college.content?.gallery)
+  const scholarships = safeArray(college.content?.scholarships)
+  const important_dates = safeArray(college.content?.important_dates)
 
   // 1. General/Smart FAQs (Always present, auto-generated from stats)
   const generalFaqs = [
@@ -592,11 +641,38 @@ export default async function CollegePage({ params }: any) {
   // 2. Custom FAQs (From Supabase 'faqs' table)
   const customFaqs = dbFaqs.map(f => ({ q: f.question, a: f.answer }))
 
-  // 3. Combined List (General first, then Custom)
-  const displayFaqs = [...generalFaqs, ...customFaqs]
+  // 3. Editorial FAQs (From college.content.faqs)
+  const editorialFaqs = safeArray(college.content?.faqs).map(f => ({ q: f.question, a: f.answer }))
+
+  // 4. Combined List (General first, then Editorial, then Custom)
+  let displayFaqs = [...generalFaqs, ...editorialFaqs, ...customFaqs]
+
+  // 5. Fallback FAQs if still low on content
+  if (displayFaqs.length < 5) {
+    displayFaqs = [
+      ...displayFaqs,
+      {
+        q: `What is the admission process at ${college.name}?`,
+        a: `Admission to ${college.name} is based on national-level entrance exams and merit depending on the course. Please check the official admission guidelines for the current session.`
+      },
+      {
+        q: `How are placements at ${college.name}?`,
+        a: `${college.name} offers good placement opportunities with reputed recruiters visit this college regularly. Placement statistics are updated periodically based on the latest batches.`
+      }
+    ]
+  }
+
+  // Schema FAQs (Editorial ones)
+  const schemaFaqs = editorialFaqs.length > 0 ? editorialFaqs : displayFaqs.slice(0, 3)
+
+  const overviewText = college.content?.overview || `${college.name} is a reputed institution located in ${college.location}, ${college.state}. It offers quality education and strong career opportunities for students in the ${college.stream} stream.`
+  
+  const displayGallery = gallery.length > 0 ? gallery : [{ id: 'default', image_url: '/default-college.jpg', caption: college.name, category: 'Campus' }] as GalleryItem[]
+
 
   return (
-    <div className="min-h-screen" style={{ background: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif', fontSize: '14px', color: '#1e293b', lineHeight: 1.6 }}>
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
+      <div className="max-w-7xl mx-auto px-6">
 
       {/* JSON-LD */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{
@@ -611,19 +687,19 @@ export default async function CollegePage({ params }: any) {
       }} />
 
       {/* FAQ Schema */}
-      {college.faqs && college.faqs.length > 0 && (
+      {schemaFaqs.length > 0 && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "FAQPage",
-              mainEntity: college.faqs.map((faq: any) => ({
+              mainEntity: schemaFaqs.map((faq: any) => ({
                 "@type": "Question",
-                name: faq.question,
+                name: faq.q || faq.question,
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: faq.answer,
+                  text: faq.a || faq.answer,
                 },
               })),
             }),
@@ -631,603 +707,541 @@ export default async function CollegePage({ params }: any) {
         />
       )}
 
-      {/* ── HEADER ── */}
-      <header style={{ position: 'relative', color: '#fff', padding: '18px 24px 0', overflow: 'hidden' }}>
-
-        {/* CAROUSEL BACKGROUND */}
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0 }}>
-          {gallery.length > 0 ? (
-            <div style={{ width: '100%', height: '100%', position: 'relative' }}>
-              {gallery.map((img, idx) => (
-                <div
-                  key={img.id}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    backgroundImage: `linear-gradient(to bottom, rgba(26,53,87,0.85), rgba(26,53,87,0.95)), url(${img.image_url})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    opacity: 0,
-                    animation: `heroFade ${gallery.length * 5}s infinite`,
-                    animationDelay: `${idx * 5}s`
-                  }}
-                />
-              ))}
-              <style dangerouslySetInnerHTML={{
-                __html: `
-                @keyframes heroFade {
-                  0% { opacity: 0; }
-                  5% { opacity: 1; }
-                  20% { opacity: 1; }
-                  25% { opacity: 0; }
-                  100% { opacity: 0; }
-                }
-              `}} />
-            </div>
-          ) : (
-            <div style={{ width: '100%', height: '100%', background: '#1a3557' }} />
-          )}
+      {/* ── HERO SECTION ── */}
+      <header className="relative rounded-2xl overflow-hidden mt-6">
+        {/* Background */}
+        <div className="absolute inset-0">
+          <img
+            src={displayGallery[0]?.image_url || '/default-college.jpg'}
+            className="w-full h-full object-cover"
+            alt={college.name}
+          />
+          <div className="absolute inset-0 backdrop-blur-md bg-slate-900/70" />
         </div>
 
-        {/* Content Overlay */}
-        <div style={{ position: 'relative', zIndex: 1 }}>
+        {/* Content */}
+        <div className="relative z-10 p-8 md:p-12 text-white">
+          <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-6">
           {/* Breadcrumb */}
-          <div style={{ fontSize: '11px', color: '#8eaeca', marginBottom: '10px', display: 'flex', gap: '4px' }}>
-            <Link href="/" style={{ color: '#8eaeca', textDecoration: 'none' }}>Home</Link>
-            <span>›</span>
-            <Link href="/colleges" style={{ color: '#8eaeca', textDecoration: 'none' }}>Colleges</Link>
-            <span>›</span>
-            <Link href={`/colleges?stream=${college.stream}`} style={{ color: '#8eaeca', textDecoration: 'none' }}>{college.stream}</Link>
-            <span>›</span>
-            <span style={{ color: '#c5d8ed' }}>{college.name}</span>
+          <div className="text-xs text-slate-300 mb-4 flex gap-2">
+            <Link href="/" className="hover:text-white transition-colors">Home</Link> / 
+            <Link href="/colleges" className="hover:text-white transition-colors">Colleges</Link> / 
+            <span>{college.stream}</span> / 
+            <span className="text-white font-medium">{college.name}</span>
           </div>
 
-          {/* College identity */}
-          <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start', paddingBottom: '16px' }}>
-            <div style={{
-              width: '56px', height: '56px', borderRadius: '8px', background: '#fff', flexShrink: 0,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '16px', fontWeight: 800, color: '#1a3557', border: '2px solid rgba(255,255,255,0.2)',
-              lineHeight: 1, textAlign: 'center', padding: '4px',
-            }}>
+          <div className="flex flex-col md:flex-row items-start gap-6">
+            {/* Logo */}
+            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center font-bold text-slate-900 text-xl shadow-xl flex-shrink-0">
               {college.short_name}
             </div>
 
-            <div style={{ flex: 1 }}>
-              <h1 style={{ fontSize: '19px', fontWeight: 700, color: '#fff', lineHeight: 1.3, marginBottom: '8px' }}>
+            {/* Info */}
+            <div className="flex-1">
+              <h1 className="text-2xl md:text-4xl font-bold mb-4 tracking-tight">
                 {college.name}
               </h1>
 
-              {/* Pills */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '8px' }}>
+              <div className="flex flex-wrap gap-3">
                 {college.nirf_rank && (
-                  <span style={{ background: '#e67e00', color: '#fff', fontSize: '10px', fontWeight: 700, padding: '3px 8px', borderRadius: '3px', textTransform: 'uppercase' as const, letterSpacing: '0.3px' }}>
+                  <span className="bg-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
                     NIRF #{college.nirf_rank}
                   </span>
                 )}
-                {[college.ownership, college.stream, `${college.location}, ${college.state}`].filter(Boolean).map((p) => (
-                  <span key={p} style={{ background: 'rgba(255,255,255,0.12)', color: '#c5d8ed', fontSize: '10px', fontWeight: 600, padding: '3px 8px', borderRadius: '3px', border: '1px solid rgba(255,255,255,0.15)', textTransform: 'uppercase' as const, letterSpacing: '0.3px' }}>
-                    {p}
+                <span className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                  {college.stream}
+                </span>
+                <span className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                  {college.location}, {college.state}
+                </span>
+                {college.ownership && (
+                  <span className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                    {college.ownership}
                   </span>
-                ))}
+                )}
               </div>
-
-              {/* Rating */}
-              {college.rating && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#8eaeca' }}>
-                  <span style={{ color: '#f5a623', letterSpacing: '-1px', fontSize: '13px' }}>
-                    {'★'.repeat(Math.round(college.rating))}{'☆'.repeat(5 - Math.round(college.rating))}
-                  </span>
-                  <span style={{ fontWeight: 700, color: '#fff', fontSize: '14px' }}>{college.rating}</span>
-                  <span>/ 5</span>
-                  {college.review_count && <span>· {college.review_count.toLocaleString('en-IN')} reviews</span>}
-                  <span style={{ background: '#eaf6ef', color: '#1a7a42', fontSize: '10px', fontWeight: 700, padding: '2px 7px', borderRadius: '3px' }}>✓ Verified Data</span>
-                </div>
-              )}
             </div>
           </div>
         </div>
+      </div>
+      </header>
 
-        {/* Tabs */}
-        <nav style={{ display: 'flex', gap: 0, background: '#152d49', overflow: 'auto', borderTop: '1px solid rgba(255,255,255,0.08)', marginLeft: '-24px', marginRight: '-24px', paddingLeft: '24px' }}>
-          {['Overview', 'Courses & Fees', 'Placements', 'Cutoffs', `Admission ${new Date().getFullYear() + 1}`, 'Reviews', 'Gallery'].map((tab, i) => (
+      {/* ── FLOATING NAV ── */}
+      <nav className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-100 shadow-sm mt-6 -mx-6 px-6 overflow-x-auto no-scrollbar">
+        <div className="max-w-7xl mx-auto flex gap-8">
+          {['Overview', 'Courses', 'Placements', 'Cutoffs', 'Reviews', 'Gallery', 'FAQs'].map((tab) => (
             <a
               key={tab}
-              href={`#${tab.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
-              style={{
-                padding: '11px 16px', fontSize: '12px', fontWeight: 600,
-                color: i === 0 ? '#fff' : '#8eaeca', whiteSpace: 'nowrap' as const,
-                borderBottom: i === 0 ? '2px solid #e67e00' : '2px solid transparent',
-                textDecoration: 'none', display: 'block',
-              }}
+              href={`#${tab.toLowerCase()}`}
+              className="py-4 text-xs font-bold text-slate-400 uppercase tracking-widest hover:text-blue-600 border-b-2 border-transparent hover:border-blue-600 transition-all whitespace-nowrap"
             >
               {tab}
             </a>
           ))}
-        </nav>
-      </header>
+        </div>
+      </nav>
 
-      {/* ── STATS STRIP ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', background: '#fff', borderBottom: '1px solid #f1f5f9', boxShadow: '0 1px 3px rgba(0,0,0,0.02)' }}>
+      {/* ── STATS SECTION ── */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
         {[
-          { label: 'Avg Package', val: college.avg_package ? formatPackage(college.avg_package) : 'N/A', icon: '💰' },
-          { label: 'Highest Package', val: college.highest_package ? formatPackage(college.highest_package) : 'N/A', icon: '🚀' },
-          { label: 'Total Courses', val: courses.length || '—', icon: '📚' },
-          { label: 'Placement Rate', val: college.placement_rate ? `${college.placement_rate}%` : 'N/A', icon: '📈' },
-        ].map((s, i) => (
-          <div key={i} style={{ padding: '20px 16px', borderRight: i < 3 ? '1px solid #f1f5f9' : 'none', textAlign: 'center' }}>
-            <div style={{ fontSize: '10px', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>{s.label}</div>
-            <div style={{ fontSize: '18px', fontWeight: 800, color: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '14px', opacity: 0.8 }}>{s.icon}</span> {s.val}
-            </div>
+          { label: 'Avg Package', val: college.avg_package ? formatPackage(college.avg_package) : 'N/A' },
+          { label: 'Highest Package', val: college.highest_package ? formatPackage(college.highest_package) : 'N/A' },
+          { label: 'Courses', val: courses.length || '—' },
+          { label: 'Placement Rate', val: college.placement_rate ? `${college.placement_rate}%` : 'N/A' },
+        ].map((s) => (
+          <div key={s.label} className="bg-white/70 backdrop-blur-md rounded-2xl p-5 border border-white/40 shadow-md text-center transition hover:scale-[1.02] hover:shadow-xl">
+            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{s.label}</p>
+            <p className="text-xl font-bold mt-1 text-slate-900">{s.val}</p>
           </div>
         ))}
       </div>
 
-      {/* ── MAIN LAYOUT ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '24px', padding: '32px 16px', maxWidth: '1240px', margin: '0 auto' }}>
+      {/* ── MAIN CONTENT ── */}
+      <main className="mt-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          
+          {/* LEFT COLUMN: PRIMARY CONTENT */}
+          <div className="lg:col-span-2 space-y-8">
+            
+            <ScrollReveal>
+              <Section title="Overview">
+                <p className="max-w-3xl">{overviewText}</p>
+              </Section>
+            </ScrollReveal>
 
-        {/* LEFT COLUMN */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', minWidth: 0 }}>
-          {/* OVERVIEW */}
-          <section id="overview" style={{ background: '#fff', borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', overflow: 'hidden', padding: '24px' }}>
-            <h2 style={{ fontSize: '18px', fontWeight: 800, marginBottom: '16px', color: '#0f172a' }}>About {college.name}</h2>
-            <p style={{ fontSize: '15px', color: '#475569', lineHeight: 1.7, marginBottom: '24px' }}>{college.content?.overview || college.description}</p>
+            {college.content?.why_choose && (
+              <ScrollReveal>
+                <Section title={`Why Choose ${college.name}`}>
+                  {college.content.why_choose}
+                </Section>
+              </ScrollReveal>
+            )}
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', padding: '20px', background: '#f8fafc', borderRadius: '12px' }}>
-              {[
-                { label: 'Established', val: college.established },
-                { label: 'Ownership', val: college.ownership },
-                { label: 'Affiliation', val: college.affiliation },
-                { label: 'Campus Size', val: college.campus_size },
-              ].filter(item => item.val).map((item) => (
-                <div key={item.label}>
-                  <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>{item.label}</div>
-                  <div style={{ fontSize: '14px', fontWeight: 600, color: '#1e293b' }}>{item.val}</div>
-                </div>
-              ))}
-            </div>
-          </section>
+            {college.content?.placement_insights && (
+              <ScrollReveal>
+                <Section title="Placement Insights">
+                  {college.content.placement_insights}
+                </Section>
+              </ScrollReveal>
+            )}
 
-          {college.content?.why_choose && (
-            <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4 text-slate-900">Why Choose {college.name}</h2>
-              <p className="text-gray-600 leading-relaxed mb-4">{college.content.why_choose}</p>
-              <p className="text-sm">
-                Explore more <a href={`/colleges/${college.stream?.toLowerCase()}`} className="text-sky-600 font-semibold hover:underline">top {college.stream} colleges</a> and compare their academic ratings.
-              </p>
-            </section>
-          )}
+            {college.content?.campus_life && (
+              <ScrollReveal>
+                <Section title="Campus Life">
+                  {college.content.campus_life}
+                </Section>
+              </ScrollReveal>
+            )}
 
-          {college.content?.placements && (
-            <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4 text-slate-900">Placement Insights</h2>
-              <p className="text-gray-600 leading-relaxed mb-4">{college.content.placements}</p>
-              <p className="text-sm">
-                Discover <a href="/colleges/placements" className="text-sky-600 font-semibold hover:underline">placement trends</a> across top institutions and see how {college.name} stacks up.
-              </p>
-            </section>
-          )}
+            <ScrollReveal>
+              <Section title="Admission Process">
+                <p>{college.content?.admission || `Admission to ${college.name} for 2026 is based on national entrance exams. The process typically involves an application phase, followed by entrance test results and centralized counselling.`}</p>
+              </Section>
+            </ScrollReveal>
 
-          {college.content?.campus_life && (
-            <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4 text-slate-900">Campus Life</h2>
-              <p className="text-gray-600 leading-relaxed mb-4">{college.content.campus_life}</p>
-              <p className="text-sm">
-                Check out <a href="/campus-facilities" className="text-sky-600 font-semibold hover:underline">campus facilities</a> and student reviews for {college.stream} students.
-              </p>
-            </section>
-          )}
 
-          {college.content?.admission && (
-            <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4 text-slate-900">Admission Process</h2>
-              <p className="text-gray-600 leading-relaxed mb-4">{college.content.admission}</p>
-              <p className="text-sm">
-                Stay updated with <a href="/exams" className="text-sky-600 font-semibold hover:underline">upcoming entrance exam dates</a> and admission deadlines for 2026.
-              </p>
-            </section>
-          )}
 
-          {college.faqs && college.faqs.length > 0 && (
-            <section className="mb-10">
-              <h2 className="text-2xl font-semibold mb-4">FAQs</h2>
-              <div className="space-y-6">
-                {college.faqs.map((faq: any, i: number) => (
-                  <div key={i}>
-                    <p className="font-semibold text-slate-900 mb-2">{faq.question}</p>
-                    <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+            {/* COURSES & FEES */}
+            <section id="courses-fees" className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+              <h2 className="text-2xl font-bold text-slate-900 mb-8">Courses & Fees</h2>
+              <div className="overflow-x-auto -mx-8">
+                {courses.length > 0 ? (
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="text-left border-b border-slate-100">
+                        <th className="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Program</th>
+                        <th className="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Fees</th>
+                        <th className="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Eligibility</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-50">
+                      {courses.map((c) => (
+                        <tr key={c.id} className={c.is_popular ? "bg-blue-50/30" : ""}>
+                          <td className="px-8 py-6">
+                            <div className="font-bold text-slate-900 text-base">{c.name}</div>
+                            <div className="text-xs text-slate-500 font-medium mt-1">{c.duration} Full Time</div>
+                          </td>
+                          <td className="px-8 py-6">
+                            <div className="font-bold text-slate-900">{formatFees(c.fees)}</div>
+                            <div className="text-[10px] text-blue-600 font-bold uppercase mt-1">Total Course Fee</div>
+                          </td>
+                          <td className="px-8 py-6 text-sm text-slate-600 leading-relaxed max-w-xs">{c.eligibility}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <div className="px-8 py-12 text-center text-gray-500 italic bg-slate-50 border-y border-slate-100">
+                    Comprehensive course details are being updated. {college.name} offers specialized programs in {college.stream}.
                   </div>
-                ))}
+                )}
               </div>
             </section>
-          )}
 
+            {/* PLACEMENTS */}
+            <section id="placements" className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-2xl font-bold text-slate-900">Placements {college.content?.placements?.year ?? '2025'}</h2>
+                {college.placement_rate && (
+                  <span className="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                    {college.placement_rate}% Placement Success
+                  </span>
+                )}
+              </div>
 
-
-          {/* COURSES */}
-          <section id="courses-fees" style={{ background: '#fff', borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
-            <div style={{ padding: '20px 24px', borderBottom: '1px solid #f1f5f9' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 800 }}>Courses & Fees</h2>
-            </div>
-            <div style={{ padding: '0 24px' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                  <tr style={{ textAlign: 'left', borderBottom: '2px solid #f1f5f9' }}>
-                    <th style={{ padding: '16px 12px', fontSize: '12px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Course</th>
-                    <th style={{ padding: '16px 12px', fontSize: '12px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Total Fees</th>
-                    <th style={{ padding: '16px 12px', fontSize: '12px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Eligibility</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-50">
-                  {courses.map((c) => (
-                    <tr key={c.id} style={{ background: c.is_popular ? '#fcfaff' : 'transparent' }}>
-                      <td style={{ padding: '20px 12px' }}>
-                        <div style={{ fontWeight: 700, color: '#0f172a', fontSize: '14px' }}>{c.name}</div>
-                        <div style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>{c.duration}</div>
-                      </td>
-                      <td style={{ padding: '20px 12px', fontWeight: 800, color: '#0f172a' }}>{formatFees(c.fees)}</td>
-                      <td style={{ padding: '20px 12px', color: '#475569', fontSize: '13px' }}>{c.eligibility}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          {/* Placements */}
-          <section id="placements" style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e5e7eb', overflow: 'hidden' }}>
-            <div style={{ padding: '13px 16px', borderBottom: '1px solid #e5e7eb', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ fontSize: '14px', fontWeight: 700 }}>Placement Report {placement?.year ?? new Date().getFullYear() - 1}</h2>
-              {college.placement_rate && (
-                <span style={{ background: '#e67e00', color: '#fff', fontSize: '10px', fontWeight: 700, padding: '3px 8px', borderRadius: '3px' }}>
-                  {college.placement_rate}% Placed
-                </span>
-              )}
-            </div>
-            <div style={{ padding: '14px 16px' }}>
-              {placement ? (
+              {college.content?.placements ? (
                 <>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '14px' }}>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                     {[
-                      { label: 'Average CTC', val: formatPackage(placement.avg_package) },
-                      { label: 'Highest CTC', val: formatPackage(placement.highest_package) },
-                      { label: 'Companies Visited', val: placement.companies_visited ? `${placement.companies_visited}+` : '—' },
-                      { label: 'Total Offers', val: placement.total_offers?.toLocaleString('en-IN') ?? '—' },
+                      { label: 'Avg Package', val: formatPackage(college.content.placements.avg_package) },
+                      { label: 'Highest Package', val: formatPackage(college.content.placements.highest_package) },
+                      { label: 'Top Recruiters', val: college.content.placements.companies_visited ? `${college.content.placements.companies_visited}+` : '50+' },
+                      { label: 'Total Offers', val: college.content.placements.total_offers?.toLocaleString('en-IN') ?? '—' },
                     ].map((s) => (
-                      <div key={s.label} style={{ padding: '12px 14px', background: '#f9fafb', borderRadius: '6px', border: '1px solid #e5e7eb' }}>
-                        <div style={{ fontSize: '20px', fontWeight: 800, lineHeight: 1.1 }}>{s.val}</div>
-                        <div style={{ fontSize: '10px', textTransform: 'uppercase' as const, letterSpacing: '0.4px', color: '#6b7280', fontWeight: 600, marginTop: '2px' }}>{s.label}</div>
+                      <div key={s.label} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                        <div className="text-xl font-bold text-slate-900">{s.val}</div>
+                        <div className="text-[10px] uppercase font-bold text-slate-500 mt-1">{s.label}</div>
                       </div>
                     ))}
                   </div>
 
-                  {placement.recruiters?.length > 0 && (
-                    <>
-                      <div style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.8px', color: '#6b7280', marginBottom: '8px' }}>Top Recruiters</div>
-                      <div style={{ display: 'flex', flexWrap: 'wrap' as const, gap: '6px' }}>
-                        {placement.recruiters.map((r) => (
-                          <span key={r} style={{ background: '#f3f4f6', border: '1px solid #e5e7eb', borderRadius: '4px', padding: '4px 10px', fontSize: '11px', fontWeight: 600, color: '#4b5563' }}>
+                  {college.content.placements.recruiters?.length > 0 && (
+                    <div className="pt-6 border-t border-slate-100">
+                      <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Top Hiring Partners</h3>
+                      <div className="flex flex-wrap gap-3">
+                        {college.content.placements.recruiters.map((r) => (
+                          <span key={r} className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 shadow-sm">
                             {r}
                           </span>
                         ))}
                       </div>
-                    </>
+                    </div>
                   )}
                 </>
               ) : (
-                <div style={{ padding: '40px', textAlign: 'center', color: '#9ca3af', fontStyle: 'italic' }}>Placement audit for the current session is in progress.</div>
+                <p className="text-gray-500 italic py-10 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                  Placement data is being verified. This college has a strong track record of corporate placements.
+                </p>
               )}
-            </div>
-          </section>
-
-          {/* CUTOFFS */}
-          <section id="cutoffs" style={{ background: '#fff', borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
-            <div style={{ padding: '20px 24px', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 800 }}>Cutoffs 2024</h2>
-              <span style={{ fontSize: '12px', background: '#f1f5f9', padding: '4px 10px', borderRadius: '6px', fontWeight: 600, color: '#475569' }}>JoSAA Round 6</span>
-            </div>
-            <div style={{ padding: '0 24px' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                  <tr style={{ textAlign: 'left', borderBottom: '2px solid #f1f5f9' }}>
-                    <th style={{ padding: '16px 12px', fontSize: '12px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Branch</th>
-                    <th style={{ padding: '16px 12px', fontSize: '12px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Category</th>
-                    <th style={{ padding: '16px 12px', fontSize: '12px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Closing Rank</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-50">
-                  {cutoffs.map((ct) => (
-                    <tr key={ct.id}>
-                      <td style={{ padding: '18px 12px', fontWeight: 700, color: '#0f172a' }}>{ct.branch}</td>
-                      <td style={{ padding: '18px 12px', color: '#64748b' }}>{ct.category} ({ct.gender})</td>
-                      <td style={{ padding: '18px 12px', fontWeight: 800, color: '#1a7a42' }}>{ct.closing_rank}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          {/* GALLERY */}
-          <section id="gallery" style={{ background: '#fff', borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
-            <div style={{ padding: '20px 24px', borderBottom: '1px solid #f1f5f9' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 800 }}>Campus Gallery</h2>
-            </div>
-            <div style={{ padding: '24px', display: 'flex', gap: '16px', overflowX: 'auto', scrollbarWidth: 'none' }}>
-              {gallery.length > 0 ? gallery.map((img) => (
-                <div key={img.id} style={{ flexShrink: 0, width: '280px' }}>
-                  <img src={img.image_url} alt={img.caption} style={{ width: '100%', height: '180px', objectFit: 'cover', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }} />
-                  {img.caption && <div style={{ fontSize: '12px', color: '#64748b', marginTop: '10px', fontWeight: 500 }}>{img.caption}</div>}
-                </div>
-              )) : (
-                <div style={{ padding: '20px', color: '#94a3b8', fontStyle: 'italic' }}>Images of the campus are being uploaded.</div>
-              )}
-            </div>
-          </section>
-
-          {/* CAMPUS VIDEO */}
-          {college.video_url && (
-            <section id="campus-tour" style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e5e7eb', overflow: 'hidden' }}>
-              <div style={{ padding: '13px 16px', borderBottom: '1px solid #e5e7eb' }}>
-                <h2 style={{ fontSize: '14px', fontWeight: 700 }}>Campus Tour Video</h2>
-              </div>
-              <div style={{ padding: '16px' }}>
-                <iframe
-                  width="100%"
-                  height="400"
-                  src={college.video_url}
-                  title="Campus Tour"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  style={{ borderRadius: '8px' }}
-                ></iframe>
-              </div>
             </section>
-          )}
 
-          {/* SCHOLARSHIPS */}
-          {scholarships.length > 0 && (
-            <section id="scholarships" style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e5e7eb', overflow: 'hidden' }}>
-              <div style={{ padding: '13px 16px', borderBottom: '1px solid #e5e7eb' }}>
-                <h2 style={{ fontSize: '14px', fontWeight: 700 }}>Scholarships & Financial Aid</h2>
+            {/* CUTOFFS */}
+            <section id="cutoffs" className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-2xl font-bold text-slate-900">Entrance Cutoffs</h2>
+                <div className="text-[10px] font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded uppercase tracking-wide">Final Round Stats</div>
               </div>
-              <div style={{ padding: '16px' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-                  <thead style={{ background: '#f9fafb' }}>
-                    <tr>
-                      <th style={{ padding: '10px', textAlign: 'left', color: '#6b7280' }}>Scholarship Name</th>
-                      <th style={{ padding: '10px', textAlign: 'left', color: '#6b7280' }}>Amount</th>
-                      <th style={{ padding: '10px', textAlign: 'left', color: '#6b7280' }}>Eligibility</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {scholarships.map((s) => (
-                      <tr key={s.id}>
-                        <td style={{ padding: '12px 10px', fontWeight: 700 }}>{s.name}</td>
-                        <td style={{ padding: '12px 10px', color: '#1a7a42', fontWeight: 600 }}>{s.amount}</td>
-                        <td style={{ padding: '12px 10px', color: '#4b5563' }}>{s.eligibility}</td>
+              
+              <div className="overflow-x-auto -mx-8">
+                {cutoffs.length > 0 ? (
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="text-left border-b border-slate-100">
+                        <th className="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Specialization</th>
+                        <th className="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Category</th>
+                        <th className="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Closing Rank</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-slate-50">
+                      {cutoffs.map((ct) => (
+                        <tr key={ct.id} className="hover:bg-slate-50 transition-colors">
+                          <td className="px-8 py-5 font-bold text-slate-900">{ct.branch}</td>
+                          <td className="px-8 py-5 text-sm text-slate-500 font-medium">{ct.category} ({ct.gender})</td>
+                          <td className="px-8 py-5 text-right font-black text-blue-600 text-lg">{ct.closing_rank}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <div className="px-8 py-12 text-center text-gray-500 italic bg-slate-50 border-y border-slate-100">
+                    Latest entrance cutoffs will be published after the 2026 counseling results.
+                  </div>
+                )}
               </div>
             </section>
-          )}
 
-          {/* REVIEWS */}
-          <section id="reviews" style={{ background: '#fff', borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
-            <div style={{ padding: '20px 24px', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 800 }}>Student Reviews</h2>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '14px', fontWeight: 700, color: '#f59e0b' }}>★ {college.rating}</span>
-                <span style={{ fontSize: '12px', color: '#64748b' }}>({college.review_count} reviews)</span>
+            {/* GALLERY */}
+            <section id="gallery" className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+              <h2 className="text-2xl font-bold text-slate-900 mb-8">Campus Gallery</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {displayGallery.map((img) => (
+                  <div key={img.id} className="group relative overflow-hidden rounded-xl border border-slate-100 shadow-sm">
+                    <img 
+                      src={img.image_url} 
+                      alt={img.caption} 
+                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500" 
+                    />
+                    {img.caption && (
+                      <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                        <p className="text-[10px] font-bold text-white uppercase tracking-widest">{img.caption}</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
-            </div>
-            <div style={{ padding: '8px 24px' }}>
-              {reviews.length > 0 ? reviews.map((r) => (
-                <div key={r.id} style={{ borderBottom: '1px solid #f1f5f9', padding: '24px 0' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                      <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, color: '#1e293b' }}>{r.user_name[0]}</div>
-                      <div>
-                        <div style={{ fontSize: '14px', fontWeight: 700, color: '#0f172a' }}>{r.user_name}</div>
-                        <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 500 }}>{r.user_tag}</div>
+            </section>
+            {college.video_url && (
+              <section id="campus-tour" className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+                <h2 className="text-2xl font-bold text-slate-900 mb-6">Campus Tour</h2>
+                <div className="aspect-video w-full overflow-hidden rounded-xl border border-slate-100">
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src={college.video_url}
+                    title="Campus Tour"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              </section>
+            )}
+
+            {/* SCHOLARSHIPS */}
+            {scholarships.length > 0 && (
+              <section id="scholarships" className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+                <h2 className="text-2xl font-bold text-slate-900 mb-8">Scholarships & Aid</h2>
+                <div className="overflow-x-auto -mx-8">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="text-left border-b border-slate-100">
+                        <th className="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Scholarship</th>
+                        <th className="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Amount</th>
+                        <th className="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Eligibility</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-50">
+                      {scholarships.map((s) => (
+                        <tr key={s.id}>
+                          <td className="px-8 py-6 font-bold text-slate-900">{s.name}</td>
+                          <td className="px-8 py-6 text-blue-600 font-bold">{s.amount}</td>
+                          <td className="px-8 py-6 text-sm text-slate-600 leading-relaxed">{s.eligibility}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            )}
+
+            {/* REVIEWS */}
+            <section id="reviews" className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+              <div className="flex justify-between items-center mb-10">
+                <h2 className="text-2xl font-bold text-slate-900">Student Experiences</h2>
+                <div className="flex items-center gap-3">
+                  <div className="flex text-yellow-400">
+                    {[1,2,3,4,5].map(s => <span key={s}>★</span>)}
+                  </div>
+                  <span className="text-lg font-bold text-slate-900">{college.rating}</span>
+                  <span className="text-sm text-slate-400 font-medium">({college.review_count} reviews)</span>
+                </div>
+              </div>
+              
+              <div className="space-y-12 mb-12">
+                {college.content?.reviews && college.content.reviews.length > 0 ? college.content.reviews.map((r) => (
+                  <div key={r.id} className="group">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex gap-4 items-center">
+                        <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center font-black text-slate-900 text-lg uppercase">
+                          {r.user_name[0]}
+                        </div>
+                        <div>
+                          <div className="font-bold text-slate-900">{r.user_name}</div>
+                          <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{r.user_tag}</div>
+                        </div>
+                      </div>
+                      <div className="px-3 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-full uppercase">
+                        Rating {r.rating}/5
                       </div>
                     </div>
-                    <div style={{ textAlign: 'right' }}>
-                      <div style={{ color: '#f59e0b', fontSize: '12px', fontWeight: 700 }}>★ {r.rating}</div>
-                      {r.is_verified && <div style={{ fontSize: '10px', color: '#10b981', fontWeight: 700, marginTop: '2px' }}>✓ Verified</div>}
-                    </div>
+                    <p className="text-slate-600 leading-relaxed leading-relaxed pl-16">"{r.comment}"</p>
                   </div>
-                  <p style={{ fontSize: '14px', color: '#475569', lineHeight: 1.6, margin: 0 }}>{r.comment}</p>
-                </div>
-              )) : (
-                <div style={{ padding: '40px', textAlign: 'center', color: '#9ca3af', fontStyle: 'italic' }}>Be the first to review {college.name}!</div>
-              )}
+                )) : (
+                  <p className="text-center text-gray-400 italic py-10 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                    Be the first to share your experience at {college.name}.
+                  </p>
+                )}
+              </div>
 
-              <div style={{ padding: '24px 0' }}>
+              <div className="pt-10 border-t border-slate-100">
                 <ReviewForm collegeId={college.id} />
               </div>
-            </div>
-          </section>
-
-          {/* FAQS */}
-          <section id="faqs" style={{ background: '#fff', borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
-            <div style={{ padding: '20px 24px', borderBottom: '1px solid #f1f5f9' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 800 }}>FAQs</h2>
-            </div>
-            <div style={{ padding: '8px 24px' }}>
-              {displayFaqs.map((f, i) => (
-                <div key={i} style={{ borderBottom: i < displayFaqs.length - 1 ? '1px solid #f1f5f9' : 'none', padding: '20px 0' }}>
-                  <div style={{ fontSize: '14px', fontWeight: 700, color: '#0f172a', marginBottom: '8px', display: 'flex', gap: '12px' }}>
-                    <span style={{ color: '#f59e0b', fontWeight: 900 }}>Q.</span>
-                    {f.q}
+            </section>
+            {/* FAQS */}
+            <section id="faqs" className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+              <h2 className="text-2xl font-bold text-slate-900 mb-8">Frequently Asked Questions</h2>
+              <div className="space-y-10">
+                {displayFaqs.map((f, i) => (
+                  <div key={i} className="group">
+                    <h3 className="text-lg font-bold text-slate-900 mb-3 flex gap-3">
+                      <span className="text-blue-600 font-black">Q.</span>
+                      {f.q}
+                    </h3>
+                    <p className="text-slate-600 leading-relaxed leading-relaxed pl-8 border-l-2 border-slate-50 group-hover:border-blue-100 transition-colors">
+                      {f.a}
+                    </p>
                   </div>
-                  <div style={{ fontSize: '14px', color: '#475569', lineHeight: 1.7, paddingLeft: '28px' }}>{f.a}</div>
-                </div>
-              ))}
-              <div style={{ padding: '16px 0' }}>
+                ))}
+              </div>
+              
+              <div className="mt-12 pt-10 border-t border-slate-100">
                 <QuestionForm collegeId={college.id} />
               </div>
-            </div>
-          </section>
-
-          {similarColleges.length > 0 && (
-            <section className="mb-10 pt-16 border-t border-slate-100">
-              <h2 className="text-2xl font-semibold mb-8">
-                Similar Colleges
-              </h2>
-
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                {similarColleges.map((c: any) => (
-                  <a
-                    key={c.slug}
-                    href={`/colleges/${c.slug}`}
-                    className="border border-slate-100 p-6 rounded-2xl hover:shadow-lg transition-all hover:border-sky-100 group"
-                  >
-                    <h3 className="font-bold text-slate-900 group-hover:text-sky-600 transition-colors mb-2">{c.name}</h3>
-                    <p className="text-sm text-slate-400 font-medium">{c.location}</p>
-                  </a>
-                ))}
-              </div>
             </section>
-          )}
-          
-{/* Comparison Section (Automated) */}
-{similarColleges.length > 0 && (
-  <section className="pt-16 border-t border-slate-100">
-    <h2 className="text-xl font-bold mb-6 text-slate-900 flex items-center gap-2">
-      <svg className="w-5 h-5 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-      </svg>
-      Compare {college.short_name || college.name} with Similar Colleges
-    </h2>
-    <div className="flex flex-col gap-3">
-      {similarColleges.map((c: any) => (
-        <Link 
-          key={c.slug} 
-          href={`/compare/${college.slug}-vs-${c.slug}`}
-          className="text-sky-600 hover:text-sky-700 font-medium flex items-center gap-2 group transition-all"
-        >
-          <span className="w-1.5 h-1.5 bg-sky-600 rounded-full opacity-40 group-hover:opacity-100 transition-opacity"></span>
-          Compare {college.name} vs {c.name}
-        </Link>
-      ))}
-    </div>
-  </section>
-)}
-
-        </div>
-
-        {/* RIGHT COLUMN */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-
-          {/* Important Dates */}
-          {important_dates.length > 0 && (
-            <div style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e5e7eb', overflow: 'hidden' }}>
-              <div style={{ padding: '11px 14px', borderBottom: '1px solid #e5e7eb', background: '#fff8f0' }}>
-                <h2 style={{ fontSize: '13px', fontWeight: 700, color: '#c45c00' }}>Important Dates 2026</h2>
-              </div>
-              <div style={{ padding: '10px 14px' }}>
-                {important_dates.map((d) => (
-                  <div key={d.event_name} style={{ borderBottom: '1px solid #f3f4f6', padding: '10px 0' }}>
-                    <div style={{ fontSize: '11px', fontWeight: 600, color: '#1a3557' }}>{d.event_name}</div>
-                    <div style={{ fontSize: '13px', fontWeight: 700, marginTop: '2px' }}>
-                      {new Date(d.event_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* CTA Card */}
-          <div style={{ background: '#1a3557', borderRadius: '10px', padding: '16px', color: '#fff' }}>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, marginBottom: '6px' }}>Apply for Admissions {new Date().getFullYear() + 1}</h3>
-            <p style={{ fontSize: '11px', color: '#8eaeca', marginBottom: '12px', lineHeight: 1.5 }}>Get free counselling and know your admission chances.</p>
-            <button style={{ display: 'block', width: '100%', background: '#e67e00', color: '#fff', border: 'none', borderRadius: '5px', padding: '10px', fontSize: '13px', fontWeight: 700, cursor: 'pointer', marginBottom: '8px' }}>
-              Check Admission Eligibility
-            </button>
-            <button style={{ display: 'block', width: '100%', background: 'transparent', color: '#8eaeca', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '5px', padding: '9px', fontSize: '12px', fontWeight: 600, cursor: 'pointer' }}>
-              Download Brochure (PDF)
-            </button>
           </div>
 
-          {/* Rankings */}
-          {rankings.length > 0 && (
-            <div style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e5e7eb', overflow: 'hidden' }}>
-              <div style={{ padding: '11px 14px', borderBottom: '1px solid #e5e7eb' }}>
-                <h2 style={{ fontSize: '14px', fontWeight: 700 }}>Rankings & Accreditation</h2>
-              </div>
-              {rankings.map((r) => (
-                <div key={r.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderBottom: '1px solid #f3f4f6' }}>
-                  <div>
-                    <div style={{ fontSize: '12px', fontWeight: 600 }}>{r.agency}</div>
-                    <div style={{ fontSize: '10px', color: '#6b7280', marginTop: '1px' }}>{r.year}</div>
-                  </div>
-                  <div style={{ fontSize: '17px', fontWeight: 800, color: '#1a3557' }}>{r.rank}</div>
-                </div>
-              ))}
-              {college.naac_grade && (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px' }}>
-                  <div>
-                    <div style={{ fontSize: '12px', fontWeight: 600 }}>NAAC Grade</div>
-                    <div style={{ fontSize: '10px', color: '#6b7280', marginTop: '1px' }}>{new Date().getFullYear()}</div>
-                  </div>
-                  <div style={{ fontSize: '14px', fontWeight: 800, color: '#1a3557' }}>{college.naac_grade}</div>
-                </div>
-              )}
-            </div>
-          )}
+          {/* RIGHT COLUMN: SIDEBAR TOOLS */}
+          <aside className="lg:col-span-1">
+            <div className="space-y-6 sticky top-24 animate-fade-in">
 
-          {/* Similar Colleges Sidebar */}
-          {similarColleges.length > 0 && (
-            <div style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e5e7eb', overflow: 'hidden' }}>
-              <div style={{ padding: '11px 14px', borderBottom: '1px solid #e5e7eb' }}>
-                <h2 style={{ fontSize: '14px', fontWeight: 700 }}>Compare Colleges</h2>
+              {/* 🔥 PRIMARY CTA */}
+              <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-2xl hover:scale-[1.02] transition text-white p-6 rounded-2xl">
+                <h3 className="text-lg font-bold mb-2">
+                  Admission Helper 2026
+                </h3>
+
+                <p className="text-sm text-slate-300 mb-5">
+                  Get personalized college prediction, cutoff analysis & admission guidance.
+                </p>
+
+                <button className="w-full bg-gradient-to-r from-blue-600 to-blue-500 shadow-lg hover:shadow-xl hover:scale-[1.03] transition py-3 rounded-xl font-semibold mb-3">
+                  Check Eligibility
+                </button>
+
+                <button className="w-full bg-white/10 hover:bg-white/20 py-3 rounded-xl text-sm transition text-slate-200">
+                  Download Brochure
+                </button>
               </div>
-              <div style={{ padding: '4px 14px' }}>
-                {similarColleges.map((c: any) => (
-                  <Link key={c.slug} href={`/colleges/${c.slug}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid #f3f4f6', textDecoration: 'none' }}>
-                    <div>
-                      <div style={{ fontSize: '12px', fontWeight: 600, color: '#1a5fa8', lineHeight: 1.3 }}>{c.name}</div>
-                      <div style={{ fontSize: '10px', color: '#6b7280', marginTop: '2px' }}>{c.location}</div>
+
+
+              {/* 📊 QUICK STATS (VERY IMPORTANT) */}
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 className="text-sm font-bold text-slate-400 uppercase mb-4">
+                  Quick Facts
+                </h3>
+
+                <div className="space-y-3 text-sm">
+                  {[
+                    { label: 'Location', val: `${college.location}, ${college.state}` },
+                    { label: 'Established', val: college.established },
+                    { label: 'Ownership', val: college.ownership },
+                    { label: 'Avg Package', val: college.avg_package ? `₹${college.avg_package} LPA` : 'N/A' },
+                    { label: 'NIRF Rank', val: college.nirf_rank || '—' },
+                  ].map((item) => (
+                    <div key={item.label} className="flex justify-between border-b border-slate-50 pb-2 last:border-0">
+                      <span className="text-slate-500">{item.label}</span>
+                      <span className="font-semibold text-slate-900">{item.val}</span>
                     </div>
-                    <div style={{ fontSize: '11px', fontWeight: 700, color: '#6b7280', whiteSpace: 'nowrap' as const }}>#{c.nirf_rank}</div>
+                  ))}
+                </div>
+              </div>
+
+
+              {/* 📅 IMPORTANT DATES */}
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 className="text-sm font-bold text-slate-400 uppercase mb-4">
+                  Important Dates
+                </h3>
+
+                {important_dates.length > 0 ? (
+                  <div className="space-y-4">
+                    {important_dates.slice(0, 3).map((d) => (
+                      <div key={d.id} className="flex gap-3 items-center">
+                        <div className="w-10 h-10 bg-slate-100 rounded-lg flex flex-col items-center justify-center border border-slate-200 flex-shrink-0">
+                          <span className="text-[10px] font-bold text-slate-500 uppercase">
+                            {new Date(d.event_date).toLocaleString('en-IN', { month: 'short' })}
+                          </span>
+                          <span className="text-sm font-black text-slate-900 leading-none">
+                            {new Date(d.event_date).getDate()}
+                          </span>
+                        </div>
+                        <p className="text-sm font-bold text-slate-700 leading-tight">
+                          {d.event_name}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-slate-400 italic">
+                    Dates will be updated soon
+                  </p>
+                )}
+              </div>
+
+
+              {/* 🏆 RANKINGS */}
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 className="text-sm font-bold text-slate-400 uppercase mb-4">
+                  Rankings
+                </h3>
+
+                {rankings.length > 0 ? (
+                  <div className="space-y-3">
+                    {rankings.slice(0, 3).map((r) => (
+                      <div key={r.id} className="flex justify-between items-center">
+                        <span className="text-sm text-slate-600 font-medium">{r.agency}</span>
+                        <span className="font-black text-slate-900">#{r.rank}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-slate-400 italic">
+                    Ranking data coming soon
+                  </p>
+                )}
+              </div>
+
+
+              {/* 🔗 RELATED COLLEGES (SEO GOLD) */}
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 className="text-sm font-bold text-slate-400 uppercase mb-4">
+                  Similar Colleges
+                </h3>
+
+                {similarColleges.length > 0 ? (
+                  <div className="space-y-3">
+                    {similarColleges.map((c) => (
+                      <Link
+                        key={c.slug}
+                        href={`/colleges/${c.slug}`}
+                        className="block text-sm text-slate-700 hover:text-blue-600 font-medium transition-colors"
+                      >
+                        {c.name}
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-slate-400 italic">
+                    More colleges coming soon
+                  </p>
+                )}
+              </div>
+
+
+              {/* ⚔️ COMPARISONS (VERY IMPORTANT FOR SEO) */}
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 className="text-sm font-bold text-slate-400 uppercase mb-4">
+                  Compare
+                </h3>
+
+                {similarColleges.slice(0, 3).map((c) => (
+                  <Link
+                    key={c.slug}
+                    href={`/compare/${college.slug}-vs-${c.slug}`}
+                    className="block text-sm text-blue-600 hover:underline mb-2 last:mb-0 font-medium"
+                  >
+                    {college.short_name} vs {c.name}
                   </Link>
                 ))}
               </div>
-            </div>
-          )}
 
-          {/* Quick Facts */}
-          <div style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e5e7eb', overflow: 'hidden' }}>
-            <div style={{ padding: '11px 14px', borderBottom: '1px solid #e5e7eb' }}>
-              <h2 style={{ fontSize: '14px', fontWeight: 700 }}>Quick Facts</h2>
             </div>
-            <div style={{ padding: '4px 14px' }}>
-              {[
-                { label: 'Total Students', val: college.total_students?.toLocaleString('en-IN') },
-                { label: 'Faculty Strength', val: college.faculty_count ? `${college.faculty_count}+` : null },
-                { label: 'Ph.D. Scholars', val: college.phd_scholars?.toLocaleString('en-IN') },
-                { label: 'International Students', val: college.international_students },
-                { label: 'Research Publications', val: college.research_publications ? `${college.research_publications.toLocaleString('en-IN')}+` : null },
-              ].filter((f) => f.val).map((f) => (
-                <div key={f.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid #f3f4f6' }}>
-                  <span style={{ fontSize: '12px', color: '#4b5563' }}>{f.label}</span>
-                  <span style={{ fontSize: '12px', fontWeight: 700 }}>{f.val}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          </aside>
 
         </div>
-      </div>
+      </main>
     </div>
+      </div>
   )
 }
+
