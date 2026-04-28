@@ -21,22 +21,22 @@ const COURSE_STREAMS = [
 ]
 
 const MOCK_COURSES = [
-  { id: 1, name: 'B.Tech in Computer Science', stream: 'engineering', duration: '4 Years', eligibility: 'JEE Main, Class 12 with PCM', career: 'Software Engineer, Data Scientist', avgSalary: '₹8-25 LPA' },
-  { id: 2, name: 'MBBS', stream: 'medical', duration: '5.5 Years', eligibility: 'NEET UG, Class 12 with PCB', career: 'Doctor, Specialist', avgSalary: '₹6-50 LPA' },
-  { id: 3, name: 'MBA in Marketing', stream: 'management', duration: '2 Years', eligibility: 'CAT/MAT, Graduation', career: 'Marketing Manager, CEO', avgSalary: '₹8-30 LPA' },
-  { id: 4, name: 'B.Tech in Electronics', stream: 'engineering', duration: '4 Years', eligibility: 'JEE Main, Class 12 with PCM', career: 'Electronics Engineer, VLSI Designer', avgSalary: '₹6-20 LPA' },
-  { id: 5, name: 'BDS', stream: 'medical', duration: '5 Years', eligibility: 'NEET UG, Class 12 with PCB', career: 'Dentist, Oral Surgeon', avgSalary: '₹4-15 LPA' },
-  { id: 6, name: 'M.Tech in Data Science', stream: 'engineering', duration: '2 Years', eligibility: 'GATE, B.Tech', career: 'Data Scientist, ML Engineer', avgSalary: '₹10-35 LPA' },
-  { id: 7, name: 'MBA in Finance', stream: 'management', duration: '2 Years', eligibility: 'CAT/XAT, Graduation', career: 'Investment Banker, CFO', avgSalary: '₹10-40 LPA' },
-  { id: 8, name: 'B.Sc in Nursing', stream: 'medical', duration: '4 Years', eligibility: 'Class 12 with PCB', career: 'Nurse, Healthcare Admin', avgSalary: '₹3-8 LPA' },
-  { id: 9, name: 'B.Sc in Physics', stream: 'science', duration: '3 Years', eligibility: 'Class 12 with PCMB', career: 'Researcher, Teacher', avgSalary: '₹3-12 LPA' },
-  { id: 10, name: 'LLB', stream: 'law', duration: '3 Years', eligibility: 'CLAT, Class 12', career: 'Lawyer, Judge', avgSalary: '₹5-25 LPA' },
-  { id: 11, name: 'B.A. in Economics', stream: 'arts', duration: '3 Years', eligibility: 'Class 12', career: 'Economist, Analyst', avgSalary: '₹4-15 LPA' },
-  { id: 12, name: 'M.Sc in Chemistry', stream: 'science', duration: '2 Years', eligibility: 'B.Sc Chemistry', career: 'Researcher, Chemist', avgSalary: '₹4-12 LPA' },
-  { id: 13, name: 'B.Com', stream: 'commerce', duration: '3 Years', eligibility: 'Class 12 Commerce', career: 'Accountant, CA', avgSalary: '₹3-12 LPA' },
-  { id: 14, name: 'BBA', stream: 'management', duration: '3 Years', eligibility: 'Class 12', career: 'Manager, Entrepreneur', avgSalary: '₹4-15 LPA' },
-  { id: 15, name: 'BCA', stream: 'others', duration: '3 Years', eligibility: 'Class 12', career: 'Programmer, Web Developer', avgSalary: '₹4-12 LPA' },
-  { id: 16, name: 'BA LLB', stream: 'law', duration: '5 Years', eligibility: 'CLAT, Class 12', career: 'Corporate Lawyer, Judge', avgSalary: '₹6-30 LPA' },
+  { id: 1, slug: 'btech-computer-science', name: 'B.Tech in Computer Science', stream: 'engineering', duration: '4 Years', eligibility: 'JEE Main, Class 12 with PCM', career: 'Software Engineer, Data Scientist', avgSalary: '₹8-25 LPA' },
+  { id: 2, slug: 'mbbs', name: 'MBBS', stream: 'medical', duration: '5.5 Years', eligibility: 'NEET UG, Class 12 with PCB', career: 'Doctor, Specialist', avgSalary: '₹6-50 LPA' },
+  { id: 3, slug: 'mba-marketing', name: 'MBA in Marketing', stream: 'management', duration: '2 Years', eligibility: 'CAT/MAT, Graduation', career: 'Marketing Manager, CEO', avgSalary: '₹8-30 LPA' },
+  { id: 4, slug: 'btech-electronics', name: 'B.Tech in Electronics', stream: 'engineering', duration: '4 Years', eligibility: 'JEE Main, Class 12 with PCM', career: 'Electronics Engineer, VLSI Designer', avgSalary: '₹6-20 LPA' },
+  { id: 5, slug: 'bds', name: 'BDS', stream: 'medical', duration: '5 Years', eligibility: 'NEET UG, Class 12 with PCB', career: 'Dentist, Oral Surgeon', avgSalary: '₹4-15 LPA' },
+  { id: 6, slug: 'mtech-data-science', name: 'M.Tech in Data Science', stream: 'engineering', duration: '2 Years', eligibility: 'GATE, B.Tech', career: 'Data Scientist, ML Engineer', avgSalary: '₹10-35 LPA' },
+  { id: 7, slug: 'mba-finance', name: 'MBA in Finance', stream: 'management', duration: '2 Years', eligibility: 'CAT/XAT, Graduation', career: 'Investment Banker, CFO', avgSalary: '₹10-40 LPA' },
+  { id: 8, slug: 'bsc-nursing', name: 'B.Sc in Nursing', stream: 'medical', duration: '4 Years', eligibility: 'Class 12 with PCB', career: 'Nurse, Healthcare Admin', avgSalary: '₹3-8 LPA' },
+  { id: 9, slug: 'bsc-physics', name: 'B.Sc in Physics', stream: 'science', duration: '3 Years', eligibility: 'Class 12 with PCMB', career: 'Researcher, Teacher', avgSalary: '₹3-12 LPA' },
+  { id: 10, slug: 'llb', name: 'LLB', stream: 'law', duration: '3 Years', eligibility: 'CLAT, Class 12', career: 'Lawyer, Judge', avgSalary: '₹5-25 LPA' },
+  { id: 11, slug: 'ba-economics', name: 'B.A. in Economics', stream: 'arts', duration: '3 Years', eligibility: 'Class 12', career: 'Economist, Analyst', avgSalary: '₹4-15 LPA' },
+  { id: 12, slug: 'msc-chemistry', name: 'M.Sc in Chemistry', stream: 'science', duration: '2 Years', eligibility: 'B.Sc Chemistry', career: 'Researcher, Chemist', avgSalary: '₹4-12 LPA' },
+  { id: 13, slug: 'bcom', name: 'B.Com', stream: 'commerce', duration: '3 Years', eligibility: 'Class 12 Commerce', career: 'Accountant, CA', avgSalary: '₹3-12 LPA' },
+  { id: 14, slug: 'bba', name: 'BBA', stream: 'management', duration: '3 Years', eligibility: 'Class 12', career: 'Manager, Entrepreneur', avgSalary: '₹4-15 LPA' },
+  { id: 15, slug: 'bca', name: 'BCA', stream: 'others', duration: '3 Years', eligibility: 'Class 12', career: 'Programmer, Web Developer', avgSalary: '₹4-12 LPA' },
+  { id: 16, slug: 'ba-llb', name: 'BA LLB', stream: 'law', duration: '5 Years', eligibility: 'CLAT, Class 12', career: 'Corporate Lawyer, Judge', avgSalary: '₹6-30 LPA' },
 ]
 
 export default function CoursesPage() {
@@ -51,6 +51,7 @@ export default function CoursesPage() {
     if (search) {
       courses = courses.filter(c => 
         c.name.toLowerCase().includes(search.toLowerCase()) ||
+        c.slug.toLowerCase().includes(search.toLowerCase()) ||
         c.eligibility.toLowerCase().includes(search.toLowerCase()) ||
         c.career.toLowerCase().includes(search.toLowerCase())
       )
@@ -208,7 +209,7 @@ export default function CoursesPage() {
                   </div>
 
                   <Link 
-                    href={`/courses/${course.id}`}
+                    href={`/courses/${course.slug}`}
                     className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg bg-action text-white font-medium hover:bg-action/90 transition-colors"
                   >
                     View Details
