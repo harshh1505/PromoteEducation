@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search, MapPin, GraduationCap, ArrowRight } from 'lucide-react'
+import { Search, MapPin, ArrowRight, Sparkles } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/Button'
+import { Container } from '@/components/ui/Container'
 
 const carouselImages = [
   "https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/amitynoida.jpg",
@@ -90,71 +92,66 @@ export default function HeroSection() {
   const popularSearches = [
     { label: 'IIT Admissions', query: 'iit' },
     { label: 'Medical Colleges', query: 'medical' },
-    { label: 'MBA', query: 'management' },
+    { label: 'MBA Programs', query: 'management' },
   ]
 
   return (
-    <section className="relative w-full bg-surface overflow-hidden">
-      <div className="absolute inset-0 h-[500px] md:h-[600px]">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-white/10 to-white/40 z-10" />
+    <section className="relative w-full bg-[var(--surface)] overflow-hidden min-h-[600px] flex items-center">
+      {/* Background Layer */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-[var(--surface)]/80 via-transparent to-[var(--surface)] z-10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--surface)] via-transparent to-[var(--surface)]/40 z-10" />
+        
+        {/* Slides */}
+        <div 
+          className={cn(
+            "absolute inset-0 transition-opacity duration-1000 ease-in-out",
+            !isTransitioning ? "opacity-40" : "opacity-0"
+          )}
+        >
           <img 
-            src={localFallbacks[0]}
+            src={getCurrentImageUrl(currentSlide)}
             alt="Campus"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover animate-ken-burns grayscale-[20%]"
           />
         </div>
-
         <div 
           className={cn(
-            "absolute inset-0 transition-all duration-[3000ms] ease-in-out",
-            !isTransitioning ? "opacity-100 z-10" : "opacity-0 z-10"
+            "absolute inset-0 transition-opacity duration-1000 ease-in-out",
+            isTransitioning ? "opacity-40" : "opacity-0"
           )}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-white/10 to-white/40 z-10" />
-          {imagesLoaded[currentSlide] && (
-            <img 
-              src={getCurrentImageUrl(currentSlide)}
-              alt={`Campus ${currentSlide + 1}`}
-              className="w-full h-full object-cover animate-ken-burns"
-            />
-          )}
-        </div>
-
-        <div 
-          className={cn(
-            "absolute inset-0 transition-all duration-1000 ease-in-out",
-            isTransitioning ? "opacity-100 z-20" : "opacity-0 z-0"
-          )}
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-white/10 to-white/40 z-10" />
-          {imagesLoaded[nextSlide] && (
-            <img 
-              src={getCurrentImageUrl(nextSlide)}
-              alt={`Campus ${nextSlide + 1}`}
-              className="w-full h-full object-cover animate-ken-burns"
-            />
-          )}
+          <img 
+            src={getCurrentImageUrl(nextSlide)}
+            alt="Campus"
+            className="w-full h-full object-cover animate-ken-burns grayscale-[20%]"
+          />
         </div>
       </div>
 
-      <div className="relative z-20 max-w-5xl mx-auto px-6 pt-16 pb-12 md:pt-24 md:pb-16">
-        <div className="text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium text-ink tracking-tight mb-4" style={{ fontFamily: 'var(--font-display)' }}>
-            Find Your Dream <span className="text-action font-semibold">College</span>
+      <Container className="relative z-20 py-20">
+        <div className="max-w-4xl">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--action)]/10 text-[var(--action)] text-sm font-medium mb-6 animate-on-load">
+            <Sparkles size={16} />
+            India's Most Trusted Admission Portal
+          </div>
+          
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-medium text-[var(--ink)] tracking-tight mb-6 animate-on-load stagger-1" style={{ fontFamily: 'var(--font-display)' }}>
+            Find Your Dream <br />
+            <span className="text-[var(--action)] font-semibold italic">Academic Future</span>
           </h1>
           
-          <p className="text-ink-2 text-lg md:text-xl max-w-2xl mx-auto mb-8">
-            Get honest reviews, accurate cutoffs, and personalized admissions guidance.
+          <p className="text-[var(--ink-2)] text-xl md:text-2xl max-w-2xl mb-10 animate-on-load stagger-2">
+            Get honest reviews, accurate cutoffs, and personalized admissions guidance from experts.
           </p>
 
-          <div className="relative max-w-2xl mx-auto mb-6">
+          <div className="relative max-w-2xl mb-8 animate-on-load stagger-3">
             <div className={cn(
-              "flex items-center gap-3 bg-white rounded-xl md:rounded-2xl shadow-lg border transition-all duration-200",
-              focused ? "ring-2 ring-action/20 border-action/30" : "border-slate-200"
+              "flex items-center gap-3 bg-white/70 backdrop-blur-xl rounded-2xl md:rounded-3xl shadow-2xl border transition-all duration-300 p-2",
+              focused ? "ring-4 ring-[var(--action)]/10 border-[var(--action)]/30" : "border-white/50"
             )}>
-              <div className="pl-4 text-slate-400">
-                <Search size={20} />
+              <div className="pl-4 text-[var(--ink-4)]">
+                <Search size={22} />
               </div>
               <input
                 type="text"
@@ -163,25 +160,27 @@ export default function HeroSection() {
                 onChange={(e) => setQuery(e.target.value)}
                 onFocus={() => setFocused(true)}
                 onBlur={() => setTimeout(() => setFocused(false), 200)}
-                className="flex-1 py-4 md:py-5 text-base text-slate-800 outline-none placeholder:text-slate-400 bg-transparent"
+                className="flex-1 py-4 md:py-5 text-lg text-[var(--ink)] outline-none placeholder:text-[var(--ink-4)] bg-transparent"
               />
-              <button className="mr-2 px-6 py-2.5 bg-action text-white font-medium rounded-lg hover:bg-action/90 transition-colors">
+              <Button size="lg" className="hidden md:flex">
                 Search
-              </button>
+              </Button>
             </div>
 
             {focused && results.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden z-50">
+              <div className="absolute top-full left-0 right-0 mt-4 bg-white/90 backdrop-blur-2xl rounded-2xl shadow-2xl border border-[var(--border)] overflow-hidden z-50 animate-on-load">
                 {results.map((res) => (
                   <button
                     key={res.id}
                     onClick={() => router.push(`/colleges/${res.slug}`)}
-                    className="w-full flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition-colors text-left border-b border-slate-100 last:border-0"
+                    className="w-full flex items-center gap-4 px-6 py-4 hover:bg-[var(--action)]/5 transition-all text-left border-b border-[var(--border)]/50 last:border-0 group"
                   >
-                    <MapPin size={16} className="text-slate-400" />
+                    <div className="p-2 rounded-lg bg-[var(--surface-2)] group-hover:bg-[var(--action)]/10 transition-colors">
+                      <MapPin size={18} className="text-[var(--ink-3)] group-hover:text-[var(--action)]" />
+                    </div>
                     <div>
-                      <div className="font-medium text-slate-800">{res.name}</div>
-                      <div className="text-xs text-slate-500">{res.stream} • {res.location}</div>
+                      <div className="font-semibold text-[var(--ink)] group-hover:text-[var(--action)] transition-colors">{res.name}</div>
+                      <div className="text-sm text-[var(--ink-3)]">{res.stream} • {res.location}</div>
                     </div>
                   </button>
                 ))}
@@ -189,54 +188,38 @@ export default function HeroSection() {
             )}
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-2 text-sm text-ink-3">
-            <span>Popular:</span>
+          <div className="flex flex-wrap items-center gap-4 text-sm text-[var(--ink-3)] animate-on-load stagger-4">
+            <span className="font-medium">Popular:</span>
             {popularSearches.map((item, i) => (
               <button
                 key={i}
                 onClick={() => setQuery(item.query)}
-                className="px-3 py-1 bg-white/80 rounded-full border border-slate-200 hover:bg-white hover:border-action/30 hover:text-action transition-colors"
+                className="px-4 py-2 bg-white/50 backdrop-blur-md rounded-full border border-white/50 hover:bg-[var(--action)] hover:text-white hover:border-[var(--action)] transition-all duration-300"
               >
                 {item.label}
               </button>
             ))}
           </div>
 
-          <button 
-            onClick={() => router.push('/colleges')}
-            className="mt-8 inline-flex items-center gap-2 px-8 py-4 bg-ink text-white font-medium rounded-xl hover:bg-midnight transition-colors shadow-lg"
-          >
-            Browse All Colleges
-            <ArrowRight size={18} />
-          </button>
-        </div>
-
-        <div className="mt-12 flex flex-wrap justify-center gap-8 md:gap-12 text-center">
-          <div>
-            <div className="text-2xl md:text-3xl font-semibold text-ink">6000+</div>
-            <div className="text-sm text-ink-3">Institutes</div>
-          </div>
-          <div>
-            <div className="text-2xl md:text-3xl font-semibold text-ink">50+</div>
-            <div className="text-sm text-ink-3">Entrance Exams</div>
-          </div>
-          <div>
-            <div className="text-2xl md:text-3xl font-semibold text-ink">200+</div>
-            <div className="text-sm text-ink-3">Student Reviews</div>
+          <div className="mt-12 flex flex-wrap gap-6 animate-on-load stagger-5">
+            <Button size="lg" className="group" onClick={() => router.push('/colleges')}>
+              Explore Colleges
+              <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform" />
+            </Button>
+            <Button variant="outline" size="lg">
+              Compare Exams
+            </Button>
           </div>
         </div>
-      </div>
+      </Container>
 
       <style jsx>{`
         @keyframes kenBurns {
-          0% { transform: scale(1); }
-          100% { transform: scale(1.1); }
+          0% { transform: scale(1) translate(0, 0); }
+          100% { transform: scale(1.1) translate(-2%, -2%); }
         }
         .animate-ken-burns {
           animation: kenBurns 20s ease-in-out infinite alternate;
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .animate-ken-burns { animation: none; }
         }
       `}</style>
     </section>
