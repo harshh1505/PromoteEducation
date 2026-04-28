@@ -77,32 +77,32 @@ export default function CoursesPage() {
       </section>
 
       {/* Main Content */}
-      <section className="py-20 bg-[var(--surface)]">
+      <section className="py-12 bg-[var(--surface)]">
         <Container>
-          <div className="flex flex-col lg:flex-row gap-12">
+          <div className="flex flex-col lg:flex-row gap-8">
             {/* Sidebar Filters */}
-            <aside className="w-full lg:w-72 shrink-0">
-              <div className="sticky top-24 space-y-8">
-                <div>
-                  <h3 className="text-sm font-semibold text-[var(--ink)] uppercase tracking-wider mb-4">Search</h3>
+            <aside className="w-full lg:w-64 shrink-0">
+              <div className="sticky top-24 space-y-6">
+                <Card className="p-5 border-[var(--border)]/50">
+                  <h3 className="text-xs font-bold text-[var(--ink)] uppercase tracking-wider mb-4">Search</h3>
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--ink-4)]" size={18} />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--ink-4)]" size={16} />
                     <input
                       type="text"
                       placeholder="Search courses..."
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)] focus:ring-2 focus:ring-[var(--action)]/20 outline-none transition-all"
+                      className="w-full pl-9 pr-3 py-2.5 rounded-lg text-sm border border-[var(--border)] bg-[var(--surface)] text-[var(--ink)] focus:ring-1 focus:ring-[var(--action)]/30 outline-none transition-all"
                     />
                   </div>
-                </div>
+                </Card>
 
-                <div>
-                  <h3 className="text-sm font-semibold text-[var(--ink)] uppercase tracking-wider mb-4">Streams</h3>
-                  <div className="flex flex-col gap-2">
+                <Card className="p-5 border-[var(--border)]/50">
+                  <h3 className="text-xs font-bold text-[var(--ink)] uppercase tracking-wider mb-4">Filter by Stream</h3>
+                  <div className="flex flex-col gap-1">
                     <button
                       onClick={() => setSelectedStream(null)}
-                      className={`px-4 py-2.5 rounded-xl text-left transition-all ${!selectedStream ? 'bg-[var(--action)] text-white shadow-lg' : 'hover:bg-[var(--surface-2)] text-[var(--ink-2)]'}`}
+                      className={`px-3 py-2 rounded-lg text-sm text-left transition-all ${!selectedStream ? 'bg-[var(--action)]/10 text-[var(--action)] font-medium' : 'text-[var(--ink-2)] hover:bg-[var(--surface-2)]'}`}
                     >
                       All Streams
                     </button>
@@ -110,19 +110,22 @@ export default function CoursesPage() {
                       <button
                         key={stream.id}
                         onClick={() => setSelectedStream(stream.id)}
-                        className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-left transition-all ${selectedStream === stream.id ? 'bg-[var(--action)] text-white shadow-lg' : 'hover:bg-[var(--surface-2)] text-[var(--ink-2)]'}`}
+                        className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-left transition-all ${selectedStream === stream.id ? 'bg-[var(--action)]/10 text-[var(--action)] font-medium' : 'text-[var(--ink-2)] hover:bg-[var(--surface-2)]'}`}
                       >
-                        <stream.icon size={16} />
+                        <stream.icon size={14} />
                         {stream.name}
                       </button>
                     ))}
                   </div>
-                </div>
+                </Card>
 
-                <Card className="bg-[var(--action)] text-white p-6 border-none shadow-xl">
-                  <h4 className="font-semibold mb-2">Need Guidance?</h4>
-                  <p className="text-sm text-white/80 mb-4">Speak with our academic experts to find the best course for you.</p>
-                  <Button variant="secondary" size="sm" className="w-full">Book Free Call</Button>
+                <Card className="p-5 bg-gradient-to-br from-[var(--action)] to-[var(--action)]/90 text-white border-none">
+                  <Sparkles size={20} className="mb-3" />
+                  <h4 className="font-semibold text-sm mb-1">Need Guidance?</h4>
+                  <p className="text-xs text-white/80 mb-4">Talk to experts for course selection.</p>
+                  <Button variant="secondary" size="sm" className="w-full bg-white text-[var(--action)] hover:bg-white/90">
+                    Book Free Call
+                  </Button>
                 </Card>
               </div>
             </aside>
