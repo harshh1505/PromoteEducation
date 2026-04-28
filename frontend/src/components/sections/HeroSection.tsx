@@ -1,12 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { Search, MapPin, ArrowRight, Sparkles } from 'lucide-react'
+import { Search, GraduationCap, BookOpen, Award, CheckCircle2, TrendingUp, Users, ArrowRight } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/Button'
-import { Container } from '@/components/ui/Container'
 
 const carouselImages = [
   "https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/amitynoida.jpg",
@@ -17,9 +14,24 @@ const carouselImages = [
   "https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/sapthagiriNps.webp"
 ]
 
+// Optimization helper for Supabase Storage
 const getOptimizedUrl = (url: string) => {
   return url.replace('/object/public/', '/render/image/public/') + '?width=1920&quality=80&format=webp';
 }
+
+const stats = [
+  { label: '6000+ Institutions', icon: GraduationCap },
+  { label: '50+ Entrance Exams', icon: BookOpen },
+  { label: '200+ Student Reviews', icon: Award },
+  { label: '10,000+ Monthly Students', icon: Users },
+]
+
+const trustBadges = [
+  { label: 'Entrance Support', icon: CheckCircle2 },
+  { label: 'Rank Prediction', icon: TrendingUp },
+  { label: 'Direct Admissions', icon: Users },
+  { label: 'Placement Stats', icon: Award },
+]
 
 const localFallbacks = [
   "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1920",
@@ -29,16 +41,17 @@ const localFallbacks = [
 ]
 
 export default function HeroSection() {
-  const router = useRouter()
   const [currentSlide, setCurrentSlide] = useState(0)
   const [nextSlide, setNextSlide] = useState(1)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
   const [focused, setFocused] = useState(false)
   const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({})
   const [imagesLoaded, setImagesLoaded] = useState<Record<number, boolean>>({})
 
+  // Preload all images on mount
   useEffect(() => {
     carouselImages.forEach((url, idx) => {
       const img = new Image();
@@ -55,168 +68,209 @@ export default function HeroSection() {
   useEffect(() => {
     const interval = setInterval(() => {
       setIsTransitioning(true);
+      
+      // Set next slide index
       const next = (currentSlide + 1) % carouselImages.length;
       setNextSlide(next);
+      
+      // After crossfade duration, update current slide and reset transition
       setTimeout(() => {
         setCurrentSlide(next);
         setIsTransitioning(false);
-      }, 1000);
-    }, 6000)
+      }, 1000); // Match transition duration
+      
+    }, 6000) // Change every 6 seconds
     return () => clearInterval(interval)
   }, [currentSlide])
 
+  // Live search logic
   useEffect(() => {
     const searchColleges = async () => {
       if (query.length < 2) {
         setResults([])
         return
       }
+      setLoading(true)
       const { data, error } = await supabase
         .from('colleges')
-        .select('id, slug, name, location, stream')
+        .select('name, location, stream')
         .or(`name.ilike.%${query}%,location.ilike.%${query}%,stream.ilike.%${query}%`)
         .limit(5)
 
       if (!error && data) setResults(data)
+      setLoading(false)
     }
     const timer = setTimeout(searchColleges, 300)
     return () => clearTimeout(timer)
   }, [query])
 
+  // Get the current image URL
   const getCurrentImageUrl = (idx: number) => {
     const url = carouselImages[idx];
     if (imageErrors[idx]) return localFallbacks[idx % localFallbacks.length];
     return getOptimizedUrl(url);
   };
 
-  const popularSearches = [
-    { label: 'IIT Admissions', query: 'iit' },
-    { label: 'Medical Colleges', query: 'medical' },
-    { label: 'MBA Programs', query: 'management' },
-  ]
-
   return (
-    <section className="relative w-full bg-[var(--surface)] overflow-hidden min-h-[600px] flex items-center">
-      {/* Background Layer */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-[var(--surface)]/80 via-transparent to-[var(--surface)] z-10" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--surface)] via-transparent to-[var(--surface)]/40 z-10" />
-        
-        {/* Slides */}
-        <div 
-          className={cn(
-            "absolute inset-0 transition-opacity duration-1000 ease-in-out",
-            !isTransitioning ? "opacity-40" : "opacity-0"
-          )}
-        >
+    <section className="relative min-h-screen w-full overflow-hidden flex items-center justify-center py-20 md:py-0 bg-black">
+      
+      {/* Background Carousel with Crossfade + Ken Burns Effect */}
+      <div className="absolute inset-0 bg-black">
+        {/* Base Placeholder Image (Visible immediately) */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/90 z-10" />
           <img 
-            src={getCurrentImageUrl(currentSlide)}
-            alt="Campus"
-            className="w-full h-full object-cover animate-ken-burns grayscale-[20%]"
+            src={localFallbacks[0]}
+            alt="Promote Education Campus"
+            className="w-full h-full object-cover opacity-50"
           />
         </div>
+
+        {/* Current Image */}
         <div 
           className={cn(
-            "absolute inset-0 transition-opacity duration-1000 ease-in-out",
-            isTransitioning ? "opacity-40" : "opacity-0"
+            "absolute inset-0 transition-all duration-[3000ms] ease-in-out",
+            !isTransitioning ? "opacity-100 z-10" : "opacity-0 z-10"
           )}
         >
-          <img 
-            src={getCurrentImageUrl(nextSlide)}
-            alt="Campus"
-            className="w-full h-full object-cover animate-ken-burns grayscale-[20%]"
-          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/90 z-10" />
+          {imagesLoaded[currentSlide] && (
+            <img 
+              src={getCurrentImageUrl(currentSlide)}
+              alt={`College Campus ${currentSlide + 1}`}
+              className="w-full h-full object-cover animate-ken-burns"
+              style={{ imageRendering: 'auto' }}
+            />
+          )}
+        </div>
+
+        {/* Next Image (fading in) */}
+        <div 
+          className={cn(
+            "absolute inset-0 transition-all duration-1000 ease-in-out",
+            isTransitioning ? "opacity-100 z-20" : "opacity-0 z-0"
+          )}
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/90 z-10" />
+          {imagesLoaded[nextSlide] && (
+            <img 
+              src={getCurrentImageUrl(nextSlide)}
+              alt={`College Campus ${nextSlide + 1}`}
+              className="w-full h-full object-cover animate-ken-burns"
+              style={{ imageRendering: 'auto' }}
+            />
+          )}
         </div>
       </div>
 
-      <Container className="relative z-20 py-20">
-        <div className="max-w-4xl">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--action)]/10 text-[var(--action)] text-sm font-medium mb-6 animate-on-load">
-            <Sparkles size={16} />
-            India's Most Trusted Admission Portal
-          </div>
-          
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-medium text-[var(--ink)] tracking-tight mb-6 animate-on-load stagger-1" style={{ fontFamily: 'var(--font-display)' }}>
-            Find Your Dream <br />
-            <span className="text-[var(--action)] font-semibold italic">Academic Future</span>
-          </h1>
-          
-          <p className="text-[var(--ink-2)] text-xl md:text-2xl max-w-2xl mb-10 animate-on-load stagger-2">
-            Get honest reviews, accurate cutoffs, and personalized admissions guidance from experts.
-          </p>
+      {/* Main Content Area */}
+      <div className="relative z-30 max-w-4xl w-full px-6 flex flex-col items-center justify-center translate-y-4 md:translate-y-10">
 
-          <div className="relative max-w-2xl mb-8 animate-on-load stagger-3">
-            <div className={cn(
-              "flex items-center gap-3 bg-white/70 backdrop-blur-xl rounded-2xl md:rounded-3xl shadow-2xl border transition-all duration-300 p-2",
-              focused ? "ring-4 ring-[var(--action)]/10 border-[var(--action)]/30" : "border-white/50"
-            )}>
-              <div className="pl-4 text-[var(--ink-4)]">
-                <Search size={22} />
-              </div>
-              <input
-                type="text"
-                placeholder="Search college, course, or exam..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onFocus={() => setFocused(true)}
-                onBlur={() => setTimeout(() => setFocused(false), 200)}
-                className="flex-1 py-4 md:py-5 text-lg text-[var(--ink)] outline-none placeholder:text-[var(--ink-4)] bg-transparent"
-              />
-              <Button size="lg" className="hidden md:flex">
-                Search
-              </Button>
+    <div className="w-full px-6 md:px-10 py-8 md:py-10 rounded-[40px] bg-white/[0.02] backdrop-blur-sm border border-white/10 shadow-2xl animate-in fade-in zoom-in duration-700 text-center">
+
+      <div className="mb-6 flex flex-col items-center">
+        {/* Hero Logo */}
+        <div className="mb-6 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+          <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-white/20 overflow-hidden bg-white shadow-2xl relative mx-auto">
+            <img
+              src="/images/PromoteEducationLogo.png"
+              alt="Promote Education"
+              className="w-full h-full object-contain scale-[1.2] -translate-y-[2px]" />
+          </div>
+        </div>
+
+        <h1 className="text-4xl md:text-5xl font-black text-white mb-3 tracking-tighter leading-[1.1]">
+          Top <span className="text-sky-400">Colleges in India 2026</span>
+          <span className="block text-xl md:text-2xl font-medium text-white/90 mt-1">NIRF Rankings & Admissions</span>
+        </h1>
+        <p className="text-white/60 text-sm md:text-base max-w-2xl mx-auto font-medium leading-relaxed">
+          Complete admission guidance for Engineering, Management, and Medical across India based on latest data.
+        </p>
+      </div>
+
+      {/* Stats Chips */}
+      <div className="flex flex-wrap justify-center gap-3 mb-6">
+        {stats.map((stat, i) => (
+          <div
+            key={i}
+            className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/70 text-[10px] font-bold uppercase tracking-wider hover:bg-white/10 transition-colors"
+          >
+            <stat.icon size={12} className="text-amber-400" />
+            {stat.label}
+          </div>
+        ))}
+      </div>
+
+      {/* Combined Search Bar */}
+      <div className="relative max-w-4xl mx-auto mb-6 group">
+        <div className={cn(
+          "flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 p-2 sm:p-1 rounded-[24px] sm:rounded-full shadow-2xl transition-all duration-300",
+          focused ? "bg-white ring-4 ring-amber-400/20" : "bg-white/95"
+        )}>
+          <div className="flex items-center flex-1">
+            <div className="pl-4 sm:pl-5 text-gray-400">
+              <Search size={18} />
             </div>
-
-            {focused && results.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-4 bg-white/90 backdrop-blur-2xl rounded-2xl shadow-2xl border border-[var(--border)] overflow-hidden z-50 animate-on-load">
-                {results.map((res) => (
-                  <button
-                    key={res.id}
-                    onClick={() => router.push(`/colleges/${res.slug}`)}
-                    className="w-full flex items-center gap-4 px-6 py-4 hover:bg-[var(--action)]/5 transition-all text-left border-b border-[var(--border)]/50 last:border-0 group"
-                  >
-                    <div className="p-2 rounded-lg bg-[var(--surface-2)] group-hover:bg-[var(--action)]/10 transition-colors">
-                      <MapPin size={18} className="text-[var(--ink-3)] group-hover:text-[var(--action)]" />
-                    </div>
-                    <div>
-                      <div className="font-semibold text-[var(--ink)] group-hover:text-[var(--action)] transition-colors">{res.name}</div>
-                      <div className="text-sm text-[var(--ink-3)]">{res.stream} • {res.location}</div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
+            <input
+              type="text"
+              placeholder="Search Colleges, Courses, Exams..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setTimeout(() => setFocused(false), 200)}
+              className="flex-1 bg-transparent px-2 py-3 sm:py-2.5 text-xs sm:text-sm font-medium text-gray-800 outline-none border-none placeholder:text-gray-400" />
           </div>
+          <button className="px-8 py-3 sm:py-2.5 bg-blue-600 text-white text-xs sm:text-sm font-bold rounded-[18px] sm:rounded-full hover:bg-blue-700 active:scale-95 transition-all shadow-lg shadow-blue-600/20">
+            Search
+          </button>
+        </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-sm text-[var(--ink-3)] animate-on-load stagger-4">
-            <span className="font-medium">Popular:</span>
-            {popularSearches.map((item, i) => (
+        {/* Search Results Dropdown */}
+        {focused && results.length > 0 && (
+          <div className="absolute top-full left-0 right-0 mt-3 bg-white rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl border border-gray-100 animate-in slide-in-from-top-2 duration-200 z-[60]">
+            {results.map((res, i) => (
               <button
                 key={i}
-                onClick={() => setQuery(item.query)}
-                className="px-4 py-2 bg-white/50 backdrop-blur-md rounded-full border border-white/50 hover:bg-[var(--action)] hover:text-white hover:border-[var(--action)] transition-all duration-300"
+                className="w-full flex flex-col items-start px-5 md:px-6 py-3 md:py-4 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0 text-left"
               >
-                {item.label}
+                <span className="text-xs md:text-sm font-bold text-gray-800">{res.name}</span>
+                <span className="text-[9px] md:text-[10px] text-gray-400 uppercase tracking-wider">{res.stream} • {res.location}</span>
               </button>
             ))}
           </div>
+        )}
+      </div>
 
-          <div className="mt-12 flex flex-wrap gap-6 animate-on-load stagger-5">
-            <Button size="lg" className="group" onClick={() => router.push('/colleges')}>
-              Explore Colleges
-              <ArrowRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <Button variant="outline" size="lg">
-              Compare Exams
-            </Button>
-          </div>
+      {/* CTAs */}
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
+        <button className="w-full sm:w-auto px-8 sm:px-10 py-3.5 sm:py-4 bg-blue-600 text-white text-sm font-bold rounded-xl md:rounded-2xl hover:bg-blue-700 hover:-translate-y-1 transition-all shadow-xl shadow-blue-600/30 flex items-center justify-center gap-2">
+          Find Top Colleges
+          <ArrowRight size={18} />
+        </button>
+        <button className="w-full sm:w-auto px-8 sm:px-10 py-3.5 sm:py-4 bg-white/10 hover:bg-white/20 text-white text-sm font-bold border border-white/30 rounded-xl md:rounded-2xl transition-all flex items-center justify-center gap-2">
+          Counseling 2026
+        </button>
+      </div>
+    </div>
+
+    {/* Bottom Trust Badges */}
+    <div className="flex flex-wrap justify-center gap-8 md:gap-12 mt-12">
+      {trustBadges.map((badge, i) => (
+        <div key={i} className="flex items-center gap-2 text-white/50 text-[11px] font-bold uppercase tracking-widest group cursor-default">
+          <badge.icon size={16} className="text-amber-400 group-hover:scale-125 transition-transform" />
+          {badge.label}
         </div>
-      </Container>
+      ))}
+    </div>
 
-      <style jsx>{`
+  </div><style jsx>{`
         @keyframes kenBurns {
-          0% { transform: scale(1) translate(0, 0); }
-          100% { transform: scale(1.1) translate(-2%, -2%); }
+          0% {
+            transform: scale(1);
+          }
+          100% {
+            transform: scale(1.1);
+          }
         }
         .animate-ken-burns {
           animation: kenBurns 20s ease-in-out infinite alternate;

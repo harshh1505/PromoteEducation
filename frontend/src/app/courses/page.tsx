@@ -6,7 +6,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { 
   Stethoscope, Briefcase, Code, FlaskConical, Award,
-  ChevronDown, Search, Filter, ArrowRight, Calendar, BookOpen, TrendingUp, Sparkles
+  ChevronDown, Search, Filter, ArrowRight, Calendar, BookOpen, TrendingUp
 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
@@ -120,7 +120,6 @@ export default function CoursesPage() {
                 </Card>
 
                 <Card className="p-5 bg-gradient-to-br from-[var(--action)] to-[var(--action)]/90 text-white border-none">
-                  <Sparkles size={20} className="mb-3" />
                   <h4 className="font-semibold text-sm mb-1">Need Guidance?</h4>
                   <p className="text-xs text-white/80 mb-4">Talk to experts for course selection.</p>
                   <Button variant="secondary" size="sm" className="w-full bg-white text-[var(--action)] hover:bg-white/90">

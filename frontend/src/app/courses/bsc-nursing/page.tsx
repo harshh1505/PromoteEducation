@@ -6,14 +6,13 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { supabase } from '@/lib/supabase'
 import {
-  ArrowRight, BookOpen, Clock, Eye, TrendingUp, Star,
-  ChevronRight, Search, Filter, Tag, Users, Flame,
+  Lightbulb, Building, MapPin, DollarSign, CheckCircle,
   GraduationCap, Code, Briefcase, FlaskConical, Globe,
-  Cpu, BarChart3, Layers, Award, Zap, MessageCircle,
+  Cpu, BarChart3, Layers, Award, Zap,
   Calendar, User, ArrowUpRight, Bookmark, Share2,
-  ChevronDown, Play, FileText, Hash, Trophy, Target,
-  Lightbulb, Building, MapPin, DollarSign, CheckCircle, Sparkles,
-  Compass, Send, Heart, Stethoscope, ClipboardList, Activity
+  ChevronDown, Play, FileText, Hash, Trophy, Target, Compass,
+  Users, Clock, Eye, ArrowRight, Star, Search, Flame, Stethoscope, BookOpen, ClipboardList,
+  Heart, Activity, MessageCircle
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 

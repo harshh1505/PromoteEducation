@@ -6,8 +6,8 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import {
     ArrowRight, Award, Target, Users, BookOpen, ChevronLeft, ChevronRight,
-    Shield, TrendingUp, Sparkles, Globe, MessageSquare, Quote, ExternalLink,
-    Rocket, Heart, Lightbulb, Stethoscope, GraduationCap,
+    Shield, TrendingUp, Globe, MessageSquare, Quote, ExternalLink,
+    Rocket, Heart, Lightbulb, Stethoscope, GraduationCap, CheckCircle,
     Briefcase, Code, Palette, Search, Clock, FileCheck, ClipboardList,
     CheckCircle2, Star, Zap, Gamepad2, Compass, Trophy,
     Dice1, Dice2, Dice3, Dice4, Dice5, Dice6
@@ -571,10 +571,7 @@ export default function AboutPage() {
 
                                     {gameResult && (
                                         <div className="p-6 bg-sky-50 border border-sky-200 rounded-2xl animate-in fade-in slide-in-from-top-4">
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <Sparkles size={16} className="text-sky-500" />
-                                                <p className="text-[10px] font-black text-sky-600 uppercase tracking-widest">Your Strategy</p>
-                                            </div>
+                                            <p className="text-[10px] font-black text-sky-600 uppercase tracking-widest mb-2">Your Strategy</p>
                                             <p className="text-slate-900 font-bold leading-relaxed">{gameResult}</p>
                                         </div>
                                     )}
@@ -795,7 +792,7 @@ export default function AboutPage() {
                             {
                                 title: 'End-to-end admission support',
                                 desc: 'SOP/LOR guidance, accurate form filling, deadline tracking, mock interviews. We manage the paperwork so you can focus on your entrance exams.',
-                                icon: Sparkles
+                                icon: CheckCircle
                             },
                             {
                                 title: 'Scholarship & loan help',
@@ -912,7 +909,6 @@ export default function AboutPage() {
                             {/* Text Content */}
                             <div className="w-full mb-16">
                                 <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-sky-500/10 border border-sky-500/20 mb-8">
-                                    <Sparkles size={14} className="text-sky-600" />
                                     <span className="text-[10px] font-black text-sky-600 uppercase tracking-widest">Exclusive Reward</span>
                                 </div>
                                 <h2 className="font-display text-4xl md:text-6xl text-slate-900 mb-6 tracking-tight leading-tight">
@@ -981,7 +977,7 @@ export default function AboutPage() {
                                         <div className="pb-10 border-b border-sky-100/50">
                                             <div className="flex items-start gap-6 mb-10">
                                                 <div className="w-16 h-16 rounded-2xl bg-white flex items-center justify-center shadow-sm shrink-0 group-hover:rotate-12 transition-transform duration-500">
-                                                    <Sparkles className="text-sky-600 w-8 h-8" />
+                                                    <Award className="text-sky-600 w-8 h-8" />
                                                 </div>
 
                                                 <div>

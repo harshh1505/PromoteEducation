@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowRight, Sparkles, CheckCircle } from 'lucide-react'
+import { ArrowRight, CheckCircle } from 'lucide-react'
 import MatchScoreRing from '@/components/ui/MatchScoreRing'
 
 const questions = [
@@ -48,7 +48,6 @@ export default function AIMatchSection() {
           {/* Left */}
           <div>
             <div className="flex items-center gap-2 mb-5">
-              <Sparkles size={14} style={{ color: 'var(--gold)' }} />
               <span className="text-xs font-medium tracking-wider uppercase" style={{ color: 'var(--gold)', letterSpacing: '0.1em' }}>
                 AI-powered matching
               </span>
@@ -80,7 +79,6 @@ export default function AIMatchSection() {
               className="flex items-center gap-2 px-6 py-3 rounded-pill text-sm font-medium transition-all duration-150 hover:brightness-110 active:scale-95"
               style={{ background: 'var(--gold)', color: 'var(--midnight)', borderRadius: '999px' }}
             >
-              <Sparkles size={14} />
               Get my matches
               <ArrowRight size={14} />
             </button>
