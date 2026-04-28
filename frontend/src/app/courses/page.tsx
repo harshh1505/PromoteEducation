@@ -1,343 +1,236 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import {
-  ArrowRight, GraduationCap, Stethoscope, Briefcase,
-  Code, FlaskConical, Award, Users, BookOpen,
-  TrendingUp, Sparkles, ChevronRight, Search,
-  Target, Globe, ShieldCheck, HeartPulse
+import { 
+  Stethoscope, Briefcase, Code, FlaskConical, Award,
+  ChevronDown, Search, Filter, ArrowRight, Calendar, BookOpen, TrendingUp
 } from 'lucide-react'
 
 const COURSE_STREAMS = [
-  {
-    id: 'btech',
-    title: 'B.Tech & Engineering',
-    description: 'Master JEE Main, JEE Advanced, and specialized engineering branches.',
-    icon: Code,
-    color: '#0ea5e9',
-    bg: '#f0f9ff',
-    border: '#bae6fd',
-    stats: '240+ Articles',
-    popular: ['Computer Science', 'AI & ML', 'Electronics', 'Mechanical'],
-    href: '/courses/btech'
-  },
-  {
-    id: 'mbbs',
-    title: 'MBBS & Medical',
-    description: 'Your roadmap from NEET preparation to clinical residency and beyond.',
-    icon: Stethoscope,
-    color: '#ef4444',
-    bg: '#fef2f2',
-    border: '#fecaca',
-    stats: '260+ Articles',
-    popular: ['NEET UG', 'Top Medical Colleges', 'Clinical Postings', 'Specializations'],
-    href: '/courses/mbbs'
-  },
-  {
-    id: 'mba',
-    title: 'MBA & Management',
-    description: 'Prepare for CAT, GMAT and lead the corporate world with elite B-Schools.',
-    icon: Briefcase,
-    color: '#f59e0b',
-    bg: '#fffbeb',
-    border: '#fde68a',
-    stats: '180+ Articles',
-    popular: ['CAT Strategy', 'IIM Selection', 'ROI Analysis', 'Corporate Placement'],
-    href: '/courses/mba'
-  },
-  {
-    id: 'mtech',
-    title: 'M.Tech & PG Engg',
-    description: 'Advanced research and specialization pathways through GATE and beyond.',
-    icon: GraduationCap,
-    color: '#8b5cf6',
-    bg: '#f5f3ff',
-    border: '#ddd6fe',
-    stats: '120+ Articles',
-    popular: ['GATE 2026', 'Research Labs', 'Direct Ph.D', 'PSU Recruitment'],
-    href: '/courses/mtech'
-  },
-  {
-    id: 'bsc-nursing',
-    title: 'B.Sc Nursing',
-    description: 'Step into the noble field of clinical care and advanced nursing practice.',
-    icon: HeartPulse,
-    color: '#10b981',
-    bg: '#ecfdf5',
-    border: '#a7f3d0',
-    stats: '150+ Articles',
-    popular: ['AIIMS Nursing', 'Clinical Skills', 'M.Sc Specialization', 'Staff Jobs'],
-    href: '/courses/bsc-nursing'
-  },
-  {
-    id: 'bds',
-    title: 'BDS & Dental',
-    description: 'Excellence in oral health, clinical procedures, and MDS specialization.',
-    icon: FlaskConical,
-    color: '#06b6d4',
-    bg: '#ecfeff',
-    border: '#a5f3fc',
-    stats: '140+ Articles',
-    popular: ['NEET MDS', 'Prosthodontics', 'Private Practice', 'Oral Surgery'],
-    href: '/courses/bds'
-  }
+  { id: 'engineering', name: 'Engineering/Technology', icon: Code, color: '#0ea5e9' },
+  { id: 'medical', name: 'Medical', icon: Stethoscope, color: '#ef4444' },
+  { id: 'management', name: 'Management', icon: Briefcase, color: '#f59e0b' },
+  { id: 'arts', name: 'Arts', icon: BookOpen, color: '#10b981' },
+  { id: 'science', name: 'Science', icon: FlaskConical, color: '#8b5cf6' },
+  { id: 'commerce', name: 'Commerce', icon: TrendingUp, color: '#06b6d4' },
+  { id: 'law', name: 'Law', icon: Award, color: '#f97316' },
+  { id: 'others', name: 'Others', icon: ChevronDown, color: '#64748b' },
 ]
 
-export default function CoursesHubPage() {
+const MOCK_COURSES = [
+  { id: 1, name: 'B.Tech in Computer Science', stream: 'engineering', duration: '4 Years', eligibility: 'JEE Main, Class 12 with PCM', career: 'Software Engineer, Data Scientist', avgSalary: '₹8-25 LPA' },
+  { id: 2, name: 'MBBS', stream: 'medical', duration: '5.5 Years', eligibility: 'NEET UG, Class 12 with PCB', career: 'Doctor, Specialist', avgSalary: '₹6-50 LPA' },
+  { id: 3, name: 'MBA in Marketing', stream: 'management', duration: '2 Years', eligibility: 'CAT/MAT, Graduation', career: 'Marketing Manager, CEO', avgSalary: '₹8-30 LPA' },
+  { id: 4, name: 'B.Tech in Electronics', stream: 'engineering', duration: '4 Years', eligibility: 'JEE Main, Class 12 with PCM', career: 'Electronics Engineer, VLSI Designer', avgSalary: '₹6-20 LPA' },
+  { id: 5, name: 'BDS', stream: 'medical', duration: '5 Years', eligibility: 'NEET UG, Class 12 with PCB', career: 'Dentist, Oral Surgeon', avgSalary: '₹4-15 LPA' },
+  { id: 6, name: 'M.Tech in Data Science', stream: 'engineering', duration: '2 Years', eligibility: 'GATE, B.Tech', career: 'Data Scientist, ML Engineer', avgSalary: '₹10-35 LPA' },
+  { id: 7, name: 'MBA in Finance', stream: 'management', duration: '2 Years', eligibility: 'CAT/XAT, Graduation', career: 'Investment Banker, CFO', avgSalary: '₹10-40 LPA' },
+  { id: 8, name: 'B.Sc in Nursing', stream: 'medical', duration: '4 Years', eligibility: 'Class 12 with PCB', career: 'Nurse, Healthcare Admin', avgSalary: '₹3-8 LPA' },
+  { id: 9, name: 'B.Sc in Physics', stream: 'science', duration: '3 Years', eligibility: 'Class 12 with PCMB', career: 'Researcher, Teacher', avgSalary: '₹3-12 LPA' },
+  { id: 10, name: 'LLB', stream: 'law', duration: '3 Years', eligibility: 'CLAT, Class 12', career: 'Lawyer, Judge', avgSalary: '₹5-25 LPA' },
+  { id: 11, name: 'B.A. in Economics', stream: 'arts', duration: '3 Years', eligibility: 'Class 12', career: 'Economist, Analyst', avgSalary: '₹4-15 LPA' },
+  { id: 12, name: 'M.Sc in Chemistry', stream: 'science', duration: '2 Years', eligibility: 'B.Sc Chemistry', career: 'Researcher, Chemist', avgSalary: '₹4-12 LPA' },
+  { id: 13, name: 'B.Com', stream: 'commerce', duration: '3 Years', eligibility: 'Class 12 Commerce', career: 'Accountant, CA', avgSalary: '₹3-12 LPA' },
+  { id: 14, name: 'BBA', stream: 'management', duration: '3 Years', eligibility: 'Class 12', career: 'Manager, Entrepreneur', avgSalary: '₹4-15 LPA' },
+  { id: 15, name: 'BCA', stream: 'others', duration: '3 Years', eligibility: 'Class 12', career: 'Programmer, Web Developer', avgSalary: '₹4-12 LPA' },
+  { id: 16, name: 'BA LLB', stream: 'law', duration: '5 Years', eligibility: 'CLAT, Class 12', career: 'Corporate Lawyer, Judge', avgSalary: '₹6-30 LPA' },
+]
+
+export default function CoursesPage() {
+  const [search, setSearch] = useState('')
+  const [selectedStream, setSelectedStream] = useState<string | null>(null)
+  const [sortBy, setSortBy] = useState('name')
+  const [showFilters, setShowFilters] = useState(false)
+
+  const filteredCourses = useMemo(() => {
+    let courses = [...MOCK_COURSES]
+    
+    if (search) {
+      courses = courses.filter(c => 
+        c.name.toLowerCase().includes(search.toLowerCase()) ||
+        c.eligibility.toLowerCase().includes(search.toLowerCase()) ||
+        c.career.toLowerCase().includes(search.toLowerCase())
+      )
+    }
+    
+    if (selectedStream) {
+      courses = courses.filter(c => c.stream === selectedStream)
+    }
+    
+    if (sortBy === 'name') {
+      courses.sort((a, b) => a.name.localeCompare(b.name))
+    } else if (sortBy === 'duration') {
+      courses.sort((a, b) => a.duration.localeCompare(b.duration))
+    }
+    
+    return courses
+  }, [search, selectedStream, sortBy])
+
+  const getStreamColor = (stream: string) => {
+    return COURSE_STREAMS.find(s => s.id === stream)?.color || '#64748b'
+  }
+
+  const getStreamName = (stream: string) => {
+    return COURSE_STREAMS.find(s => s.id === stream)?.name || stream
+  }
+
   return (
-    <main style={{ minHeight: '100vh', background: '#f8fafc', fontFamily: "'DM Sans', sans-serif" }}>
-      <style dangerouslySetInnerHTML={{
-        __html: `
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap');
-        .font-display { font-family: 'Playfair Display', Georgia, serif; }
-        .hero-glow {
-          position: absolute;
-          top: 0; left: 50%;
-          transform: translateX(-50%);
-          width: 100vw;
-          height: 600px;
-          background: radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.08) 0%, transparent 70%);
-          pointer-events: none;
-          z-index: 0;
-        }
-        .stream-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .stream-card:hover { transform: translateY(-8px); }
-        .container {
-          max-width: 1280px;
-          margin: 0 auto;
-          padding: 0 24px;
-        }
-        `
-      }} />
-
+    <>
       <Navbar />
-
-      {/* Hero Section */}
-      <section style={{ padding: '160px 0 80px', position: 'relative', overflow: 'hidden' }}>
-        <div className="hero-glow" />
-        <div className="container" style={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '99px', background: '#f1f5f9', marginBottom: '24px' }}>
-            <Sparkles size={14} style={{ color: '#0ea5e9' }} />
-            <span style={{ fontSize: '12px', fontWeight: 700, color: '#475569', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-              Your Education Journey Starts Here
-            </span>
+      <main className="min-h-screen bg-surface">
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="mb-8">
+            <h1 className="text-3xl md:text-4xl font-medium text-ink mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+              Explore <span className="text-action">Courses</span>
+            </h1>
+            <p className="text-ink-2 text-lg">
+              Find the right course for your career from {MOCK_COURSES.length}+ courses.
+            </p>
           </div>
 
-          <h1 className="font-display" style={{ fontSize: 'clamp(40px, 6vw, 72px)', color: '#0f172a', lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '24px' }}>
-            Choose Your Path to <br />
-            <em style={{ color: '#0ea5e9' }}>Academic Excellence</em>
-          </h1>
+          <div className="flex flex-col lg:flex-row gap-4 mb-6">
+            <div className="flex-1 relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+              <input
+                type="text"
+                placeholder="Search courses or colleges..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-action/20"
+              />
+            </div>
+            
+            <button 
+              onClick={() => setShowFilters(!showFilters)}
+              className="lg:hidden flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-600"
+            >
+              <Filter size={20} />
+              Filters
+            </button>
 
-          <p style={{ fontSize: '18px', color: '#64748b', lineHeight: 1.6, maxWidth: '640px', margin: '0 auto 40px' }}>
-            India's most comprehensive Knowledge Hub for prospective students. Expert guidance, detailed roadmaps, and data-driven insights for every major stream.
-          </p>
-
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '32px', flexWrap: 'wrap' }}>
-            {[
-              { label: 'Courses Covered', value: '12+', icon: BookOpen },
-              { label: 'Active Learners', value: '2.5L+', icon: Users },
-              { label: 'Expert Articles', value: '1200+', icon: Award },
-            ].map((stat, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#e0f2fe', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0ea5e9' }}>
-                  <stat.icon size={20} />
-                </div>
-                <div style={{ textAlign: 'left' }}>
-                  <p style={{ fontSize: '20px', fontWeight: 800, color: '#0f172a', lineHeight: 1 }}>{stat.value}</p>
-                  <p style={{ fontSize: '12px', color: '#64748b', fontWeight: 600 }}>{stat.label}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Streams Grid */}
-      <section style={{ padding: '40px 0 100px' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', gap: '24px' }}>
-            {COURSE_STREAMS.map((stream) => (
-              <Link key={stream.id} href={stream.href}>
-                <div className="stream-card" style={{
-                  background: '#ffffff',
-                  borderRadius: '24px',
-                  padding: '32px',
-                  height: '100%',
-                  border: '1px solid #e2e8f0',
-                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  cursor: 'pointer'
-                }}>
-                  <div style={{
-                    width: '64px',
-                    height: '64px',
-                    borderRadius: '16px',
-                    background: stream.bg,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: stream.color,
-                    marginBottom: '24px'
-                  }}>
-                    <stream.icon size={32} />
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                    <h3 style={{ fontSize: '22px', fontWeight: 700, color: '#0f172a' }}>{stream.title}</h3>
-                    <div style={{
-                      fontSize: '11px',
-                      fontWeight: 800,
-                      padding: '4px 12px',
-                      borderRadius: '99px',
-                      background: stream.bg,
-                      color: stream.color,
-                      border: `1px solid ${stream.border}`
-                    }}>
-                      {stream.stats}
-                    </div>
-                  </div>
-
-                  <p style={{ fontSize: '15px', color: '#64748b', lineHeight: 1.6, marginBottom: '24px', flex: 1 }}>
-                    {stream.description}
-                  </p>
-
-                  <div style={{ marginBottom: '28px' }}>
-                    <p style={{ fontSize: '11px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '12px' }}>
-                      Popular in this stream
-                    </p>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                      {stream.popular.map(tag => (
-                        <span key={tag} style={{
-                          fontSize: '12px',
-                          fontWeight: 600,
-                          padding: '6px 14px',
-                          borderRadius: '8px',
-                          background: '#f8fafc',
-                          border: '1px solid #f1f5f9',
-                          color: '#475569'
-                        }}>
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    fontSize: '14px',
-                    fontWeight: 700,
-                    color: stream.color
-                  }}>
-                    Explore Knowledge Hub <ArrowRight size={16} />
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section style={{ padding: '100px 0', background: '#0f172a', color: '#ffffff' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
-            <div>
-              <h2 className="font-display" style={{ fontSize: '42px', lineHeight: 1.1, marginBottom: '24px' }}>
-                Why Students Trust <br />
-                <span style={{ color: '#38bdf8' }}>Our Knowledge Hubs</span>
-              </h2>
-              <p style={{ color: '#94a3b8', fontSize: '17px', lineHeight: 1.7, marginBottom: '40px' }}>
-                We don't just provide information; we build roadmaps. Our stream-specific hubs are designed to guide you from high school foundation to your professional launch.
-              </p>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
-                {[
-                  { title: 'Verified Content', desc: 'Updated weekly by academic experts.', icon: ShieldCheck },
-                  { title: 'Data-Driven', desc: 'ROI and placement trends for every course.', icon: TrendingUp },
-                  { title: 'Expert Roadmap', desc: 'Step-by-step prep strategy for exams.', icon: Target },
-                  { title: 'Global Reach', desc: 'Information on international pathways.', icon: Globe },
-                ].map((f, i) => (
-                  <div key={i}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-                      <f.icon size={18} style={{ color: '#38bdf8' }} />
-                      <h4 style={{ fontWeight: 700, fontSize: '16px' }}>{f.title}</h4>
-                    </div>
-                    <p style={{ fontSize: '13px', color: '#64748b', lineHeight: 1.5 }}>{f.desc}</p>
-                  </div>
+            <div className={`
+              ${showFilters ? 'flex' : 'hidden'} lg:flex
+              flex-wrap gap-3
+            `}>
+              <select
+                value={selectedStream || ''}
+                onChange={(e) => setSelectedStream(e.target.value || null)}
+                className="px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-600 focus:outline-none"
+              >
+                <option value="">All Streams</option>
+                {COURSE_STREAMS.map(s => (
+                  <option key={s.id} value={s.id}>{s.name}</option>
                 ))}
-              </div>
-            </div>
+              </select>
 
-            <div style={{ position: 'relative' }}>
-              <div style={{
-                background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)',
-                borderRadius: '32px',
-                padding: '40px',
-                border: '1px solid rgba(255,255,255,0.1)',
-                boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px' }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(56,189,248,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#38bdf8' }}>
-                    <GraduationCap size={24} />
-                  </div>
-                  <div>
-                    <p style={{ fontSize: '12px', fontWeight: 700, color: '#38bdf8', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Premium Resource</p>
-                    <h3 style={{ fontSize: '20px', fontWeight: 700 }}>2026 Admission Guide</h3>
-                  </div>
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  {[
-                    'Complete College Selection Matrix',
-                    'Round-by-Round Counseling Strategy',
-                    'Verified Placement Reports 2025',
-                    'Expert Branch Comparison Tool'
-                  ].map((item, i) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '16px 0', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                      <div style={{ width: '20px', height: '20px', borderRadius: '50%', background: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <ChevronRight size={12} color="white" />
-                      </div>
-                      <span style={{ fontSize: '14px', color: '#cbd5e1', fontWeight: 500 }}>{item}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <button style={{
-                  width: '100%',
-                  marginTop: '32px',
-                  padding: '16px',
-                  borderRadius: '12px',
-                  background: '#38bdf8',
-                  color: '#0f172a',
-                  fontWeight: 800,
-                  fontSize: '14px',
-                  border: 'none',
-                  cursor: 'pointer'
-                }}>
-                  Get Access Now
-                </button>
-              </div>
-
-              {/* Decorative glow */}
-              <div style={{
-                position: 'absolute',
-                top: '-20px', right: '-20px',
-                width: '100px', height: '100px',
-                background: 'radial-gradient(circle, rgba(56,189,248,0.2) 0%, transparent 70%)',
-                zIndex: -1
-              }} />
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-600 focus:outline-none"
+              >
+                <option value="name">Sort by Name</option>
+                <option value="duration">Sort by Duration</option>
+              </select>
             </div>
           </div>
-        </div>
-      </section>
 
+          <div className="mb-6 flex flex-wrap gap-2">
+            <button
+              onClick={() => setSelectedStream(null)}
+              className={`
+                px-4 py-2 rounded-full text-sm font-medium transition-colors
+                ${!selectedStream ? 'bg-action text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}
+              `}
+            >
+              All
+            </button>
+            {COURSE_STREAMS.map(stream => (
+              <button
+                key={stream.id}
+                onClick={() => setSelectedStream(stream.id)}
+                className={`
+                  px-4 py-2 rounded-full text-sm font-medium transition-colors
+                  ${selectedStream === stream.id 
+                    ? 'text-white' 
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}
+                `}
+                style={{ 
+                  backgroundColor: selectedStream === stream.id ? stream.color : undefined,
+                  color: selectedStream === stream.id ? 'white' : undefined 
+                }}
+              >
+                {stream.name}
+              </button>
+            ))}
+          </div>
+
+          <div className="mb-4 text-sm text-ink-3">
+            Showing {filteredCourses.length} of {MOCK_COURSES.length} courses
+          </div>
+
+          <div className="grid gap-4">
+            {filteredCourses.map(course => (
+              <div
+                key={course.id}
+                className="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-lg transition-shadow"
+              >
+                <div className="flex flex-col md:flex-row md:items-center gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span 
+                        className="text-xs font-medium px-2 py-0.5 rounded-full text-white"
+                        style={{ backgroundColor: getStreamColor(course.stream) }}
+                      >
+                        {getStreamName(course.stream)}
+                      </span>
+                      <span className="text-xs text-slate-500 flex items-center gap-1">
+                        <Calendar size={12} /> {course.duration}
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-semibold text-ink mb-2">{course.name}</h3>
+                    <div className="flex flex-col gap-1.5 text-sm text-ink-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-slate-500 w-20">Eligibility:</span>
+                        {course.eligibility}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-slate-500 w-20">Career:</span>
+                        {course.career}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-slate-500 w-20">Avg Salary:</span>
+                        <span className="text-action font-medium">{course.avgSalary}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Link 
+                    href={`/courses/${course.id}`}
+                    className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg bg-action text-white font-medium hover:bg-action/90 transition-colors"
+                  >
+                    View Details
+                    <ArrowRight size={16} />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {filteredCourses.length === 0 && (
+            <div className="text-center py-16">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 flex items-center justify-center">
+                <Search size={24} className="text-slate-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-ink mb-2">No courses found</h3>
+              <p className="text-ink-2">Try adjusting your search or filters.</p>
+            </div>
+          )}
+        </div>
+      </main>
       <Footer />
-    </main>
+    </>
   )
 }

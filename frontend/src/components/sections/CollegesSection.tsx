@@ -650,7 +650,7 @@ export default function CollegesSection() {
   }
 
   return (
-    <section id="colleges" className="py-24 relative overflow-hidden bg-slate-50">
+    <section id="colleges" className="pt-12 pb-24 relative overflow-hidden bg-slate-50">
       <div className="w-full max-w-[1600px] mx-auto px-6">
         
         <div className="mb-12">
@@ -673,7 +673,7 @@ export default function CollegesSection() {
                 key={f.value}
                 onClick={() => setActiveStream(f.value)}
                 className={cn(
-                  "px-8 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all duration-300 shrink-0",
+                  "px-8 py-3 rounded-full text-sm font-black uppercase tracking-widest transition-all duration-300 shrink-0",
                   activeStream === f.value 
                     ? "bg-slate-900 text-white shadow-xl shadow-slate-900/20" 
                     : "bg-white border border-slate-200 text-slate-500 hover:border-slate-400"

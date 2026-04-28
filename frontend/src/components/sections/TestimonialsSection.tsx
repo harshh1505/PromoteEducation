@@ -56,7 +56,7 @@ export default function TestimonialsSection() {
               What our students say
             </h2>
             <p className="mt-1.5 text-sm" style={{ color: 'var(--ink-3)' }}>
-              2M+ verified testimonials from real students — no paid placements
+              Real reviews from students who got admitted through our counseling
             </p>
           </div>
 
@@ -72,7 +72,7 @@ export default function TestimonialsSection() {
             </div>
             <div>
               <div className="text-sm font-medium" style={{ color: 'var(--ink)', letterSpacing: '-0.01em' }}>4.8 / 5.0</div>
-              <div className="text-xs" style={{ color: 'var(--ink-3)' }}>from 2M+ testimonials</div>
+              <div className="text-xs" style={{ color: 'var(--ink-3)' }}>verified reviews</div>
             </div>
           </div>
         </div>

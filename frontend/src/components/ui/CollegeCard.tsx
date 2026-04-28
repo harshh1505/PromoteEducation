@@ -32,7 +32,7 @@ export default function CollegeCard({ college, onOpenLead, onOpenReview }: Colle
           
           {/* Top Badges */}
           <div className="absolute top-3 right-3 flex items-center gap-2">
-            <div className="bg-sky-500 text-white text-[9px] font-black px-2 py-0.5 rounded-md shadow-lg">
+            <div className="bg-sky-500 text-white text-[10px] font-black px-2 py-0.5 rounded-md shadow-lg">
               {college.rating || '4.5'}/5
             </div>
           </div>
@@ -41,16 +41,20 @@ export default function CollegeCard({ college, onOpenLead, onOpenReview }: Colle
           <div className="absolute bottom-3 left-4 right-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-white p-1 flex-shrink-0 shadow-xl">
                 <img 
-                  src={college.logo || `https://ui-avatars.com/api/?name=${college.name}&background=random`} 
+                  src={college.logo || `https://ui-avatars.com/api/?name=${college.name}&background=0D9488&color=fff`} 
                   alt="logo" 
                   className="w-full h-full rounded-full object-contain"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = `https://ui-avatars.com/api/?name=${college.name}&background=0D9488&color=fff`;
+                  }}
                 />
             </div>
             <div className="min-w-0">
                 <h3 className="text-white font-bold text-sm leading-tight line-clamp-1">
                   {college.name}
                 </h3>
-                <p className="text-white/70 text-[10px] flex items-center gap-1 mt-0.5">
+                <p className="text-white/80 text-xs flex items-center gap-1 mt-0.5">
                   <MapPin size={10} /> {college.location}, {college.state} | {college.type}
                 </p>
             </div>
@@ -67,7 +71,7 @@ export default function CollegeCard({ college, onOpenLead, onOpenReview }: Colle
                   {college.stream} Program
                 </p>
                 <p className="text-sky-600 font-black text-sm">
-                  {formatFee(college.totalFee)} <span className="text-slate-400 text-[10px] font-medium">Total Fees</span>
+                  {formatFee(college.totalFee)} <span className="text-slate-500 text-xs font-medium">Total Fees</span>
                 </p>
             </div>
             <div className="text-right flex flex-col items-end">
@@ -77,7 +81,7 @@ export default function CollegeCard({ college, onOpenLead, onOpenReview }: Colle
                 </div>
                 <button 
                   onClick={() => onOpenReview?.(college)}
-                  className="text-[9px] text-sky-600 font-black uppercase tracking-tighter hover:underline"
+                  className="text-[10px] text-sky-600 font-black uppercase tracking-wide hover:underline"
                 >
                   Rate & Review
                 </button>
@@ -89,11 +93,11 @@ export default function CollegeCard({ college, onOpenLead, onOpenReview }: Colle
           {/* Stats Row - AdmissionCampus style */}
           <div className="grid grid-cols-2 gap-4 mb-5 border-l-2 border-l-sky-500/20 pl-3">
             <div>
-                <p className="text-[9px] text-slate-400 uppercase font-bold tracking-wider mb-0.5">No. of Courses</p>
+                <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-0.5">No. of Courses</p>
                 <p className="text-xs font-black text-slate-800">{college.numCourses || '12'}</p>
             </div>
             <div className="border-l border-slate-100 pl-4">
-                <p className="text-[9px] text-slate-400 uppercase font-bold tracking-wider mb-0.5">Estb. Year</p>
+                <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-0.5">Estb. Year</p>
                 <p className="text-xs font-black text-slate-800">{college.establishmentYear || '1998'}</p>
             </div>
           </div>
@@ -102,7 +106,7 @@ export default function CollegeCard({ college, onOpenLead, onOpenReview }: Colle
           <div className="mt-auto space-y-2">
             <button 
               onClick={() => onOpenLead?.(college)}
-              className="w-full py-2.5 border border-sky-500 text-sky-600 text-[10px] md:text-[11px] font-black uppercase tracking-widest rounded-lg hover:bg-sky-50 transition-colors flex items-center justify-center gap-2"
+              className="w-full py-2.5 border border-sky-500 text-sky-600 text-xs font-black uppercase tracking-widest rounded-lg hover:bg-sky-50 transition-colors flex items-center justify-center gap-2"
             >
               Read more <ChevronRight size={14} />
             </button>
@@ -110,13 +114,13 @@ export default function CollegeCard({ college, onOpenLead, onOpenReview }: Colle
             <div className="grid grid-cols-2 gap-2">
                 <button 
                   onClick={() => onOpenLead?.(college)}
-                  className="py-2.5 border border-slate-200 text-slate-600 text-[9px] md:text-[10px] font-bold rounded-lg hover:bg-slate-50 transition-colors flex items-center justify-center gap-1.5"
+                  className="py-2.5 border border-slate-200 text-slate-600 text-xs font-bold rounded-lg hover:bg-slate-50 transition-colors flex items-center justify-center gap-1.5"
                 >
                   Brochure <Download size={12} />
                 </button>
                 <button 
                   onClick={() => onOpenLead?.(college)}
-                  className="py-2.5 bg-slate-900 text-white text-[9px] md:text-[10px] font-bold rounded-lg hover:bg-slate-800 transition-colors flex items-center justify-center gap-1.5"
+                  className="py-2.5 bg-slate-900 text-white text-xs font-bold rounded-lg hover:bg-slate-800 transition-colors flex items-center justify-center gap-1.5"
                 >
                   Apply Now <ArrowRight size={12} />
                 </button>
