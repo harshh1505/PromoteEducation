@@ -650,7 +650,7 @@ export default function CollegesSection() {
   }
 
   return (
-    <section id="colleges" className="pt-12 pb-24 relative overflow-hidden bg-slate-50">
+    <section id="colleges" className="pt-12 pb-8 relative overflow-hidden bg-slate-50">
       <div className="w-full max-w-[1600px] mx-auto px-6">
         
         <div className="mb-12">

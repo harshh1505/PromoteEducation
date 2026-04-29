@@ -6,7 +6,8 @@ import {
   Trophy, GraduationCap, MessageSquare, Bell, Building2,
   Target, FileText, Coins, Globe, ClipboardList,
   BookOpen, Newspaper, IndianRupee, HelpCircle,
-  CheckSquare, Search, FileEdit, BarChart3
+  CheckSquare, Search, FileEdit, BarChart3,
+  Compass, Users, ShieldCheck, Video, Clock
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
@@ -49,30 +50,35 @@ interface ExploreGroup {
 
 const exploreGroups: ExploreGroup[] = [
   {
-    title: 'Discover',
+    title: 'Professional Services',
     items: [
-      { label: 'College Rankings', href: '/rankings', icon: 'Trophy' },
-      { label: 'Top Courses', href: '/courses', icon: 'GraduationCap' },
-      { label: 'Read College Reviews', href: '/#reviews', icon: 'MessageSquare' },
-      { label: 'Admission Alerts 2026', href: '/alerts', icon: 'Bell', status: 'New' },
-      { label: 'Institute (Counselling & more)', href: '#', icon: 'Building2' },
-      { label: 'College Predictor', href: '/tools', icon: 'Target' },
-      { label: 'Practice Questions', href: '#', icon: 'FileText' },
-      { label: 'Scholarships 2026', href: '#', icon: 'Coins' },
+      { label: 'Admission Support', href: '/admission-support', icon: 'ShieldCheck', badge: 'High Priority' },
+      { label: 'Career Mentorship', href: '/mentorship', icon: 'Users' },
+      { label: 'Counselling Strategy', href: '/counseling', icon: 'Compass' },
+      { label: 'Selection Support', href: '/selection', icon: 'Target' },
+      { label: 'Expert Consultation', href: '/consultation', icon: 'Video', badge: 'Free' },
+      { label: 'Scholarship Guide', href: '/scholarships', icon: 'Coins', status: '2026' },
     ]
   },
   {
-    title: 'Resources',
+    title: 'Academic Hubs',
     items: [
-      { label: 'Study Abroad', href: '#', icon: 'Globe', badge: '50% Off Visa Fees' },
-      { label: 'Abroad Exams', href: '#', icon: 'ClipboardList' },
-      { label: 'Entrance Exams', href: '/#exams', icon: 'BookOpen' },
-      { label: 'News', href: '/news', icon: 'Newspaper' },
-      { label: 'Education Loan Calculator', href: '/loan-calculator', icon: 'IndianRupee' },
-      { label: 'Ask a Question', href: '#', icon: 'HelpCircle' },
-      { label: 'Test Series', href: '#', icon: 'CheckSquare' },
-      { label: 'Course Finder', href: '#', icon: 'Search' },
-      { label: 'Articles', href: '/articles', icon: 'FileEdit' },
+      { label: 'NIRF Rankings', href: '/rankings', icon: 'Trophy' },
+      { label: 'Entrance Exams', href: '/exams', icon: 'BookOpen' },
+      { label: 'Course Directory', href: '/courses', icon: 'GraduationCap' },
+      { label: 'Study Abroad', href: '/abroad', icon: 'Globe', status: 'Popular' },
+      { label: 'Education News', href: '/news', icon: 'Newspaper' },
+      { label: 'Review Hub', href: '/#reviews', icon: 'MessageSquare' },
+    ]
+  },
+  {
+    title: 'Platform Tools',
+    items: [
+      { label: 'College Predictor', href: '/tools', icon: 'Search', badge: 'AI Tool' },
+      { label: 'Loan Calculator', href: '/loan-calculator', icon: 'IndianRupee' },
+      { label: 'Admission Alerts', href: '/alerts', icon: 'Bell', status: 'New' },
+      { label: 'College Finder', href: '/tools', icon: 'Search' },
+      { label: 'Compare Colleges', href: '/compare', icon: 'BarChart3' },
     ]
   }
 ]
@@ -91,12 +97,15 @@ export default function Navbar() {
   const [searchResults, setSearchResults] = useState<any[]>([])
   const [searchFocused, setSearchFocused] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
+  const [currentTime, setCurrentTime] = useState<string>('')
+  const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null)
 
   const IconMap: any = {
     Trophy, GraduationCap, MessageSquare, Bell, Building2,
     Target, FileText, Coins, Globe, ClipboardList,
     BookOpen, Newspaper, IndianRupee, HelpCircle,
-    CheckSquare, Search, FileEdit
+    CheckSquare, Search, FileEdit, Compass, Users, 
+    ShieldCheck, Video
   }
 
   useEffect(() => {
@@ -112,9 +121,17 @@ export default function Navbar() {
       setUser(session?.user ?? null)
     })
 
+    // Running Clock Logic
+    const clockTimer = setInterval(() => {
+      setCurrentTime(new Date().toLocaleTimeString('en-IN', { 
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
+      }))
+    }, 1000)
+
     return () => {
       window.removeEventListener('scroll', handleScroll)
       subscription.unsubscribe()
+      clearInterval(clockTimer)
     }
   }, [])
 
@@ -148,6 +165,18 @@ export default function Navbar() {
   const handleSignOut = async () => {
     await supabase.auth.signOut()
     setUserDropdown(false)
+  }
+
+  const handleMouseEnter = () => {
+    if (hoverTimeout) clearTimeout(hoverTimeout)
+    setMegaMenuOpen(true)
+  }
+
+  const handleMouseLeave = () => {
+    const timeout = setTimeout(() => {
+      setMegaMenuOpen(false)
+    }, 300) // Increased delay for more stability
+    setHoverTimeout(timeout)
   }
 
   return (
@@ -271,21 +300,26 @@ export default function Navbar() {
 
               <div className="w-px h-8 bg-white/10 hidden md:block" />
 
-              <button
-                onClick={() => setMegaMenuOpen(!megaMenuOpen)}
-                className={cn(
-                  "flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all",
-                  megaMenuOpen ? "bg-white text-slate-900" : "text-white/80 hover:text-white hover:bg-white/10"
-                )}
+              <div 
+                className="relative group/explore"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
               >
-                <div className="grid grid-cols-2 gap-0.5 w-3.5 h-3.5">
-                  {[1, 2, 3, 4].map(i => (
-                    <div key={i} className={cn("rounded-[1px]", megaMenuOpen ? "bg-sky-500" : "bg-current")} />
-                  ))}
-                </div>
-                <span className="text-xs font-bold uppercase tracking-wide">Explore</span>
-                <ChevronDown size={14} className={cn("transition-transform duration-300", megaMenuOpen ? "rotate-180" : "")} />
-              </button>
+                <button
+                  className={cn(
+                    "flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all",
+                    megaMenuOpen ? "bg-white text-slate-900" : "text-white/80 hover:text-white hover:bg-white/10"
+                  )}
+                >
+                  <div className="grid grid-cols-2 gap-0.5 w-3.5 h-3.5">
+                    {[1, 2, 3, 4].map(i => (
+                      <div key={i} className={cn("rounded-[1px]", megaMenuOpen ? "bg-sky-500" : "bg-current")} />
+                    ))}
+                  </div>
+                  <span className="text-xs font-bold uppercase tracking-wide">Explore</span>
+                  <ChevronDown size={14} className={cn("transition-transform duration-300", megaMenuOpen ? "rotate-180" : "")} />
+                </button>
+              </div>
 
               <button className="relative p-2 text-white/60 hover:text-white transition-colors">
                 <Bell size={20} />
@@ -346,19 +380,18 @@ export default function Navbar() {
               {navItems.map((item) => (
                 <button
                   key={item.label}
-                  onClick={(e) => {
-                    if (item.label === 'Explore') {
-                      e.preventDefault()
-                      setMegaMenuOpen(!megaMenuOpen)
-                    } else {
-                      setActiveItem(item.label)
-                      window.location.href = item.href
-                    }
-                  }}
                   className={cn(
                     "text-xs font-bold whitespace-nowrap transition-colors flex items-center gap-1",
                     (activeItem === item.label || (item.label === 'Explore' && megaMenuOpen)) ? "text-sky-600" : "text-slate-600 hover:text-slate-900"
                   )}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                  onClick={() => {
+                    if (item.label !== 'Explore') {
+                      setActiveItem(item.label)
+                      window.location.href = item.href
+                    }
+                  }}
                 >
                   {item.label}
                   {item.label === 'Explore' && <ChevronDown size={12} className={cn("transition-transform", megaMenuOpen ? "rotate-180" : "")} />}
@@ -379,6 +412,12 @@ export default function Navbar() {
             </div>
 
             <div className="flex items-center gap-6 pl-6 bg-gradient-to-r from-transparent via-white to-white sticky right-0">
+              <div className="hidden lg:flex items-center gap-2 px-1">
+                <Clock size={14} className="text-sky-500" />
+                <span className="text-[13px] font-black text-slate-800 tabular-nums uppercase tracking-tight min-w-[85px]">
+                  {currentTime || '--:--:-- --'}
+                </span>
+              </div>
               <a href="/cutoffs" className="flex items-center gap-1.5 text-[11px] font-bold text-amber-700 hover:text-amber-800 transition-colors whitespace-nowrap bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200/60 shadow-sm ring-4 ring-amber-500/5 animate-pulse-slow">
                 <BarChart3 size={13} className="text-amber-500" /> Cutoffs
               </a>
@@ -394,41 +433,49 @@ export default function Navbar() {
 
         {/* Mega Menu Overlay */}
         {megaMenuOpen && (
-          <>
-            {/* Backdrop Overlay - Covers page content but stays below header */}
-            <div 
-              className="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] z-40 animate-in fade-in duration-500"
-              onClick={() => setMegaMenuOpen(false)}
-            />
-            
-            <div
-              className="absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-2xl animate-in slide-in-from-top-2 duration-300 z-50"
-            >
-            <div className="max-w-6xl mx-auto px-6 py-8 grid grid-cols-12 gap-8">
+          <div
+            className="absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-2xl animate-in slide-in-from-top-2 duration-300 z-50"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+              <button 
+                onClick={() => setMegaMenuOpen(false)}
+                className="absolute top-4 right-6 p-2 text-slate-400 hover:text-slate-900 transition-colors"
+              >
+                <X size={20} />
+              </button>
+            <div className="max-w-[1440px] mx-auto px-6 py-12 grid grid-cols-12 gap-10">
               {/* Groups Section */}
-              <div className="col-span-8 grid grid-cols-2 gap-x-12 gap-y-2">
+              <div className="col-span-9 grid grid-cols-3 gap-10">
                 {exploreGroups.map(group => (
-                  <div key={group.title}>
-                    <h5 className="text-[9px] uppercase font-black text-slate-400 tracking-[0.2em] mb-4">{group.title}</h5>
-                    <div className="space-y-1">
+                  <div key={group.title} className="flex flex-col">
+                    <div className="flex items-center gap-2 mb-6">
+                      <div className="w-1.5 h-4 bg-sky-500 rounded-full" />
+                      <h5 className="text-[10px] uppercase font-black text-slate-900 tracking-[0.2em]">{group.title}</h5>
+                    </div>
+                    <div className="flex flex-col gap-1.5">
                       {group.items.map(subItem => {
                         const Icon = IconMap[subItem.icon]
                         return (
                           <a
                             key={subItem.label}
                             href={subItem.href}
-                            className="group flex items-center justify-between p-1.5 rounded-lg hover:bg-slate-50 transition-all"
+                            className="group flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100"
                           >
                             <div className="flex items-center gap-3">
-                              <div className="w-7 h-7 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-sky-500 group-hover:text-white transition-all shadow-sm">
-                                {Icon && <Icon size={13} />}
+                              <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-slate-400 group-hover:bg-sky-500 group-hover:text-white transition-all shadow-sm border border-slate-100">
+                                {Icon && <Icon size={14} />}
                               </div>
                               <div className="flex flex-col">
-                                <span className="text-xs font-bold text-slate-700 group-hover:text-sky-600 transition-colors leading-none">{subItem.label}</span>
-                                {subItem.badge && <span className="text-[8px] text-green-600 font-bold mt-1 uppercase tracking-tighter">{subItem.badge}</span>}
+                                <span className="text-[13px] font-bold text-slate-700 group-hover:text-sky-600 transition-colors leading-none">{subItem.label}</span>
+                                {subItem.badge && <span className="text-[8px] text-sky-600 font-bold mt-1.5 uppercase tracking-tighter opacity-70">{subItem.badge}</span>}
                               </div>
                             </div>
-                            {subItem.status && <span className="text-[8px] bg-sky-100 text-sky-600 px-1.5 py-0.5 rounded font-black uppercase tracking-tighter">{subItem.status}</span>}
+                            {subItem.status && (
+                              <span className="text-[8px] bg-sky-50 text-sky-600 px-2 py-0.5 rounded-full font-black uppercase tracking-tighter border border-sky-100/50">
+                                {subItem.status}
+                              </span>
+                            )}
                           </a>
                         )
                       })}
@@ -438,20 +485,35 @@ export default function Navbar() {
               </div>
 
               {/* Sidebar Feature */}
-              <div className="col-span-4 bg-slate-950 rounded-2xl p-6 text-white relative overflow-hidden flex flex-col justify-center border border-white/5">
-                <div className="relative z-10">
-                  <h6 className="text-lg font-black mb-1.5 leading-tight">Need Help Finding a College?</h6>
-                  <p className="text-white/50 text-[11px] mb-4 leading-relaxed font-medium">Use our advanced tools to compare rankings, fees, and placements in seconds.</p>
-                  <button className="px-5 py-2 bg-sky-500 text-white font-bold rounded-lg hover:bg-sky-600 transition-all active:scale-95 text-[10px] uppercase tracking-widest shadow-lg shadow-sky-500/20">
-                    Start Comparing
-                  </button>
+              <div className="col-span-3 flex flex-col gap-4">
+                <div className="flex-1 bg-slate-900 rounded-[2rem] p-8 text-white relative overflow-hidden flex flex-col justify-end border border-white/5 shadow-2xl">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/10 blur-[80px] -mr-16 -mt-16" />
+                  <div className="relative z-10">
+                    <div className="w-10 h-10 rounded-2xl bg-sky-500 flex items-center justify-center mb-6 shadow-lg shadow-sky-500/40">
+                      <Compass size={20} className="text-white" />
+                    </div>
+                    <h6 className="text-xl font-black mb-3 leading-tight tracking-tight">Personalized Roadmap 2026</h6>
+                    <p className="text-white/50 text-xs mb-6 leading-relaxed font-medium">Get a step-by-step admission plan tailored to your exam scores and goal.</p>
+                    <button className="w-full py-4 bg-white text-slate-900 font-black rounded-2xl hover:bg-sky-50 transition-all active:scale-[0.98] text-[10px] uppercase tracking-widest">
+                      Start Planning
+                    </button>
+                  </div>
                 </div>
-                <Target size={100} className="absolute -bottom-6 -right-6 text-white/5 rotate-12" />
+                
+                <div className="p-5 bg-sky-50 border border-sky-100 rounded-3xl flex items-center gap-4 group cursor-pointer hover:bg-sky-100 transition-all">
+                  <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-sky-500 shadow-sm border border-sky-100">
+                    <MessageSquare size={18} />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black text-sky-600 uppercase tracking-widest mb-0.5">24/7 Helpdesk</p>
+                    <p className="text-xs font-bold text-slate-900">Talk to Expert Now</p>
+                  </div>
+                  <ChevronRight size={14} className="ml-auto text-sky-300 group-hover:text-sky-500 transition-transform group-hover:translate-x-1" />
+                </div>
               </div>
             </div>
           </div>
-        </>
-      )}
+        )}
 
         {/* Mobile Menu */}
         {mobileOpen && (

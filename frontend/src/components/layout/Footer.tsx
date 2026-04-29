@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils'
 const footerLinks = {
   Exams: ['JEE Main', 'NEET', 'CAT', 'CUET', 'All exams'],
   Courses: ['BTech', 'MBA', 'MBBS', 'BDS', 'Others'],
+  Services: ['Mentorship', 'Scholarship', 'Counseling', 'Admission Support', 'Selection', 'Consultation'],
   Company: ['About', 'Careers', 'Events', 'Contact Us', 'FAQ', 'Sitemap'],
 }
 
@@ -154,6 +155,9 @@ export default function Footer() {
                         href={
                           link === 'All exams' ? '/exams' :
                           link === 'Others' ? '/courses' :
+                          category === 'Services' ? (
+                            link === 'Scholarship' ? '/scholarships' : `/${link.toLowerCase().replace(/ /g, '-')}`
+                          ) :
                           category === 'Company' ? `/${link.toLowerCase().replace(/ /g, '-')}` :
                             category === 'Courses' ? `/courses/${link.toLowerCase().replace(/ /g, '-').replace(/\./g, '')}` :
                               category === 'Exams' ? `/exams/${link.toLowerCase().replace(/ /g, '-')}` :

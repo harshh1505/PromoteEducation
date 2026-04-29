@@ -41,7 +41,7 @@ const CityCard = ({ city }: { city: any }) => (
 
 export default function PopularCitiesSection() {
   return (
-    <section className="py-16 bg-white overflow-hidden">
+    <section className="pt-8 pb-16 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 mb-10 text-center">
         <div className="flex items-center justify-center gap-2 mb-3">
           <div className="w-4 h-[2px] bg-sky-500" />

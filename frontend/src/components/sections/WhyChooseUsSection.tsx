@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { UserCheck, Video, Building2, IndianRupee, ArrowRight, ShieldCheck, Target, GraduationCap } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -9,48 +10,54 @@ const features = [
     desc: 'We go beyond academics to prepare students for real-world challenges. Our mentorship programs bridge the gap between classroom learning and professional excellence.',
     icon: Target,
     color: 'text-blue-500',
-    bg: 'bg-blue-50'
+    bg: 'bg-blue-50',
+    href: '/mentorship'
   },
   {
     title: 'Scholarship & Financial Aid',
     desc: 'Cost should never be a barrier to quality education. We provide end-to-end assistance in securing scholarships and affordable educational financing for all.',
     icon: IndianRupee,
     color: 'text-emerald-500',
-    bg: 'bg-emerald-50'
+    bg: 'bg-emerald-50',
+    href: '/scholarships'
   },
   {
     title: 'Career Counseling & Guidance',
     desc: 'Navigating through countless career paths can be overwhelming. Our experts provide data-driven profile assessments to identify your ideal trajectory.',
     icon: UserCheck,
     color: 'text-purple-500',
-    bg: 'bg-purple-50'
+    bg: 'bg-purple-50',
+    href: '/counseling'
   },
   {
     title: 'Admission Support',
     desc: 'Securing a seat in your dream college requires strategic planning. We simplify the complex admission process from documentation to final enrollment.',
     icon: ShieldCheck,
     color: 'text-amber-500',
-    bg: 'bg-amber-50'
+    bg: 'bg-amber-50',
+    href: '/admission-support'
   },
   {
     title: 'Course & University Selection',
     desc: 'Choosing the right course shapes your future. We help you select institutions that offer the best mix of infrastructure, faculty, and placement records.',
     icon: GraduationCap,
     color: 'text-sky-500',
-    bg: 'bg-sky-50'
+    bg: 'bg-sky-50',
+    href: '/selection'
   },
   {
     title: 'Free Digital Consultation',
     desc: 'Connect with our expert counselors from the comfort of your home. We offer free video consultations to resolve all your academic and career queries.',
     icon: Video,
     color: 'text-rose-500',
-    bg: 'bg-rose-50'
+    bg: 'bg-rose-50',
+    href: '/consultation'
   }
 ]
 
 export default function WhyChooseUsSection() {
   return (
-    <section className="py-24 bg-white relative overflow-hidden">
+    <section className="pt-8 pb-10 bg-white relative overflow-hidden">
       {/* Background Decor */}
       <div className="absolute top-0 left-0 w-full h-1/2 bg-slate-50/50 -skew-y-3 origin-top-left" />
       
@@ -71,8 +78,9 @@ export default function WhyChooseUsSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, i) => (
-            <div 
+            <Link 
               key={i} 
+              href={feature.href}
               className="group p-8 rounded-[32px] bg-white border border-slate-100 hover:border-sky-500/30 hover:shadow-2xl hover:shadow-sky-500/5 transition-all duration-500 flex flex-col h-full border-b-4 border-b-slate-100 hover:border-b-sky-500"
             >
               <div className={cn(
@@ -94,12 +102,12 @@ export default function WhyChooseUsSection() {
               <div className="mt-auto flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 group-hover:text-sky-500 transition-colors">
                 Learn More <ArrowRight size={14} className="group-hover:translate-x-2 transition-transform" />
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
         {/* Success Metrics Overlay (Optional/Bonus) */}
-        <div className="mt-20 flex flex-wrap justify-center gap-12 border-t border-slate-100 pt-16">
+        <div className="mt-10 flex flex-wrap justify-center gap-12 border-t border-slate-100 pt-10">
             <div className="text-center">
                 <p className="text-3xl font-black text-slate-900 mb-1">98%</p>
                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Student Satisfaction</p>

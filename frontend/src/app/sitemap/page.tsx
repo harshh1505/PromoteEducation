@@ -1,6 +1,4 @@
-'use client'
-
-import React from 'react'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
@@ -8,159 +6,205 @@ import {
   ChevronRight, Map, BookOpen, GraduationCap, 
   ShieldCheck, HelpCircle, FileText, Globe, 
   TrendingUp, Layout, Briefcase, HeartPulse,
-  Stethoscope, Code, FlaskConical
+  Stethoscope, Code, FlaskConical, Sparkles,
+  Search, Users, Compass, Shield, Target,
+  MessageSquare, FileSearch, PieChart, Activity
 } from 'lucide-react'
 
-interface SitemapLink {
-  label: string
-  href: string
-  icon?: React.ElementType
+// ─────────────────────────────────────────────
+// SEO METADATA
+// ─────────────────────────────────────────────
+export const metadata: Metadata = {
+  title: 'Website Sitemap | Promote Education Navigation Directory',
+  description:
+    'Comprehensive website map of Promote Education. Easily navigate through our admission support, mentorship, counselling, rankings, and exam guides.',
+  keywords: ['sitemap', 'website map', 'promote education directory', 'navigation guide'],
+  openGraph: {
+    title: 'Website Sitemap | Promote Education',
+    description: 'Find every page on Promote Education—from admission aid to career mentorship.',
+    type: 'website',
+  }
 }
 
-interface SitemapSection {
-  title: string
-  icon: React.ElementType
-  links: SitemapLink[]
-}
-
-const SITEMAP_DATA: SitemapSection[] = [
+// ─────────────────────────────────────────────
+// SITEMAP DATA
+// ─────────────────────────────────────────────
+const SITEMAP_DATA = [
   {
-    title: 'Core Platform',
-    icon: Layout,
+    title: 'Professional Services',
+    icon: Sparkles,
+    color: 'text-sky-500',
     links: [
-      { label: 'Homepage', href: '/' },
-      { label: 'College Rankings', href: '/rankings' },
-      { label: 'Education News', href: '/news' },
-      { label: 'Student Tools', href: '/tools' },
-      { label: 'Education Loan Calculator', href: '/loan-calculator' },
+      { label: 'Admission Support', href: '/admission-support' },
+      { label: 'Counselling Strategy', href: '/counseling' },
+      { label: 'Career Mentorship', href: '/mentorship' },
+      { label: 'College Selection', href: '/selection' },
+      { label: 'Expert Consultation', href: '/consultation' },
+      { label: 'Scholarship Guide', href: '/scholarships' },
     ]
   },
   {
-    title: 'Knowledge Hubs',
+    title: 'Knowledge Centers',
     icon: BookOpen,
+    color: 'text-indigo-500',
     links: [
-      { label: 'Course Directory', href: '/courses', icon: Globe },
-      { label: 'B.Tech & Engineering', href: '/courses/btech', icon: Code },
-      { label: 'MBA & Management', href: '/courses/mba', icon: Briefcase },
-      { label: 'M.Tech & PG Engg', href: '/courses/mtech', icon: GraduationCap },
-      { label: 'MBBS & Medical', href: '/courses/mbbs', icon: Stethoscope },
-      { label: 'BDS & Dental', href: '/courses/bds', icon: FlaskConical },
-      { label: 'B.Sc Nursing', href: '/courses/bsc-nursing', icon: HeartPulse },
+      { label: 'All Courses', href: '/courses' },
+      { label: 'B.Tech Engineering', href: '/courses/btech' },
+      { label: 'MBBS Medical', href: '/courses/mbbs' },
+      { label: 'MBA Management', href: '/courses/mba' },
+      { label: 'M.Tech PG Engineering', href: '/courses/mtech' },
+      { label: 'BDS Dental', href: '/courses/bds' },
+      { label: 'B.Sc Nursing', href: '/courses/bsc-nursing' },
     ]
   },
   {
-    title: 'Support & Info',
-    icon: HelpCircle,
+    title: 'Entrance Exams',
+    icon: Target,
+    color: 'text-rose-500',
     links: [
-      { label: 'About Us', href: '/about' },
-      { label: 'Contact Support', href: '/contact-us' },
-      { label: 'Frequently Asked Questions', href: '/faq' },
+      { label: 'JEE Main 2026', href: '/exams/jee-main' },
+      { label: 'JEE Advanced', href: '/exams/jee-advanced' },
+      { label: 'NEET UG 2026', href: '/exams/neet-ug' },
+      { label: 'CUET UG', href: '/exams/cuet-ug' },
+      { label: 'WBJEE Portal', href: '/exams/wbjee' },
+      { label: 'COMEDK & KCET', href: '/exams/comedk' },
+      { label: 'TNEA Counseling', href: '/exams/tnea' },
+    ]
+  },
+  {
+    title: 'College Directories',
+    icon: GraduationCap,
+    color: 'text-emerald-500',
+    links: [
+      { label: 'Top Engineering Colleges', href: '/colleges/engineering' },
+      { label: 'Top Medical Colleges', href: '/colleges/medical' },
+      { label: 'Top MBA Institutions', href: '/colleges/management' },
+      { label: 'Top Private Universities', href: '/colleges/private' },
+      { label: 'Deemed Universities', href: '/colleges/deemed' },
+      { label: 'NIRF 2026 Rankings', href: '/rankings' },
+    ]
+  },
+  {
+    title: 'Platform & Tools',
+    icon: Activity,
+    color: 'text-amber-500',
+    links: [
+      { label: 'College Predictor', href: '/tools/college-predictor' },
+      { label: 'Loan Calculator', href: '/loan-calculator' },
+      { label: 'Education News', href: '/news' },
+      { label: 'Latest Articles', href: '/articles' },
+      { label: 'Student Testimonials', href: '/reviews' },
+      { label: 'Compare Colleges', href: '/compare' },
+    ]
+  },
+  {
+    title: 'Company',
+    icon: Users,
+    color: 'text-slate-500',
+    links: [
+      { label: 'About Promote Education', href: '/about' },
+      { label: 'Contact Support', href: '/contact' },
+      { label: 'Help Center (FAQ)', href: '/faq' },
+      { label: 'Join as Mentor', href: '/careers/mentor' },
+      { label: 'Media & Press', href: '/press' },
     ]
   },
   {
     title: 'Legal & Compliance',
     icon: ShieldCheck,
+    color: 'text-slate-400',
     links: [
       { label: 'Privacy Policy', href: '/privacy-policy' },
       { label: 'Terms of Use', href: '/terms-of-use' },
       { label: 'Disclaimer', href: '/disclaimer' },
       { label: 'Cookie Policy', href: '/cookie-policy' },
+      { label: 'Refund Policy', href: '/refund-policy' },
     ]
   }
 ]
 
+// ─────────────────────────────────────────────
+// PAGE COMPONENT
+// ─────────────────────────────────────────────
 export default function SitemapPage() {
   return (
-    <main style={{ minHeight: '100vh', background: '#f8fafc', fontFamily: "'DM Sans', sans-serif" }}>
-      <style dangerouslySetInnerHTML={{
-        __html: `
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap');
-        .font-display { font-family: 'Playfair Display', Georgia, serif; }
-        .sitemap-card { transition: all 0.3s ease; }
-        .sitemap-card:hover { transform: translateY(-4px); }
-        .sitemap-link { transition: all 0.2s ease; }
-        .sitemap-link:hover { color: #0ea5e9; padding-left: 4px; }
-        .container {
-          max-width: 1280px;
-          margin: 0 auto;
-          padding: 0 24px;
-        }
-        `
-      }} />
-
+    <div className="flex flex-col min-h-screen bg-white text-slate-900" style={{ fontFamily: "'DM Sans', sans-serif" }}>
       <Navbar />
 
-      {/* Hero */}
-      <section style={{ padding: '160px 0 60px', background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', color: 'white' }}>
-        <div className="container" style={{ textAlign: 'center' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '99px', background: 'rgba(56, 189, 248, 0.1)', border: '1px solid rgba(56, 189, 248, 0.2)', marginBottom: '24px' }}>
-            <Map size={14} style={{ color: '#38bdf8' }} />
-            <span style={{ fontSize: '11px', fontWeight: 700, color: '#38bdf8', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
-              Navigation Directory
-            </span>
+      {/* ── HERO ── */}
+      <header className="pt-32 pb-20 border-b border-slate-100 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <div className="inline-flex items-center gap-2 bg-sky-50 border border-sky-100 text-sky-700 text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-sm mb-6">
+            <Map size={12} className="text-sky-500" />
+            Platform Directory · Sitemap v2.0
           </div>
-          <h1 className="font-display" style={{ fontSize: 'clamp(40px, 6vw, 64px)', marginBottom: '20px' }}>
-            Website Sitemap
+
+          <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-[1] mb-6">
+            Navigate Your <br />
+            <span className="text-sky-500 italic">Ambition</span>
           </h1>
-          <p style={{ fontSize: '17px', color: '#94a3b8', maxWidth: '600px', margin: '0 auto' }}>
-            A comprehensive overview of our platform's structure and resources to help you find exactly what you need.
+
+          <p className="text-lg text-slate-500 leading-relaxed max-w-2xl mx-auto font-medium">
+            Explore our comprehensive directory of admission services, exam guides, and university resources designed to simplify your educational journey.
           </p>
         </div>
-      </section>
+      </header>
 
-      {/* Grid */}
-      <section style={{ padding: '80px 0 120px' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '32px' }}>
+      <main className="py-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
             {SITEMAP_DATA.map((section, idx) => (
-              <div key={idx} className="sitemap-card" style={{ 
-                background: 'white', 
-                padding: '32px', 
-                borderRadius: '24px', 
-                border: '1px solid #e2e8f0',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-                  <div style={{ 
-                    width: '40px', height: '40px', borderRadius: '12px', 
-                    background: '#f1f5f9', display: 'flex', alignItems: 'center', 
-                    justifyContent: 'center', color: '#0f172a' 
-                  }}>
-                    {(() => {
-                      const SectionIcon = section.icon
-                      return <SectionIcon size={20} />
-                    })()}
+              <section key={idx} className="flex flex-col">
+                <header className="flex items-center gap-3 mb-8">
+                  <div className={`w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center ${section.color} shadow-sm border border-slate-100`}>
+                    <section.icon size={20} />
                   </div>
-                  <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#0f172a' }}>{section.title}</h3>
-                </div>
+                  <h2 className="text-lg font-black text-slate-900">{section.title}</h2>
+                </header>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  {section.links.map((link, lIdx) => {
-                    const IconComponent = link.icon
-                    return (
-                      <Link key={lIdx} href={link.href} className="sitemap-link" style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        gap: '8px', 
-                        fontSize: '14px', 
-                        color: '#64748b',
-                        textDecoration: 'none',
-                        fontWeight: 500
-                      }}>
-                        <ChevronRight size={14} style={{ color: '#cbd5e1' }} />
-                        {IconComponent && <IconComponent size={12} style={{ color: '#94a3b8' }} />}
-                        {link.label}
-                      </Link>
-                    )
-                  })}
-                </div>
-              </div>
+                <nav className="flex flex-col gap-4">
+                  {section.links.map((link, lIdx) => (
+                    <Link
+                      key={lIdx}
+                      href={link.href}
+                      className="group flex items-center gap-2 text-sm text-slate-500 hover:text-sky-500 font-medium transition-colors"
+                    >
+                      <ChevronRight size={14} className="text-slate-300 group-hover:text-sky-500 transition-colors" />
+                      {link.label}
+                    </Link>
+                  ))}
+                </nav>
+              </section>
             ))}
           </div>
+
+          {/* ── FOOTER SEARCH ── */}
+          <div className="mt-24 pt-16 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-10">
+            <div className="max-w-md">
+              <h3 className="text-2xl font-black text-slate-900 mb-3">Can't find something?</h3>
+              <p className="text-slate-500 font-medium leading-relaxed">
+                Our global helpdesk is active 24/7. Speak to a counselor or search our knowledge base for specific institution data.
+              </p>
+            </div>
+            <div className="flex gap-4">
+              <Link 
+                href="/contact" 
+                className="px-8 py-4 bg-slate-900 text-white font-black text-xs uppercase tracking-widest rounded-full hover:bg-slate-800 transition-all"
+              >
+                Contact Support
+              </Link>
+              <Link 
+                href="/faq" 
+                className="px-8 py-4 bg-white border border-slate-200 text-slate-900 font-black text-xs uppercase tracking-widest rounded-full hover:bg-slate-50 transition-all"
+              >
+                Read FAQs
+              </Link>
+            </div>
+          </div>
         </div>
-      </section>
+      </main>
 
       <Footer />
-    </main>
+    </div>
   )
 }
