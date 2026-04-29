@@ -66,6 +66,7 @@ type College = {
     placements?: Placement | null; rankings?: Ranking[]; reviews?: Review[]
     courses?: Course[]; cutoffs?: Cutoff[]; gallery?: GalleryItem[]
     scholarships?: Scholarship[]; important_dates?: ImportantDate[]
+    selection_steps?: { step: string; desc: string }[]
   }
 }
 
@@ -342,6 +343,7 @@ export default async function CollegePage({ params }: any) {
     { id: 'overview', label: 'Overview' },
     ...(college.content?.why_choose ? [{ id: 'why-choose', label: `Why Choose` }] : []),
     { id: 'admission', label: 'Admission Process' },
+    ...(college.content?.selection_steps && college.content.selection_steps.length > 0 ? [{ id: 'selection', label: 'Selection Steps' }] : []),
     ...(courses.length > 0 ? [{ id: 'courses', label: 'Courses & Fees' }] : []),
     ...(cutoffs.length > 0 ? [{ id: 'cutoffs', label: 'Cutoffs' }] : []),
     { id: 'rankings', label: 'Rankings' },
@@ -649,14 +651,11 @@ export default async function CollegePage({ params }: any) {
             )}
 
             {/* ADMISSION PROCESS */}
-            <ScrollReveal>
-              <section id="admission" className="scroll-mt-32">
+            <section id="admission" className="scroll-mt-32 pt-16 border-t border-slate-100">
                 <h2 className="text-3xl font-black mb-8 text-slate-900 tracking-tight">Admission Protocol 2026</h2>
                 <div className="prose prose-slate prose-lg max-w-none text-slate-600 leading-relaxed space-y-8">
                   <p>
-                    {college.content?.admission ||
-                      `Admission to ${college.name} is highly competitive, governed by merit and national-level entrance examinations. The selection process is rigorous and merit-based.`
-                    }
+                    {college.content?.admission || `Admission to ${college.name} is highly competitive, governed by merit and national-level entrance examinations. The selection process is rigorous and merit-based.`}
                   </p>
 
                   {college.entrance_exam && (
@@ -681,30 +680,28 @@ export default async function CollegePage({ params }: any) {
                       </div>
                     </div>
                   )}
-
-                  {/* Step-by-step */}
-                  <div className="not-prose space-y-4 pt-4">
-                    <h3 className="text-lg font-black text-slate-900 uppercase tracking-wide">Step-by-Step Selection</h3>
-                    <ol className="space-y-4">
-                      {[
-                        { step: 'Examination', desc: `Qualify ${college.entrance_exam || 'the relevant national entrance exam'} with a strong score/rank.` },
-                        { step: 'Registration', desc: 'Register on the official counselling portal (MCC / State authority) within the deadline.' },
-                        { step: 'Choice Filling', desc: `Select ${college.short_name || college.name} as your preferred institution during the choice-filling window.` },
-                        { step: 'Seat Allotment', desc: 'Based on rank, category, and availability, seats are allotted in rounds. Accept and report to the institution.' },
-                      ].map((s, i) => (
-                        <li key={i} className="flex gap-4">
-                          <span className="font-black text-slate-200 text-3xl leading-none flex-shrink-0">0{i + 1}</span>
-                          <div>
-                            <p className="font-black text-slate-900 uppercase text-[11px] tracking-widest mb-1">{s.step}</p>
-                            <p className="text-sm text-slate-500">{s.desc}</p>
-                          </div>
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
                 </div>
-              </section>
-            </ScrollReveal>
+            </section>
+
+            {/* Step-by-step Selection - Standalone Section */}
+            {college.content?.selection_steps && college.content.selection_steps.length > 0 && (
+              <section id="selection" className="scroll-mt-32 pt-16 border-t border-slate-100">
+                  <h3 className="text-xl font-black text-slate-900 uppercase tracking-wider mb-10">Step-by-Step Selection</h3>
+                  <div className="space-y-10">
+                    {college.content.selection_steps.map((s: any, i: number) => (
+                      <div key={i} className="flex gap-8 items-start group">
+                        <span className="font-black text-slate-100 text-6xl leading-none flex-shrink-0 tabular-nums group-hover:text-sky-50 transition-colors duration-500">
+                          0{i + 1}
+                        </span>
+                        <div className="pt-2">
+                          <p className="font-black text-slate-900 uppercase text-xs tracking-[0.2em] mb-3">{s.step}</p>
+                          <p className="text-[16px] text-slate-500 leading-relaxed font-medium max-w-2xl">{s.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+            )}
 
             {/* COURSES & FEES */}
             {(courses.length > 0 || true) && (

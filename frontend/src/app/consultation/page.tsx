@@ -11,7 +11,6 @@ import {
   Users,
   CheckCircle2,
   Clock,
-  Sparkles,
   Smartphone,
   Globe,
   Share2,

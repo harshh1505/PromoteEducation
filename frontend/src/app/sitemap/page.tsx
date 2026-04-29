@@ -6,7 +6,7 @@ import {
   ChevronRight, Map, BookOpen, GraduationCap, 
   ShieldCheck, HelpCircle, FileText, Globe, 
   TrendingUp, Layout, Briefcase, HeartPulse,
-  Stethoscope, Code, FlaskConical, Sparkles,
+  Stethoscope, Code, FlaskConical, Zap,
   Search, Users, Compass, Shield, Target,
   MessageSquare, FileSearch, PieChart, Activity
 } from 'lucide-react'
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
 const SITEMAP_DATA = [
   {
     title: 'Professional Services',
-    icon: Sparkles,
+    icon: Zap,
     color: 'text-sky-500',
     links: [
       { label: 'Admission Support', href: '/admission-support' },

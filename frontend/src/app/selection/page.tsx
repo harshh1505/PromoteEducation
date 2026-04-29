@@ -8,7 +8,6 @@ import {
   Search, 
   CheckCircle2, 
   ArrowRight,
-  Sparkles,
   BarChart3,
   MapPin,
   Target,
@@ -227,7 +226,6 @@ export default function SelectionPage() {
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12">
               <div className="flex-1 max-w-3xl">
                 <div className="inline-flex items-center gap-2 bg-indigo-50 border border-indigo-100 text-indigo-700 text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-sm mb-6">
-                  <Sparkles size={12} className="text-indigo-500" />
                   AI-Powered Matching · Cycle 2026 Open
                 </div>
 
