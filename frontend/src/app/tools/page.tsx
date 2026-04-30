@@ -19,7 +19,8 @@ export default function ToolsPage() {
       desc: 'Predict admission chances based on rank, category, and budget.',
       icon: Calculator, 
       color: 'var(--gold)',
-      popular: true
+      popular: true,
+      link: '/tools/probability'
     },
     { 
       id: 'pred', 
@@ -27,7 +28,8 @@ export default function ToolsPage() {
       desc: 'Simple high-demand tool to find which colleges you can get.',
       icon: Target, 
       color: '#4ADE80',
-      popular: true
+      popular: true,
+      link: '/tools/predictor'
     },
     { 
       id: 'roi', 
@@ -35,7 +37,8 @@ export default function ToolsPage() {
       desc: 'Compares real fees versus average placement returns to find value.',
       icon: TrendingUp, 
       color: '#60A5FA',
-      popular: false
+      popular: false,
+      link: '/tools/roi'
     },
     { 
       id: 'brain', 
@@ -43,12 +46,13 @@ export default function ToolsPage() {
       desc: 'A cognitive assessment to find the perfect stream and career match.',
       icon: Brain, 
       color: '#A855F7',
-      popular: false
+      popular: true,
+      link: '/tools/brainstorm'
     },
   ]
 
   return (
-    <div className="min-h-screen flex flex-col bg-surface">
+    <div className="min-h-screen flex flex-col bg-surface font-sansSelection">
       <Navbar />
       
       <main className="flex-1 max-w-7xl mx-auto w-full px-6 pt-32 pb-20">
@@ -57,10 +61,10 @@ export default function ToolsPage() {
             <div className="w-8 h-px bg-gold" />
             <span className="text-xs font-bold uppercase tracking-widest text-gold">Student Toolkit</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-medium text-ink tracking-tight mb-6">
+          <h1 className="text-4xl md:text-5xl font-black text-ink tracking-tight mb-6">
             Advanced tools for <span className="text-gold-dark italic">smarter</span> admissions.
           </h1>
-          <p className="text-lg text-ink-3 leading-relaxed">
+          <p className="text-lg text-ink-3 leading-relaxed font-medium">
             Eliminate the guesswork in your college search. Use our data-driven calculators to predict your future and maximize your ROI.
           </p>
         </div>
@@ -69,10 +73,11 @@ export default function ToolsPage() {
           {tools.map((tool) => (
             <div 
               key={tool.id}
-              className="group p-8 rounded-3xl bg-white border border-border shadow-sm hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
+              onClick={() => window.location.href = tool.link}
+              className="group p-8 rounded-3xl bg-white border border-border shadow-sm hover:shadow-2xl transition-all duration-300 relative overflow-hidden cursor-pointer"
             >
               {tool.popular && (
-                <div className="absolute top-6 right-6 px-3 py-1 bg-gold/10 text-gold-dark text-[10px] font-bold uppercase tracking-widest rounded-full">
+                <div className="absolute top-6 right-6 px-3 py-1 bg-gold/10 text-gold-dark text-[10px] font-black uppercase tracking-widest rounded-full">
                   Mostly Used
                 </div>
               )}
@@ -82,18 +87,19 @@ export default function ToolsPage() {
               >
                 <tool.icon size={28} />
               </div>
-              <h3 className="text-xl font-medium text-ink mb-3 group-hover:text-gold-dark transition-colors">
+              <h3 className="text-xl font-black text-ink mb-3 group-hover:text-gold-dark transition-colors">
                 {tool.name}
               </h3>
-              <p className="text-sm text-ink-3 mb-8 leading-relaxed">
+              <p className="text-sm text-ink-3 mb-8 leading-relaxed font-medium">
                 {tool.desc}
               </p>
-              <button className="flex items-center gap-2 text-sm font-bold text-ink group-hover:gap-4 transition-all">
+              <div className="flex items-center gap-2 text-sm font-black text-ink group-hover:gap-4 transition-all uppercase tracking-widest">
                 Launch Tool <ArrowRight size={16} className="text-gold" />
-              </button>
+              </div>
             </div>
           ))}
         </div>
+
 
         <div className="mt-20 p-12 rounded-[40px] bg-midnight text-white shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-[100px] -mr-32 -mt-32" />

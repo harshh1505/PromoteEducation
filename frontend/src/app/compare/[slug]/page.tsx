@@ -1,6 +1,8 @@
 import { supabase } from '@/lib/supabase'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import Navbar from '@/components/layout/Navbar'
+import Footer from '@/components/layout/Footer'
 
 export const revalidate = 86400
 
@@ -9,7 +11,7 @@ export async function generateStaticParams() {
     .from('colleges')
     .select('slug')
     .order('nirf_rank', { ascending: true })
-    .limit(20)
+    .limit(30)
 
   if (!data) return []
 
@@ -37,8 +39,7 @@ async function getCollegeBySlug(slug: string) {
   const { data } = await supabase
     .from('colleges')
     .select('*')
-    .ilike('slug', `%${slug}%`)
-    .limit(1)
+    .eq('slug', slug)
     .single()
 
   return data
@@ -67,7 +68,7 @@ export async function generateMetadata({ params }: any) {
   if (!parsed) return { title: 'Comparison' }
 
   return {
-    title: `${parsed.college1} vs ${parsed.college2} 2026 Comparison`,
+    title: `${parsed.college1.replace(/-/g, ' ').toUpperCase()} vs ${parsed.college2.replace(/-/g, ' ').toUpperCase()} 2026 Comparison`,
     description: `Compare ${parsed.college1} and ${parsed.college2} based on fees, placements, rankings, and admission process.`,
   }
 }
@@ -80,15 +81,18 @@ export default async function Page({ params }: any) {
   const c2 = await getCollegeBySlug(parsed.college2)
 
   if (!c1 || !c2) {
-    console.log("FAILED:", parsed.college1, parsed.college2, !!c1, !!c2)
     return (
-      <div className="p-10 pt-32 max-w-6xl mx-auto text-center">
-        <h1 className="text-2xl font-bold mb-4 text-slate-900">Comparison not found</h1>
-        <p className="text-slate-600 mb-8 text-balance">We couldn't find the data for one of these colleges. Please check the URLs or try another comparison.</p>
-        <Link href="/colleges" className="inline-block bg-slate-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-slate-800 transition-all">
-          Explore All Colleges
-        </Link>
-      </div>
+      <>
+        <Navbar />
+        <div className="p-10 pt-48 pb-32 max-w-6xl mx-auto text-center min-h-[60vh]">
+          <h1 className="text-3xl font-bold mb-4 text-slate-900">Comparison Data Missing</h1>
+          <p className="text-slate-600 mb-8 text-balance max-w-lg mx-auto">We couldn't find the exact data for these colleges. This happens if the college slugs have changed or the comparison is invalid.</p>
+          <Link href="/colleges" className="inline-block bg-sky-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-sky-500 transition-all shadow-lg shadow-sky-100">
+            Explore All Colleges
+          </Link>
+        </div>
+        <Footer />
+      </>
     )
   }
 
@@ -104,8 +108,10 @@ export default async function Page({ params }: any) {
   const aiContent = comp?.content as any
 
   return (
-    <div className="min-h-screen bg-slate-50 pt-28 pb-20 px-6">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-slate-50">
+      <Navbar />
+      <div className="pt-32 pb-20 px-6">
+        <div className="max-w-6xl mx-auto">
         
         {/* STEP 1: HERO SECTION */}
         <div className="mb-10">
@@ -320,8 +326,9 @@ export default async function Page({ params }: any) {
             </Link>
           </div>
         </div>
-
       </div>
+      </div>
+      <Footer />
     </div>
   )
 }

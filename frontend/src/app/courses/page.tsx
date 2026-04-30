@@ -148,7 +148,7 @@ export default function CoursesPage() {
               <div className="grid gap-4">
                 {filteredCourses.map(course => (
                   <Card key={course.id} className="p-0 overflow-hidden border-[var(--border)]/50 group">
-                    <div className="flex flex-col md:flex-row h-full">
+                    <Link href={`/courses/${course.slug}`} className="flex flex-col md:flex-row h-full no-underline">
                       <div className="flex-1 p-5">
                         <div className="flex items-center gap-2 mb-3">
                           <span 
@@ -183,11 +183,11 @@ export default function CoursesPage() {
                           <div className="text-[var(--ink-4)] uppercase text-[9px] font-bold tracking-widest mb-0.5">Avg Salary</div>
                           <div className="text-lg font-bold text-[var(--action)]">{course.avgSalary}</div>
                         </div>
-                        <Button className="w-full mt-4" size="sm">
-                          Details <ArrowRight size={14} className="ml-1" />
-                        </Button>
+                        <div className="mt-4 w-full py-2 px-3 text-center text-xs font-bold bg-[var(--action)] text-white rounded-lg flex items-center justify-center gap-1">
+                          Explore <ArrowRight size={12} />
+                        </div>
                       </div>
-                    </div>
+                    </Link>
                   </Card>
                 ))}
               </div>

@@ -447,8 +447,8 @@ export default function AdmissionSupportPage() {
                     {[
                       { l: 'Successful Allotments', v: '98.4%', p: 'w-[98.4%]' },
                       { l: 'Upgrades in Round 2/3', v: '74.2%', p: 'w-[74.2%]' },
-                      { l: 'Tier-1 College Placement', v: '82.1%', p: 'w-[82.1%]' },
-                      { l: 'Customer Satisfaction', v: '99.1%', p: 'w-[99.1%]' },
+                      { l: 'Top-100 College Placement', v: '82.1%', p: 'w-[82.1%]' },
+                      { l: 'Student Satisfaction', v: '99.1%', p: 'w-[99.1%]' },
                     ].map((stat, i) => (
                       <div key={i}>
                         <div className="flex justify-between items-end mb-2">

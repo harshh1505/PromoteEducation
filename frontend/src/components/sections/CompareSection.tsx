@@ -1,4 +1,5 @@
 import { ArrowRight, GitCompare } from 'lucide-react'
+import Link from 'next/link'
 
 const compareData = {
   colleges: ['IIT Bombay', 'IIT Delhi'],
@@ -55,14 +56,15 @@ export default function CompareSection() {
                 </li>
               ))}
             </ul>
-            <button
-              className="flex items-center gap-2 text-sm font-medium transition-colors duration-150 hover:opacity-80"
+            <Link
+              href="/compare"
+              className="flex items-center gap-2 text-sm font-medium transition-colors duration-150 hover:opacity-80 w-fit"
               style={{ color: 'var(--action)' }}
             >
               <GitCompare size={15} />
               Start comparing
               <ArrowRight size={14} />
-            </button>
+            </Link>
           </div>
 
           {/* Right — comparison table preview */}
