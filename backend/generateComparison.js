@@ -11,7 +11,6 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 )
 
-// 🔥 SAFE PARSER
 function safeParse(text) {
   try {
     return JSON.parse(text)
@@ -22,7 +21,6 @@ function safeParse(text) {
   }
 }
 
-// 🔥 FALLBACK CONTENT (VERY IMPORTANT)
 function fallback(c1, c2) {
   return {
     overview: `${c1.name} and ${c2.name} are well-known institutions offering strong academic programs and placement opportunities.`,
@@ -39,7 +37,6 @@ function fallback(c1, c2) {
   }
 }
 
-// 🔹 GENERATE CONTENT
 async function generateComparison(c1, c2) {
   const model = genAI.getGenerativeModel({
     model: "gemini-2.0-flash",
@@ -96,9 +93,8 @@ Location: ${c1.location} vs ${c2.location}
   }
 }
 
-// 🔹 MAIN SCRIPT
 async function run() {
-  console.log("🚀 Starting comparison generation...")
+  console.log("Starting comparison generation...")
 
   const { data: colleges } = await supabase
     .from("colleges")
@@ -128,16 +124,13 @@ async function run() {
         content,
       })
 
-      console.log(`✅ Done: ${slug}`)
+      console.log(`Done: ${slug}`)
     } catch (err) {
-      console.log(`❌ Failed: ${slug}`, err.message)
+      console.log(`Failed: ${slug}`, err.message)
     }
 
-    // 🔥 RATE LIMIT PROTECTION
     await new Promise((res) => setTimeout(res, 1500))
   }
-
-  console.log("🎉 Completed!")
+  console.log("Completed!")
 }
-
 run()

@@ -282,3 +282,1106 @@ WHERE college_id IN (
     lower(trim('MEDICAL COLLEGE, KOLKATA'))
   )
 );
+
+BEGIN;
+
+-- Safety: Remove existing 2025 cutoffs for this college to prevent duplicates
+DELETE FROM cutoffs 
+WHERE year = 2025
+  AND exam_id IN (SELECT id FROM exams WHERE name = 'NEET')
+  AND college_id IN (
+    SELECT id FROM colleges 
+    WHERE lower(trim(name)) = lower(trim('ESI PGI MSR AND ESIC MEDICAL COLLEGE, JOKA, KOLKATA'))
+  );
+
+-- Insert 2025 Data with Marks
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 22388, 532, 1),
+  (2025, 22555, 532, 2),
+  (2025, 24134, 530, 3),
+  (2025, 24134, 530, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('ESI PGI MSR AND ESIC MEDICAL COLLEGE, JOKA, KOLKATA'));
+
+COMMIT;
+
+BEGIN;
+
+-- Safety: Remove existing 2025 cutoffs for these colleges to prevent duplicates
+DELETE FROM cutoffs 
+WHERE year = 2025
+  AND exam_id IN (SELECT id FROM exams WHERE name = 'NEET')
+  AND college_id IN (
+    SELECT id FROM colleges 
+    WHERE lower(trim(name)) IN (
+      lower(trim('MIDNAPORE MEDICAL COLLEGE, MIDNAPUR')),
+      lower(trim('Mursidabad M C & Hospital, Mursidabad')),
+      lower(trim('NILRATAN SIRKAR MEDICAL COLLEGE, KOLKATA')),
+      lower(trim('Prafulla Chandra Sen Government Medical College & Hospital, Arambagh')),
+      lower(trim('R.G. KAR MEDICAL COLLEGE, KOLKATA'))
+    )
+  );
+
+-- 1. MIDNAPORE MEDICAL COLLEGE, MIDNAPUR
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 29489, 523, 1),
+  (2025, 31894, 520, 2),
+  (2025, 34098, 518, 3),
+  (2025, 45539, 506, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('MIDNAPORE MEDICAL COLLEGE, MIDNAPUR'));
+
+-- 2. Mursidabad M C & Hospital, Mursidabad
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 30544, 522, 1),
+  (2025, 32218, 520, 2),
+  (2025, 34700, 517, 3),
+  (2025, 34700, 517, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('Mursidabad M C & Hospital, Mursidabad'));
+
+-- 3. NILRATAN SIRKAR MEDICAL COLLEGE, KOLKATA
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 9842, 556, 1),
+  (2025, 10597, 554, 2),
+  (2025, 10945, 553, 3),
+  (2025, 10945, 553, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('NILRATAN SIRKAR MEDICAL COLLEGE, KOLKATA'));
+
+-- 4. Prafulla Chandra Sen Government Medical College & Hospital, Arambagh
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 33725, 518, 1),
+  (2025, 36318, 515, 2),
+  (2025, 36318, 515, 3),
+  (2025, 36318, 515, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('Prafulla Chandra Sen Government Medical College & Hospital, Arambagh'));
+
+-- 5. R.G. KAR MEDICAL COLLEGE, KOLKATA
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 14534, 545, 1),
+  (2025, 15494, 543, 2),
+  (2025, 15897, 542, 3),
+  (2025, 15897, 542, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('R.G. KAR MEDICAL COLLEGE, KOLKATA'));
+
+COMMIT;
+
+ BEGIN;
+
+-- Safety: Remove existing 2025 cutoffs for these colleges
+DELETE FROM cutoffs 
+WHERE year = 2025
+  AND exam_id IN (SELECT id FROM exams WHERE name = 'NEET')
+  AND college_id IN (
+    SELECT id FROM colleges 
+    WHERE lower(trim(name)) IN (
+      lower(trim('Raiganj Government Medical College, RAIGANJ')),
+      lower(trim('RAMPURHAT GOVT MEDICAL COLLEGE, RAMPURHAT')),
+      lower(trim('Sarat Chandra Chattopadhyay Govt. Medical College & Hospital, Uluberia')),
+      lower(trim('Tamralipto Government Medical College & Hospital, Purba Medinipur'))
+    )
+  );
+
+-- 1. Raiganj Government Medical College, RAIGANJ
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 38656, 513, 1),
+  (2025, 41826, 510, 2),
+  (2025, 45652, 506, 3),
+  (2025, 47373, 504, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('Raiganj Government Medical College, RAIGANJ'));
+
+-- 2. RAMPURHAT GOVT MEDICAL COLLEGE, RAMPURHAT
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 36146, 515, 1),
+  (2025, 38942, 512, 2),
+  (2025, 43860, 508, 3),
+  (2025, 47156, 504, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('RAMPURHAT GOVT MEDICAL COLLEGE, RAMPURHAT'));
+
+-- 3. Sarat Chandra Chattopadhyay Govt. Medical College & Hospital, Uluberia
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 33843, 518, 1),
+  (2025, 36811, 515, 2),
+  (2025, 38045, 513, 3),
+  (2025, 38045, 513, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('Sarat Chandra Chattopadhyay Govt. Medical College & Hospital, Uluberia'));
+
+-- 4. Tamralipto Government Medical College & Hospital, Purba Medinipur
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 36065, 515, 1),
+  (2025, 37134, 514, 2),
+  (2025, 38036, 513, 3),
+  (2025, 38036, 513, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('Tamralipto Government Medical College & Hospital, Purba Medinipur'));
+
+COMMIT;
+
+BEGIN;
+
+-- Safety: Remove existing All India quota entries for this college to prevent duplicates
+DELETE FROM cutoffs 
+WHERE year IN (2023, 2024, 2025)
+  AND quota = 'All India'
+  AND exam_id IN (SELECT id FROM exams WHERE name = 'NEET')
+  AND college_id IN (
+    SELECT id FROM colleges WHERE lower(trim(name)) = lower(trim('BANKURA SAMMILANI MEDICAL COLLEGE, BANKURA'))
+  );
+
+-- BANKURA SAMMILANI MEDICAL COLLEGE, BANKURA (All India Quota)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 11895, 551, 1),
+  (2025, 18161, 539, 2),
+  (2025, 20819, 534, 3),
+  (2024, 10552, 673, 1),
+  (2024, 16017, 665, 2),
+  (2024, 18299, 661, 3),
+  (2023, 10417, 639, 1),
+  (2023, 13686, 630, 2),
+  (2023, 15037, 627, 3),
+  (2023, 21750, 613, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('BANKURA SAMMILANI MEDICAL COLLEGE, BANKURA'));
+
+COMMIT;
+
+BEGIN;
+
+-- Safety: Remove existing All India quota entries for these colleges
+DELETE FROM cutoffs 
+WHERE year IN (2023, 2024, 2025)
+  AND quota = 'All India'
+  AND exam_id IN (SELECT id FROM exams WHERE name = 'NEET')
+  AND college_id IN (
+    SELECT id FROM colleges WHERE lower(trim(name)) IN (
+      lower(trim('BARASAT GOVERNMENT MEDICAL COLLEGE AND HOSPITAL')),
+      lower(trim('BURDWAN MEDICAL COLLEGE, BURDWAN')),
+      lower(trim('CALCUTTA NATIONAL MEDICAL COLLEGE, KOLKATA')),
+      lower(trim('COLLEGE OF MEDICINE and JNM HOSPITAL, KALYANI')),
+      lower(trim('COLLEGE OF MEDICINE AND SAGORE DUTTA HOSPITAL, KAMARHATI'))
+    )
+  );
+
+-- 1. BARASAT GOVERNMENT MEDICAL COLLEGE AND HOSPITAL
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 13148, 548, 1), (2025, 19032, 537, 2), (2025, 19805, 536, 3),
+  (2024, 12940, 670, 1), (2024, 17599, 662, 2), (2024, 19403, 660, 3),
+  (2023, 12776, 632, 1), (2023, 15920, 625, 2), (2023, 16787, 623, 3)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('BARASAT GOVERNMENT MEDICAL COLLEGE AND HOSPITAL'));
+
+-- 2. BURDWAN MEDICAL COLLEGE, BURDWAN
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 10078, 555, 1), (2025, 15052, 544, 2), (2025, 18519, 538, 3),
+  (2024, 9457, 675, 1), (2024, 14914, 666, 2), (2024, 16145, 665, 3), (2024, 21322, 656, 4),
+  (2023, 8107, 646, 1), (2023, 11418, 636, 2), (2023, 12536, 633, 3)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('BURDWAN MEDICAL COLLEGE, BURDWAN'));
+
+-- 3. CALCUTTA NATIONAL MEDICAL COLLEGE, KOLKATA
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 6375, 566, 1), (2025, 11518, 552, 2), (2025, 13687, 547, 3), (2025, 21457, 534, 4),
+  (2024, 5975, 683, 1), (2024, 10003, 675, 2), (2024, 11523, 671, 3), (2024, 12892, 670, 4),
+  (2023, 5158, 657, 1), (2023, 8292, 645, 2), (2023, 9847, 640, 3), (2023, 15081, 627, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('CALCUTTA NATIONAL MEDICAL COLLEGE, KOLKATA'));
+
+-- 4. COLLEGE OF MEDICINE and JNM HOSPITAL, KALYANI
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 10895, 553, 1), (2025, 16256, 542, 2), (2025, 20065, 536, 3),
+  (2024, 9729, 675, 1), (2024, 14928, 666, 2), (2024, 17092, 662, 3),
+  (2023, 9242, 642, 1), (2023, 11770, 635, 2), (2023, 13686, 630, 3), (2023, 21315, 614, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('COLLEGE OF MEDICINE and JNM HOSPITAL, KALYANI'));
+
+-- 5. COLLEGE OF MEDICINE AND SAGORE DUTTA HOSPITAL, KAMARHATI
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 8390, 560, 1), (2025, 14056, 546, 2), (2025, 16600, 541, 3), (2025, 26791, 526, 4),
+  (2024, 7347, 680, 1), (2024, 11577, 671, 2), (2024, 14445, 666, 3), (2024, 18981, 660, 4),
+  (2023, 6497, 651, 1), (2023, 9993, 640, 2), (2023, 11410, 636, 3), (2023, 18340, 620, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('COLLEGE OF MEDICINE AND SAGORE DUTTA HOSPITAL, KAMARHATI'));
+
+COMMIT;
+
+BEGIN;
+-- Safety: Remove existing All India quota entries for these colleges
+DELETE FROM cutoffs 
+WHERE year IN (2023, 2024, 2025)
+  AND quota = 'All India'
+  AND exam_id IN (SELECT id FROM exams WHERE name = 'NEET')
+  AND college_id IN (
+    SELECT id FROM colleges WHERE lower(trim(name)) IN (
+      lower(trim('Deben Mahata Government Medical College & Hospital, Purulia')),
+      lower(trim('Diamond Harbour Govt Medical College, Diamond Harbour')),
+      lower(trim('ESI PGI MSR AND ESIC MEDICAL COLLEGE, JOKA, KOLKATA')),
+      lower(trim('Government Medical College & Hospital, Jalpaiguri')),
+      lower(trim('INSTITUTE OF PG MEDICAL EDUCATION AND RESEARCH, KOLKATA'))
+    )
+  );
+
+-- 1. Deben Mahata Government Medical College & Hospital, Purulia
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 18165, 539, 1), (2025, 21259, 534, 2), (2025, 22750, 532, 3),
+  (2024, 16398, 664, 1), (2024, 20380, 658, 2), (2024, 22140, 656, 3),
+  (2023, 15108, 627, 1), (2023, 17526, 622, 2), (2023, 18737, 620, 3), (2023, 23161, 610, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('Deben Mahata Government Medical College & Hospital, Purulia'));
+
+-- 2. Diamond Harbour Govt Medical College, Diamond Harbour
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 11448, 552, 1), (2025, 18340, 538, 2), (2025, 21828, 533, 3),
+  (2024, 11809, 671, 1), (2024, 15220, 665, 2), (2024, 18398, 661, 3), (2024, 19036, 660, 4), (2024, 25097, 652, 5),
+  (2023, 10870, 637, 1), (2023, 12782, 632, 2), (2023, 14567, 628, 3)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('Diamond Harbour Govt Medical College, Diamond Harbour'));
+
+-- 3. ESI PGI MSR AND ESIC MEDICAL COLLEGE, JOKA, KOLKATA
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 9732, 556, 1), (2025, 13768, 547, 2), (2025, 16307, 542, 3), (2025, 26759, 526, 4),
+  (2024, 9058, 676, 1), (2024, 13435, 669, 2), (2024, 14136, 667, 3),
+  (2023, 7540, 648, 1), (2023, 11048, 637, 2), (2023, 11973, 635, 3)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('ESI PGI MSR AND ESIC MEDICAL COLLEGE, JOKA, KOLKATA'));
+
+-- 4. Government Medical College & Hospital, Jalpaiguri
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 16071, 542, 1), (2025, 21544, 533, 2), (2025, 22799, 532, 3),
+  (2024, 16043, 665, 1), (2024, 20686, 657, 2), (2024, 22595, 655, 3), (2024, 24272, 653, 4), (2024, 25123, 652, 5),
+  (2023, 15174, 627, 1), (2023, 18709, 620, 2), (2023, 18817, 619, 3)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('Government Medical College & Hospital, Jalpaiguri'));
+
+-- 5. INSTITUTE OF PG MEDICAL EDUCATION AND RESEARCH, KOLKATA
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 3260, 582, 1), (2025, 4137, 576, 2), (2025, 6327, 566, 3), (2025, 16421, 542, 4), (2025, 18783, 538, 5),
+  (2024, 2699, 694, 1), (2024, 3935, 690, 2), (2024, 3984, 690, 3),
+  (2023, 2249, 675, 1)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('INSTITUTE OF PG MEDICAL EDUCATION AND RESEARCH, KOLKATA'));
+
+COMMIT;
+
+BEGIN;
+-- Safety: Remove existing All India quota entries for these colleges
+DELETE FROM cutoffs 
+WHERE year IN (2023, 2024, 2025)
+  AND quota = 'All India'
+  AND exam_id IN (SELECT id FROM exams WHERE name = 'NEET')
+  AND college_id IN (
+    SELECT id FROM colleges WHERE lower(trim(name)) IN (
+      lower(trim('Jhargram Government Medical College and Hospital, Jhargram')),
+      lower(trim('Maharaja Jitendra Narayan Medical College and Hospital Coochbehar')),
+      lower(trim('MALDA MED. COLLEGE, MALDA')),
+      lower(trim('MEDICAL COLLEGE, KOLKATA')),
+      lower(trim('MIDNAPORE MEDICAL COLLEGE, MIDNAPUR'))
+    )
+  );
+
+-- 1. Jhargram Government Medical College and Hospital, Jhargram
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 19281, 537, 1), (2025, 22926, 531, 2), (2025, 24232, 530, 3), (2025, 27296, 525, 4),
+  (2024, 16872, 663, 1), (2024, 21204, 657, 2), (2024, 23316, 655, 3),
+  (2023, 16196, 625, 1), (2023, 18818, 619, 2), (2023, 20398, 615, 3), (2023, 23398, 610, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('Jhargram Government Medical College and Hospital, Jhargram'));
+
+-- 2. Maharaja Jitendra Narayan Medical College and Hospital Coochbehar
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 18083, 539, 1), (2025, 21362, 534, 2), (2025, 23933, 530, 3),
+  (2024, 15973, 665, 1), (2024, 20033, 659, 2), (2024, 22014, 656, 3), (2024, 22103, 656, 4),
+  (2023, 14352, 629, 1), (2023, 17622, 621, 2), (2023, 18525, 620, 3)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('Maharaja Jitendra Narayan Medical College and Hospital Coochbehar'));
+
+-- 3. MALDA MED. COLLEGE, MALDA
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 14398, 545, 1), (2025, 20737, 535, 2), (2025, 22988, 531, 3),
+  (2024, 13703, 668, 1), (2024, 18827, 660, 2), (2024, 21218, 657, 3), (2024, 22779, 655, 4),
+  (2023, 12063, 635, 1), (2023, 14989, 627, 2), (2023, 15148, 627, 3)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('MALDA MED. COLLEGE, MALDA'));
+
+-- 4. MEDICAL COLLEGE, KOLKATA
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 2714, 586, 1), (2025, 3581, 580, 2),
+  (2024, 2504, 695, 1), (2024, 3427, 690, 2),
+  (2023, 2103, 675, 1), (2023, 3224, 667, 2), (2023, 3128, 668, 3)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('MEDICAL COLLEGE, KOLKATA'));
+
+-- 5. MIDNAPORE MEDICAL COLLEGE, MIDNAPUR
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 13585, 547, 1), (2025, 19936, 536, 2), (2025, 21971, 533, 3),
+  (2024, 12269, 670, 1), (2024, 18271, 661, 2), (2024, 20542, 658, 3), (2024, 23116, 655, 4),
+  (2023, 12098, 635, 1), (2023, 15592, 626, 2), (2023, 16882, 623, 3), (2023, 22566, 611, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('MIDNAPORE MEDICAL COLLEGE, MIDNAPUR'));
+
+COMMIT;
+
+BEGIN;
+
+-- Safety: Remove existing All India quota entries for these colleges
+DELETE FROM cutoffs 
+WHERE year IN (2023, 2024, 2025)
+  AND quota = 'All India'
+  AND exam_id IN (SELECT id FROM exams WHERE name = 'NEET')
+  AND college_id IN (
+    SELECT id FROM colleges WHERE lower(trim(name)) IN (
+      lower(trim('Mursidabad M C & Hospital, Mursidabad')),
+      lower(trim('NILRATAN SIRKAR MEDICAL COLLEGE, KOLKATA')),
+      lower(trim('Prafulla Chandra Sen Government Medical College & Hospital, Arambagh')),
+      lower(trim('R.G. KAR MEDICAL COLLEGE, KOLKATA')),
+      lower(trim('Raiganj Government Medical College, RAIGANJ'))
+    )
+  );
+
+-- 1. Mursidabad M C & Hospital, Mursidabad
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 15566, 543, 1), (2025, 21370, 534, 2), (2025, 22912, 531, 3),
+  (2024, 14131, 667, 1), (2024, 18395, 661, 2), (2024, 20308, 658, 3), (2024, 23918, 653, 4),
+  (2023, 12660, 633, 1), (2023, 16172, 625, 2), (2023, 17970, 621, 3), (2023, 23125, 610, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('Mursidabad M C & Hospital, Mursidabad'));
+
+-- 2. NILRATAN SIRKAR MEDICAL COLLEGE, KOLKATA
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 5524, 570, 1), (2025, 9231, 557, 2), (2025, 10755, 554, 3),
+  (2024, 5180, 685, 1), (2024, 7347, 680, 2), (2024, 8074, 678, 3),
+  (2023, 3934, 664, 1), (2023, 5821, 655, 2), (2023, 7337, 649, 3), (2023, 9672, 641, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('NILRATAN SIRKAR MEDICAL COLLEGE, KOLKATA'));
+
+-- 3. Prafulla Chandra Sen Government Medical College & Hospital, Arambagh
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 18500, 538, 1), (2025, 22363, 532, 2), (2025, 23175, 531, 3),
+  (2024, 16642, 663, 1), (2024, 20675, 657, 2), (2024, 22655, 655, 3),
+  (2023, 15263, 626, 1), (2023, 17615, 621, 2), (2023, 19021, 619, 3), (2023, 23232, 610, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('Prafulla Chandra Sen Government Medical College & Hospital, Arambagh'));
+
+-- 4. R.G. KAR MEDICAL COLLEGE, KOLKATA
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 7997, 561, 1), (2025, 12512, 549, 2), (2025, 14047, 546, 3),
+  (2024, 7437, 680, 1), (2024, 12461, 670, 2), (2024, 13631, 668, 3), (2024, 15973, 665, 4),
+  (2023, 4802, 660, 1), (2023, 7834, 647, 2), (2023, 8707, 644, 3), (2023, 15247, 626, 4), (2023, 17058, 623, 5)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('R.G. KAR MEDICAL COLLEGE, KOLKATA'));
+
+-- 5. Raiganj Government Medical College, RAIGANJ
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 16264, 542, 1), (2025, 21828, 533, 2), (2025, 23373, 531, 3),
+  (2024, 15868, 665, 1), (2024, 19054, 660, 2), (2024, 21819, 656, 3),
+  (2023, 15066, 627, 1), (2023, 17699, 621, 2), (2023, 18086, 620, 3)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('Raiganj Government Medical College, RAIGANJ'));
+
+COMMIT;
+
+BEGIN;
+
+-- Safety: Remove existing All India quota entries for these colleges
+DELETE FROM cutoffs 
+WHERE year IN (2023, 2024, 2025)
+  AND quota = 'All India'
+  AND exam_id IN (SELECT id FROM exams WHERE name = 'NEET')
+  AND college_id IN (
+    SELECT id FROM colleges WHERE lower(trim(name)) IN (
+      lower(trim('RAMPURHAT GOVT MEDICAL COLLEGE, RAMPURHAT')),
+      lower(trim('Sarat Chandra Chattopadhyay Govt. Medical College & Hospital, Uluberia')),
+      lower(trim('Tamralipto Government Medical College & Hospital, Purba Medinipur'))
+    )
+  );
+
+-- 1. RAMPURHAT GOVT MEDICAL COLLEGE, RAMPURHAT
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 17392, 540, 1), (2025, 22098, 533, 2), (2025, 23811, 530, 3), (2025, 26665, 526, 4),
+  (2024, 15657, 665, 1), (2024, 20094, 658, 2), (2024, 21906, 656, 3), (2024, 23931, 653, 4),
+  (2023, 14617, 628, 1), (2023, 17801, 621, 2), (2023, 18577, 620, 3), (2023, 23185, 610, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('RAMPURHAT GOVT MEDICAL COLLEGE, RAMPURHAT'));
+
+-- 2. Sarat Chandra Chattopadhyay Govt. Medical College & Hospital, Uluberia
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 17944, 539, 1), (2025, 21303, 534, 2), (2025, 23215, 531, 3),
+  (2024, 15088, 665, 1), (2024, 20156, 658, 2), (2024, 21824, 656, 3),
+  (2023, 13529, 631, 1), (2023, 17455, 622, 2), (2023, 17687, 621, 3), (2023, 22734, 611, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('Sarat Chandra Chattopadhyay Govt. Medical College & Hospital, Uluberia'));
+
+-- 3. Tamralipto Government Medical College & Hospital, Purba Medinipur
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'All India', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 18793, 538, 1), (2025, 23226, 531, 2), (2025, 23511, 531, 3),
+  (2024, 16824, 663, 1), (2024, 21107, 657, 2), (2024, 23151, 655, 3),
+  (2023, 16392, 624, 1), (2023, 17955, 621, 2), (2023, 19986, 616, 3)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('Tamralipto Government Medical College & Hospital, Purba Medinipur'));
+
+COMMIT;
+
+BEGIN;
+
+-- Safety: Remove existing ESIC quota entries for this college
+DELETE FROM cutoffs 
+WHERE year IN (2023, 2024, 2025)
+  AND quota = 'ESIC'
+  AND exam_id IN (SELECT id FROM exams WHERE name = 'NEET')
+  AND college_id IN (
+    SELECT id FROM colleges WHERE lower(trim(name)) = lower(trim('ESI PGI MSR AND ESIC MEDICAL COLLEGE, JOKA, KOLKATA'))
+  );
+
+-- ESI PGI MSR AND ESIC MEDICAL COLLEGE, JOKA, KOLKATA (ESIC Quota)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'ESIC', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 31648, 520, 1), (2025, 38118, 513, 2), (2025, 48741, 503, 3), (2025, 38411, 513, 4),
+  (2024, 48787, 626, 1), (2024, 50790, 624, 2), (2024, 54601, 620, 3),
+  (2023, 48544, 570, 1), (2023, 55198, 561, 2), (2023, 61491, 553, 3)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('ESI PGI MSR AND ESIC MEDICAL COLLEGE, JOKA, KOLKATA'));
+
+COMMIT;
+
+BEGIN;
+
+-- Safety: Remove existing State quota entries for these private colleges for 2025
+DELETE FROM cutoffs 
+WHERE year = 2025
+  AND quota = 'State'
+  AND college_type = 'Private'
+  AND exam_id IN (SELECT id FROM exams WHERE name = 'NEET')
+  AND college_id IN (
+    SELECT id FROM colleges WHERE lower(trim(name)) IN (
+      lower(trim('EAST WEST INSTITUTE OF MEDICAL SCIENCES AND RESEARCH')),
+      lower(trim('GOURI DEVI INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL')),
+      lower(trim('I Q CITY MEDICAL COLLEGE')),
+      lower(trim('ICARE INSTITUTE OF MEDICAL SCIENCE AND RESEARCH AND DR B C ROY HOSPITAL HALDIA')),
+      lower(trim('JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES & HOSPITAL- NORTH KOLKATA'))
+    )
+  );
+
+-- 1. EAST WEST INSTITUTE OF MEDICAL SCIENCES AND RESEARCH
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 66283, 488, 1), (2025, 66717, 488, 2), (2025, 78021, 480, 3), (2025, 89941, 471, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('EAST WEST INSTITUTE OF MEDICAL SCIENCES AND RESEARCH'));
+
+-- 2. GOURI DEVI INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 56154, 496, 1), (2025, 56736, 496, 2), (2025, 66835, 488, 3), (2025, 71162, 485, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('GOURI DEVI INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL'));
+
+-- 3. I Q CITY MEDICAL COLLEGE
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 50924, 501, 1), (2025, 51633, 500, 2), (2025, 62098, 492, 3), (2025, 62098, 492, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('I Q CITY MEDICAL COLLEGE'));
+
+-- 4. ICARE INSTITUTE OF MEDICAL SCIENCE AND RESEARCH AND DR B C ROY HOSPITAL HALDIA
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 52852, 499, 1), (2025, 52852, 499, 2), (2025, 60071, 493, 3), (2025, 60071, 493, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('ICARE INSTITUTE OF MEDICAL SCIENCE AND RESEARCH AND DR B C ROY HOSPITAL HALDIA'));
+
+-- 5. JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES & HOSPITAL- NORTH KOLKATA
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 80728, 478, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES & HOSPITAL- NORTH KOLKATA'));
+
+COMMIT;
+
+
+BEGIN;
+
+-- Safety: Remove existing State quota entries for these private colleges for 2025
+DELETE FROM cutoffs 
+WHERE year = 2025
+  AND quota = 'State'
+  AND college_type = 'Private'
+  AND exam_id IN (SELECT id FROM exams WHERE name = 'NEET')
+  AND college_id IN (
+    SELECT id FROM colleges WHERE lower(trim(name)) IN (
+      lower(trim('JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL')),
+      lower(trim('JAKIR HOSAIN MEDICAL COLLEGE & RESEARCH INSTITUTE')),
+      lower(trim('JIS SCHOOL OF MEDICAL SCIENCE AND RESEARCH')),
+      lower(trim('JMN MEDICAL COLLEGE')),
+      lower(trim('KPC MEDICAL COLLEGE AND HOSPITAL, JADAVPUR'))
+    )
+  );
+
+-- 1. JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 46881, 505, 1), (2025, 48122, 504, 2), (2025, 54920, 497, 3), (2025, 61291, 492, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL'));
+
+-- 2. JAKIR HOSAIN MEDICAL COLLEGE & RESEARCH INSTITUTE
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 66489, 488, 1), (2025, 69922, 485, 2), (2025, 79278, 479, 3), (2025, 95512, 467, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('JAKIR HOSAIN MEDICAL COLLEGE & RESEARCH INSTITUTE'));
+
+-- 3. JIS SCHOOL OF MEDICAL SCIENCE AND RESEARCH
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 55318, 497, 1), (2025, 55318, 497, 2), (2025, 60674, 493, 3), (2025, 60674, 493, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('JIS SCHOOL OF MEDICAL SCIENCE AND RESEARCH'));
+
+-- 4. JMN MEDICAL COLLEGE
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 60563, 493, 1), (2025, 60563, 493, 2), (2025, 66927, 488, 3), (2025, 66927, 488, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('JMN MEDICAL COLLEGE'));
+
+-- 5. KPC MEDICAL COLLEGE AND HOSPITAL, JADAVPUR
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 42294, 509, 1), (2025, 44025, 507, 2), (2025, 47232, 504, 3), (2025, 47232, 504, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('KPC MEDICAL COLLEGE AND HOSPITAL, JADAVPUR'));
+
+COMMIT;
+
+
+BEGIN;
+
+-- Safety: Remove existing State quota entries for these private colleges for 2025
+DELETE FROM cutoffs 
+WHERE year = 2025
+  AND quota = 'State'
+  AND college_type = 'Private'
+  AND exam_id IN (SELECT id FROM exams WHERE name = 'NEET')
+  AND college_id IN (
+    SELECT id FROM colleges WHERE lower(trim(name)) IN (
+      lower(trim('KRISHNANAGAR INSTITUTE OF MEDICAL SCIENCE PRIVATE LIMITED')),
+      lower(trim('PKG MEDICAL COLLEGE & HOSPITAL')),
+      lower(trim('RANIGANJ INSTITUTE OF MEDICAL SCIENCE')),
+      lower(trim('SANTINIKETAN MEDICAL COLLEGE')),
+      lower(trim('SHRI RAMKRISHNA INSTITUTE OF MEDICAL SCIENCES AND SANAKA HOSPITALS'))
+    )
+  );
+
+-- 1. KRISHNANAGAR INSTITUTE OF MEDICAL SCIENCE PRIVATE LIMITED
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 65947, 489, 1), (2025, 66382, 488, 2), (2025, 76119, 481, 3), (2025, 84623, 475, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('KRISHNANAGAR INSTITUTE OF MEDICAL SCIENCE PRIVATE LIMITED'));
+
+-- 2. PKG MEDICAL COLLEGE & HOSPITAL
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 82520, 476, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('PKG MEDICAL COLLEGE & HOSPITAL'));
+
+-- 3. RANIGANJ INSTITUTE OF MEDICAL SCIENCE
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 68380, 487, 2), (2025, 76247, 481, 3), (2025, 87185, 473, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('RANIGANJ INSTITUTE OF MEDICAL SCIENCE'));
+
+-- 4. SANTINIKETAN MEDICAL COLLEGE
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 57441, 495, 1), (2025, 57293, 496, 2), (2025, 63526, 490, 3), (2025, 63526, 490, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('SANTINIKETAN MEDICAL COLLEGE'));
+
+-- 5. SHRI RAMKRISHNA INSTITUTE OF MEDICAL SCIENCES AND SANAKA HOSPITALS
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'State', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 60943, 493, 1), (2025, 63123, 491, 2), (2025, 70813, 485, 3), (2025, 74558, 482, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('SHRI RAMKRISHNA INSTITUTE OF MEDICAL SCIENCES AND SANAKA HOSPITALS'));
+
+COMMIT;
+
+BEGIN;
+
+-- Safety: Remove existing NRI quota entries for these private colleges for 2024 and 2025
+DELETE FROM cutoffs 
+WHERE year IN (2024, 2025)
+  AND quota = 'NRI'
+  AND college_type = 'Private'
+  AND exam_id IN (SELECT id FROM exams WHERE name = 'NEET')
+  AND college_id IN (
+    SELECT id FROM colleges WHERE lower(trim(name)) IN (
+      lower(trim('JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL')),
+      lower(trim('KPC MEDICAL COLLEGE AND HOSPITAL, JADAVPUR'))
+    )
+  );
+
+-- 1. JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL (NRI)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'NRI', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- 2025
+  (2025, 1188084, 130, 1), (2025, 1267125, 120, 2), (2025, 1195103, 129, 3), (2025, 1076536, 147, 4),
+  -- 2024
+  (2024, 1306154, 139, 1), (2024, 1306154, 139, 2), (2024, 1286978, 142, 3), (2024, 1306154, 139, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL'));
+
+-- 2. KPC MEDICAL COLLEGE AND HOSPITAL, JADAVPUR (NRI)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'NRI', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- 2025
+  (2025, 1171559, 132, 1), (2025, 1281133, 117, 2), (2025, 960899, 167, 3), (2025, 960899, 167, 4),
+  -- 2024
+  (2024, 1196225, 156, 1), (2024, 1196225, 156, 2), (2024, 1382375, 129, 3), (2024, 1196225, 156, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('KPC MEDICAL COLLEGE AND HOSPITAL, JADAVPUR'));
+
+COMMIT;
+
+
+BEGIN;
+
+-- Safety: Remove existing Management quota entries for these private colleges for 2024 and 2025
+DELETE FROM cutoffs 
+WHERE year IN (2024, 2025)
+  AND quota = 'Management'
+  AND college_type = 'Private'
+  AND exam_id IN (SELECT id FROM exams WHERE name = 'NEET')
+  AND college_id IN (
+    SELECT id FROM colleges WHERE lower(trim(name)) IN (
+      lower(trim('EAST WEST INSTITUTE OF MEDICAL SCIENCES AND RESEARCH')),
+      lower(trim('GOURI DEVI INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL')),
+      lower(trim('I Q CITY MEDICAL COLLEGE')),
+      lower(trim('ICARE INSTITUTE OF MEDICAL SCIENCE AND RESEARCH AND DR B C ROY HOSPITAL HALDIA')),
+      lower(trim('JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES & HOSPITAL- NORTH KOLKATA'))
+    )
+  );
+
+-- 1. EAST WEST INSTITUTE OF MEDICAL SCIENCES AND RESEARCH (Management)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'Management', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 512536, 277, 1), (2025, 642879, 238, 2), (2025, 804787, 199, 3), (2025, 861300, 187, 4),
+  (2024, 729099, 262, 6)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('EAST WEST INSTITUTE OF MEDICAL SCIENCES AND RESEARCH'));
+
+-- 2. GOURI DEVI INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL (Management)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'Management', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 712188, 221, 1), (2025, 712188, 221, 2), (2025, 712188, 221, 3), (2025, 851954, 189, 4),
+  (2024, 1034173, 186, 1), (2024, 1034173, 186, 2), (2024, 574211, 314, 3), (2024, 1034173, 186, 4), (2024, 787447, 246, 5), (2024, 89097, 590, 6)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('GOURI DEVI INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL'));
+
+-- 3. I Q CITY MEDICAL COLLEGE (Management)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'Management', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 698903, 224, 1), (2025, 698903, 224, 2), (2025, 741064, 214, 3), (2025, 844366, 190, 4),
+  (2024, 1125076, 169, 1), (2024, 1125076, 169, 2), (2024, 635707, 292, 3), (2024, 1125076, 169, 4), (2024, 774498, 249, 5), (2024, 172459, 523, 6)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('I Q CITY MEDICAL COLLEGE'));
+
+-- 4. ICARE INSTITUTE OF MEDICAL SCIENCE AND RESEARCH AND DR B C ROY HOSPITAL HALDIA (Management)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'Management', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 457844, 295, 1), (2025, 457844, 295, 2), (2025, 457844, 295, 3), (2025, 480227, 287, 4),
+  (2024, 758057, 254, 1), (2024, 758057, 254, 2), (2024, 298111, 441, 3), (2024, 758057, 254, 4), (2024, 130196, 556, 5)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('ICARE INSTITUTE OF MEDICAL SCIENCE AND RESEARCH AND DR B C ROY HOSPITAL HALDIA'));
+
+-- 5. JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES & HOSPITAL- NORTH KOLKATA (Management)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'Management', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 923270, 175, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES & HOSPITAL- NORTH KOLKATA'));
+
+COMMIT;
+
+
+BEGIN;
+
+-- Safety: Remove existing Management quota entries for these private colleges for 2024 and 2025
+DELETE FROM cutoffs 
+WHERE year IN (2024, 2025)
+  AND quota = 'Management'
+  AND college_type = 'Private'
+  AND exam_id IN (SELECT id FROM exams WHERE name = 'NEET')
+  AND college_id IN (
+    SELECT id FROM colleges WHERE lower(trim(name)) IN (
+      lower(trim('JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL')),
+      lower(trim('JAKIR HOSAIN MEDICAL COLLEGE & RESEARCH INSTITUTE')),
+      lower(trim('JIS SCHOOL OF MEDICAL SCIENCE AND RESEARCH')),
+      lower(trim('JMN MEDICAL COLLEGE')),
+      lower(trim('KPC MEDICAL COLLEGE AND HOSPITAL, JADAVPUR'))
+    )
+  );
+
+-- 1. JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL (Management)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'Management', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- 2025
+  (2025, 491918, 283, 1), (2025, 511247, 277, 2), (2025, 667340, 232, 3), (2025, 866080, 186, 4),
+  -- 2024
+  (2024, 794811, 244, 1), (2024, 794811, 244, 2), (2024, 493502, 346, 3), (2024, 794811, 244, 4), (2024, 829674, 234, 5), (2024, 253911, 468, 6)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('JAGANNATH GUPTA INSTITUTE OF MEDICAL SCIENCES AND HOSPITAL'));
+
+-- 2. JAKIR HOSAIN MEDICAL COLLEGE & RESEARCH INSTITUTE (Management)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'Management', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- 2025
+  (2025, 836337, 192, 1), (2025, 834973, 192, 2), (2025, 845872, 190, 3), (2025, 915803, 176, 4),
+  -- 2024
+  (2024, 827260, 235, 6)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('JAKIR HOSAIN MEDICAL COLLEGE & RESEARCH INSTITUTE'));
+
+-- 3. JIS SCHOOL OF MEDICAL SCIENCE AND RESEARCH (Management)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'Management', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- 2025
+  (2025, 714253, 220, 1), (2025, 714253, 220, 2), (2025, 714253, 220, 3), (2025, 848669, 189, 4),
+  -- 2024
+  (2024, 1298333, 140, 1), (2024, 1172510, 160, 2), (2024, 289948, 446, 3), (2024, 1172510, 160, 4), (2024, 820060, 237, 5), (2024, 139625, 548, 6)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('JIS SCHOOL OF MEDICAL SCIENCE AND RESEARCH'));
+
+-- 4. JMN MEDICAL COLLEGE (Management)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'Management', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- 2025
+  (2025, 734957, 215, 1), (2025, 734957, 215, 2), (2025, 734957, 215, 3), (2025, 734957, 215, 4),
+  -- 2024
+  (2024, 1385127, 128, 1), (2024, 1243696, 149, 2), (2024, 510146, 339, 3), (2024, 1243696, 149, 4), (2024, 831281, 234, 5), (2024, 129187, 557, 6)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('JMN MEDICAL COLLEGE'));
+
+-- 5. KPC MEDICAL COLLEGE AND HOSPITAL, JADAVPUR (Management)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'Management', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- 2025
+  (2025, 111301, 457, 1), (2025, 111301, 457, 2), (2025, 111301, 457, 3), (2025, 211553, 399, 4),
+  -- 2024
+  (2024, 113252, 570, 1), (2024, 113252, 570, 2), (2024, 109189, 573, 3), (2024, 113252, 570, 4), (2024, 99574, 581, 5)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('KPC MEDICAL COLLEGE AND HOSPITAL, JADAVPUR'));
+
+COMMIT;
+
+
+BEGIN;
+
+-- Safety: Remove existing Management quota entries for these private colleges for 2024 and 2025
+DELETE FROM cutoffs 
+WHERE year IN (2024, 2025)
+  AND quota = 'Management'
+  AND college_type = 'Private'
+  AND exam_id IN (SELECT id FROM exams WHERE name = 'NEET')
+  AND college_id IN (
+    SELECT id FROM colleges WHERE lower(trim(name)) IN (
+      lower(trim('KRISHNANAGAR INSTITUTE OF MEDICAL SCIENCE PRIVATE LIMITED')),
+      lower(trim('PKG MEDICAL COLLEGE & HOSPITAL')),
+      lower(trim('RANIGANJ INSTITUTE OF MEDICAL SCIENCE')),
+      lower(trim('SANTINIKETAN MEDICAL COLLEGE')),
+      lower(trim('SHRI RAMKRISHNA INSTITUTE OF MEDICAL SCIENCES AND SANAKA HOSPITALS'))
+    )
+  );
+
+-- 1. KRISHNANAGAR INSTITUTE OF MEDICAL SCIENCE PRIVATE LIMITED (Management)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'Management', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- 2025
+  (2025, 814210, 197, 1), (2025, 812998, 198, 2), (2025, 812998, 198, 3), (2025, 885599, 182, 4),
+  -- 2024
+  (2024, 827871, 235, 1), (2024, 760876, 253, 2), (2024, 488945, 348, 3), (2024, 760876, 253, 4), (2024, 834969, 233, 5), (2024, 126077, 559, 6)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('KRISHNANAGAR INSTITUTE OF MEDICAL SCIENCE PRIVATE LIMITED'));
+
+-- 2. PKG MEDICAL COLLEGE & HOSPITAL (Management)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'Management', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- 2025
+  (2025, 912479, 177, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('PKG MEDICAL COLLEGE & HOSPITAL'));
+
+-- 3. RANIGANJ INSTITUTE OF MEDICAL SCIENCE (Management)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'Management', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- 2025
+  (2025, 738904, 214, 2), (2025, 830358, 194, 3), (2025, 882290, 183, 4)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('RANIGANJ INSTITUTE OF MEDICAL SCIENCE'));
+
+-- 4. SANTINIKETAN MEDICAL COLLEGE (Management)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'Management', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- 2025
+  (2025, 821038, 195, 1), (2025, 821038, 195, 2), (2025, 821038, 195, 3), (2025, 893015, 180, 4),
+  -- 2024
+  (2024, 1333433, 135, 1), (2024, 1333433, 135, 2), (2024, 708438, 269, 3), (2024, 1333433, 135, 4), (2024, 834015, 233, 5), (2024, 502874, 342, 6)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('SANTINIKETAN MEDICAL COLLEGE'));
+
+-- 5. SHRI RAMKRISHNA INSTITUTE OF MEDICAL SCIENCES AND SANAKA HOSPITALS (Management)
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT c.id, e.id, 'MBBS', 'Open', 'Management', 'West Bengal', 'Private', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- 2025
+  (2025, 791009, 202, 1), (2025, 791009, 202, 2), (2025, 791009, 202, 3), (2025, 874690, 184, 4),
+  -- 2024
+  (2024, 1386322, 128, 1), (2024, 1386322, 128, 2), (2024, 610704, 301, 3), (2024, 1386322, 128, 4), (2024, 800646, 242, 5), (2024, 304717, 437, 6)
+) AS v(year, rank, marks, round)
+CROSS JOIN (SELECT id FROM exams WHERE name = 'NEET') e
+CROSS JOIN colleges c
+WHERE lower(trim(c.name)) = lower(trim('SHRI RAMKRISHNA INSTITUTE OF MEDICAL SCIENCES AND SANAKA HOSPITALS'));
+
+COMMIT;
+
