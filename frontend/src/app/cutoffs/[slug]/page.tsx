@@ -294,13 +294,13 @@ export default function CutoffSlugPage({ params }: { params: { slug: string } })
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-8">
             <SelectField label="Entrance Exam" value={filters.exam} onChange={(v: string) => setFilter('exam', v)} options={config.exams} placeholder="All Exams" theme={themeColor} />
-            <SelectField label="Academic Year" value={filters.year} onChange={(v: string) => setFilter('year', v)} options={dbOptions.years} placeholder="All Years" theme={themeColor} />
-            <SelectField label="Desired Course" value={filters.course} onChange={(v: string) => setFilter('course', v)} options={dbOptions.courses} placeholder="All Courses" theme={themeColor} />
-            <SelectField label="College Type" value={filters.collegeType} onChange={(v: string) => setFilter('collegeType', v)} options={dbOptions.collegeTypes} placeholder="All Types" theme={themeColor} />
-            <SelectField label="State / Territory" value={filters.state} onChange={(v: string) => setFilter('state', v)} options={dbOptions.states} placeholder="All States" theme={themeColor} />
-            <SelectField label="Counseling Quota" value={filters.quota} onChange={(v: string) => setFilter('quota', v)} options={dbOptions.quotas} placeholder="All Quotas" theme={themeColor} />
-            <SelectField label="Your Category" value={filters.category} onChange={(v: string) => setFilter('category', v)} options={dbOptions.categories} placeholder="All Categories" theme={themeColor} />
-            <SelectField label="Specific College" value={filters.college} onChange={(v: string) => setFilter('college', v)} options={dbOptions.colleges} placeholder="All Colleges" theme={themeColor} />
+            <SelectField label="Academic Year" value={filters.year} onChange={(v: string) => setFilter('year', v)} options={dbOptions.years} placeholder="All Years" theme={themeColor} disabled={!filters.exam} />
+            <SelectField label="Desired Course" value={filters.course} onChange={(v: string) => setFilter('course', v)} options={dbOptions.courses} placeholder="All Courses" theme={themeColor} disabled={!filters.year} />
+            <SelectField label="College Type" value={filters.collegeType} onChange={(v: string) => setFilter('collegeType', v)} options={dbOptions.collegeTypes} placeholder="All Types" theme={themeColor} disabled={!filters.course} />
+            <SelectField label="State / Territory" value={filters.state} onChange={(v: string) => setFilter('state', v)} options={dbOptions.states} placeholder="All States" theme={themeColor} disabled={!filters.collegeType} />
+            <SelectField label="Counseling Quota" value={filters.quota} onChange={(v: string) => setFilter('quota', v)} options={dbOptions.quotas} placeholder="All Quotas" theme={themeColor} disabled={!filters.state} />
+            <SelectField label="Specific College" value={filters.college} onChange={(v: string) => setFilter('college', v)} options={dbOptions.colleges} placeholder="All Colleges" theme={themeColor} disabled={!filters.quota} />
+            <SelectField label="Your Category" value={filters.category} onChange={(v: string) => setFilter('category', v)} options={dbOptions.categories} placeholder="All Categories" theme={themeColor} disabled={!filters.college} />
             <div className="flex items-end sm:col-span-2 lg:col-span-4 mt-2">
               <button 
                 onClick={handleSearch}
@@ -418,14 +418,15 @@ export default function CutoffSlugPage({ params }: { params: { slug: string } })
 
 // ── MODERN COMPONENTS ─────────────────────────────────────────────────────────
 
-function SelectField({ label, value, onChange, options, placeholder, theme }: any) {
+function SelectField({ label, value, onChange, options, placeholder, theme, disabled }: any) {
   return (
-    <div className="space-y-2.5">
+    <div className={`space-y-2.5 ${disabled ? 'opacity-50 pointer-events-none' : ''}`}>
       <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">{label}</label>
       <div className="relative group">
         <select
           value={value}
           onChange={e => onChange(e.target.value)}
+          disabled={disabled}
           className={`w-full pl-5 pr-12 py-4 bg-[#F8FAFC] border border-slate-200/60 rounded-2xl text-sm font-bold text-slate-700 focus:outline-none focus:ring-4 transition-all appearance-none cursor-pointer group-hover:border-slate-300 ${theme === 'sky' ? 'focus:ring-sky-100 focus:border-sky-300' : 'focus:ring-emerald-100 focus:border-emerald-300'}`}
         >
           <option value="">{placeholder}</option>

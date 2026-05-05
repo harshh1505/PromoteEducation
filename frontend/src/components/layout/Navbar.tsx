@@ -146,7 +146,7 @@ export default function Navbar() {
       setIsSearching(true)
       const { data, error } = await supabase
         .from('colleges')
-        .select('name, location, stream')
+        .select('name, slug, location, stream')
         .or(`name.ilike.%${trimmedQuery}%,location.ilike.%${trimmedQuery}%,stream.ilike.%${trimmedQuery}%`)
         .limit(5)
 
@@ -252,7 +252,7 @@ export default function Navbar() {
                       {searchResults.map((res, i) => (
                         <button
                           key={i}
-                          onClick={() => { window.location.href = `/colleges?search=${encodeURIComponent(res.name)}` }}
+                          onClick={() => { window.location.href = `/colleges/${res.slug}` }}
                           className="w-full flex items-center gap-4 px-5 py-3.5 hover:bg-slate-50 text-left transition-colors group"
                         >
                           <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-sky-500 group-hover:text-white transition-all shadow-sm">
@@ -533,7 +533,7 @@ export default function Navbar() {
                     {searchResults.map((res, i) => (
                       <button
                         key={i}
-                        onClick={() => { window.location.href = `/colleges?search=${encodeURIComponent(res.name)}`; setMobileOpen(false); }}
+                        onClick={() => { window.location.href = `/colleges/${res.slug}`; setMobileOpen(false); }}
                         className="w-full flex items-center gap-3 px-4 py-3 border-b border-slate-50 last:border-0 hover:bg-slate-50"
                       >
                         <Building2 size={14} className="text-slate-400" />
