@@ -50,7 +50,7 @@ export default function RankingsPageContent() {
       let query = supabase
         .from('colleges')
         .select('*')
-        .order('ranking', { ascending: true })
+        .order('ranking', { ascending: true, nullsFirst: false })
 
       if (filter !== 'All') {
         query = query.eq('stream', filter)
@@ -62,7 +62,12 @@ export default function RankingsPageContent() {
 
       const { data, error } = await query
       if (!error && data) {
-        setColleges(data)
+        const sortedData = data.sort((a, b) => {
+          const rankA = (a.ranking !== null && a.ranking > 0) ? a.ranking : Infinity;
+          const rankB = (b.ranking !== null && b.ranking > 0) ? b.ranking : Infinity;
+          return rankA - rankB;
+        });
+        setColleges(sortedData)
       } else {
         setColleges([])
       }
@@ -149,7 +154,7 @@ export default function RankingsPageContent() {
                         className="border-b border-slate-200 hover:bg-slate-50 transition-colors"
                       >
                         <td className="px-4 py-4 text-center font-bold text-slate-900 border-r border-slate-200 bg-slate-50/50">
-                           #{college.ranking || index + 1}
+                           {college.ranking && college.ranking > 0 ? `#${college.ranking}` : '-'}
                         </td>
                         <td className="px-4 py-4 border-r border-slate-200">
                            <div className="flex flex-col gap-1">

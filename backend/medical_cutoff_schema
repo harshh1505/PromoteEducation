@@ -1385,3 +1385,2786 @@ WHERE lower(trim(c.name)) = lower(trim('SHRI RAMKRISHNA INSTITUTE OF MEDICAL SCI
 
 COMMIT;
 
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'aiims-kalyani'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  'MBBS', 'Open', 'Open Seat Quota', 'West Bengal', 'Central Inst./University', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  (2025, 2276, 590, 1),
+  (2025, 2417, 588, 2),
+  (2024, 2149, 695, 1),
+  (2024, 2435, 695, 2),
+  (2024, 891, 701, 3),
+  (2023, 1985, 676, 1),
+  (2023, 2103, 675, 2),
+  (2023, 2176, 675, 3)
+) AS v(year, rank, marks, round);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'esi-pgi-msr-esic-medical-college-joka'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'ESIC Quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 38376, 513, 1, 2025),
+  ('MBBS', 'EWS', 40263, 511, 2, 2025),
+  ('MBBS', 'EWS', 55783, 497, 3, 2025),
+  ('MBBS', 'EWS', 53932, 621, 1, 2024),
+  ('MBBS', 'EWS', 74894, 537, 1, 2023),
+  
+  -- OBC Data
+  ('MBBS', 'OBC', 35494, 516, 1, 2025),
+  ('MBBS', 'OBC', 38970, 512, 2, 2025),
+  ('MBBS', 'OBC', 51767, 500, 3, 2025),
+  ('MBBS', 'OBC', 52814, 622, 1, 2024),
+  ('MBBS', 'OBC', 53308, 622, 2, 2024),
+  ('MBBS', 'OBC', 55255, 620, 3, 2024),
+  ('MBBS', 'OBC', 67448, 546, 1, 2023),
+  ('MBBS', 'OBC', 69198, 544, 2, 2023),
+  ('MBBS', 'OBC', 71524, 541, 3, 2023),
+  
+  -- SC Data
+  ('MBBS', 'SC', 190094, 411, 1, 2025),
+  ('MBBS', 'SC', 203508, 404, 2, 2025),
+  ('MBBS', 'SC', 214358, 398, 3, 2025),
+  ('MBBS', 'SC', 220143, 490, 1, 2024),
+  ('MBBS', 'SC', 220987, 489, 2, 2024),
+  ('MBBS', 'SC', 231007, 483, 3, 2024),
+  ('MBBS', 'SC', 203619, 419, 1, 2023),
+  
+  -- ST Data
+  ('MBBS', 'ST', 468396, 291, 1, 2025),
+  ('MBBS', 'ST', 538009, 269, 2, 2025),
+  ('MBBS', 'ST', 616588, 246, 3, 2025),
+  ('MBBS', 'ST', 586839, 309, 1, 2024),
+  ('MBBS', 'ST', 538498, 328, 2, 2024),
+  ('MBBS', 'ST', 843780, 169, 1, 2023),
+  ('MBBS', 'ST', 700746, 204, 3, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'bankura-sammilani-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 16226, 542, 1, 2025), ('MBBS', 'EWS', 20938, 534, 2, 2025), ('MBBS', 'EWS', 21810, 533, 3, 2025),
+  ('MBBS', 'EWS', 13027, 670, 1, 2024), ('MBBS', 'EWS', 17184, 662, 2, 2024), ('MBBS', 'EWS', 20401, 658, 3, 2024), ('MBBS', 'EWS', 26156, 651, 4, 2024),
+  ('MBBS', 'EWS', 10918, 637, 1, 2023), ('MBBS', 'EWS', 15136, 627, 2, 2023), ('MBBS', 'EWS', 15435, 626, 3, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 14053, 546, 1, 2025), ('MBBS', 'OBC', 19610, 536, 2, 2025), ('MBBS', 'OBC', 22143, 533, 3, 2025),
+  ('MBBS', 'OBC', 13158, 670, 1, 2024), ('MBBS', 'OBC', 18128, 661, 2, 2024), ('MBBS', 'OBC', 19283, 660, 3, 2024),
+  ('MBBS', 'OBC', 12407, 634, 1, 2023), ('MBBS', 'OBC', 14911, 627, 2, 2023), ('MBBS', 'OBC', 15969, 625, 3, 2023), ('MBBS', 'OBC', 22950, 611, 4, 2023),
+
+  -- OBC PwD Data
+  ('MBBS', 'OBC PwD', 767643, 207, 1, 2025), ('MBBS', 'OBC PwD', 769009, 207, 2, 2025),
+  ('MBBS', 'OBC PwD', 777299, 248, 1, 2024), ('MBBS', 'OBC PwD', 904181, 215, 2, 2024), ('MBBS', 'OBC PwD', 1183849, 159, 3, 2024),
+  ('MBBS', 'OBC PwD', 688447, 208, 1, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 78803, 479, 1, 2025), ('MBBS', 'SC', 118252, 452, 2, 2025), ('MBBS', 'SC', 127450, 447, 3, 2025), ('MBBS', 'SC', 136970, 441, 4, 2025),
+  ('MBBS', 'SC', 68315, 608, 1, 2024), ('MBBS', 'SC', 89108, 590, 2, 2024), ('MBBS', 'SC', 106429, 575, 3, 2024),
+  ('MBBS', 'SC', 68426, 545, 1, 2023), ('MBBS', 'SC', 92053, 517, 2, 2023), ('MBBS', 'SC', 103151, 506, 3, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 116490, 453, 1, 2025), ('MBBS', 'ST', 130285, 445, 2, 2025), ('MBBS', 'ST', 140230, 439, 3, 2025),
+  ('MBBS', 'ST', 116228, 567, 1, 2024), ('MBBS', 'ST', 128992, 557, 2, 2024), ('MBBS', 'ST', 133582, 553, 3, 2024),
+  ('MBBS', 'ST', 122647, 486, 1, 2023), ('MBBS', 'ST', 124372, 485, 2, 2023), ('MBBS', 'ST', 136665, 473, 3, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'barasat-government-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 18745, 538, 1, 2025), ('MBBS', 'EWS', 22829, 532, 2, 2025), ('MBBS', 'EWS', 21895, 533, 3, 2025),
+  ('MBBS', 'EWS', 16331, 664, 1, 2024), ('MBBS', 'EWS', 18366, 661, 2, 2024), ('MBBS', 'EWS', 19569, 660, 3, 2024),
+  ('MBBS', 'EWS', 15284, 626, 1, 2023), ('MBBS', 'EWS', 17881, 621, 2, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 16780, 541, 1, 2025), ('MBBS', 'OBC', 20078, 536, 2, 2025), ('MBBS', 'OBC', 21232, 534, 3, 2025), ('MBBS', 'OBC', 27192, 526, 4, 2025),
+  ('MBBS', 'OBC', 16359, 664, 1, 2024), ('MBBS', 'OBC', 20457, 658, 2, 2024), ('MBBS', 'OBC', 21761, 656, 3, 2024),
+  ('MBBS', 'OBC', 14746, 628, 1, 2023), ('MBBS', 'OBC', 17232, 622, 2, 2023), ('MBBS', 'OBC', 17298, 622, 3, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 73405, 483, 1, 2025), ('MBBS', 'SC', 114634, 455, 2, 2025), ('MBBS', 'SC', 122842, 449, 3, 2025),
+  ('MBBS', 'SC', 59487, 616, 1, 2024), ('MBBS', 'SC', 107525, 574, 2, 2024),
+  ('MBBS', 'SC', 59262, 556, 1, 2023), ('MBBS', 'SC', 90585, 519, 2, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 116504, 453, 1, 2025), ('MBBS', 'ST', 136153, 441, 2, 2025), ('MBBS', 'ST', 145672, 435, 3, 2025),
+  ('MBBS', 'ST', 119314, 564, 1, 2024), ('MBBS', 'ST', 130198, 556, 2, 2024),
+  ('MBBS', 'ST', 122609, 486, 1, 2023), ('MBBS', 'ST', 94005, 515, 2, 2023), ('MBBS', 'ST', 141333, 469, 3, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'burdwan-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 12584, 549, 1, 2025), ('MBBS', 'EWS', 17020, 540, 2, 2025), ('MBBS', 'EWS', 19830, 536, 3, 2025),
+  ('MBBS', 'EWS', 11462, 671, 1, 2024), ('MBBS', 'EWS', 15720, 665, 2, 2024), ('MBBS', 'EWS', 17056, 662, 3, 2024),
+  ('MBBS', 'EWS', 9299, 642, 1, 2023), ('MBBS', 'EWS', 11961, 635, 2, 2023), ('MBBS', 'EWS', 14166, 630, 3, 2023), ('MBBS', 'EWS', 22179, 612, 4, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 12345, 550, 1, 2025), ('MBBS', 'OBC', 17362, 540, 2, 2025), ('MBBS', 'OBC', 19610, 536, 3, 2025),
+  ('MBBS', 'OBC', 11037, 672, 1, 2024), ('MBBS', 'OBC', 16084, 665, 2, 2024), ('MBBS', 'OBC', 18082, 661, 3, 2024), ('MBBS', 'OBC', 22029, 656, 4, 2024),
+  ('MBBS', 'OBC', 10136, 640, 1, 2023), ('MBBS', 'OBC', 12942, 632, 2, 2023), ('MBBS', 'OBC', 13246, 631, 3, 2023), ('MBBS', 'OBC', 22025, 612, 4, 2023),
+
+  -- Open PwD Data
+  ('MBBS', 'Open PwD', 396838, 317, 1, 2025), ('MBBS', 'Open PwD', 702132, 223, 2, 2025), ('MBBS', 'Open PwD', 999414, 160, 3, 2025),
+  ('MBBS', 'Open PwD', 588038, 309, 1, 2024),
+  ('MBBS', 'Open PwD', 463763, 282, 1, 2023), ('MBBS', 'Open PwD', 671559, 212, 2, 2023), ('MBBS', 'Open PwD', 795769, 180, 3, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 67297, 488, 1, 2025), ('MBBS', 'SC', 108273, 459, 2, 2025), ('MBBS', 'SC', 110836, 457, 3, 2025),
+  ('MBBS', 'SC', 54589, 620, 1, 2024), ('MBBS', 'SC', 95724, 584, 2, 2024), ('MBBS', 'SC', 109403, 573, 3, 2024),
+  ('MBBS', 'SC', 58771, 557, 1, 2023), ('MBBS', 'SC', 86201, 524, 2, 2023), ('MBBS', 'SC', 83211, 527, 3, 2023), ('MBBS', 'SC', 124757, 484, 4, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 103156, 462, 1, 2025), ('MBBS', 'ST', 124744, 448, 2, 2025),
+  ('MBBS', 'ST', 106003, 575, 1, 2024), ('MBBS', 'ST', 103534, 577, 2, 2024), ('MBBS', 'ST', 133517, 553, 3, 2024),
+  ('MBBS', 'ST', 120797, 488, 1, 2023), ('MBBS', 'ST', 114713, 494, 2, 2023), ('MBBS', 'ST', 129043, 480, 3, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'calcutta-national-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 9437, 557, 1, 2025), ('MBBS', 'EWS', 14846, 545, 2, 2025), ('MBBS', 'EWS', 16186, 542, 3, 2025),
+  ('MBBS', 'EWS', 8127, 678, 1, 2024), ('MBBS', 'EWS', 12336, 670, 2, 2024), ('MBBS', 'EWS', 12950, 670, 3, 2024),
+  ('MBBS', 'EWS', 7306, 649, 1, 2023), ('MBBS', 'EWS', 9553, 641, 2, 2023), ('MBBS', 'EWS', 10443, 639, 3, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 8258, 560, 1, 2025), ('MBBS', 'OBC', 12224, 550, 2, 2025), ('MBBS', 'OBC', 14788, 545, 3, 2025), ('MBBS', 'OBC', 26755, 526, 4, 2025), ('MBBS', 'OBC', 27406, 525, 5, 2025),
+  ('MBBS', 'OBC', 7374, 680, 1, 2024), ('MBBS', 'OBC', 11774, 671, 2, 2024), ('MBBS', 'OBC', 12938, 670, 3, 2024), ('MBBS', 'OBC', 18181, 661, 4, 2024),
+  ('MBBS', 'OBC', 6792, 651, 1, 2023), ('MBBS', 'OBC', 9323, 642, 2, 2023), ('MBBS', 'OBC', 10289, 639, 3, 2023),
+
+  -- OBC PwD Data
+  ('MBBS', 'OBC PwD', 592129, 253, 1, 2025),
+  ('MBBS', 'OBC PwD', 517654, 336, 1, 2024),
+  ('MBBS', 'OBC PwD', 550381, 250, 1, 2023), ('MBBS', 'OBC PwD', 624437, 226, 2, 2023),
+
+  -- Open PwD Data
+  ('MBBS', 'Open PwD', 327112, 345, 1, 2025), ('MBBS', 'Open PwD', 432944, 304, 2, 2025),
+  ('MBBS', 'Open PwD', 453522, 286, 1, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 44753, 507, 1, 2025), ('MBBS', 'SC', 81841, 477, 2, 2025), ('MBBS', 'SC', 86954, 473, 3, 2025),
+  ('MBBS', 'SC', 45139, 630, 1, 2024), ('MBBS', 'SC', 63306, 612, 2, 2024), ('MBBS', 'SC', 87596, 591, 3, 2024), ('MBBS', 'SC', 132079, 554, 4, 2024),
+  ('MBBS', 'SC', 42266, 579, 1, 2023), ('MBBS', 'SC', 64168, 550, 2, 2023), ('MBBS', 'SC', 82146, 528, 3, 2023), ('MBBS', 'SC', 119535, 489, 4, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 89140, 472, 1, 2025), ('MBBS', 'ST', 111048, 457, 2, 2025), ('MBBS', 'ST', 117345, 453, 3, 2025),
+  ('MBBS', 'ST', 90112, 589, 1, 2024), ('MBBS', 'ST', 99863, 580, 2, 2024), ('MBBS', 'ST', 130747, 555, 3, 2024), ('MBBS', 'ST', 120992, 563, 4, 2024),
+  ('MBBS', 'ST', 84862, 525, 1, 2023), ('MBBS', 'ST', 104421, 504, 2, 2023), ('MBBS', 'ST', 119542, 489, 3, 2023), ('MBBS', 'ST', 151899, 460, 4, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'jnm-medical-college-kalyani'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 12299, 550, 1, 2025), ('MBBS', 'EWS', 16998, 540, 2, 2025),
+  ('MBBS', 'EWS', 12741, 670, 1, 2024), ('MBBS', 'EWS', 15739, 665, 2, 2024), ('MBBS', 'EWS', 18395, 661, 3, 2024),
+  ('MBBS', 'EWS', 9946, 640, 1, 2023), ('MBBS', 'EWS', 12088, 635, 2, 2023), ('MBBS', 'EWS', 15136, 627, 3, 2023),
+
+  -- EWS PwD Data
+  ('MBBS', 'EWS PwD', 1154614, 135, 1, 2025),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 12926, 548, 1, 2025), ('MBBS', 'OBC', 18077, 539, 2, 2025), ('MBBS', 'OBC', 20681, 535, 3, 2025),
+  ('MBBS', 'OBC', 11581, 671, 1, 2024), ('MBBS', 'OBC', 16898, 663, 2, 2024), ('MBBS', 'OBC', 18346, 661, 3, 2024),
+  ('MBBS', 'OBC', 11517, 636, 1, 2023), ('MBBS', 'OBC', 13470, 631, 2, 2023), ('MBBS', 'OBC', 14553, 628, 3, 2023), ('MBBS', 'OBC', 22492, 612, 4, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 70966, 485, 1, 2025), ('MBBS', 'SC', 108671, 458, 2, 2025), ('MBBS', 'SC', 118989, 452, 3, 2025), ('MBBS', 'SC', 135863, 441, 4, 2025),
+  ('MBBS', 'SC', 57707, 617, 1, 2024), ('MBBS', 'SC', 91520, 588, 2, 2024),
+  ('MBBS', 'SC', 56416, 560, 1, 2023), ('MBBS', 'SC', 66525, 547, 2, 2023), ('MBBS', 'SC', 56416, 560, 3, 2023), ('MBBS', 'SC', 124179, 485, 4, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 129596, 445, 1, 2025),
+  ('MBBS', 'ST', 97192, 583, 1, 2024), ('MBBS', 'ST', 86617, 592, 2, 2024), ('MBBS', 'ST', 134505, 552, 3, 2024),
+  ('MBBS', 'ST', 91209, 518, 1, 2023), ('MBBS', 'ST', 119542, 489, 2, 2023), ('MBBS', 'ST', 126637, 483, 3, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'sagore-dutta-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 10336, 555, 1, 2025), ('MBBS', 'EWS', 15760, 543, 2, 2025), ('MBBS', 'EWS', 16750, 541, 3, 2025),
+  ('MBBS', 'EWS', 9498, 675, 1, 2024), ('MBBS', 'EWS', 14453, 666, 2, 2024), ('MBBS', 'EWS', 15720, 665, 3, 2024),
+  ('MBBS', 'EWS', 7660, 647, 1, 2023), ('MBBS', 'EWS', 10816, 637, 2, 2023),
+
+  -- EWS PwD Data
+  ('MBBS', 'EWS PwD', 763736, 208, 1, 2025),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 9832, 556, 1, 2025), ('MBBS', 'OBC', 15156, 544, 2, 2025), ('MBBS', 'OBC', 17637, 539, 3, 2025),
+  ('MBBS', 'OBC', 9142, 676, 1, 2024), ('MBBS', 'OBC', 13100, 670, 2, 2024), ('MBBS', 'OBC', 15619, 665, 3, 2024), ('MBBS', 'OBC', 19252, 660, 4, 2024),
+  ('MBBS', 'OBC', 8368, 645, 1, 2023), ('MBBS', 'OBC', 10389, 639, 2, 2023), ('MBBS', 'OBC', 11833, 635, 3, 2023), ('MBBS', 'OBC', 20688, 615, 4, 2023),
+
+  -- OBC PwD Data
+  ('MBBS', 'OBC PwD', 648027, 237, 1, 2025), ('MBBS', 'OBC PwD', 859291, 187, 2, 2025),
+  ('MBBS', 'OBC PwD', 670020, 281, 1, 2024), ('MBBS', 'OBC PwD', 781048, 247, 2, 2024),
+  ('MBBS', 'OBC PwD', 551595, 250, 1, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 54924, 497, 1, 2025), ('MBBS', 'SC', 100279, 464, 2, 2025), ('MBBS', 'SC', 103280, 462, 3, 2025), ('MBBS', 'SC', 137168, 441, 4, 2025),
+  ('MBBS', 'SC', 52253, 623, 1, 2024), ('MBBS', 'SC', 82315, 595, 2, 2024), ('MBBS', 'SC', 98479, 581, 3, 2024),
+  ('MBBS', 'SC', 50073, 568, 1, 2023), ('MBBS', 'SC', 67155, 546, 2, 2023), ('MBBS', 'SC', 89547, 520, 3, 2023), ('MBBS', 'SC', 123370, 486, 4, 2023),
+
+  -- SC PwD Data
+  ('MBBS', 'SC PwD', 1289581, 116, 1, 2025),
+
+  -- ST Data
+  ('MBBS', 'ST', 102218, 463, 1, 2025), ('MBBS', 'ST', 117345, 453, 2, 2025), ('MBBS', 'ST', 127811, 446, 3, 2025),
+  ('MBBS', 'ST', 100993, 579, 1, 2024), ('MBBS', 'ST', 114982, 568, 2, 2024), ('MBBS', 'ST', 131871, 554, 3, 2024), ('MBBS', 'ST', 165708, 529, 4, 2024),
+  ('MBBS', 'ST', 103011, 506, 1, 2023), ('MBBS', 'ST', 119254, 490, 2, 2023), ('MBBS', 'ST', 125781, 483, 3, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'deben-mahata-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 19558, 536, 1, 2025), ('MBBS', 'EWS', 23307, 531, 2, 2025), ('MBBS', 'EWS', 25011, 529, 3, 2025),
+  ('MBBS', 'EWS', 17872, 661, 1, 2024), ('MBBS', 'EWS', 21286, 657, 2, 2024), ('MBBS', 'EWS', 23401, 655, 3, 2024), ('MBBS', 'EWS', 27298, 650, 4, 2024),
+  ('MBBS', 'EWS', 15709, 625, 1, 2023), ('MBBS', 'EWS', 18953, 619, 2, 2023), ('MBBS', 'EWS', 19078, 619, 3, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 19532, 536, 1, 2025), ('MBBS', 'OBC', 22826, 532, 2, 2025), ('MBBS', 'OBC', 23889, 530, 3, 2025),
+  ('MBBS', 'OBC', 17116, 662, 1, 2024), ('MBBS', 'OBC', 21568, 656, 2, 2024), ('MBBS', 'OBC', 22691, 655, 3, 2024), ('MBBS', 'OBC', 24071, 653, 4, 2024), ('MBBS', 'OBC', 25135, 652, 5, 2024),
+  ('MBBS', 'OBC', 15898, 625, 1, 2023), ('MBBS', 'OBC', 18362, 620, 2, 2023), ('MBBS', 'OBC', 18945, 619, 3, 2023),
+
+  -- Open PwD Data
+  ('MBBS', 'Open PwD', 534498, 270, 1, 2025), ('MBBS', 'Open PwD', 747846, 212, 2, 2025), ('MBBS', 'Open PwD', 973018, 165, 3, 2025),
+  ('MBBS', 'Open PwD', 745057, 192, 1, 2023), ('MBBS', 'Open PwD', 803607, 178, 2, 2023), ('MBBS', 'Open PwD', 941177, 150, 3, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 93051, 469, 1, 2025), ('MBBS', 'SC', 122921, 449, 2, 2025),
+  ('MBBS', 'SC', 88141, 590, 1, 2024), ('MBBS', 'SC', 115559, 567, 2, 2024), ('MBBS', 'SC', 120701, 563, 3, 2024),
+  ('MBBS', 'SC', 70874, 542, 1, 2023), ('MBBS', 'SC', 104539, 504, 2, 2023), ('MBBS', 'SC', 115774, 493, 3, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 127811, 446, 1, 2025), ('MBBS', 'ST', 139626, 439, 2, 2025), ('MBBS', 'ST', 148191, 434, 3, 2025),
+  ('MBBS', 'ST', 134505, 552, 1, 2024), ('MBBS', 'ST', 137246, 550, 2, 2024),
+  ('MBBS', 'ST', 125584, 484, 1, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'diamond-harbour-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 12066, 550, 1, 2025), ('MBBS', 'EWS', 19347, 537, 2, 2025), ('MBBS', 'EWS', 22829, 532, 3, 2025),
+  ('MBBS', 'EWS', 15052, 665, 1, 2024), ('MBBS', 'EWS', 18182, 661, 2, 2024), ('MBBS', 'EWS', 20183, 658, 3, 2024),
+  ('MBBS', 'EWS', 12768, 632, 1, 2023), ('MBBS', 'EWS', 15435, 626, 2, 2023), ('MBBS', 'EWS', 15998, 625, 3, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 12358, 550, 1, 2025), ('MBBS', 'OBC', 19618, 536, 2, 2025), ('MBBS', 'OBC', 22183, 533, 3, 2025), ('MBBS', 'OBC', 27214, 526, 4, 2025),
+  ('MBBS', 'OBC', 13661, 668, 1, 2024), ('MBBS', 'OBC', 17936, 661, 2, 2024), ('MBBS', 'OBC', 19427, 660, 3, 2024), ('MBBS', 'OBC', 21607, 656, 4, 2024),
+  ('MBBS', 'OBC', 11928, 635, 1, 2023), ('MBBS', 'OBC', 14978, 627, 2, 2023), ('MBBS', 'OBC', 15106, 627, 3, 2023), ('MBBS', 'OBC', 23109, 610, 4, 2023),
+
+  -- OBC PwD Data
+  ('MBBS', 'OBC PwD', 689156, 227, 1, 2025), ('MBBS', 'OBC PwD', 954114, 169, 2, 2025), ('MBBS', 'OBC PwD', 955463, 168, 3, 2025), ('MBBS', 'OBC PwD', 494413, 282, 4, 2025),
+  ('MBBS', 'OBC PwD', 774478, 185, 1, 2023), ('MBBS', 'OBC PwD', 811320, 176, 2, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 80173, 478, 1, 2025), ('MBBS', 'SC', 117722, 453, 2, 2025), ('MBBS', 'SC', 126854, 447, 3, 2025), ('MBBS', 'SC', 137886, 440, 4, 2025),
+  ('MBBS', 'SC', 61225, 615, 1, 2024), ('MBBS', 'SC', 103053, 578, 2, 2024), ('MBBS', 'SC', 115376, 568, 3, 2024), ('MBBS', 'SC', 134455, 552, 4, 2024), ('MBBS', 'SC', 138780, 549, 5, 2024),
+  ('MBBS', 'SC', 66173, 547, 1, 2023), ('MBBS', 'SC', 95400, 514, 2, 2023), ('MBBS', 'SC', 99729, 509, 3, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 108951, 458, 1, 2025), ('MBBS', 'ST', 127811, 446, 2, 2025), ('MBBS', 'ST', 141691, 438, 3, 2025),
+  ('MBBS', 'ST', 105159, 576, 1, 2024), ('MBBS', 'ST', 128646, 557, 2, 2024), ('MBBS', 'ST', 137355, 550, 3, 2024),
+  ('MBBS', 'ST', 99625, 509, 1, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'esi-pgi-msr-esic-medical-college-joka'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 13132, 548, 1, 2025), ('MBBS', 'EWS', 17168, 540, 2, 2025), ('MBBS', 'EWS', 18441, 538, 3, 2025), ('MBBS', 'EWS', 28864, 524, 4, 2025),
+  ('MBBS', 'EWS', 12459, 670, 1, 2024), ('MBBS', 'EWS', 14608, 666, 2, 2024), ('MBBS', 'EWS', 19540, 660, 3, 2024),
+  ('MBBS', 'EWS', 8389, 645, 1, 2023), ('MBBS', 'EWS', 11627, 635, 2, 2023), ('MBBS', 'EWS', 13745, 630, 3, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 12801, 549, 1, 2025), ('MBBS', 'OBC', 15396, 543, 2, 2025), ('MBBS', 'OBC', 18512, 538, 3, 2025),
+  ('MBBS', 'OBC', 11555, 671, 1, 2024), ('MBBS', 'OBC', 15124, 665, 2, 2024), ('MBBS', 'OBC', 16956, 663, 3, 2024),
+  ('MBBS', 'OBC', 9808, 640, 1, 2023), ('MBBS', 'OBC', 13056, 632, 2, 2023), ('MBBS', 'OBC', 14449, 629, 3, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 54945, 497, 1, 2025), ('MBBS', 'SC', 101029, 463, 2, 2025), ('MBBS', 'SC', 108358, 459, 3, 2025),
+  ('MBBS', 'SC', 60247, 615, 1, 2024), ('MBBS', 'SC', 93160, 586, 2, 2024), ('MBBS', 'SC', 97075, 583, 3, 2024), ('MBBS', 'SC', 133069, 553, 4, 2024), ('MBBS', 'SC', 85125, 593, 5, 2024),
+  ('MBBS', 'SC', 54238, 563, 1, 2023), ('MBBS', 'SC', 83211, 527, 2, 2023), ('MBBS', 'SC', 102484, 506, 3, 2023), ('MBBS', 'SC', 121190, 488, 4, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 95435, 467, 1, 2025), ('MBBS', 'ST', 108951, 458, 2, 2025),
+  ('MBBS', 'ST', 88703, 590, 1, 2024), ('MBBS', 'ST', 110503, 572, 2, 2024), ('MBBS', 'ST', 133663, 553, 3, 2024),
+  ('MBBS', 'ST', 86043, 524, 1, 2023), ('MBBS', 'ST', 122641, 486, 2, 2023), ('MBBS', 'ST', 130475, 479, 3, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'govt-medical-college-jalpaiguri'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 21857, 533, 1, 2025), ('MBBS', 'EWS', 23480, 531, 2, 2025), ('MBBS', 'EWS', 25119, 528, 3, 2025),
+  ('MBBS', 'EWS', 18884, 660, 1, 2024), ('MBBS', 'EWS', 22109, 656, 2, 2024), ('MBBS', 'EWS', 23615, 654, 3, 2024),
+  ('MBBS', 'EWS', 16699, 623, 1, 2023), ('MBBS', 'EWS', 20278, 616, 2, 2023), ('MBBS', 'EWS', 19948, 616, 3, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 18810, 538, 1, 2025), ('MBBS', 'OBC', 23286, 531, 2, 2025), ('MBBS', 'OBC', 24544, 529, 3, 2025), ('MBBS', 'OBC', 27175, 526, 4, 2025),
+  ('MBBS', 'OBC', 17333, 662, 1, 2024), ('MBBS', 'OBC', 21638, 656, 2, 2024), ('MBBS', 'OBC', 23304, 655, 3, 2024),
+  ('MBBS', 'OBC', 17036, 623, 1, 2023), ('MBBS', 'OBC', 18881, 619, 2, 2023), ('MBBS', 'OBC', 19213, 618, 3, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 98047, 465, 1, 2025), ('MBBS', 'SC', 120525, 451, 2, 2025),
+  ('MBBS', 'SC', 85229, 593, 1, 2024), ('MBBS', 'SC', 114822, 568, 2, 2024), ('MBBS', 'SC', 119844, 564, 3, 2024),
+  ('MBBS', 'SC', 81394, 529, 1, 2023), ('MBBS', 'SC', 103568, 505, 2, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 133067, 443, 1, 2025),
+  ('MBBS', 'ST', 129615, 556, 1, 2024), ('MBBS', 'ST', 139601, 548, 2, 2024), ('MBBS', 'ST', 146891, 543, 3, 2024),
+  ('MBBS', 'ST', 128569, 481, 1, 2023), ('MBBS', 'ST', 128828, 480, 2, 2023), ('MBBS', 'ST', 130413, 479, 3, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'ipgmer-kolkata'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 4783, 573, 1, 2025), ('MBBS', 'EWS', 4815, 573, 1, 2025),
+  ('MBBS', 'EWS', 5620, 685, 1, 2024), ('MBBS', 'EWS', 5990, 683, 2, 2024),
+  ('MBBS', 'EWS', 5187, 657, 1, 2023), ('MBBS', 'EWS', 5906, 655, 2, 2023), ('MBBS', 'EWS', 7107, 650, 3, 2023), ('MBBS', 'EWS', 10572, 638, 4, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 4770, 573, 1, 2025), ('MBBS', 'OBC', 6987, 564, 2, 2025), ('MBBS', 'OBC', 8662, 559, 3, 2025),
+  ('MBBS', 'OBC', 4335, 687, 1, 2024), ('MBBS', 'OBC', 4940, 685, 2, 2024), ('MBBS', 'OBC', 5319, 685, 3, 2024),
+  ('MBBS', 'OBC', 4887, 659, 1, 2023), ('MBBS', 'OBC', 5216, 657, 2, 2023), ('MBBS', 'OBC', 2430, 673, 3, 2023),
+
+  -- OBC PwD Data
+  ('MBBS', 'OBC PwD', 269372, 371, 1, 2025),
+  ('MBBS', 'OBC PwD', 427262, 374, 1, 2024), ('MBBS', 'OBC PwD', 670020, 281, 2, 2024),
+
+  -- Open PwD Data
+  ('MBBS', 'Open PwD', 254596, 379, 1, 2025),
+  ('MBBS', 'Open PwD', 162804, 531, 1, 2024),
+  ('MBBS', 'Open PwD', 171737, 443, 1, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 22844, 532, 1, 2025), ('MBBS', 'SC', 42383, 509, 2, 2025), ('MBBS', 'SC', 67250, 488, 3, 2025),
+  ('MBBS', 'SC', 27613, 649, 1, 2024), ('MBBS', 'SC', 34530, 641, 2, 2024), ('MBBS', 'SC', 43433, 631, 3, 2024),
+  ('MBBS', 'SC', 19862, 617, 1, 2023), ('MBBS', 'SC', 30177, 598, 2, 2023),
+
+   -- ST Data
+  ('MBBS', 'ST', 74360, 482, 1, 2025), ('MBBS', 'ST', 99309, 465, 2, 2025), ('MBBS', 'ST', 71259, 485, 3, 2025),
+  ('MBBS', 'ST', 72186, 605, 1, 2024), ('MBBS', 'ST', 78128, 599, 2, 2024),
+  ('MBBS', 'ST', 71776, 541, 1, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'jhargram-govt-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 20542, 535, 1, 2025), ('MBBS', 'EWS', 24588, 529, 2, 2025),
+  ('MBBS', 'EWS', 19108, 660, 1, 2024), ('MBBS', 'EWS', 22384, 655, 2, 2024), ('MBBS', 'EWS', 24011, 653, 3, 2024),
+  ('MBBS', 'EWS', 16287, 625, 1, 2023), ('MBBS', 'EWS', 20011, 616, 2, 2023), ('MBBS', 'EWS', 20849, 615, 3, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 19687, 536, 1, 2025), ('MBBS', 'OBC', 23276, 531, 2, 2025), ('MBBS', 'OBC', 24996, 529, 3, 2025),
+  ('MBBS', 'OBC', 18279, 661, 1, 2024), ('MBBS', 'OBC', 21916, 656, 2, 2024), ('MBBS', 'OBC', 23516, 654, 3, 2024),
+  ('MBBS', 'OBC', 16890, 623, 1, 2023), ('MBBS', 'OBC', 19182, 618, 2, 2023), ('MBBS', 'OBC', 20460, 615, 3, 2023), ('MBBS', 'OBC', 23410, 610, 4, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 91235, 470, 1, 2025), ('MBBS', 'SC', 125187, 448, 2, 2025), ('MBBS', 'SC', 129753, 445, 3, 2025),
+  ('MBBS', 'SC', 85996, 592, 1, 2024), ('MBBS', 'SC', 114449, 568, 2, 2024), ('MBBS', 'SC', 117921, 565, 3, 2024), ('MBBS', 'SC', 134894, 552, 4, 2024),
+  ('MBBS', 'SC', 87444, 522, 1, 2023), ('MBBS', 'SC', 105143, 504, 2, 2023), ('MBBS', 'SC', 117158, 492, 3, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 125649, 448, 1, 2025), ('MBBS', 'ST', 134753, 442, 2, 2025), ('MBBS', 'ST', 149018, 434, 3, 2025),
+  ('MBBS', 'ST', 79221, 598, 1, 2024),
+  ('MBBS', 'ST', 105326, 503, 1, 2023), ('MBBS', 'ST', 129968, 479, 2, 2023), ('MBBS', 'ST', 143660, 467, 3, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'mjn-medical-college-coochbehar'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 20010, 536, 1, 2025), ('MBBS', 'EWS', 24271, 530, 2, 2025),
+  ('MBBS', 'EWS', 17800, 661, 1, 2024), ('MBBS', 'EWS', 20744, 657, 2, 2024), ('MBBS', 'EWS', 22826, 655, 3, 2024),
+  ('MBBS', 'EWS', 16400, 624, 1, 2023), ('MBBS', 'EWS', 19600, 617, 2, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 18940, 537, 1, 2025), ('MBBS', 'OBC', 22394, 532, 2, 2025), ('MBBS', 'OBC', 24204, 530, 3, 2025),
+  ('MBBS', 'OBC', 17049, 662, 1, 2024), ('MBBS', 'OBC', 20767, 657, 2, 2024), ('MBBS', 'OBC', 22682, 655, 3, 2024),
+  ('MBBS', 'OBC', 15767, 625, 1, 2023), ('MBBS', 'OBC', 18210, 620, 2, 2023), ('MBBS', 'OBC', 18888, 619, 3, 2023),
+
+  -- Open PwD Data
+  ('MBBS', 'Open PwD', 617316, 246, 1, 2025), ('MBBS', 'Open PwD', 539772, 268, 2, 2025),
+  ('MBBS', 'Open PwD', 732741, 261, 1, 2024), ('MBBS', 'Open PwD', 1015093, 190, 3, 2024),
+  ('MBBS', 'Open PwD', 880018, 162, 1, 2023), ('MBBS', 'Open PwD', 798790, 180, 2, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 98006, 465, 1, 2025), ('MBBS', 'SC', 118218, 452, 2, 2025), ('MBBS', 'SC', 115790, 454, 3, 2025),
+  ('MBBS', 'SC', 90317, 589, 1, 2024), ('MBBS', 'SC', 112123, 570, 2, 2024), ('MBBS', 'SC', 120609, 563, 3, 2024),
+  ('MBBS', 'SC', 84079, 526, 1, 2023), ('MBBS', 'SC', 102731, 506, 2, 2023), ('MBBS', 'SC', 112246, 496, 3, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 128380, 446, 1, 2025),
+  ('MBBS', 'ST', 132913, 554, 1, 2024), ('MBBS', 'ST', 138314, 549, 2, 2024), ('MBBS', 'ST', 153092, 538, 3, 2024),
+  ('MBBS', 'ST', 121115, 488, 1, 2023),
+
+   -- SC PwD data
+  ('MBBS', 'SC PwD', 944362, 170, 2, 2025)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'malda-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 19347, 537, 1, 2025), ('MBBS', 'EWS', 22513, 532, 2, 2025), ('MBBS', 'EWS', 23430, 531, 3, 2025),
+  ('MBBS', 'EWS', 16004, 665, 1, 2024), ('MBBS', 'EWS', 20183, 658, 2, 2024), ('MBBS', 'EWS', 21840, 656, 3, 2024),
+  ('MBBS', 'EWS', 14663, 628, 1, 2023), ('MBBS', 'EWS', 15254, 626, 2, 2023), ('MBBS', 'EWS', 16580, 624, 3, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 15958, 542, 1, 2025), ('MBBS', 'OBC', 21158, 534, 2, 2025), ('MBBS', 'OBC', 23484, 531, 3, 2025),
+  ('MBBS', 'OBC', 15196, 665, 1, 2024), ('MBBS', 'OBC', 19116, 660, 2, 2024), ('MBBS', 'OBC', 21861, 656, 3, 2024),
+  ('MBBS', 'OBC', 14003, 630, 1, 2023), ('MBBS', 'OBC', 17136, 622, 2, 2023), ('MBBS', 'OBC', 17745, 621, 3, 2023), ('MBBS', 'OBC', 23182, 610, 4, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 90126, 471, 1, 2025), ('MBBS', 'SC', 120557, 451, 2, 2025), ('MBBS', 'SC', 125620, 448, 3, 2025),
+  ('MBBS', 'SC', 86390, 592, 1, 2024), ('MBBS', 'SC', 110921, 571, 2, 2024), ('MBBS', 'SC', 116747, 566, 3, 2024),
+  ('MBBS', 'SC', 77446, 534, 1, 2023), ('MBBS', 'SC', 99288, 510, 2, 2023), ('MBBS', 'SC', 110006, 499, 3, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 123538, 449, 1, 2025), ('MBBS', 'ST', 139023, 440, 2, 2025), ('MBBS', 'ST', 146136, 435, 3, 2025),
+  ('MBBS', 'ST', 127868, 558, 1, 2024), ('MBBS', 'ST', 133517, 553, 2, 2024), ('MBBS', 'ST', 140452, 548, 3, 2024),
+  ('MBBS', 'ST', 122641, 486, 1, 2023), ('MBBS', 'ST', 121291, 488, 2, 2023), ('MBBS', 'ST', 144705, 466, 3, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'medical-college-kolkata'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 5183, 571, 1, 2025), ('MBBS', 'EWS', 5368, 570, 2, 2025), ('MBBS', 'EWS', 7487, 563, 3, 2025),
+  ('MBBS', 'EWS', 4968, 685, 1, 2024), ('MBBS', 'EWS', 6322, 682, 2, 2024), ('MBBS', 'EWS', 4852, 685, 3, 2024),
+  ('MBBS', 'EWS', 4593, 660, 1, 2023), ('MBBS', 'EWS', 5187, 657, 2, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 5022, 572, 1, 2025), ('MBBS', 'OBC', 6064, 567, 2, 2025), ('MBBS', 'OBC', 8754, 559, 3, 2025),
+  ('MBBS', 'OBC', 4266, 687, 1, 2024), ('MBBS', 'OBC', 5217, 685, 2, 2024), ('MBBS', 'OBC', 3981, 690, 3, 2024),
+  ('MBBS', 'OBC', 3961, 664, 1, 2023), ('MBBS', 'OBC', 5217, 657, 2, 2023), ('MBBS', 'OBC', 5427, 656, 3, 2023),
+
+  -- OBC PwD Data
+  ('MBBS', 'OBC PwD', 322079, 347, 1, 2025),
+  ('MBBS', 'OBC PwD', 417193, 301, 1, 2023),
+
+  -- Open PwD Data
+  ('MBBS', 'Open PwD', 159095, 428, 1, 2025),
+  ('MBBS', 'Open PwD', 110510, 572, 1, 2024),
+  ('MBBS', 'Open PwD', 345116, 334, 1, 2023), ('MBBS', 'Open PwD', 507154, 266, 2, 2023), ('MBBS', 'Open PwD', 176971, 439, 3, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 19710, 536, 1, 2025), ('MBBS', 'SC', 18485, 538, 2, 2025), ('MBBS', 'SC', 50338, 502, 3, 2025), ('MBBS', 'SC', 123424, 449, 4, 2025),
+  ('MBBS', 'SC', 32310, 643, 1, 2024), ('MBBS', 'SC', 32432, 643, 2, 2024), ('MBBS', 'SC', 35651, 640, 3, 2024),
+  ('MBBS', 'SC', 14792, 628, 1, 2023), ('MBBS', 'SC', 47296, 572, 2, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 70328, 485, 1, 2025), ('MBBS', 'ST', 96835, 466, 2, 2025),
+  ('MBBS', 'ST', 69964, 606, 1, 2024), ('MBBS', 'ST', 75664, 601, 2, 2024),
+  ('MBBS', 'ST', 57498, 558, 1, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'midnapore-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 17068, 540, 1, 2025), ('MBBS', 'EWS', 21944, 533, 2, 2025), ('MBBS', 'EWS', 22513, 532, 3, 2025),
+  ('MBBS', 'EWS', 15085, 665, 1, 2024), ('MBBS', 'EWS', 19055, 660, 2, 2024), ('MBBS', 'EWS', 21496, 656, 3, 2024),
+  ('MBBS', 'EWS', 15067, 627, 1, 2023), ('MBBS', 'EWS', 16983, 623, 2, 2023), ('MBBS', 'EWS', 17313, 622, 3, 2023), ('MBBS', 'EWS', 23004, 611, 4, 2023),
+
+  -- EWS PwD Data
+  ('MBBS', 'EWS PwD', 1179350, 131, 1, 2025), ('MBBS', 'EWS PwD', 904513, 178, 2, 2025),
+  ('MBBS', 'EWS PwD', 901139, 216, 1, 2024), ('MBBS', 'EWS PwD', 1165851, 161, 2, 2024),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 15765, 543, 1, 2025), ('MBBS', 'OBC', 20681, 535, 2, 2025), ('MBBS', 'OBC', 23164, 531, 3, 2025),
+  ('MBBS', 'OBC', 15074, 665, 1, 2024), ('MBBS', 'OBC', 18852, 660, 2, 2024), ('MBBS', 'OBC', 21265, 657, 3, 2024), ('MBBS', 'OBC', 23237, 655, 4, 2024),
+  ('MBBS', 'OBC', 14084, 630, 1, 2023), ('MBBS', 'OBC', 17053, 623, 2, 2023), ('MBBS', 'OBC', 17534, 622, 3, 2023), ('MBBS', 'OBC', 23348, 610, 4, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 88573, 472, 1, 2025), ('MBBS', 'SC', 122051, 450, 2, 2025), ('MBBS', 'SC', 122611, 450, 3, 2025),
+  ('MBBS', 'SC', 76156, 601, 1, 2024), ('MBBS', 'SC', 109205, 573, 2, 2024), ('MBBS', 'SC', 116051, 567, 3, 2024),
+  ('MBBS', 'SC', 74529, 537, 1, 2023), ('MBBS', 'SC', 97549, 512, 2, 2023), ('MBBS', 'SC', 108964, 500, 3, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 125396, 448, 1, 2025), ('MBBS', 'ST', 138363, 440, 2, 2025),
+  ('MBBS', 'ST', 126409, 559, 1, 2024), ('MBBS', 'ST', 133582, 553, 2, 2024), ('MBBS', 'ST', 145036, 544, 3, 2024), ('MBBS', 'ST', 163366, 530, 4, 2024),
+  ('MBBS', 'ST', 122771, 486, 1, 2023), ('MBBS', 'ST', 127859, 481, 2, 2023), ('MBBS', 'ST', 129619, 480, 3, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'nilratan-sirkar-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 9130, 558, 1, 2025), ('MBBS', 'EWS', 9580, 556, 2, 2025),
+  ('MBBS', 'EWS', 7078, 680, 1, 2024), ('MBBS', 'EWS', 9860, 675, 2, 2024),
+  ('MBBS', 'EWS', 6459, 652, 1, 2023), ('MBBS', 'EWS', 7163, 650, 2, 2023), ('MBBS', 'EWS', 7717, 647, 3, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 7671, 562, 1, 2025), ('MBBS', 'OBC', 11263, 552, 2, 2025), ('MBBS', 'OBC', 11608, 551, 3, 2025),
+  ('MBBS', 'OBC', 6352, 682, 1, 2024), ('MBBS', 'OBC', 9803, 675, 2, 2024), ('MBBS', 'OBC', 9461, 675, 3, 2024),
+  ('MBBS', 'OBC', 5725, 655, 1, 2023), ('MBBS', 'OBC', 7697, 647, 2, 2023), ('MBBS', 'OBC', 8037, 646, 3, 2023),
+
+  -- OBC PwD Data
+  ('MBBS', 'OBC PwD', 559370, 262, 1, 2025),
+  ('MBBS', 'OBC PwD', 545107, 252, 1, 2023),
+
+  -- Open PwD Data
+  ('MBBS', 'Open PwD', 345430, 337, 1, 2025),
+  ('MBBS', 'Open PwD', 43198, 632, 1, 2024),
+  ('MBBS', 'Open PwD', 155049, 457, 1, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 31212, 521, 1, 2025), ('MBBS', 'SC', 52946, 499, 2, 2025), ('MBBS', 'SC', 53010, 499, 3, 2025),
+  ('MBBS', 'SC', 39098, 636, 1, 2024), ('MBBS', 'SC', 42069, 633, 2, 2024), ('MBBS', 'SC', 48208, 627, 3, 2024), ('MBBS', 'SC', 115319, 568, 4, 2024),
+  ('MBBS', 'SC', 27106, 603, 1, 2023), ('MBBS', 'SC', 57499, 558, 2, 2023), ('MBBS', 'SC', 64833, 549, 3, 2023),
+
+   -- SC PwD Data
+  ('MBBS', 'SC PwD', 850483, 189, 1, 2025), ('MBBS', 'SC PwD', 608456, 248, 2, 2025),
+  -- ST Data
+  ('MBBS', 'ST', 82262, 476, 1, 2025), ('MBBS', 'ST', 103371, 462, 2, 2025),
+  ('MBBS', 'ST', 84535, 594, 1, 2024), ('MBBS', 'ST', 96444, 583, 2, 2024), ('MBBS', 'ST', 108576, 573, 3, 2024),
+  ('MBBS', 'ST', 85357, 525, 1, 2023), ('MBBS', 'ST', 93308, 516, 2, 2023), ('MBBS', 'ST', 95258, 514, 3, 2023),
+  -- ST PwD Data
+  ('MBBS', 'ST PwD', 1238539, 124, 3, 2025)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'north-bengal-medical-college-hospital-darjeeling'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 14869, 545, 1, 2025), ('MBBS', 'EWS', 18433, 538, 2, 2025), ('MBBS', 'EWS', 20482, 535, 3, 2025),
+  ('MBBS', 'EWS', 13245, 669, 1, 2024), ('MBBS', 'EWS', 16599, 663, 2, 2024), ('MBBS', 'EWS', 17506, 662, 3, 2024),
+  ('MBBS', 'EWS', 11961, 635, 1, 2023), ('MBBS', 'EWS', 14493, 628, 2, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 13016, 548, 1, 2025), ('MBBS', 'OBC', 17170, 540, 2, 2025), ('MBBS', 'OBC', 20278, 535, 3, 2025),
+  ('MBBS', 'OBC', 12252, 670, 1, 2024), ('MBBS', 'OBC', 15666, 665, 2, 2024), ('MBBS', 'OBC', 19151, 660, 3, 2024),
+  ('MBBS', 'OBC', 11877, 635, 1, 2023), ('MBBS', 'OBC', 14271, 629, 2, 2023), ('MBBS', 'OBC', 15010, 627, 3, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 74422, 482, 1, 2025), ('MBBS', 'SC', 110971, 457, 2, 2025), ('MBBS', 'SC', 115311, 454, 3, 2025), ('MBBS', 'SC', 137174, 441, 4, 2025),
+  ('MBBS', 'SC', 71511, 605, 1, 2024), ('MBBS', 'SC', 103122, 578, 2, 2024), ('MBBS', 'SC', 112364, 570, 3, 2024),
+  ('MBBS', 'SC', 58803, 557, 1, 2023), ('MBBS', 'SC', 80407, 530, 2, 2023), ('MBBS', 'SC', 99288, 510, 3, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 101241, 463, 1, 2025), ('MBBS', 'ST', 128548, 446, 2, 2025), ('MBBS', 'ST', 133959, 443, 3, 2025), ('MBBS', 'ST', 163931, 425, 4, 2025),
+  ('MBBS', 'ST', 102234, 579, 1, 2024), ('MBBS', 'ST', 117279, 566, 2, 2024), ('MBBS', 'ST', 138314, 549, 3, 2024),
+  ('MBBS', 'ST', 103047, 506, 1, 2023), ('MBBS', 'ST', 121039, 488, 2, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'pcs-medical-college-arambagh'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 20938, 534, 1, 2025), ('MBBS', 'EWS', 24034, 530, 2, 2025), ('MBBS', 'EWS', 24782, 529, 3, 2025),
+  ('MBBS', 'EWS', 18048, 661, 1, 2024), ('MBBS', 'EWS', 21022, 657, 2, 2024), ('MBBS', 'EWS', 23443, 655, 3, 2024),
+  ('MBBS', 'EWS', 17601, 621, 1, 2023), ('MBBS', 'EWS', 20954, 615, 2, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 19599, 536, 1, 2025), ('MBBS', 'OBC', 23023, 531, 2, 2025), ('MBBS', 'OBC', 23635, 530, 3, 2025),
+  ('MBBS', 'OBC', 17723, 661, 1, 2024), ('MBBS', 'OBC', 21860, 656, 2, 2024), ('MBBS', 'OBC', 23000, 655, 3, 2024),
+  ('MBBS', 'OBC', 17077, 622, 1, 2023), ('MBBS', 'OBC', 19103, 619, 2, 2023), ('MBBS', 'OBC', 19702, 617, 3, 2023), ('MBBS', 'OBC', 23363, 610, 4, 2023),
+
+  -- Open PwD Data
+  ('MBBS', 'Open PwD', 473110, 290, 1, 2025), ('MBBS', 'Open PwD', 719780, 219, 2, 2025),
+  ('MBBS', 'Open PwD', 706626, 203, 1, 2023), ('MBBS', 'Open PwD', 614870, 229, 2, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 93574, 469, 1, 2025), ('MBBS', 'SC', 122611, 450, 2, 2025), ('MBBS', 'SC', 130317, 445, 3, 2025),
+  ('MBBS', 'SC', 92331, 587, 1, 2024), ('MBBS', 'SC', 116418, 567, 2, 2024),
+  ('MBBS', 'SC', 81038, 530, 1, 2023), ('MBBS', 'SC', 107910, 501, 2, 2023), ('MBBS', 'SC', 115938, 493, 3, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 109833, 458, 1, 2025), ('MBBS', 'ST', 140230, 439, 2, 2025), ('MBBS', 'ST', 147433, 435, 3, 2025),
+  ('MBBS', 'ST', 134633, 552, 1, 2024), ('MBBS', 'ST', 145036, 544, 2, 2024), ('MBBS', 'ST', 154733, 537, 3, 2024),
+  ('MBBS', 'ST', 125781, 483, 1, 2023), ('MBBS', 'ST', 136665, 473, 2, 2023), ('MBBS', 'ST', 137319, 472, 3, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'rg-kar-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 8600, 559, 1, 2025), ('MBBS', 'EWS', 15551, 543, 2, 2025), ('MBBS', 'EWS', 16703, 541, 3, 2025),
+  ('MBBS', 'EWS', 9196, 675, 1, 2024), ('MBBS', 'EWS', 13301, 669, 2, 2024), ('MBBS', 'EWS', 15673, 665, 3, 2024),
+  ('MBBS', 'EWS', 7491, 648, 1, 2023), ('MBBS', 'EWS', 8741, 644, 2, 2023), ('MBBS', 'EWS', 9935, 640, 3, 2023), ('MBBS', 'EWS', 16921, 623, 4, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 9315, 557, 1, 2025), ('MBBS', 'OBC', 13576, 547, 2, 2025), ('MBBS', 'OBC', 15234, 544, 3, 2025),
+  ('MBBS', 'OBC', 8061, 678, 1, 2024), ('MBBS', 'OBC', 12928, 670, 2, 2024), ('MBBS', 'OBC', 15074, 665, 3, 2024), ('MBBS', 'OBC', 17873, 661, 4, 2024),
+  ('MBBS', 'OBC', 7171, 650, 1, 2023), ('MBBS', 'OBC', 8795, 644, 2, 2023), ('MBBS', 'OBC', 9355, 642, 3, 2023),
+
+  -- OBC PwD Data
+  ('MBBS', 'OBC PwD', 542417, 267, 1, 2025), ('MBBS', 'OBC PwD', 688351, 227, 2, 2025),
+  ('MBBS', 'OBC PwD', 596260, 235, 1, 2023), ('MBBS', 'OBC PwD', 664595, 214, 2, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 53010, 499, 1, 2025), ('MBBS', 'SC', 97111, 466, 2, 2025), ('MBBS', 'SC', 100637, 464, 3, 2025),
+  ('MBBS', 'SC', 48498, 626, 1, 2024), ('MBBS', 'SC', 87902, 591, 2, 2024), ('MBBS', 'SC', 99260, 581, 3, 2024),
+  ('MBBS', 'SC', 33320, 593, 1, 2023), ('MBBS', 'SC', 59984, 555, 2, 2023), ('MBBS', 'SC', 79931, 531, 3, 2023), ('MBBS', 'SC', 64005, 550, 4, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 91629, 470, 1, 2025), ('MBBS', 'ST', 113270, 455, 2, 2025), ('MBBS', 'ST', 123741, 449, 3, 2025),
+  ('MBBS', 'ST', 99342, 581, 1, 2024), ('MBBS', 'ST', 116228, 567, 2, 2024), ('MBBS', 'ST', 124137, 560, 3, 2024),
+  ('MBBS', 'ST', 86232, 524, 1, 2023), ('MBBS', 'ST', 103047, 506, 2, 2023), ('MBBS', 'ST', 121291, 488, 3, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'raiganj-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 20444, 535, 1, 2025), ('MBBS', 'EWS', 24191, 530, 2, 2025), ('MBBS', 'EWS', 24993, 529, 3, 2025),
+  ('MBBS', 'EWS', 17506, 662, 1, 2024), ('MBBS', 'EWS', 20730, 657, 2, 2024),
+  ('MBBS', 'EWS', 16198, 625, 1, 2023), ('MBBS', 'EWS', 18389, 620, 2, 2023), ('MBBS', 'EWS', 18366, 620, 3, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 18300, 538, 1, 2025), ('MBBS', 'OBC', 22936, 531, 2, 2025), ('MBBS', 'OBC', 24635, 529, 3, 2025),
+  ('MBBS', 'OBC', 16734, 663, 1, 2024), ('MBBS', 'OBC', 20705, 657, 2, 2024), ('MBBS', 'OBC', 22445, 655, 3, 2024),
+  ('MBBS', 'OBC', 15942, 625, 1, 2023), ('MBBS', 'OBC', 18240, 620, 2, 2023), ('MBBS', 'OBC', 18482, 620, 3, 2023),
+
+  -- Open PwD Data
+  ('MBBS', 'Open PwD', 617511, 246, 1, 2025), ('MBBS', 'Open PwD', 718507, 219, 2, 2025),
+  ('MBBS', 'Open PwD', 795769, 180, 1, 2023), ('MBBS', 'Open PwD', 836960, 171, 2, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 97078, 466, 1, 2025), ('MBBS', 'SC', 123843, 449, 2, 2025), ('MBBS', 'SC', 129534, 445, 3, 2025),
+  ('MBBS', 'SC', 88012, 591, 1, 2024), ('MBBS', 'SC', 115614, 567, 2, 2024), ('MBBS', 'SC', 122718, 562, 3, 2024),
+  ('MBBS', 'SC', 83483, 527, 1, 2023), ('MBBS', 'SC', 101292, 508, 2, 2023), ('MBBS', 'SC', 114940, 494, 3, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 131714, 444, 1, 2025), ('MBBS', 'ST', 139591, 439, 2, 2025), ('MBBS', 'ST', 133561, 443, 3, 2025),
+  ('MBBS', 'ST', 133235, 553, 1, 2024), ('MBBS', 'ST', 137499, 550, 2, 2024), ('MBBS', 'ST', 158882, 534, 3, 2024),
+  ('MBBS', 'ST', 124317, 485, 1, 2023), ('MBBS', 'ST', 132152, 477, 2, 2023), ('MBBS', 'ST', 145390, 465, 3, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'rampurhat-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 19830, 536, 1, 2025), ('MBBS', 'EWS', 24587, 529, 2, 2025), ('MBBS', 'EWS', 25107, 528, 3, 2025),
+  ('MBBS', 'EWS', 17184, 662, 1, 2024), ('MBBS', 'EWS', 22336, 655, 2, 2024), ('MBBS', 'EWS', 22935, 655, 3, 2024),
+  ('MBBS', 'EWS', 15549, 626, 1, 2023), ('MBBS', 'EWS', 19442, 618, 2, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 18283, 538, 1, 2025), ('MBBS', 'OBC', 22841, 532, 2, 2025), ('MBBS', 'OBC', 24310, 530, 3, 2025),
+  ('MBBS', 'OBC', 17018, 662, 1, 2024), ('MBBS', 'OBC', 21235, 657, 2, 2024), ('MBBS', 'OBC', 22497, 655, 3, 2024),
+  ('MBBS', 'OBC', 15783, 625, 1, 2023), ('MBBS', 'OBC', 18133, 620, 2, 2023), ('MBBS', 'OBC', 19031, 619, 3, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 90561, 471, 1, 2025), ('MBBS', 'SC', 125330, 448, 2, 2025), ('MBBS', 'SC', 129745, 445, 3, 2025),
+  ('MBBS', 'SC', 83103, 595, 1, 2024), ('MBBS', 'SC', 106206, 575, 2, 2024), ('MBBS', 'SC', 118773, 565, 3, 2024),
+  ('MBBS', 'SC', 83506, 527, 1, 2023), ('MBBS', 'SC', 104308, 505, 2, 2023), ('MBBS', 'SC', 112510, 496, 3, 2023), ('MBBS', 'SC', 124890, 484, 4, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 122224, 450, 1, 2025), ('MBBS', 'ST', 139466, 439, 2, 2025), ('MBBS', 'ST', 146954, 435, 3, 2025),
+  ('MBBS', 'ST', 131998, 554, 1, 2024), ('MBBS', 'ST', 139651, 548, 2, 2024), ('MBBS', 'ST', 142053, 546, 3, 2024),
+  ('MBBS', 'ST', 123469, 486, 1, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'scc-medical-college-uluberia'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- EWS Data
+  ('MBBS', 'EWS', 19261, 537, 1, 2025), ('MBBS', 'EWS', 24137, 530, 2, 2025),
+  ('MBBS', 'EWS', 18816, 660, 1, 2024), ('MBBS', 'EWS', 22935, 655, 2, 2024), ('MBBS', 'EWS', 24725, 652, 3, 2024),
+  ('MBBS', 'EWS', 16983, 623, 1, 2023), ('MBBS', 'EWS', 20286, 616, 2, 2023), ('MBBS', 'EWS', 18616, 620, 3, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 19405, 537, 1, 2025), ('MBBS', 'OBC', 22861, 532, 2, 2025), ('MBBS', 'OBC', 23387, 531, 3, 2025), ('MBBS', 'OBC', 27307, 525, 4, 2025),
+  ('MBBS', 'OBC', 17120, 662, 1, 2024), ('MBBS', 'OBC', 21544, 656, 2, 2024), ('MBBS', 'OBC', 23195, 655, 3, 2024),
+  ('MBBS', 'OBC', 16504, 624, 1, 2023), ('MBBS', 'OBC', 18888, 619, 2, 2023), ('MBBS', 'OBC', 20140, 616, 3, 2023),
+
+  -- Open PwD Data
+  ('MBBS', 'Open PwD', 586162, 254, 1, 2025),
+  ('MBBS', 'Open PwD', 507154, 266, 1, 2023), ('MBBS', 'Open PwD', 906039, 156, 2, 2023), ('MBBS', 'Open PwD', 789939, 181, 3, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 84981, 475, 1, 2025), ('MBBS', 'SC', 122842, 449, 2, 2025), ('MBBS', 'SC', 120350, 451, 3, 2025),
+  ('MBBS', 'SC', 87818, 591, 1, 2024), ('MBBS', 'SC', 113639, 569, 2, 2024), ('MBBS', 'SC', 122781, 561, 3, 2024),
+  ('MBBS', 'SC', 78029, 533, 1, 2023), ('MBBS', 'SC', 96511, 513, 2, 2023), ('MBBS', 'SC', 105143, 504, 3, 2023),
+
+  -- ST Data
+  ('MBBS', 'ST', 124635, 448, 1, 2025), ('MBBS', 'ST', 137499, 440, 2, 2025),
+  ('MBBS', 'ST', 133763, 553, 1, 2024), ('MBBS', 'ST', 135839, 551, 2, 2024), ('MBBS', 'ST', 157936, 534, 3, 2024),
+  ('MBBS', 'ST', 147895, 463, 3, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'tamralipto-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'All India quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+  -- ST Data
+  ('MBBS', 'ST', 132634, 443, 1, 2025), ('MBBS', 'ST', 140683, 439, 2, 2025), ('MBBS', 'ST', 149127, 434, 3, 2025),
+  ('MBBS', 'ST', 135300, 552, 1, 2024), ('MBBS', 'ST', 149534, 540, 2, 2024), ('MBBS', 'ST', 159081, 533, 3, 2024),
+  ('MBBS', 'ST', 130413, 479, 1, 2023), ('MBBS', 'ST', 140094, 470, 2, 2023), ('MBBS', 'ST', 145818, 465, 3, 2023),
+
+  -- EWS Data
+  ('MBBS', 'EWS', 21290, 534, 1, 2025), ('MBBS', 'EWS', 24126, 530, 2, 2025),
+  ('MBBS', 'EWS', 18144, 661, 1, 2024), ('MBBS', 'EWS', 22340, 655, 2, 2024),
+  ('MBBS', 'EWS', 16650, 624, 1, 2023), ('MBBS', 'EWS', 21103, 615, 2, 2023),
+
+  -- OBC Data
+  ('MBBS', 'OBC', 19665, 536, 1, 2025), ('MBBS', 'OBC', 23422, 531, 2, 2025), ('MBBS', 'OBC', 24208, 530, 3, 2025),
+  ('MBBS', 'OBC', 18126, 661, 1, 2024), ('MBBS', 'OBC', 22039, 656, 2, 2024), ('MBBS', 'OBC', 23415, 655, 3, 2024),
+  ('MBBS', 'OBC', 17342, 622, 1, 2023), ('MBBS', 'OBC', 19361, 618, 2, 2023), ('MBBS', 'OBC', 20372, 616, 3, 2023),
+
+  -- SC Data
+  ('MBBS', 'SC', 102110, 463, 1, 2025), ('MBBS', 'SC', 125759, 448, 2, 2025),
+  ('MBBS', 'SC', 88024, 591, 1, 2024), ('MBBS', 'SC', 112697, 570, 2, 2024), ('MBBS', 'SC', 123529, 561, 3, 2024), ('MBBS', 'SC', 135366, 552, 4, 2024), ('MBBS', 'SC', 138851, 549, 5, 2024),
+  ('MBBS', 'SC', 86538, 524, 1, 2023), ('MBBS', 'SC', 106035, 503, 2, 2023), ('MBBS', 'SC', 116887, 492, 3, 2023)
+) AS v(course, category, rank, marks, round, year);
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'bankura-sammilani-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+-- EWS
+('MBBS','EWS',70926,485,1,2025),('MBBS','EWS',76896,480,2,2025),('MBBS','EWS',77726,480,3,2025),('MBBS','EWS',77726,480,4,2025),
+('MBBS','EWS',65050,611,1,2024),('MBBS','EWS',65050,611,2,2024),('MBBS','EWS',65248,611,3,2024),('MBBS','EWS',65248,611,4,2024),
+('MBBS','EWS',40143,582,1,2023),('MBBS','EWS',40737,581,3,2023),
+
+-- OBC-A
+('MBBS','OBC-A',38956,512,1,2025),('MBBS','OBC-A',40379,511,2,2025),('MBBS','OBC-A',45194,506,3,2025),('MBBS','OBC-A',45194,506,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',31460,521,1,2025),('MBBS','OBC-B',32326,520,2,2025),('MBBS','OBC-B',32640,519,3,2025),('MBBS','OBC-B',32640,519,4,2025),
+
+-- SC
+('MBBS','SC',134741,442,1,2025),('MBBS','SC',145651,436,2,2025),('MBBS','SC',162495,426,3,2025),('MBBS','SC',162495,426,4,2025),
+('MBBS','SC',121036,563,1,2024),('MBBS','SC',125792,559,2,2024),('MBBS','SC',140425,548,3,2024),('MBBS','SC',140425,548,4,2024),
+('MBBS','SC',98689,510,1,2023),('MBBS','SC',104035,505,2,2023),('MBBS','SC',116718,492,3,2023),
+
+-- ST
+('MBBS','ST',491915,283,1,2025),('MBBS','ST',508827,278,2,2025),('MBBS','ST',575183,258,3,2025),('MBBS','ST',575183,258,4,2025),
+('MBBS','ST',500874,343,1,2024),('MBBS','ST',500874,343,2,2024),('MBBS','ST',563535,318,3,2024),('MBBS','ST',563535,318,4,2024),
+('MBBS','ST',423736,298,1,2023),('MBBS','ST',444874,290,3,2023),
+
+-- UR PwD
+('MBBS','UR PwD',383058,323,1,2025),('MBBS','UR PwD',383058,323,2,2025),('MBBS','UR PwD',383058,323,3,2025),('MBBS','UR PwD',383058,323,4,2025),
+('MBBS','UR PwD',1045947,184,1,2024),('MBBS','UR PwD',1045947,184,2,2024),('MBBS','UR PwD',1045947,184,4,2024),
+('MBBS','UR PwD',848913,168,1,2023)
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'barasat-government-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',67123,488,1,2025),('MBBS','EWS',67123,488,2,2025),('MBBS','EWS',87517,473,3,2025),('MBBS','EWS',87517,473,4,2025),
+('MBBS','EWS',63379,612,1,2024),('MBBS','EWS',63379,612,2,2024),('MBBS','EWS',63379,612,4,2024),
+('MBBS','EWS',42524,579,1,2023),('MBBS','EWS',43742,577,3,2023),
+
+-- OBC-A
+('MBBS','OBC-A',33212,519,1,2025),('MBBS','OBC-A',34001,518,2,2025),('MBBS','OBC-A',34001,518,3,2025),('MBBS','OBC-A',34001,518,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',28741,524,1,2025),('MBBS','OBC-B',28741,524,2,2025),('MBBS','OBC-B',28741,524,3,2025),('MBBS','OBC-B',28741,524,4,2025),
+
+-- SC
+('MBBS','SC',120316,451,1,2025),('MBBS','SC',120316,451,2,2025),('MBBS','SC',124592,448,3,2025),('MBBS','SC',124592,448,4,2025),
+('MBBS','SC',107378,574,1,2024),('MBBS','SC',110086,572,2,2024),('MBBS','SC',120932,563,3,2024),('MBBS','SC',120932,563,4,2024),
+('MBBS','SC',101306,508,1,2023),('MBBS','SC',93766,516,2,2023),('MBBS','SC',101688,507,3,2023),
+
+-- ST
+('MBBS','ST',497294,282,1,2025),('MBBS','ST',497294,282,2,2025),('MBBS','ST',497294,282,3,2025),('MBBS','ST',497294,282,4,2025),
+('MBBS','ST',567088,316,1,2024),('MBBS','ST',567088,316,2,2024),('MBBS','ST',567088,316,4,2024),
+('MBBS','ST',452794,286,1,2023),
+
+-- UR PwD
+('MBBS','UR PwD',1070625,148,1,2025),('MBBS','UR PwD',1070625,148,2,2025),('MBBS','UR PwD',1070625,148,3,2025),('MBBS','UR PwD',1070625,148,4,2025),
+('MBBS','UR PwD',1126391,169,1,2024),('MBBS','UR PwD',1126391,169,2,2024),('MBBS','UR PwD',1126391,169,4,2024)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'calcutta-national-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',47434,504,1,2025),('MBBS','EWS',47434,504,2,2025),('MBBS','EWS',53239,499,3,2025),('MBBS','EWS',53239,499,4,2025),
+('MBBS','EWS',44304,631,1,2024),('MBBS','EWS',49939,625,2,2024),('MBBS','EWS',51935,623,3,2024),('MBBS','EWS',51935,623,4,2024),
+('MBBS','EWS',29291,600,1,2023),('MBBS','EWS',29451,599,2,2023),('MBBS','EWS',33364,593,3,2023),
+
+-- OBC-A
+('MBBS','OBC-A',24772,529,1,2025),('MBBS','OBC-A',24772,529,2,2025),('MBBS','OBC-A',25478,528,3,2025),('MBBS','OBC-A',25478,528,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',20282,535,1,2025),('MBBS','OBC-B',20282,535,2,2025),('MBBS','OBC-B',21026,534,3,2025),('MBBS','OBC-B',50489,501,4,2025),
+
+-- SC
+('MBBS','SC',93664,468,1,2025),('MBBS','SC',100297,464,2,2025),('MBBS','SC',103154,462,3,2025),('MBBS','SC',103154,462,4,2025),
+('MBBS','SC',85122,593,1,2024),('MBBS','SC',86654,592,2,2024),('MBBS','SC',93139,586,3,2024),('MBBS','SC',93139,586,4,2024),
+('MBBS','SC',74239,538,1,2023),('MBBS','SC',75760,536,2,2023),('MBBS','SC',78529,533,3,2023),
+
+-- ST
+('MBBS','ST',410247,312,1,2025),('MBBS','ST',433569,303,2,2025),('MBBS','ST',464263,293,3,2025),('MBBS','ST',464263,293,4,2025),
+('MBBS','ST',407949,384,1,2024),('MBBS','ST',407949,384,2,2024),('MBBS','ST',543390,326,3,2024),('MBBS','ST',543390,326,4,2024),
+('MBBS','ST',339365,337,1,2023),('MBBS','ST',363084,326,3,2023),
+
+-- UR PwD
+('MBBS','UR PwD',776192,205,1,2025),('MBBS','UR PwD',797503,201,2,2025),('MBBS','UR PwD',797503,201,3,2025),('MBBS','UR PwD',797503,201,4,2025),
+('MBBS','UR PwD',918090,212,1,2024),('MBBS','UR PwD',1129262,168,2,2024),('MBBS','UR PwD',1129262,168,4,2024)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'burdwan-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',60287,493,1,2025),('MBBS','EWS',64351,490,2,2025),('MBBS','EWS',65693,489,3,2025),('MBBS','EWS',65693,489,4,2025),
+('MBBS','EWS',59928,615,1,2024),('MBBS','EWS',62008,614,2,2024),('MBBS','EWS',69494,607,3,2024),('MBBS','EWS',69494,607,4,2024),
+('MBBS','EWS',37246,587,1,2023),('MBBS','EWS',29656,599,2,2023),('MBBS','EWS',40233,582,3,2023),
+
+-- OBC-A
+('MBBS','OBC-A',30369,522,1,2025),('MBBS','OBC-A',30369,522,2,2025),('MBBS','OBC-A',30665,521,3,2025),('MBBS','OBC-A',30665,521,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',24636,529,1,2025),('MBBS','OBC-B',24636,529,2,2025),('MBBS','OBC-B',26438,527,3,2025),('MBBS','OBC-B',26438,527,4,2025),
+
+-- SC
+('MBBS','SC',116323,454,1,2025),('MBBS','SC',126888,447,2,2025),('MBBS','SC',127863,446,3,2025),('MBBS','SC',127863,446,4,2025),
+('MBBS','SC',103779,577,1,2024),('MBBS','SC',113342,570,2,2024),('MBBS','SC',128300,557,3,2024),('MBBS','SC',128300,557,4,2024),
+('MBBS','SC',87444,522,1,2023),('MBBS','SC',94791,515,2,2023),('MBBS','SC',102514,506,3,2023),
+
+-- SC PwD
+('MBBS','SC PwD',1269704,119,3,2025),('MBBS','SC PwD',1269704,119,4,2025),
+
+-- ST
+('MBBS','ST',489433,284,1,2025),('MBBS','ST',489433,284,2,2025),('MBBS','ST',557819,263,3,2025),('MBBS','ST',557819,263,4,2025),
+('MBBS','ST',513852,337,1,2024),('MBBS','ST',513852,337,2,2024),('MBBS','ST',601536,304,3,2024),('MBBS','ST',601536,304,4,2024),
+('MBBS','ST',404366,307,1,2023),('MBBS','ST',405346,306,3,2023),
+
+-- UR PwD
+('MBBS','UR PwD',1055016,151,1,2025),('MBBS','UR PwD',1055016,151,2,2025),('MBBS','UR PwD',1055016,151,3,2025),('MBBS','UR PwD',1055016,151,4,2025),
+('MBBS','UR PwD',1222930,152,1,2024),('MBBS','UR PwD',1222930,152,2,2024),
+('MBBS','UR PwD',404653,385,3,2024),('MBBS','UR PwD',985661,196,4,2024),
+('MBBS','UR PwD',930316,151,1,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'jnm-medical-college-kalyani'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',64988,489,1,2025),('MBBS','EWS',72609,483,2,2025),('MBBS','EWS',83071,476,3,2025),('MBBS','EWS',83071,476,4,2025),
+('MBBS','EWS',62920,613,1,2024),('MBBS','EWS',64915,611,2,2024),('MBBS','EWS',72105,605,3,2024),('MBBS','EWS',72105,605,4,2024),
+('MBBS','EWS',39104,584,1,2023),('MBBS','EWS',39495,583,3,2023),
+
+-- OBC-A
+('MBBS','OBC-A',31379,521,1,2025),('MBBS','OBC-A',33158,519,2,2025),('MBBS','OBC-A',36751,515,3,2025),('MBBS','OBC-A',36751,515,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',26998,526,1,2025),('MBBS','OBC-B',28413,524,2,2025),('MBBS','OBC-B',28787,524,3,2025),('MBBS','OBC-B',28787,524,4,2025),
+
+-- SC
+('MBBS','SC',110525,457,1,2025),('MBBS','SC',123477,449,2,2025),('MBBS','SC',133632,443,3,2025),('MBBS','SC',133632,443,4,2025),
+('MBBS','SC',106680,575,1,2024),('MBBS','SC',106680,575,2,2024),('MBBS','SC',112518,570,3,2024),('MBBS','SC',112518,570,4,2024),
+('MBBS','SC',89248,520,1,2023),('MBBS','SC',92339,517,2,2023),('MBBS','SC',101306,508,3,2023),('MBBS','SC',56416,560,4,2023),
+
+-- ST
+('MBBS','ST',491054,284,1,2025),('MBBS','ST',515788,276,2,2025),('MBBS','ST',538565,269,3,2025),('MBBS','ST',538565,269,4,2025),
+('MBBS','ST',494352,345,1,2024),('MBBS','ST',494352,345,2,2024),('MBBS','ST',494352,345,4,2024),
+('MBBS','ST',433072,295,1,2023),
+
+-- UR PwD
+('MBBS','UR PwD',1180909,131,1,2025),('MBBS','UR PwD',1180909,131,2,2025),('MBBS','UR PwD',1180909,131,3,2025),('MBBS','UR PwD',1180909,131,4,2025)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'sagore-dutta-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',54372,498,1,2025),('MBBS','EWS',54372,498,2,2025),('MBBS','EWS',72353,484,3,2025),('MBBS','EWS',72353,484,4,2025),
+('MBBS','EWS',51935,623,1,2024),('MBBS','EWS',54670,620,2,2024),('MBBS','EWS',60980,615,3,2024),('MBBS','EWS',60980,615,4,2024),
+('MBBS','EWS',35128,590,1,2023),('MBBS','EWS',35819,589,2,2023),('MBBS','EWS',41486,580,3,2023),
+
+-- OBC-A
+('MBBS','OBC-A',29172,523,1,2025),('MBBS','OBC-A',29172,523,2,2025),('MBBS','OBC-A',29172,523,3,2025),('MBBS','OBC-A',29172,523,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',21923,533,1,2025),('MBBS','OBC-B',21923,533,2,2025),('MBBS','OBC-B',25398,528,3,2025),('MBBS','OBC-B',25398,528,4,2025),
+
+-- SC
+('MBBS','SC',102943,462,1,2025),('MBBS','SC',106476,460,2,2025),('MBBS','SC',123477,449,3,2025),('MBBS','SC',123477,449,4,2025),
+('MBBS','SC',97503,582,1,2024),('MBBS','SC',100053,580,2,2024),('MBBS','SC',120037,564,3,2024),('MBBS','SC',120037,564,4,2024),
+('MBBS','SC',79950,531,1,2023),('MBBS','SC',86233,524,2,2023),('MBBS','SC',100649,508,3,2023),
+
+-- ST
+('MBBS','ST',469662,291,1,2025),('MBBS','ST',471353,290,2,2025),('MBBS','ST',471353,290,3,2025),('MBBS','ST',471353,290,4,2025),
+('MBBS','ST',477427,352,1,2024),('MBBS','ST',477427,352,2,2024),('MBBS','ST',576645,313,3,2024),('MBBS','ST',576645,313,4,2024),
+('MBBS','ST',361471,326,1,2023),('MBBS','ST',408311,305,3,2023),
+
+-- UR PwD
+('MBBS','UR PwD',993311,162,1,2025),('MBBS','UR PwD',1096025,144,2,2025),('MBBS','UR PwD',1111482,142,3,2025),('MBBS','UR PwD',1111482,142,4,2025),
+('MBBS','UR PwD',1053405,182,1,2024),('MBBS','UR PwD',1053405,182,2,2024),('MBBS','UR PwD',1053405,182,4,2024),
+('MBBS','UR PwD',991313,140,1,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'deben-mahata-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',99758,464,1,2025),('MBBS','EWS',99758,464,2,2025),('MBBS','EWS',111250,457,3,2025),('MBBS','EWS',111250,457,4,2025),
+('MBBS','EWS',88990,590,1,2024),('MBBS','EWS',88990,590,2,2024),('MBBS','EWS',88990,590,4,2024),
+('MBBS','EWS',54487,562,1,2023),
+
+-- OBC-A
+('MBBS','OBC-A',46742,505,1,2025),('MBBS','OBC-A',47403,504,2,2025),('MBBS','OBC-A',51022,501,3,2025),('MBBS','OBC-A',51022,501,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',44651,507,1,2025),('MBBS','OBC-B',45011,506,2,2025),('MBBS','OBC-B',49172,503,3,2025),('MBBS','OBC-B',49172,503,4,2025),
+
+-- SC
+('MBBS','SC',155066,430,1,2025),('MBBS','SC',165174,424,2,2025),('MBBS','SC',175314,419,3,2025),('MBBS','SC',175314,419,4,2025),
+('MBBS','SC',147389,542,1,2024),('MBBS','SC',147389,542,2,2024),('MBBS','SC',156116,536,3,2024),('MBBS','SC',156116,536,4,2024),
+('MBBS','SC',118944,490,1,2023),('MBBS','SC',118485,490,2,2023),('MBBS','SC',127834,481,3,2023),('MBBS','SC',129763,480,4,2023),
+
+-- ST
+('MBBS','ST',581409,256,1,2025),('MBBS','ST',581409,256,2,2025),('MBBS','ST',610036,248,3,2025),('MBBS','ST',610036,248,4,2025),
+('MBBS','ST',589199,309,1,2024),('MBBS','ST',589199,309,2,2024),('MBBS','ST',605760,303,3,2024),('MBBS','ST',605760,303,4,2024),
+('MBBS','ST',478041,276,1,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+INSERT INTO cutoffs (college_id, exam_id, course, category, quota, state, college_type, rank, marks, round, year)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'diamond-harbour-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Govt.', v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',82618,476,1,2025),('MBBS','EWS',90366,471,2,2025),('MBBS','EWS',95585,467,3,2025),('MBBS','EWS',95585,467,4,2025),
+('MBBS','EWS',66670,610,1,2024),('MBBS','EWS',70803,606,2,2024),('MBBS','EWS',74940,602,3,2024),('MBBS','EWS',74940,602,4,2024),
+('MBBS','EWS',43742,577,1,2023),('MBBS','EWS',31350,596,2,2023),('MBBS','EWS',44390,576,3,2023),
+
+-- OBC-A
+('MBBS','OBC-A',37154,514,1,2025),('MBBS','OBC-A',40635,511,2,2025),('MBBS','OBC-A',40635,511,3,2025),('MBBS','OBC-A',40635,511,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',35084,516,1,2025),('MBBS','OBC-B',38119,513,2,2025),('MBBS','OBC-B',38119,513,3,2025),('MBBS','OBC-B',38119,513,4,2025),
+
+-- SC
+('MBBS','SC',127129,447,1,2025),('MBBS','SC',144028,436,2,2025),('MBBS','SC',149074,434,3,2025),('MBBS','SC',149074,434,4,2025),
+('MBBS','SC',117162,566,1,2024),('MBBS','SC',119914,564,2,2024),('MBBS','SC',131218,555,3,2024),('MBBS','SC',131218,555,4,2024),
+('MBBS','SC',99661,509,1,2023),('MBBS','SC',92840,517,2,2023),('MBBS','SC',96999,512,3,2023),
+
+-- ST
+('MBBS','ST',517975,275,1,2025),('MBBS','ST',569151,259,2,2025),('MBBS','ST',604259,249,3,2025),('MBBS','ST',604259,249,4,2025),
+('MBBS','ST',543758,325,1,2024),('MBBS','ST',543758,325,2,2024),('MBBS','ST',543758,325,4,2024),
+('MBBS','ST',439778,292,1,2023),('MBBS','ST',411061,304,3,2023),
+
+-- UR PwD
+('MBBS','UR PwD',608397,248,2,2025),('MBBS','UR PwD',608397,248,3,2025),('MBBS','UR PwD',608397,248,4,2025),
+('MBBS','UR PwD',936630,208,1,2024),('MBBS','UR PwD',936630,208,2,2024),('MBBS','UR PwD',936630,208,4,2024)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'esi-pgi-msr-esic-medical-college-joka'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Govt.',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',72746,483,1,2025),('MBBS','EWS',72746,483,2,2025),('MBBS','EWS',90221,471,3,2025),('MBBS','EWS',90221,471,4,2025),
+('MBBS','EWS',58573,617,1,2024),('MBBS','EWS',63714,612,2,2024),('MBBS','EWS',63714,612,4,2024),
+('MBBS','EWS',33321,593,1,2023),('MBBS','EWS',38154,585,2,2023),('MBBS','EWS',43137,578,3,2023),
+
+-- OBC
+('MBBS','OBC',41700,510,1,2025),('MBBS','OBC',43568,508,2,2025),('MBBS','OBC',46833,505,3,2025),('MBBS','OBC',46833,505,4,2025),
+('MBBS','OBC',38642,636,1,2024),('MBBS','OBC',38642,636,2,2024),('MBBS','OBC',40919,635,3,2024),('MBBS','OBC',40374,635,4,2024),('MBBS','OBC',44502,630,5,2024),
+('MBBS','OBC',33917,592,1,2023),('MBBS','OBC',32446,594,2,2023),('MBBS','OBC',35766,589,3,2023),
+
+-- SC
+('MBBS','SC',111602,456,1,2025),('MBBS','SC',111602,456,2,2025),('MBBS','SC',120627,451,3,2025),('MBBS','SC',120627,451,4,2025),
+('MBBS','SC',100351,580,1,2024),('MBBS','SC',100351,580,2,2024),('MBBS','SC',98951,581,3,2024),('MBBS','SC',100351,580,4,2024),
+('MBBS','SC',88556,521,1,2023),('MBBS','SC',91204,518,2,2023),('MBBS','SC',98649,510,3,2023),
+
+-- ST
+('MBBS','ST',483421,286,1,2025),('MBBS','ST',483421,286,2,2025),('MBBS','ST',580491,256,3,2025),('MBBS','ST',580491,256,4,2025),
+('MBBS','ST',564959,317,1,2024),('MBBS','ST',564959,317,2,2024),('MBBS','ST',564959,317,4,2024),
+('MBBS','ST',467566,280,1,2023),
+
+-- UR PwD
+('MBBS','UR PwD',850013,189,1,2025),('MBBS','UR PwD',850013,189,2,2025),
+('MBBS','UR PwD',1101135,173,1,2024),('MBBS','UR PwD',1101135,173,2,2024),('MBBS','UR PwD',1101135,173,4,2024)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'govt-medical-college-jalpaiguri'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Govt.',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',109683,458,1,2025),('MBBS','EWS',109683,458,2,2025),('MBBS','EWS',114597,455,3,2025),('MBBS','EWS',114597,455,4,2025),
+('MBBS','EWS',100592,580,1,2024),('MBBS','EWS',100592,580,2,2024),('MBBS','EWS',100425,580,3,2024),('MBBS','EWS',100592,580,4,2024),
+('MBBS','EWS',69626,543,1,2023),
+
+-- OBC-A
+('MBBS','OBC-A',47402,504,1,2025),('MBBS','OBC-A',49548,502,2,2025),('MBBS','OBC-A',50415,501,3,2025),('MBBS','OBC-A',50415,501,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',45712,506,1,2025),('MBBS','OBC-B',46603,505,2,2025),('MBBS','OBC-B',49281,503,3,2025),('MBBS','OBC-B',49281,503,4,2025),
+
+-- SC
+('MBBS','SC',161172,427,1,2025),('MBBS','SC',164299,425,2,2025),('MBBS','SC',174943,419,3,2025),('MBBS','SC',174943,419,4,2025),
+('MBBS','SC',154275,537,1,2024),('MBBS','SC',154275,537,2,2024),('MBBS','SC',158167,534,3,2024),('MBBS','SC',158167,534,4,2024),
+('MBBS','SC',125398,484,1,2023),('MBBS','SC',125661,484,2,2023),('MBBS','SC',129688,480,3,2023),
+
+-- ST
+('MBBS','ST',581331,256,1,2025),('MBBS','ST',592820,253,2,2025),('MBBS','ST',603896,249,3,2025),('MBBS','ST',603896,249,4,2025),
+('MBBS','ST',610754,301,1,2024),('MBBS','ST',610754,301,2,2024),('MBBS','ST',580826,311,3,2024),('MBBS','ST',610754,301,4,2024),
+('MBBS','ST',510373,265,1,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'ipgmer-kolkata'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Govt.',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',27371,525,1,2025),('MBBS','EWS',27371,525,2,2025),('MBBS','EWS',27690,525,3,2025),('MBBS','EWS',27690,525,4,2025),
+('MBBS','EWS',20253,658,1,2024),('MBBS','EWS',20253,658,2,2024),('MBBS','EWS',20253,658,4,2024),
+('MBBS','EWS',14339,629,1,2023),
+
+-- OBC-A
+('MBBS','OBC-A',14258,546,1,2025),('MBBS','OBC-A',14258,546,2,2025),('MBBS','OBC-A',14258,546,3,2025),('MBBS','OBC-A',14258,546,4,2025),
+
+-- OBC-A PwD
+('MBBS','OBC-A PwD',119979,129,1,2025),('MBBS','OBC-A PwD',119979,129,2,2025),('MBBS','OBC-A PwD',119979,129,3,2025),('MBBS','OBC-A PwD',119979,129,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',12169,550,1,2025),('MBBS','OBC-B',12169,550,2,2025),('MBBS','OBC-B',12169,550,3,2025),('MBBS','OBC-B',12169,550,4,2025),
+
+-- OBC-B PwD
+('MBBS','OBC-B PwD',648027,237,1,2025),('MBBS','OBC-B PwD',648027,237,2,2025),('MBBS','OBC-B PwD',648027,237,3,2025),('MBBS','OBC-B PwD',648027,237,4,2025),
+
+-- SC
+('MBBS','SC',54924,497,1,2025),('MBBS','SC',63461,491,2,2025),('MBBS','SC',63461,491,3,2025),('MBBS','SC',63461,491,4,2025),
+('MBBS','SC',51415,624,1,2024),('MBBS','SC',54589,620,2,2024),('MBBS','SC',67955,608,3,2024),('MBBS','SC',67955,608,4,2024),
+('MBBS','SC',44070,577,1,2023),('MBBS','SC',53202,564,2,2023),('MBBS','SC',54903,562,3,2023),
+
+-- SC PwD
+('MBBS','SC PwD',1169026,133,1,2025),('MBBS','SC PwD',1169026,133,2,2025),('MBBS','SC PwD',1169026,133,3,2025),('MBBS','SC PwD',1169026,133,4,2025),
+
+-- ST
+('MBBS','ST',277127,367,1,2025),('MBBS','ST',363756,330,2,2025),('MBBS','ST',426221,306,3,2025),('MBBS','ST',426221,306,4,2025),
+('MBBS','ST',275507,455,1,2024),('MBBS','ST',275507,455,2,2024),('MBBS','ST',389976,392,3,2024),('MBBS','ST',389976,392,4,2024),
+('MBBS','ST',208253,415,1,2023),('MBBS','ST',268824,376,3,2023),
+
+-- UR PwD
+('MBBS','UR PwD',436764,302,1,2025),('MBBS','UR PwD',491457,284,2,2025),('MBBS','UR PwD',850013,189,3,2025),('MBBS','UR PwD',850013,189,4,2025),
+('MBBS','UR PwD',517654,336,1,2024),('MBBS','UR PwD',844332,230,2,2024),('MBBS','UR PwD',844332,230,4,2024),
+('MBBS','UR PwD',533341,256,1,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'jhargram-govt-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Govt.',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',103134,462,1,2025),('MBBS','EWS',103134,462,2,2025),('MBBS','EWS',110019,458,3,2025),('MBBS','EWS',110019,458,4,2025),
+('MBBS','EWS',91448,588,1,2024),('MBBS','EWS',91448,588,2,2024),('MBBS','EWS',91448,588,4,2024),
+('MBBS','EWS',62783,552,1,2023),
+
+-- OBC-A
+('MBBS','OBC-A',48097,504,1,2025),('MBBS','OBC-A',48217,504,2,2025),('MBBS','OBC-A',51164,501,3,2025),('MBBS','OBC-A',51598,500,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',45331,506,1,2025),('MBBS','OBC-B',45331,506,2,2025),('MBBS','OBC-B',50371,502,3,2025),('MBBS','OBC-B',50371,502,4,2025),
+
+-- SC
+('MBBS','SC',161003,427,1,2025),('MBBS','SC',165767,424,2,2025),('MBBS','SC',172755,420,3,2025),('MBBS','SC',172755,420,4,2025),
+('MBBS','SC',151444,539,1,2024),('MBBS','SC',151444,539,2,2024),('MBBS','SC',155890,536,3,2024),('MBBS','SC',155890,536,4,2024),
+('MBBS','SC',125080,484,1,2023),('MBBS','SC',125612,484,2,2023),('MBBS','SC',129468,480,3,2023),('MBBS','SC',130085,479,4,2023),
+
+-- ST
+('MBBS','ST',556364,263,1,2025),('MBBS','ST',556364,263,2,2025),('MBBS','ST',589395,253,3,2025),('MBBS','ST',589395,253,4,2025),
+('MBBS','ST',555700,320,1,2024),('MBBS','ST',555700,320,2,2024),('MBBS','ST',506036,340,3,2024),('MBBS','ST',549645,323,4,2024),
+('MBBS','ST',505001,266,1,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'mjn-medical-college-coochbehar'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Govt.',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',107922,459,1,2025),('MBBS','EWS',107922,459,2,2025),('MBBS','EWS',118329,452,3,2025),('MBBS','EWS',118329,452,4,2025),
+('MBBS','EWS',100576,580,1,2024),('MBBS','EWS',100576,580,2,2024),('MBBS','EWS',100826,580,3,2024),('MBBS','EWS',100826,580,4,2024),
+('MBBS','EWS',69235,544,1,2023),
+
+-- OBC-A
+('MBBS','OBC-A',48942,503,1,2025),('MBBS','OBC-A',49803,502,2,2025),('MBBS','OBC-A',50399,502,3,2025),('MBBS','OBC-A',50399,502,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',45104,506,1,2025),('MBBS','OBC-B',46402,505,2,2025),('MBBS','OBC-B',49705,502,3,2025),('MBBS','OBC-B',49705,502,4,2025),
+
+-- SC
+('MBBS','SC',161258,427,1,2025),('MBBS','SC',164441,425,2,2025),('MBBS','SC',172525,420,3,2025),('MBBS','SC',172525,420,4,2025),
+('MBBS','SC',152775,538,1,2024),('MBBS','SC',152775,538,2,2024),('MBBS','SC',157405,535,3,2024),('MBBS','SC',157405,535,4,2024),
+('MBBS','SC',123356,486,1,2023),('MBBS','SC',124248,485,2,2023),('MBBS','SC',129743,480,3,2023),
+
+-- ST
+('MBBS','ST',586593,254,1,2025),('MBBS','ST',586647,254,2,2025),('MBBS','ST',624775,244,3,2025),('MBBS','ST',624775,244,4,2025),
+('MBBS','ST',608655,302,1,2024),('MBBS','ST',608655,302,2,2024),('MBBS','ST',608655,302,4,2024),
+('MBBS','ST',511607,264,1,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+
+
+UPDATE cutoffs
+SET quota = CASE
+  WHEN lower(quota) LIKE '%state%' THEN 'State quota'
+  WHEN lower(quota) LIKE '%all india%' THEN 'All India quota'
+  WHEN lower(quota) LIKE '%esic%' THEN 'ESIC quota'
+  ELSE quota
+END;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'malda-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Govt.',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',92495,469,1,2025),('MBBS','EWS',96037,467,2,2025),('MBBS','EWS',113155,455,3,2025),('MBBS','EWS',118910,452,4,2025),
+('MBBS','EWS',82478,595,1,2024),('MBBS','EWS',83898,594,2,2024),('MBBS','EWS',85597,593,3,2024),('MBBS','EWS',85597,593,4,2024),
+('MBBS','EWS',50380,568,1,2023),('MBBS','EWS',46050,574,3,2023),
+
+-- OBC-A
+('MBBS','OBC-A',39997,511,1,2025),('MBBS','OBC-A',40433,511,2,2025),('MBBS','OBC-A',43010,508,3,2025),('MBBS','OBC-A',43010,508,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',37623,514,1,2025),('MBBS','OBC-B',37652,514,2,2025),('MBBS','OBC-B',37652,514,3,2025),('MBBS','OBC-B',37652,514,4,2025),
+
+-- SC
+('MBBS','SC',144748,436,1,2025),('MBBS','SC',147274,435,2,2025),('MBBS','SC',151736,432,3,2025),('MBBS','SC',151736,432,4,2025),
+('MBBS','SC',133592,553,1,2024),('MBBS','SC',133592,553,2,2024),('MBBS','SC',138685,549,3,2024),('MBBS','SC',138685,549,4,2024),
+('MBBS','SC',110202,498,1,2023),('MBBS','SC',113883,495,2,2023),('MBBS','SC',120176,489,3,2023),
+
+-- ST
+('MBBS','ST',532825,270,1,2025),('MBBS','ST',574331,258,2,2025),('MBBS','ST',618061,245,3,2025),('MBBS','ST',618061,245,4,2025),
+('MBBS','ST',576433,314,1,2024),('MBBS','ST',576433,314,2,2024),('MBBS','ST',609421,301,3,2024),('MBBS','ST',609421,301,4,2024),
+('MBBS','ST',460842,283,1,2023),('MBBS','ST',448991,288,3,2023),
+
+-- UR PwD
+('MBBS','UR PwD',993887,161,1,2025),('MBBS','UR PwD',993887,161,2,2025),('MBBS','UR PwD',993887,161,3,2025),('MBBS','UR PwD',993887,161,4,2025),
+('MBBS','UR PwD',866932,225,1,2024),('MBBS','UR PwD',866932,225,2,2024),('MBBS','UR PwD',866932,225,4,2024)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'medical-college-kolkata'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Govt.',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',26745,526,1,2025),('MBBS','EWS',26745,526,2,2025),('MBBS','EWS',26745,526,3,2025),('MBBS','EWS',26745,526,4,2025),
+('MBBS','EWS',21009,657,1,2024),('MBBS','EWS',24016,653,2,2024),('MBBS','EWS',27691,649,3,2024),('MBBS','EWS',27691,649,4,2024),
+('MBBS','EWS',14141,630,1,2023),('MBBS','EWS',14462,629,3,2023),
+
+-- OBC-A
+('MBBS','OBC-A',11217,552,1,2025),('MBBS','OBC-A',11217,552,2,2025),('MBBS','OBC-A',11217,552,3,2025),('MBBS','OBC-A',11217,552,4,2025),
+
+-- OBC-A PwD
+('MBBS','OBC-A PwD',689156,227,1,2025),('MBBS','OBC-A PwD',689156,227,2,2025),('MBBS','OBC-A PwD',689156,227,3,2025),('MBBS','OBC-A PwD',689156,227,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',10472,554,1,2025),('MBBS','OBC-B',10472,554,2,2025),('MBBS','OBC-B',10472,554,3,2025),('MBBS','OBC-B',10472,554,4,2025),
+
+-- OBC-B PwD
+('MBBS','OBC-B PwD',687113,227,1,2025),('MBBS','OBC-B PwD',687113,227,2,2025),('MBBS','OBC-B PwD',687113,227,3,2025),('MBBS','OBC-B PwD',687113,227,4,2025),
+
+-- SC
+('MBBS','SC',45518,506,1,2025),('MBBS','SC',57645,495,2,2025),('MBBS','SC',63612,490,3,2025),('MBBS','SC',63612,490,4,2025),
+('MBBS','SC',51342,624,1,2024),('MBBS','SC',55967,619,2,2024),('MBBS','SC',60570,615,3,2024),('MBBS','SC',60570,615,4,2024),
+('MBBS','SC',36835,587,1,2023),('MBBS','SC',54572,562,2,2023),('MBBS','SC',58284,557,3,2023),
+
+-- ST
+('MBBS','ST',334354,342,1,2025),('MBBS','ST',334354,342,2,2025),('MBBS','ST',344376,338,3,2025),('MBBS','ST',344376,338,4,2025),
+('MBBS','ST',270368,457,1,2024),('MBBS','ST',270368,457,2,2024),('MBBS','ST',380604,397,3,2024),('MBBS','ST',380604,397,4,2024),
+('MBBS','ST',185845,432,1,2023),('MBBS','ST',231156,400,3,2023),
+
+-- UR PwD
+('MBBS','UR PwD',473110,290,1,2025),('MBBS','UR PwD',677357,230,2,2025),('MBBS','UR PwD',784396,204,3,2025),('MBBS','UR PwD',784396,204,4,2025),
+('MBBS','UR PwD',598433,305,1,2024),('MBBS','UR PwD',741085,259,2,2024),('MBBS','UR PwD',741085,259,4,2024),
+('MBBS','UR PwD',362165,326,1,2023),('MBBS','UR PwD',729037,197,2,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'midnapore-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Govt.',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',74689,482,1,2025),('MBBS','EWS',74689,482,2,2025),('MBBS','EWS',87972,472,3,2025),('MBBS','EWS',87972,472,4,2025),
+('MBBS','EWS',70085,606,1,2024),('MBBS','EWS',70085,606,2,2024),('MBBS','EWS',75789,601,3,2024),('MBBS','EWS',75789,601,4,2024),
+('MBBS','EWS',41721,580,1,2023),('MBBS','EWS',42054,580,3,2023),
+
+-- OBC-A
+('MBBS','OBC-A',41843,510,1,2025),('MBBS','OBC-A',45809,506,2,2025),('MBBS','OBC-A',48097,504,3,2025),('MBBS','OBC-A',48097,504,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',36701,515,1,2025),('MBBS','OBC-B',38500,513,2,2025),('MBBS','OBC-B',43265,508,3,2025),('MBBS','OBC-B',43265,508,4,2025),
+
+-- SC
+('MBBS','SC',139222,439,1,2025),('MBBS','SC',153967,431,2,2025),('MBBS','SC',163167,425,3,2025),('MBBS','SC',163167,425,4,2025),
+('MBBS','SC',128525,557,1,2024),('MBBS','SC',129025,557,2,2024),('MBBS','SC',141697,547,3,2024),('MBBS','SC',141697,547,4,2024),
+('MBBS','SC',105364,503,1,2023),('MBBS','SC',109007,500,2,2023),('MBBS','SC',119187,490,3,2023),
+
+-- ST
+('MBBS','ST',513230,277,1,2025),('MBBS','ST',513358,276,2,2025),('MBBS','ST',586593,254,3,2025),('MBBS','ST',586593,254,4,2025),
+('MBBS','ST',543475,326,1,2024),('MBBS','ST',543475,326,2,2024),('MBBS','ST',570233,315,3,2024),('MBBS','ST',570233,315,4,2024),
+('MBBS','ST',442990,290,1,2023),('MBBS','ST',436212,293,3,2023),
+
+-- UR PwD
+('MBBS','UR PwD',1096025,144,1,2025),('MBBS','UR PwD',993311,162,2,2025),('MBBS','UR PwD',993311,162,3,2025),('MBBS','UR PwD',993311,162,4,2025),
+('MBBS','UR PwD',1146026,165,1,2024),('MBBS','UR PwD',1146026,165,2,2024),('MBBS','UR PwD',1146026,165,4,2024)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'murshidabad-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Govt.',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',87606,473,1,2025),('MBBS','EWS',87606,473,2,2025),('MBBS','EWS',87606,473,3,2025),('MBBS','EWS',87606,473,4,2025),
+('MBBS','EWS',78324,599,1,2024),('MBBS','EWS',81230,596,2,2024),('MBBS','EWS',94350,585,3,2024),('MBBS','EWS',94350,585,4,2024),
+('MBBS','EWS',48687,570,1,2023),('MBBS','EWS',30227,598,3,2023),
+
+-- OBC-A
+('MBBS','OBC-A',36599,515,1,2025),('MBBS','OBC-A',37131,514,2,2025),('MBBS','OBC-A',39511,512,3,2025),('MBBS','OBC-A',39511,512,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',37837,514,1,2025),('MBBS','OBC-B',37837,514,2,2025),('MBBS','OBC-B',39114,512,3,2025),('MBBS','OBC-B',39114,512,4,2025),
+
+-- SC
+('MBBS','SC',143201,437,1,2025),('MBBS','SC',148848,434,2,2025),('MBBS','SC',148848,434,3,2025),('MBBS','SC',148848,434,4,2025),
+('MBBS','SC',131417,555,1,2024),('MBBS','SC',131417,555,2,2024),('MBBS','SC',143040,546,3,2024),('MBBS','SC',143040,546,4,2024),
+('MBBS','SC',109643,499,1,2023),('MBBS','SC',105482,503,2,2023),('MBBS','SC',113851,495,3,2023),
+
+-- ST
+('MBBS','ST',541458,268,1,2025),('MBBS','ST',565025,261,2,2025),('MBBS','ST',565025,261,3,2025),('MBBS','ST',565025,261,4,2025),
+('MBBS','ST',571794,315,1,2024),('MBBS','ST',571794,315,2,2024),('MBBS','ST',614598,299,3,2024),('MBBS','ST',614598,299,4,2024),
+('MBBS','ST',475326,277,1,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'nilratan-sirkar-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State Quota', 'West Bengal', 'Govt.',
+  v.rank, v.marks, v.round, v.year
+FROM (
+VALUES
+
+-- EWS
+('MBBS','EWS',31262,521,1,2025),
+('MBBS','EWS',31262,521,2,2025),
+('MBBS','EWS',36608,515,3,2025),
+('MBBS','EWS',36608,515,4,2025),
+
+('MBBS','EWS',31872,644,1,2024),
+('MBBS','EWS',32571,643,2,2024),
+('MBBS','EWS',32894,643,3,2024),
+('MBBS','EWS',32894,643,4,2024),
+
+('MBBS','EWS',19049,619,1,2023),
+('MBBS','EWS',19107,618,2,2023),
+('MBBS','EWS',25554,606,3,2023),
+
+-- OBC-A
+('MBBS','OBC-A',16958,541,1,2025),
+('MBBS','OBC-A',16958,541,2,2025),
+('MBBS','OBC-A',16958,541,3,2025),
+('MBBS','OBC-A',16958,541,4,2025),
+
+-- OBC-A PwD
+('MBBS','OBC-A PwD',767643,207,1,2025),
+('MBBS','OBC-A PwD',767643,207,2,2025),
+('MBBS','OBC-A PwD',767643,207,3,2025),
+('MBBS','OBC-A PwD',767643,207,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',15124,544,1,2025),
+('MBBS','OBC-B',15161,544,2,2025),
+('MBBS','OBC-B',15478,543,3,2025),
+('MBBS','OBC-B',15478,543,4,2025),
+
+-- SC
+('MBBS','SC',69101,486,1,2025),
+('MBBS','SC',77044,480,2,2025),
+('MBBS','SC',81140,477,3,2025),
+('MBBS','SC',81140,477,4,2025),
+
+('MBBS','SC',64105,612,1,2024),
+('MBBS','SC',67247,609,2,2024),
+('MBBS','SC',72528,604,3,2024),
+('MBBS','SC',72528,604,4,2024),
+
+('MBBS','SC',58271,557,1,2023),
+('MBBS','SC',66173,547,2,2023),
+('MBBS','SC',68421,545,3,2023),
+
+-- SC PwD
+('MBBS','SC PwD',818849,196,1,2025),
+('MBBS','SC PwD',1055304,151,2,2025),
+('MBBS','SC PwD',1055304,151,3,2025),
+('MBBS','SC PwD',1055304,151,4,2025),
+
+-- ST
+('MBBS','ST',375983,325,1,2025),
+('MBBS','ST',394941,318,2,2025),
+('MBBS','ST',460054,294,3,2025),
+('MBBS','ST',460054,294,4,2025),
+
+('MBBS','ST',360801,407,1,2024),
+('MBBS','ST',360801,407,2,2024),
+('MBBS','ST',457613,361,3,2024),
+('MBBS','ST',457613,361,4,2024),
+
+('MBBS','ST',264401,379,1,2023),
+('MBBS','ST',336337,339,3,2023),
+
+-- UR PwD
+('MBBS','UR PwD',617511,246,1,2025),
+('MBBS','UR PwD',749617,212,2,2025),
+('MBBS','UR PwD',749617,212,3,2025),
+('MBBS','UR PwD',749617,212,4,2025),
+
+('MBBS','UR PwD',772556,250,1,2024),
+('MBBS','UR PwD',772556,250,2,2024),
+('MBBS','UR PwD',772556,250,4,2024),
+
+('MBBS','UR PwD',745057,192,1,2023),
+('MBBS','UR PwD',851211,168,2,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id,
+  exam_id,
+  course,
+  category,
+  quota,
+  state,
+  college_type,
+  rank,
+  marks,
+  round,
+  year
+)
+
+SELECT
+  (SELECT id FROM colleges WHERE slug = 'pcs-medical-college-arambagh'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course,
+  v.category,
+  'State Quota',
+  'West Bengal',
+  'Govt.',
+  v.rank,
+  v.marks,
+  v.round,
+  v.year
+
+FROM (
+  VALUES
+
+  -- EWS
+  ('MBBS','EWS',87517,473,1,2025),
+  ('MBBS','EWS',90510,471,2,2025),
+  ('MBBS','EWS',98634,465,3,2025),
+  ('MBBS','EWS',98634,465,4,2025),
+
+  ('MBBS','EWS',80741,597,1,2024),
+  ('MBBS','EWS',80741,597,2,2024),
+  ('MBBS','EWS',80741,597,4,2024),
+
+  ('MBBS','EWS',52373,565,1,2023),
+
+  -- OBC-A
+  ('MBBS','OBC-A (Non- Creamy Layer)',42019,509,1,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer)',42019,509,2,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer)',42019,509,3,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer)',42019,509,4,2025),
+
+  -- OBC-B
+  ('MBBS','OBC-B (Non- Creamy Layer)',38722,513,1,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',41323,510,2,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',44529,507,3,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',44529,507,4,2025),
+
+  -- ST
+  ('MBBS','ST',565199,261,1,2025),
+  ('MBBS','ST',589245,254,2,2025),
+  ('MBBS','ST',598978,251,3,2025),
+  ('MBBS','ST',598978,251,4,2025),
+
+  ('MBBS','ST',601536,304,1,2024),
+  ('MBBS','ST',601536,304,2,2024),
+  ('MBBS','ST',613367,300,3,2024),
+  ('MBBS','ST',613367,300,4,2024),
+
+  ('MBBS','ST',498742,269,1,2023),
+
+  -- UR PwD
+  ('MBBS','UR PwD',918691,175,2,2025),
+  ('MBBS','UR PwD',918691,175,3,2025),
+  ('MBBS','UR PwD',918691,175,4,2025),
+
+  ('MBBS','UR PwD',936607,208,2,2024),
+  ('MBBS','UR PwD',936607,208,4,2024)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id,
+  exam_id,
+  course,
+  category,
+  quota,
+  state,
+  college_type,
+  rank,
+  marks,
+  round,
+  year
+)
+
+SELECT
+  (SELECT id FROM colleges WHERE slug = 'north-bengal-medical-college-hospital-darjeeling'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course,
+  v.category,
+  'State Quota',
+  'West Bengal',
+  'Govt.',
+  v.rank,
+  v.marks,
+  v.round,
+  v.year
+
+FROM (
+  VALUES
+
+  -- EWS
+  ('MBBS','EWS',87826,472,1,2025),
+  ('MBBS','EWS',88118,472,2,2025),
+  ('MBBS','EWS',98393,465,3,2025),
+  ('MBBS','EWS',98393,465,4,2025),
+
+  ('MBBS','EWS',78975,598,1,2024),
+  ('MBBS','EWS',78975,598,2,2024),
+  ('MBBS','EWS',99142,581,3,2024),
+  ('MBBS','EWS',99142,581,4,2024),
+
+  ('MBBS','EWS',44665,576,1,2023),
+  ('MBBS','EWS',41075,581,2,2023),
+  ('MBBS','EWS',45397,575,3,2023),
+
+  -- OBC-A
+  ('MBBS','OBC-A (Non- Creamy Layer)',36117,515,1,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer)',36288,515,2,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer)',37923,513,3,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer)',37923,513,4,2025),
+
+  -- OBC-B
+  ('MBBS','OBC-B (Non- Creamy Layer)',36055,515,1,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',36055,515,2,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',37837,514,3,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',37837,514,4,2025),
+
+  -- SC
+  ('MBBS','SC',135749,441,1,2025),
+  ('MBBS','SC',135749,441,2,2025),
+  ('MBBS','SC',141537,438,3,2025),
+  ('MBBS','SC',141537,438,4,2025),
+
+  ('MBBS','SC',123733,561,1,2024),
+  ('MBBS','SC',123948,561,2,2024),
+  ('MBBS','SC',124979,560,3,2024),
+  ('MBBS','SC',124979,560,4,2024),
+
+  ('MBBS','SC',99505,510,1,2023),
+  ('MBBS','SC',104871,504,2,2023),
+  ('MBBS','SC',108646,500,3,2023),
+
+  -- ST
+  ('MBBS','ST',479804,287,1,2025),
+  ('MBBS','ST',479804,287,2,2025),
+  ('MBBS','ST',504680,279,3,2025),
+  ('MBBS','ST',504680,279,4,2025),
+
+  ('MBBS','ST',460826,359,1,2024),
+  ('MBBS','ST',460826,359,2,2024),
+  ('MBBS','ST',538341,328,3,2024),
+  ('MBBS','ST',538341,328,4,2024),
+
+  ('MBBS','ST',426553,297,1,2023),
+  ('MBBS','ST',247925,389,3,2023),
+
+  -- UR PwD
+  ('MBBS','UR PwD',891432,181,1,2025),
+  ('MBBS','UR PwD',891432,181,2,2025),
+  ('MBBS','UR PwD',891432,181,3,2025),
+  ('MBBS','UR PwD',891432,181,4,2025),
+
+  ('MBBS','UR PwD',1100363,174,1,2024),
+
+  ('MBBS','UR PwD',679407,210,1,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id,
+  exam_id,
+  course,
+  category,
+  quota,
+  state,
+  college_type,
+  rank,
+  marks,
+  round,
+  year
+)
+
+SELECT
+  (SELECT id FROM colleges WHERE slug = 'rg-kar-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course,
+  v.category,
+  'State Quota',
+  'West Bengal',
+  'Govt.',
+  v.rank,
+  v.marks,
+  v.round,
+  v.year
+
+FROM (
+  VALUES
+
+  -- EWS
+  ('MBBS','EWS',46005,505,1,2025),
+  ('MBBS','EWS',46005,505,2,2025),
+  ('MBBS','EWS',52284,500,3,2025),
+  ('MBBS','EWS',52284,500,4,2025),
+
+  ('MBBS','EWS',48758,626,1,2024),
+  ('MBBS','EWS',48836,626,2,2024),
+  ('MBBS','EWS',51212,624,3,2024),
+  ('MBBS','EWS',51212,624,4,2024),
+
+  ('MBBS','EWS',24697,607,1,2023),
+  ('MBBS','EWS',26088,605,2,2023),
+  ('MBBS','EWS',29507,599,3,2023),
+
+  -- OBC-A
+  ('MBBS','OBC-A (Non- Creamy Layer)',21448,534,1,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer)',21448,534,2,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer)',21448,534,3,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer)',21448,534,4,2025),
+
+  -- OBC-A PwD
+  ('MBBS','OBC-A (Non- Creamy Layer) PwD',1288021,117,1,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer) PwD',1288021,117,2,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer) PwD',1288021,117,3,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer) PwD',1288021,117,4,2025),
+
+  -- OBC-B
+  ('MBBS','OBC-B (Non- Creamy Layer)',18526,538,1,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',18526,538,2,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',20688,535,3,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',20688,535,4,2025),
+
+  -- OBC-B PwD
+  ('MBBS','OBC-B (Non- Creamy Layer) PwD',1001139,160,1,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer) PwD',1001139,160,2,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer) PwD',1001139,160,3,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer) PwD',1001139,160,4,2025),
+
+  -- SC
+  ('MBBS','SC',90545,471,1,2025),
+  ('MBBS','SC',97188,466,2,2025),
+  ('MBBS','SC',102593,462,3,2025),
+  ('MBBS','SC',102593,462,4,2025),
+
+  ('MBBS','SC',86412,592,1,2024),
+  ('MBBS','SC',87534,591,2,2024),
+  ('MBBS','SC',98692,581,3,2024),
+  ('MBBS','SC',98692,581,4,2024),
+
+  ('MBBS','SC',67380,546,1,2023),
+  ('MBBS','SC',73456,539,2,2023),
+  ('MBBS','SC',75153,536,3,2023),
+
+  -- ST
+  ('MBBS','ST',427715,306,1,2025),
+  ('MBBS','ST',460054,294,2,2025),
+  ('MBBS','ST',532825,270,3,2025),
+  ('MBBS','ST',532825,270,4,2025),
+
+  ('MBBS','ST',460784,359,1,2024),
+  ('MBBS','ST',460784,359,2,2024),
+  ('MBBS','ST',555700,320,3,2024),
+  ('MBBS','ST',555700,320,4,2024),
+
+  ('MBBS','ST',313761,351,1,2023),
+  ('MBBS','ST',351227,331,3,2023),
+
+  -- UR PwD
+  ('MBBS','UR PwD',784396,204,1,2025),
+  ('MBBS','UR PwD',1055498,151,2,2025),
+  ('MBBS','UR PwD',893129,180,3,2025),
+  ('MBBS','UR PwD',893129,180,4,2025),
+
+  ('MBBS','UR PwD',1129262,168,1,2024),
+  ('MBBS','UR PwD',1270171,145,2,2024),
+  ('MBBS','UR PwD',1270171,145,4,2024),
+
+  ('MBBS','UR PwD',1029528,134,1,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id,
+  exam_id,
+  course,
+  category,
+  quota,
+  state,
+  college_type,
+  rank,
+  marks,
+  round,
+  year
+)
+
+SELECT
+  (SELECT id FROM colleges WHERE slug = 'raiganj-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course,
+  v.category,
+  'State Quota',
+  'West Bengal',
+  'Govt.',
+  v.rank,
+  v.marks,
+  v.round,
+  v.year
+
+FROM (
+  VALUES
+
+  -- EWS
+  ('MBBS','EWS',102669,462,1,2025),
+  ('MBBS','EWS',102669,462,2,2025),
+  ('MBBS','EWS',117164,453,3,2025),
+  ('MBBS','EWS',117164,453,4,2025),
+
+  ('MBBS','EWS',94996,585,1,2024),
+  ('MBBS','EWS',94996,585,2,2024),
+  ('MBBS','EWS',97241,583,3,2024),
+  ('MBBS','EWS',97241,583,4,2024),
+
+  ('MBBS','EWS',63555,551,1,2023),
+
+  -- OBC-A
+  ('MBBS','OBC-A (Non- Creamy Layer)',45470,506,1,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer)',46015,505,2,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer)',49898,502,3,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer)',49898,502,4,2025),
+
+  -- OBC-B
+  ('MBBS','OBC-B (Non- Creamy Layer)',41134,510,1,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',42410,509,2,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',47937,504,3,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',47937,504,4,2025),
+
+  -- SC
+  ('MBBS','SC',158974,428,1,2025),
+  ('MBBS','SC',164037,425,2,2025),
+  ('MBBS','SC',174104,419,3,2025),
+  ('MBBS','SC',174104,419,4,2025),
+
+  ('MBBS','SC',145298,544,1,2024),
+  ('MBBS','SC',145298,544,2,2024),
+  ('MBBS','SC',156321,535,3,2024),
+  ('MBBS','SC',156321,535,4,2024),
+
+  ('MBBS','SC',121338,488,1,2023),
+  ('MBBS','SC',126145,483,2,2023),
+  ('MBBS','SC',129532,480,3,2023),
+
+  -- ST
+  ('MBBS','ST',569151,259,1,2025),
+  ('MBBS','ST',589837,253,2,2025),
+  ('MBBS','ST',629941,242,3,2025),
+  ('MBBS','ST',629941,242,4,2025),
+
+  ('MBBS','ST',594433,307,1,2024),
+  ('MBBS','ST',594433,307,2,2024),
+  ('MBBS','ST',567169,316,3,2024),
+  ('MBBS','ST',594433,307,4,2024),
+
+  ('MBBS','ST',488325,273,1,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id,
+  exam_id,
+  course,
+  category,
+  quota,
+  state,
+  college_type,
+  rank,
+  marks,
+  round,
+  year
+)
+
+SELECT
+  (SELECT id FROM colleges WHERE slug = 'rampurhat-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course,
+  v.category,
+  'State Quota',
+  'West Bengal',
+  'Govt.',
+  v.rank,
+  v.marks,
+  v.round,
+  v.year
+
+FROM (
+  VALUES
+
+  -- EWS
+  ('MBBS','EWS',96508,466,1,2025),
+  ('MBBS','EWS',101708,463,2,2025),
+  ('MBBS','EWS',112869,456,3,2025),
+  ('MBBS','EWS',112869,456,4,2025),
+
+  ('MBBS','EWS',92303,587,1,2024),
+  ('MBBS','EWS',92303,587,2,2024),
+  ('MBBS','EWS',92303,587,4,2024),
+
+  ('MBBS','EWS',57190,559,1,2023),
+
+  -- OBC-B
+  ('MBBS','OBC-B (Non- Creamy Layer)',41544,510,1,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',41544,510,2,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',47595,504,3,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',47595,504,4,2025),
+
+  -- SC
+  ('MBBS','SC',152991,431,1,2025),
+  ('MBBS','SC',162431,426,2,2025),
+  ('MBBS','SC',168923,422,3,2025),
+  ('MBBS','SC',168923,422,4,2025),
+
+  ('MBBS','SC',140895,547,1,2024),
+  ('MBBS','SC',140895,547,2,2024),
+  ('MBBS','SC',155688,536,3,2024),
+  ('MBBS','SC',155688,536,4,2024),
+
+  ('MBBS','SC',115166,494,1,2023),
+  ('MBBS','SC',119624,489,2,2023),
+  ('MBBS','SC',128291,481,3,2023),
+
+  -- ST
+  ('MBBS','ST',569133,259,1,2025),
+  ('MBBS','ST',589395,253,2,2025),
+  ('MBBS','ST',615418,246,3,2025),
+  ('MBBS','ST',615418,246,4,2025),
+
+  ('MBBS','ST',605760,303,1,2024),
+  ('MBBS','ST',605760,303,2,2024),
+  ('MBBS','ST',614544,299,3,2024),
+  ('MBBS','ST',614544,299,4,2024),
+
+  ('MBBS','ST',499304,269,1,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id,
+  exam_id,
+  course,
+  category,
+  quota,
+  state,
+  college_type,
+  rank,
+  marks,
+  round,
+  year
+)
+
+SELECT
+  (SELECT id FROM colleges WHERE slug = 'scc-medical-college-uluberia'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course,
+  v.category,
+  'State Quota',
+  'West Bengal',
+  'Govt.',
+  v.rank,
+  v.marks,
+  v.round,
+  v.year
+
+FROM (
+  VALUES
+
+  -- EWS
+  ('MBBS','EWS',88787,472,1,2025),
+  ('MBBS','EWS',94210,468,2,2025),
+  ('MBBS','EWS',94210,468,3,2025),
+  ('MBBS','EWS',94210,468,4,2025),
+
+  ('MBBS','EWS',70803,606,1,2024),
+  ('MBBS','EWS',69722,607,2,2024),
+  ('MBBS','EWS',74198,603,3,2024),
+  ('MBBS','EWS',74198,603,4,2024),
+
+  ('MBBS','EWS',49601,569,1,2023),
+  ('MBBS','EWS',46183,574,3,2023),
+
+  -- OBC-A
+  ('MBBS','OBC-A (Non- Creamy Layer)',42817,508,1,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer)',42817,508,2,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer)',42817,508,3,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer)',42817,508,4,2025),
+
+  -- OBC-B
+  ('MBBS','OBC-B (Non- Creamy Layer)',38278,513,1,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',38722,513,2,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',38722,513,3,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',38722,513,4,2025),
+
+  -- SC
+  ('MBBS','SC',145169,436,1,2025),
+  ('MBBS','SC',155446,430,2,2025),
+  ('MBBS','SC',166013,424,3,2025),
+  ('MBBS','SC',166013,424,4,2025),
+
+  ('MBBS','SC',139963,548,1,2024),
+  ('MBBS','SC',139963,548,2,2024),
+  ('MBBS','SC',144314,545,3,2024),
+  ('MBBS','SC',144314,545,4,2024),
+
+  ('MBBS','SC',113434,495,1,2023),
+  ('MBBS','SC',114822,494,2,2023),
+  ('MBBS','SC',119624,489,3,2023),
+
+  -- ST
+  ('MBBS','ST',555113,264,1,2025),
+  ('MBBS','ST',586593,254,2,2025),
+  ('MBBS','ST',592820,253,3,2025),
+  ('MBBS','ST',592820,253,4,2025),
+
+  ('MBBS','ST',606384,302,1,2024),
+  ('MBBS','ST',606384,302,2,2024),
+  ('MBBS','ST',604996,303,3,2024),
+  ('MBBS','ST',606384,302,4,2024),
+
+  ('MBBS','ST',486321,273,1,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id,
+  exam_id,
+  course,
+  category,
+  quota,
+  state,
+  college_type,
+  rank,
+  marks,
+  round,
+  year
+)
+
+SELECT
+  (SELECT id FROM colleges WHERE slug = 'tamralipto-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course,
+  v.category,
+  'State Quota',
+  'West Bengal',
+  'Govt.',
+  v.rank,
+  v.marks,
+  v.round,
+  v.year
+
+FROM (
+  VALUES
+
+  -- EWS
+  ('MBBS','EWS',92901,469,1,2025),
+  ('MBBS','EWS',92538,469,2,2025),
+  ('MBBS','EWS',95746,467,3,2025),
+  ('MBBS','EWS',95746,467,4,2025),
+
+  ('MBBS','EWS',87502,591,1,2024),
+  ('MBBS','EWS',87502,591,2,2024),
+  ('MBBS','EWS',77311,600,3,2024),
+  ('MBBS','EWS',87502,591,4,2024),
+
+  ('MBBS','EWS',52657,565,1,2023),
+  ('MBBS','EWS',46096,574,3,2023),
+
+  -- OBC-A
+  ('MBBS','OBC-A (Non- Creamy Layer)',45025,506,1,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer)',45025,506,2,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer)',48056,504,3,2025),
+  ('MBBS','OBC-A (Non- Creamy Layer)',48056,504,4,2025),
+
+  -- OBC-B
+  ('MBBS','OBC-B (Non- Creamy Layer)',43265,508,1,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',43369,508,2,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',48350,503,3,2025),
+  ('MBBS','OBC-B (Non- Creamy Layer)',48350,503,4,2025),
+
+  -- SC
+  ('MBBS','SC',152346,432,1,2025),
+  ('MBBS','SC',158056,428,2,2025),
+  ('MBBS','SC',165224,424,3,2025),
+  ('MBBS','SC',176264,418,4,2025),
+
+  ('MBBS','SC',147571,542,1,2024),
+  ('MBBS','SC',147571,542,2,2024),
+  ('MBBS','SC',145549,544,3,2024),
+  ('MBBS','SC',147571,542,4,2024),
+
+  ('MBBS','SC',118310,490,1,2023),
+  ('MBBS','SC',110797,498,2,2023),
+  ('MBBS','SC',120235,489,3,2023),
+
+  -- ST
+  ('MBBS','ST',575678,257,1,2025),
+  ('MBBS','ST',575678,257,2,2025),
+  ('MBBS','ST',607639,249,3,2025),
+  ('MBBS','ST',607639,249,4,2025),
+
+  ('MBBS','ST',612964,300,1,2024),
+  ('MBBS','ST',612964,300,2,2024),
+  ('MBBS','ST',617276,299,3,2024),
+  ('MBBS','ST',617276,299,4,2024),
+
+  ('MBBS','ST',494252,270,1,2023),
+
+  -- UR PwD
+  ('MBBS','UR PwD',818421,196,1,2025),
+  ('MBBS','UR PwD',1179151,131,2,2025),
+  ('MBBS','UR PwD',1179151,131,3,2025),
+  ('MBBS','UR PwD',1179151,131,4,2025),
+
+  ('MBBS','UR PwD',1135375,167,2,2024),
+  ('MBBS','UR PwD',1135375,167,4,2024)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'east-west-institute-of-medical-sciences-and-research'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Private',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',201059,405,2,2025),('MBBS','EWS',201059,405,1,2025),('MBBS','EWS',217044,397,3,2025),('MBBS','EWS',217044,397,4,2025),
+('MBBS','EWS',276335,454,6,2024),
+
+-- OBC-A
+('MBBS','OBC-A',96426,467,2,2025),('MBBS','OBC-A',76725,480,1,2025),('MBBS','OBC-A',96567,466,3,2025),('MBBS','OBC-A',96567,466,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',78357,479,2,2025),('MBBS','OBC-B',74447,482,1,2025),('MBBS','OBC-B',90337,471,3,2025),('MBBS','OBC-B',107232,459,4,2025),
+
+-- SC
+('MBBS','SC',230992,390,2,2025),('MBBS','SC',229013,390,1,2025),('MBBS','SC',258042,376,3,2025),('MBBS','SC',282237,365,4,2025),
+('MBBS','SC',255056,467,6,2024),
+
+-- ST
+('MBBS','ST',650639,236,1,2025),('MBBS','ST',996670,161,3,2025)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'gouri-devi-institute-of-medical-sciences-and-hospital'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Private',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',175093,419,2,2025),('MBBS','EWS',175093,419,1,2025),('MBBS','EWS',178748,417,3,2025),('MBBS','EWS',178748,417,4,2025),
+('MBBS','EWS',179988,518,1,2024),('MBBS','EWS',179988,518,2,2024),('MBBS','EWS',198112,505,3,2024),('MBBS','EWS',179988,518,4,2024),
+('MBBS','EWS',136888,473,1,2023),('MBBS','EWS',96510,513,2,2023),('MBBS','EWS',108825,500,3,2023),
+
+-- OBC-A
+('MBBS','OBC-A',76725,480,2,2025),('MBBS','OBC-A',71660,484,1,2025),('MBBS','OBC-A',81089,477,3,2025),('MBBS','OBC-A',86277,474,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',68757,486,2,2025),('MBBS','OBC-B',68441,487,1,2025),('MBBS','OBC-B',77176,480,3,2025),('MBBS','OBC-B',77176,480,4,2025),
+
+-- SC
+('MBBS','SC',217284,396,2,2025),('MBBS','SC',206573,402,1,2025),('MBBS','SC',231263,389,3,2025),('MBBS','SC',231263,389,4,2025),
+('MBBS','SC',211332,496,1,2024),('MBBS','SC',211332,496,2,2024),('MBBS','SC',219270,490,3,2024),('MBBS','SC',217747,491,4,2024),
+('MBBS','SC',168931,445,1,2023),('MBBS','SC',170226,444,2,2023),('MBBS','SC',178210,438,3,2023),('MBBS','SC',186651,431,4,2023),
+
+-- ST
+('MBBS','ST',995438,161,2,2025),('MBBS','ST',869745,185,1,2025),('MBBS','ST',1146327,136,3,2025),('MBBS','ST',1146327,136,4,2025),
+('MBBS','ST',898563,217,1,2024),('MBBS','ST',835336,233,2,2024),('MBBS','ST',1006774,192,3,2024),('MBBS','ST',835336,233,4,2024),
+('MBBS','ST',753132,190,1,2023),('MBBS','ST',773059,186,2,2023),('MBBS','ST',846634,169,3,2023),('MBBS','ST',913933,155,4,2023),
+
+-- UR PwD
+('MBBS','UR PwD',1018384,157,2,2025)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'i-q-city-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Private',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',143086,437,2,2025),('MBBS','EWS',143086,437,1,2025),('MBBS','EWS',174765,419,3,2025),('MBBS','EWS',174765,419,4,2025),
+('MBBS','EWS',162228,531,1,2024),('MBBS','EWS',162228,531,2,2024),('MBBS','EWS',165358,529,3,2024),('MBBS','EWS',165358,529,4,2024),('MBBS','EWS',206512,499,5,2024),('MBBS','EWS',229638,484,6,2024),
+('MBBS','EWS',95316,514,1,2023),('MBBS','EWS',77471,534,2,2023),('MBBS','EWS',83333,527,3,2023),
+
+-- OBC-A
+('MBBS','OBC-A',65004,489,2,2025),('MBBS','OBC-A',64241,490,1,2025),('MBBS','OBC-A',77831,480,3,2025),('MBBS','OBC-A',77831,480,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',64648,490,2,2025),('MBBS','OBC-B',64655,490,1,2025),('MBBS','OBC-B',64648,490,3,2025),('MBBS','OBC-B',64648,490,4,2025),
+
+-- SC
+('MBBS','SC',193783,409,2,2025),('MBBS','SC',193783,409,1,2025),('MBBS','SC',218504,396,3,2025),('MBBS','SC',218504,396,4,2025),
+('MBBS','SC',185341,514,1,2024),('MBBS','SC',184149,515,2,2024),('MBBS','SC',211332,496,3,2024),('MBBS','SC',211332,496,4,2024),('MBBS','SC',221290,489,5,2024),('MBBS','SC',201086,503,6,2024),
+('MBBS','SC',148419,463,1,2023),('MBBS','SC',154159,458,2,2023),('MBBS','SC',157351,455,3,2023),('MBBS','SC',168360,446,4,2023),
+
+-- ST
+('MBBS','ST',1007033,159,2,2025),('MBBS','ST',826562,194,1,2025),('MBBS','ST',1007033,159,3,2025),('MBBS','ST',1007033,159,4,2025),
+('MBBS','ST',828275,234,1,2024),('MBBS','ST',828275,234,2,2024),('MBBS','ST',730151,262,3,2024),('MBBS','ST',828275,234,4,2024),
+('MBBS','ST',647977,219,1,2023),('MBBS','ST',661196,215,2,2023),('MBBS','ST',695133,206,3,2023),('MBBS','ST',820778,175,4,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'icare-institute-of-medical-science-and-research-and-dr-b-c-roy-hospital-haldia'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Private',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',134282,442,2,2025),('MBBS','EWS',134282,442,1,2025),('MBBS','EWS',134282,442,3,2025),('MBBS','EWS',134282,442,4,2025),
+('MBBS','EWS',144166,545,1,2024),('MBBS','EWS',144166,545,2,2024),('MBBS','EWS',144166,545,4,2024),
+('MBBS','EWS',73764,538,2,2023),('MBBS','EWS',67468,546,3,2023),
+
+-- OBC-A
+('MBBS','OBC-A',54154,498,2,2025),('MBBS','OBC-A',54154,498,1,2025),('MBBS','OBC-A',54154,498,3,2025),('MBBS','OBC-A',54154,498,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',56217,496,2,2025),('MBBS','OBC-B',56217,496,1,2025),('MBBS','OBC-B',56217,496,3,2025),('MBBS','OBC-B',56217,496,4,2025),
+
+-- SC
+('MBBS','SC',209321,400,2,2025),('MBBS','SC',195231,408,1,2025),('MBBS','SC',210656,400,3,2025),('MBBS','SC',210656,400,4,2025),
+('MBBS','SC',178497,519,1,2024),('MBBS','SC',178497,519,2,2024),('MBBS','SC',178945,519,3,2024),('MBBS','SC',178945,519,4,2024),
+('MBBS','SC',160893,452,2,2023),('MBBS','SC',167902,446,3,2023),
+
+-- ST
+('MBBS','ST',781615,204,2,2025),('MBBS','ST',781615,204,1,2025),('MBBS','ST',781615,204,3,2025),('MBBS','ST',781615,204,4,2025),
+('MBBS','ST',843634,230,1,2024),('MBBS','ST',843634,230,2,2024),('MBBS','ST',843634,230,4,2024),
+('MBBS','ST',561842,246,2,2023),('MBBS','ST',661196,215,3,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'jakir-hosain-medical-college-research-institute'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Private',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',199720,405,2,2025),('MBBS','EWS',199720,405,1,2025),('MBBS','EWS',221314,394,3,2025),('MBBS','EWS',221314,394,4,2025),
+('MBBS','EWS',246557,473,6,2024),
+
+-- OBC-A
+('MBBS','OBC-A',93703,468,2,2025),('MBBS','OBC-A',85112,474,1,2025),('MBBS','OBC-A',93703,468,3,2025),('MBBS','OBC-A',93703,468,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',80706,478,2,2025),('MBBS','OBC-B',67848,487,1,2025),('MBBS','OBC-B',80706,478,3,2025),('MBBS','OBC-B',80706,478,4,2025),
+
+-- SC
+('MBBS','SC',240864,385,2,2025),('MBBS','SC',229251,390,1,2025),('MBBS','SC',263854,374,3,2025),('MBBS','SC',287278,363,4,2025),
+('MBBS','SC',262774,462,6,2024),
+
+-- ST
+('MBBS','ST',1006024,159,1,2025)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'jis-school-of-medical-science-and-research'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Private',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',160370,427,2,2025),('MBBS','EWS',160370,427,1,2025),('MBBS','EWS',160370,427,3,2025),('MBBS','EWS',160370,427,4,2025),
+('MBBS','EWS',166786,528,1,2024),('MBBS','EWS',166786,528,2,2024),('MBBS','EWS',152831,538,3,2024),('MBBS','EWS',166786,528,4,2024),
+('MBBS','EWS',194789,425,1,2023),('MBBS','EWS',102239,507,2,2023),('MBBS','EWS',86631,523,3,2023),('MBBS','EWS',52515,565,4,2023),
+
+-- OBC-A
+('MBBS','OBC-A',65119,489,2,2025),('MBBS','OBC-A',65119,489,1,2025),('MBBS','OBC-A',65119,489,3,2025),('MBBS','OBC-A',65119,489,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',62139,492,2,2025),('MBBS','OBC-B',61040,492,1,2025),('MBBS','OBC-B',64321,490,3,2025),('MBBS','OBC-B',64321,490,4,2025),
+
+-- SC
+('MBBS','SC',206097,402,2,2025),('MBBS','SC',206095,402,1,2025),('MBBS','SC',222947,394,3,2025),('MBBS','SC',222947,394,4,2025),
+('MBBS','SC',203638,501,1,2024),('MBBS','SC',203638,501,2,2024),('MBBS','SC',216218,492,3,2024),('MBBS','SC',216218,492,4,2024),
+('MBBS','SC',161578,451,1,2023),('MBBS','SC',162372,451,2,2023),('MBBS','SC',171043,444,3,2023),('MBBS','SC',181671,435,4,2023),
+
+-- ST
+('MBBS','ST',1011645,158,2,2025),('MBBS','ST',981490,164,1,2025),('MBBS','ST',1054770,151,3,2025),('MBBS','ST',1054770,151,4,2025),
+('MBBS','ST',792190,244,1,2024),('MBBS','ST',792190,244,2,2024),('MBBS','ST',792190,244,4,2024),
+('MBBS','ST',960649,146,1,2023),('MBBS','ST',611004,230,2,2023),('MBBS','ST',859664,166,3,2023),('MBBS','ST',990867,140,4,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'jmn-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Private',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',176791,418,2,2025),('MBBS','EWS',174663,419,1,2025),('MBBS','EWS',176791,418,3,2025),('MBBS','EWS',176791,418,4,2025),
+('MBBS','EWS',207358,499,1,2024),('MBBS','EWS',184403,514,2,2024),('MBBS','EWS',177266,520,3,2024),('MBBS','EWS',184403,514,4,2024),
+
+-- OBC-A
+('MBBS','OBC-A',74951,482,2,2025),('MBBS','OBC-A',74724,482,1,2025),('MBBS','OBC-A',74951,482,3,2025),('MBBS','OBC-A',74951,482,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',72728,483,2,2025),('MBBS','OBC-B',68030,487,1,2025),('MBBS','OBC-B',80647,478,3,2025),('MBBS','OBC-B',80647,478,4,2025),
+
+-- SC
+('MBBS','SC',211535,399,2,2025),('MBBS','SC',210612,400,1,2025),('MBBS','SC',225059,392,3,2025),('MBBS','SC',225059,392,4,2025),
+('MBBS','SC',209707,497,1,2024),('MBBS','SC',209707,497,2,2024),('MBBS','SC',213318,495,3,2024),('MBBS','SC',213318,495,4,2024),('MBBS','SC',230367,483,5,2024),
+
+-- ST
+('MBBS','ST',915470,176,2,2025),('MBBS','ST',937096,172,1,2025),('MBBS','ST',915470,176,3,2025),('MBBS','ST',915470,176,4,2025),
+('MBBS','ST',1060626,181,1,2024),('MBBS','ST',1060626,181,2,2024),('MBBS','ST',1060626,181,4,2024)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'kpc-medical-college-and-hospital-jadavpur'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Private',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',117459,453,2,2025),('MBBS','EWS',117459,453,1,2025),('MBBS','EWS',122300,450,3,2025),('MBBS','EWS',137734,440,4,2025),
+('MBBS','EWS',106367,575,1,2024),('MBBS','EWS',106367,575,2,2024),('MBBS','EWS',106703,575,3,2024),('MBBS','EWS',106703,575,4,2024),
+('MBBS','EWS',71661,541,1,2023),
+
+-- OBC-A
+('MBBS','OBC-A',51142,501,2,2025),('MBBS','OBC-A',51142,501,1,2025),('MBBS','OBC-A',52895,499,3,2025),('MBBS','OBC-A',56963,496,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',48303,503,2,2025),('MBBS','OBC-B',48303,503,1,2025),('MBBS','OBC-B',52919,499,3,2025),('MBBS','OBC-B',52919,499,4,2025),
+
+-- SC
+('MBBS','SC',169537,422,2,2025),('MBBS','SC',169340,422,1,2025),('MBBS','SC',178665,417,3,2025),('MBBS','SC',178665,417,4,2025),
+('MBBS','SC',155890,536,1,2024),('MBBS','SC',155890,536,2,2024),('MBBS','SC',162175,531,3,2024),('MBBS','SC',162175,531,4,2024),
+('MBBS','SC',127241,482,1,2023),('MBBS','SC',128770,481,2,2023),('MBBS','SC',132681,477,3,2023),('MBBS','SC',132970,477,4,2023),
+
+-- ST
+('MBBS','ST',640476,239,2,2025),('MBBS','ST',640476,239,1,2025),('MBBS','ST',662262,233,3,2025),('MBBS','ST',662262,233,4,2025),
+('MBBS','ST',627277,295,1,2024),('MBBS','ST',627277,295,2,2024),('MBBS','ST',631878,293,3,2024),('MBBS','ST',631878,293,4,2024),
+('MBBS','ST',519474,261,1,2023),('MBBS','ST',182776,434,2,2023),('MBBS','ST',521189,260,3,2023),
+
+-- UR PwD
+('MBBS','UR PwD',1055498,151,3,2025),('MBBS','UR PwD',1055498,151,4,2025)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'krishnanagar-institute-of-medical-science-private-limited'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Private',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',184179,414,2,2025),('MBBS','EWS',184179,414,1,2025),('MBBS','EWS',216592,397,3,2025),('MBBS','EWS',203235,404,4,2025),
+('MBBS','EWS',184403,514,1,2024),('MBBS','EWS',210946,496,2,2024),('MBBS','EWS',211341,496,3,2024),('MBBS','EWS',211341,496,4,2024),('MBBS','EWS',228049,484,5,2024),
+
+-- OBC-A
+('MBBS','OBC-A',93019,469,2,2025),('MBBS','OBC-A',83625,475,1,2025),('MBBS','OBC-A',93019,469,3,2025),('MBBS','OBC-A',96839,466,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',77176,480,2,2025),('MBBS','OBC-B',77176,480,1,2025),('MBBS','OBC-B',89557,471,3,2025),('MBBS','OBC-B',96271,467,4,2025),
+
+-- SC
+('MBBS','SC',224647,393,2,2025),('MBBS','SC',224647,393,1,2025),('MBBS','SC',254298,379,3,2025),('MBBS','SC',294384,360,4,2025),
+('MBBS','SC',215939,493,1,2024),('MBBS','SC',216022,493,2,2024),('MBBS','SC',229012,484,3,2024),('MBBS','SC',226499,486,4,2024),('MBBS','SC',238458,478,5,2024),('MBBS','SC',254639,468,6,2024),
+
+-- ST
+('MBBS','ST',1173585,132,2,2025),('MBBS','ST',1314333,113,1,2025),('MBBS','ST',1173585,132,3,2025),('MBBS','ST',1173585,132,4,2025),
+('MBBS','ST',1059527,181,1,2024),('MBBS','ST',792123,244,2,2024),('MBBS','ST',918219,212,3,2024)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'pkg-medical-college-hospital'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Private',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',222417,394,4,2025),
+
+-- OBC-A
+('MBBS','OBC-A',99184,465,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',95781,467,4,2025),
+
+-- SC
+('MBBS','SC',295664,359,4,2025)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'raniganj-institute-of-medical-science'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Private',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',195723,408,2,2025),('MBBS','EWS',221015,395,3,2025),('MBBS','EWS',221015,395,4,2025),
+
+-- OBC-A
+('MBBS','OBC-A',83888,475,2,2025),('MBBS','OBC-A',90102,471,3,2025),('MBBS','OBC-A',101785,463,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',78947,479,2,2025),('MBBS','OBC-B',88072,472,3,2025),('MBBS','OBC-B',106162,460,4,2025),
+
+-- SC
+('MBBS','SC',229057,390,2,2025),('MBBS','SC',256836,377,3,2025),('MBBS','SC',298270,358,4,2025),
+
+-- ST
+('MBBS','ST',820814,195,2,2025),('MBBS','ST',794018,201,3,2025),('MBBS','ST',851824,189,4,2025)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'santiniketan-medical-college'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Private',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',183246,414,2,2025),('MBBS','EWS',171793,421,1,2025),('MBBS','EWS',183246,414,3,2025),('MBBS','EWS',185852,413,4,2025),
+('MBBS','EWS',174142,522,1,2024),('MBBS','EWS',174142,522,2,2024),('MBBS','EWS',174142,522,4,2024),
+('MBBS','EWS',127270,482,1,2023),('MBBS','EWS',82943,527,2,2023),('MBBS','EWS',77471,534,3,2023),('MBBS','EWS',116964,492,4,2023),
+
+-- OBC-A
+('MBBS','OBC-A',72109,484,2,2025),('MBBS','OBC-A',72109,484,1,2025),('MBBS','OBC-A',82288,476,3,2025),('MBBS','OBC-A',82288,476,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',63836,490,2,2025),('MBBS','OBC-B',63836,490,1,2025),('MBBS','OBC-B',74847,482,3,2025),('MBBS','OBC-B',74847,482,4,2025),
+
+-- SC
+('MBBS','SC',214181,398,2,2025),('MBBS','SC',214181,398,1,2025),('MBBS','SC',225096,392,3,2025),('MBBS','SC',251504,380,4,2025),
+('MBBS','SC',207513,498,1,2024),('MBBS','SC',201912,502,2,2024),('MBBS','SC',208343,498,3,2024),('MBBS','SC',208343,498,4,2024),('MBBS','SC',231167,483,5,2024),
+('MBBS','SC',164570,449,1,2023),('MBBS','SC',167295,447,2,2023),('MBBS','SC',168931,445,3,2023),('MBBS','SC',181330,436,4,2023),
+
+-- ST
+('MBBS','ST',1067527,149,2,2025),('MBBS','ST',662262,233,1,2025),('MBBS','ST',1044488,152,3,2025),('MBBS','ST',1044488,152,4,2025),
+('MBBS','ST',730151,262,1,2024),('MBBS','ST',690352,274,2,2024),('MBBS','ST',953377,204,3,2024),('MBBS','ST',953377,204,4,2024),
+('MBBS','ST',742597,193,1,2023),('MBBS','ST',533744,256,2,2023),('MBBS','ST',634622,223,3,2023),('MBBS','ST',1000001,139,4,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
+BEGIN;
+
+INSERT INTO cutoffs (
+  college_id, exam_id, course, category, quota, state, college_type,
+  rank, marks, round, year
+)
+SELECT 
+  (SELECT id FROM colleges WHERE slug = 'shri-ramkrishna-institute-of-medical-sciences-and-sanaka-hospitals'),
+  (SELECT id FROM exams WHERE lower(name) LIKE '%neet%' LIMIT 1),
+  v.course, v.category, 'State quota', 'West Bengal', 'Private',
+  v.rank, v.marks, v.round, v.year
+FROM (VALUES
+
+-- EWS
+('MBBS','EWS',183330,414,2,2025),('MBBS','EWS',182829,415,1,2025),('MBBS','EWS',184179,414,3,2025),('MBBS','EWS',184179,414,4,2025),
+('MBBS','EWS',209452,497,1,2024),('MBBS','EWS',203061,501,2,2024),('MBBS','EWS',178545,519,3,2024),('MBBS','EWS',203061,501,4,2024),
+('MBBS','EWS',265952,378,1,2023),('MBBS','EWS',109464,499,2,2023),('MBBS','EWS',95018,514,3,2023),('MBBS','EWS',105247,504,4,2023),
+
+-- OBC-A
+('MBBS','OBC-A',81975,477,2,2025),('MBBS','OBC-A',81073,477,1,2025),('MBBS','OBC-A',83625,475,3,2025),('MBBS','OBC-A',93566,469,4,2025),
+
+-- OBC-B
+('MBBS','OBC-B',74792,482,2,2025),('MBBS','OBC-B',74792,482,1,2025),('MBBS','OBC-B',82226,476,3,2025),('MBBS','OBC-B',82226,476,4,2025),
+
+-- SC
+('MBBS','SC',221466,394,2,2025),('MBBS','SC',220881,395,1,2025),('MBBS','SC',240864,385,3,2025),('MBBS','SC',266547,372,4,2025),
+('MBBS','SC',214041,494,1,2024),('MBBS','SC',214041,494,2,2024),('MBBS','SC',229412,484,3,2024),('MBBS','SC',228716,484,4,2024),
+('MBBS','SC',170226,444,1,2023),('MBBS','SC',171612,443,2,2023),('MBBS','SC',178301,438,3,2023),('MBBS','SC',147034,464,4,2023),
+
+-- ST
+('MBBS','ST',1205907,128,2,2025),('MBBS','ST',975467,165,1,2025),('MBBS','ST',1191474,130,3,2025),('MBBS','ST',1191474,130,4,2025),
+('MBBS','ST',1125726,169,1,2024),('MBBS','ST',1125726,169,2,2024),('MBBS','ST',1125726,169,4,2024),
+('MBBS','ST',846634,169,1,2023),('MBBS','ST',561856,246,2,2023),('MBBS','ST',877172,162,3,2023),('MBBS','ST',1186351,111,4,2023)
+
+) AS v(course, category, rank, marks, round, year);
+
+COMMIT;
+
