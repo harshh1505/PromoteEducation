@@ -14,6 +14,7 @@ import NewsSection from '@/components/sections/NewsSection'
 import TestimonialsSection from '@/components/sections/TestimonialsSection'
 import WhyChooseUsSection from '@/components/sections/WhyChooseUsSection'
 import NewsletterSection from '@/components/sections/NewsletterSection'
+import MoreFromUsSection from '@/components/sections/MoreFromUsSection'
 
 export default function HomePage() {
   return (
@@ -22,6 +23,7 @@ export default function HomePage() {
       <HeroSection />
       <LivePulse />
       <StatsBar />
+      <MoreFromUsSection />
       <CollegesSection />
       <WhyChooseUsSection />
       <PopularCitiesSection />
