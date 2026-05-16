@@ -175,7 +175,7 @@ export default function Navbar() {
   const handleMouseLeave = () => {
     const timeout = setTimeout(() => {
       setMegaMenuOpen(false)
-    }, 300) // Increased delay for more stability
+    }, 150)
     setHoverTimeout(timeout)
   }
 
@@ -381,11 +381,11 @@ export default function Navbar() {
                 <button
                   key={item.label}
                   className={cn(
-                    "text-xs font-bold whitespace-nowrap transition-colors flex items-center gap-1",
+                    "text-[13px] font-bold whitespace-nowrap transition-colors flex items-center gap-1",
                     (activeItem === item.label || (item.label === 'Explore' && megaMenuOpen)) ? "text-sky-600" : "text-slate-600 hover:text-slate-900"
                   )}
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
+                  onMouseEnter={item.label === 'Explore' ? handleMouseEnter : undefined}
+                  onMouseLeave={item.label === 'Explore' ? handleMouseLeave : undefined}
                   onClick={() => {
                     if (item.label !== 'Explore') {
                       setActiveItem(item.label)
@@ -403,7 +403,7 @@ export default function Navbar() {
                   <a
                     key={cat.label}
                     href={cat.href}
-                    className="text-[11px] font-medium text-slate-500 hover:text-sky-600 whitespace-nowrap transition-colors"
+                    className="text-xs font-medium text-slate-500 hover:text-sky-600 whitespace-nowrap transition-colors"
                   >
                     {cat.label}
                   </a>
@@ -411,21 +411,18 @@ export default function Navbar() {
               </div>
             </div>
 
-            <div className="flex items-center gap-6 pl-6 bg-gradient-to-r from-transparent via-white to-white sticky right-0">
+            <div className="flex items-center gap-8 pl-6 bg-gradient-to-r from-transparent via-white to-white sticky right-0">
               <div className="hidden lg:flex items-center gap-2 px-1">
                 <Clock size={14} className="text-sky-500" />
-                <span className="text-[13px] font-black text-slate-800 tabular-nums uppercase tracking-tight min-w-[85px]">
+                <span className="text-sm font-black text-slate-800 tabular-nums uppercase tracking-tight min-w-[85px]">
                   {currentTime || '--:--:-- --'}
                 </span>
               </div>
-              <a href="/cutoffs" className="flex items-center gap-1.5 text-[11px] font-bold text-amber-700 hover:text-amber-800 transition-colors whitespace-nowrap bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200/60 shadow-sm ring-4 ring-amber-500/5 animate-pulse-slow">
+              <a href="/cutoffs" className="flex items-center gap-1.5 text-xs font-bold text-amber-700 hover:text-amber-800 transition-colors whitespace-nowrap bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200/60 shadow-sm ring-4 ring-amber-500/5 animate-pulse-slow">
                 <BarChart3 size={13} className="text-amber-500" /> Cutoffs
               </a>
-              <a href="/abroad" className="flex items-center gap-1.5 text-[11px] font-bold text-slate-700 hover:text-sky-600 transition-colors whitespace-nowrap">
+              <a href="/abroad" className="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-sky-600 transition-colors whitespace-nowrap">
                 <Globe size={13} className="text-sky-500" /> Study Abroad
-              </a>
-              <a href="/tools" className="flex items-center gap-1.5 text-[11px] font-bold text-slate-700 hover:text-sky-600 transition-colors whitespace-nowrap">
-                <Target size={13} className="text-sky-500" /> Course Finder
               </a>
             </div>
           </div>
