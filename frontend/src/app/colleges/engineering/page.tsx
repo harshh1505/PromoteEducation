@@ -152,7 +152,7 @@ export default async function EngineeringCollegesPage() {
             return (
               <Link
                 key={i}
-                href={`/compare/${c1.slug}-vs-${c2.slug}`}
+                href="/#compare-section"
                 className="bg-white border border-slate-100 p-5 rounded-2xl text-sm font-semibold text-slate-600 hover:text-sky-600 hover:border-sky-200 hover:shadow-lg transition-all flex items-center justify-between group"
               >
                 <span>{c1.name} <span className="text-slate-300 mx-1 font-normal">vs</span> {c2.name}</span>

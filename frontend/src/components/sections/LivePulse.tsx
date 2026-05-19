@@ -46,7 +46,7 @@ export default function LivePulse() {
   }, [])
 
   return (
-    <div className="w-full bg-slate-900 py-4 border-y border-white/5 overflow-hidden relative group">
+    <div className="w-full bg-slate-900 py-3.5 border-y border-white/5 overflow-hidden relative group">
       {/* Background Glows */}
       <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-slate-900 to-transparent z-10" />
       <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-slate-900 to-transparent z-10" />
@@ -55,62 +55,58 @@ export default function LivePulse() {
         {[...pulseData, ...pulseData].map((item, i) => (
           <div 
             key={i} 
-            className="flex items-center gap-4 group/item cursor-default"
+            className="flex items-center gap-3 group/item cursor-default"
           >
             <div className={cn(
-              "w-8 h-8 rounded-full flex items-center justify-center shadow-lg transition-all duration-500",
-              item.type === 'brochure' ? "bg-sky-500/20 text-sky-400 group-hover/item:bg-sky-500 group-hover/item:text-white" :
-              item.type === 'viewing' ? "bg-emerald-500/20 text-emerald-400 group-hover/item:bg-emerald-500 group-hover/item:text-white" :
-              item.type === 'review' ? "bg-amber-500/20 text-amber-400 group-hover/item:bg-amber-500 group-hover/item:text-white" :
-              "bg-purple-500/20 text-purple-400 group-hover/item:bg-purple-500 group-hover/item:text-white"
+              "w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-500",
+              item.type === 'brochure' ? "bg-sky-500/15 text-sky-400" :
+              item.type === 'viewing' ? "bg-emerald-500/15 text-emerald-400" :
+              item.type === 'review' ? "bg-amber-500/15 text-amber-400" :
+              "bg-purple-500/15 text-purple-400"
             )}>
-              <item.icon size={14} />
+              <item.icon size={13} />
             </div>
 
             <div className="flex flex-col">
-              <div className="text-[11px] font-bold text-white/90 flex items-center gap-1.5">
+              <div className="text-[11px] font-medium text-white/80 flex items-center gap-1.5">
                 {item.type === 'brochure' && (
                   <>
-                    <span className="text-white">{item.name}</span>
-                    <span className="text-white/40 font-medium">from</span>
+                    <span className="text-white font-semibold">{item.name}</span>
+                    <span className="text-white/30">from</span>
                     <span className="text-sky-400 flex items-center gap-1"><MapPin size={10} /> {item.city}</span>
-                    <span className="text-white/40 font-medium">requested brochure for</span>
-                    <span className="text-white">{item.college}</span>
+                    <span className="text-white/30">requested brochure for</span>
+                    <span className="text-white font-semibold">{item.college}</span>
                   </>
                 )}
                 {item.type === 'viewing' && (
                   <>
-                    <span className="text-emerald-400">
+                    <span className="text-emerald-400 font-semibold">
                       {mounted ? (item.count || 0) + Math.floor(Math.random() * 10) : item.count}
                     </span>
-                    <span className="text-white/40 font-medium">students are currently viewing</span>
-                    <span className="text-white">{item.stream} Colleges</span>
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse ml-1" />
+                    <span className="text-white/30">students viewing</span>
+                    <span className="text-white font-semibold">{item.stream} Colleges</span>
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse ml-0.5" />
                   </>
                 )}
                 {item.type === 'review' && (
                   <>
-                    <span className="text-white/40 font-medium">New 5-star review posted for</span>
-                    <span className="text-white">{item.college}</span>
-                    <div className="flex items-center gap-0.5 text-amber-500">
+                    <span className="text-white/30">5-star review for</span>
+                    <span className="text-white font-semibold">{item.college}</span>
+                    <div className="flex items-center gap-0.5 text-amber-400">
                       {[1,2,3,4,5].map(s => <Star key={s} size={8} fill="currentColor" />)}
                     </div>
                   </>
                 )}
                 {item.type === 'apply' && (
                   <>
-                    <span className="text-white">{item.name}</span>
-                    <span className="text-white/40 font-medium">just started application for</span>
-                    <span className="text-purple-400 font-black">{item.college}</span>
+                    <span className="text-white font-semibold">{item.name}</span>
+                    <span className="text-white/30">started application for</span>
+                    <span className="text-purple-400 font-semibold">{item.college}</span>
                     <Zap size={10} className="text-purple-400" />
                   </>
                 )}
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-white/20">Live Activity Pulse</span>
-                <div className="h-[1px] w-4 bg-white/10" />
-                <span className="text-[8px] text-white/30 font-medium">Just now</span>
-              </div>
+              <span className="text-[8px] font-medium uppercase tracking-[0.15em] text-white/15">Just now</span>
             </div>
           </div>
         ))}

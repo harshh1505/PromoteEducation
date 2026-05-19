@@ -41,15 +41,14 @@ const CityCard = ({ city }: { city: any }) => (
 
 export default function PopularCitiesSection() {
   return (
-    <section className="pt-8 pb-16 bg-white overflow-hidden">
+    <section className="py-16 bg-slate-50 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 mb-10 text-center">
-        <div className="flex items-center justify-center gap-2 mb-3">
-          <div className="w-4 h-[2px] bg-sky-500" />
-          <span className="text-[11px] font-bold text-sky-500 uppercase tracking-[0.2em]">Study Destinations</span>
-          <div className="w-4 h-[2px] bg-sky-500" />
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sky-50 border border-sky-100 mb-5">
+          <MapPin size={14} className="text-sky-500" />
+          <span className="text-xs font-bold text-sky-600 uppercase tracking-wider">Study Destinations</span>
         </div>
-        <h2 className="text-3xl md:text-4xl font-medium text-slate-900 tracking-tight" style={{ fontFamily: 'Georgia, serif' }}>
-          Top <span className="italic text-slate-700">Educational</span> Hubs
+        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+          Top Educational Hubs
         </h2>
       </div>
 

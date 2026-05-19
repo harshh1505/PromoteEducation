@@ -133,31 +133,15 @@ export default function MoreFromUsSection() {
     <section
       ref={sectionRef}
       id="more-from-us"
-      className="py-20"
+      className="py-12"
       style={{ background: 'var(--surface)' }}
     >
       <div className="max-w-[1440px] mx-auto px-6">
         {/* Instagram Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-4 h-px" style={{ background: 'var(--gold)' }} />
-              <span
-                className="text-[10px] font-bold tracking-wider uppercase"
-                style={{ color: 'var(--gold)', letterSpacing: '0.15em' }}
-              >
-                Connect With Us
-              </span>
-            </div>
-            <h2
-              className="text-3xl md:text-4xl font-medium"
-              style={{
-                fontFamily: 'var(--font-display)',
-                letterSpacing: '-0.02em',
-                color: 'var(--ink)',
-              }}
-            >
-              More from our <span className="italic text-sky-500">Instagram</span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
+              More from our <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-600">Instagram</span>
             </h2>
             <p className="mt-2 text-slate-500 text-sm max-w-lg">
               Explore daily updates, success stories, and expert tips to help you choose the right educational path.
@@ -200,24 +184,8 @@ export default function MoreFromUsSection() {
         <div className="mt-24">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-4 h-px" style={{ background: 'var(--gold)' }} />
-                <span
-                  className="text-[10px] font-bold tracking-wider uppercase"
-                  style={{ color: 'var(--gold)', letterSpacing: '0.15em' }}
-                >
-                  Deep Dives
-                </span>
-              </div>
-              <h3
-                className="text-2xl md:text-3xl font-medium"
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  letterSpacing: '-0.02em',
-                  color: 'var(--ink)',
-                }}
-              >
-                Featured <span className="italic text-sky-500">YouTube Content</span>
+              <h3 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+                Featured <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-600">YouTube Content</span>
               </h3>
             </div>
             <p className="text-slate-500 text-sm max-w-sm">

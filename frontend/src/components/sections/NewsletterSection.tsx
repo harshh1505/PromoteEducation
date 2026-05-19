@@ -23,7 +23,7 @@ export default function NewsletterSection() {
   }
 
   return (
-    <section className="py-20 bg-slate-50 border-t border-slate-100 relative overflow-hidden">
+    <section className="py-12 bg-slate-50 border-t border-slate-100 relative overflow-hidden">
       {/* Decorative Illustrations - Subtle Vectors */}
       <div className="absolute left-0 bottom-0 w-32 md:w-48 opacity-20 pointer-events-none hidden lg:block">
          <img src="https://img.freepik.com/free-vector/hand-drawn-people-shouting-illustration_23-2149446394.jpg" alt="decor" className="w-full grayscale" />

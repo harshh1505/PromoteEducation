@@ -18,7 +18,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/scholarships',
     '/rankings',
     '/news',
-    '/loan-calculator',
     '/sitemap',
     '/about',
     '/contact',

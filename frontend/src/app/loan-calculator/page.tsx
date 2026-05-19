@@ -1,11 +1,20 @@
-import LoanCalculatorPageContent from '@/components/pages/LoanCalculatorPage'
-import type { Metadata } from 'next'
+'use client'
 
-export const metadata: Metadata = {
-  title: 'Education Loan EMI Calculator — Plan Your Studies',
-  description: 'Calculate your monthly loan repayments (EMI) with our easy-to-use tool. Compare interest rates, principal vs. interest, and tax benefits for education loans in India.',
-}
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
-export default function LoanCalculatorPage() {
-  return <LoanCalculatorPageContent />
+export default function LoanCalculatorRedirectPage() {
+  const router = useRouter()
+
+  useEffect(() => {
+    router.replace('/#loan-calculator-section')
+  }, [router])
+
+  return (
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+      <div className="text-slate-400 font-bold animate-pulse text-sm uppercase tracking-widest">
+        Redirecting to Education Loan Finance Estimator...
+      </div>
+    </div>
+  )
 }

@@ -492,7 +492,7 @@ export default function CounselingPage() {
                   ['/articles/choice-filling-josaa', 'JoSAA Choice Filling Guide'],
                   ['/exams/cuet-ug', 'CUET UG Counselling 2026'],
                   ['/rankings', 'Latest NIRF Rankings 2026'],
-                  ['/compare', 'Compare Colleges 1-on-1'],
+                  ['/#compare-section', 'Compare Colleges 1-on-1'],
                 ].map(([href, label]) => (
                   <Link
                     key={href}

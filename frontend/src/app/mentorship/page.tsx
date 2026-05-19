@@ -494,7 +494,7 @@ export default function MentorshipPage() {
                   ['/articles/best-books-neet', 'Best Books for NEET'],
                   ['/articles/jee-advanced-preparation-strategy', 'JEE Advanced Strategy'],
                   ['/rankings', 'Latest Rankings 2026'],
-                  ['/compare', 'Compare Institutions'],
+                  ['/#compare-section', 'Compare Institutions'],
                 ].map(([href, label]) => (
                   <Link
                     key={href}

@@ -309,7 +309,7 @@ async function ListingPage({ slug, type }: { slug: string; type: string }) {
             {colleges?.slice(0, 6).map((c1, i) => {
               const c2 = colleges[i + 1]
               if (!c2) return null
-              return <Link key={i} href={`/compare/${c1.slug}-vs-${c2.slug}`} className="text-sm text-sky-500 hover:underline font-medium">{c1.name} vs {c2.name}</Link>
+              return <Link key={i} href="/#compare-section" className="text-sm text-sky-500 hover:underline font-medium">{c1.name} vs {c2.name}</Link>
             })}
           </div>
         </div>

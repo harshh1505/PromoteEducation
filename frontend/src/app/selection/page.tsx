@@ -493,7 +493,7 @@ export default function SelectionPage() {
                   ['/counseling', 'Counselling Strategy'],
                   ['/tools/college-predictor', 'College Predictor Tool'],
                   ['/rankings', 'Latest Rankings 2026'],
-                  ['/compare', 'Compare Colleges'],
+                  ['/#compare-section', 'Compare Colleges'],
                   ['/articles/top-mba-specializations', 'MBA Specialization Guide'],
                 ].map(([href, label]) => (
                   <Link

@@ -50,7 +50,9 @@ export default function RankingsPageContent() {
       let query = supabase
         .from('colleges')
         .select('*')
-        .order('ranking', { ascending: true, nullsFirst: false })
+        .not('ranking', 'is', null)
+        .gt('ranking', 0)
+        .order('ranking', { ascending: true })
 
       if (filter !== 'All') {
         query = query.eq('stream', filter)
@@ -62,11 +64,9 @@ export default function RankingsPageContent() {
 
       const { data, error } = await query
       if (!error && data) {
-        const sortedData = data.sort((a, b) => {
-          const rankA = (a.ranking !== null && a.ranking > 0) ? a.ranking : Infinity;
-          const rankB = (b.ranking !== null && b.ranking > 0) ? b.ranking : Infinity;
-          return rankA - rankB;
-        });
+        // Double-check filtering in JS to be safe
+        const rankedColleges = data.filter(c => c.ranking !== null && c.ranking > 0)
+        const sortedData = rankedColleges.sort((a, b) => a.ranking - b.ranking);
         setColleges(sortedData)
       } else {
         setColleges([])

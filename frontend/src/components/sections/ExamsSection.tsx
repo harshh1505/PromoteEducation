@@ -81,32 +81,26 @@ export default function ExamsSection() {
   }
 
   return (
-    <section id="exams" className="py-20" style={{ background: 'var(--surface-2)' }}>
+    <section id="exams" className="py-20 bg-slate-50">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-4 h-px" style={{ background: 'var(--gold)' }} />
-              <span className="text-[10px] md:text-xs font-bold tracking-wider uppercase" style={{ color: 'var(--gold)', letterSpacing: '0.1em' }}>
-                Entrance exams
-              </span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sky-50 border border-sky-100 mb-4">
+              <BookOpen size={14} className="text-sky-500" />
+              <span className="text-xs font-bold text-sky-600 uppercase tracking-wider">Entrance Exams</span>
             </div>
-            <h2
-              className="text-3xl md:text-5xl font-medium leading-tight"
-              style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.03em', color: 'var(--ink)' }}
-            >
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-2">
               Top exams in India
             </h2>
-            <p className="mt-2 text-xs md:text-sm max-w-2xl" style={{ color: 'var(--ink-3)' }}>
+            <p className="text-slate-500 text-base max-w-2xl">
               Eligibility, dates, preparation guides & direct apply links for every major exam.
             </p>
           </div>
           <Link
             href="/exams"
-            className="flex items-center gap-1.5 text-xs md:text-sm font-bold transition-all duration-150 hover:opacity-80 self-start md:self-auto"
-            style={{ color: 'var(--action)' }}
+            className="flex items-center gap-2 text-sm font-semibold text-sky-600 hover:text-sky-700 transition-colors self-start md:self-auto"
           >
             View all exams
             <ArrowRight size={16} />

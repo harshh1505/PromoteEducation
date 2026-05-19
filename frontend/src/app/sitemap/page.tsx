@@ -90,11 +90,11 @@ const SITEMAP_DATA = [
     color: 'text-amber-500',
     links: [
       { label: 'College Predictor', href: '/tools/college-predictor' },
-      { label: 'Loan Calculator', href: '/loan-calculator' },
+      { label: 'Loan Calculator', href: '/#loan-calculator-section' },
       { label: 'Education News', href: '/news' },
       { label: 'Latest Articles', href: '/articles' },
       { label: 'Student Testimonials', href: '/reviews' },
-      { label: 'Compare Colleges', href: '/compare' },
+      { label: 'Compare Colleges', href: '/#compare-section' },
     ]
   },
   {

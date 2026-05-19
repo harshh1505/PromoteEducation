@@ -18,7 +18,7 @@ import GoalModal from '@/components/ui/GoalModal'
 const navItems = [
   { label: 'Home', href: '/', hasMegaMenu: false },
   { label: 'Explore', href: '#', hasMegaMenu: true },
-  { label: 'Tools', href: '/tools', hasDropdown: false },
+  { label: 'Colleges', href: '/colleges', hasDropdown: false },
   { label: 'Exams', href: '/exams', hasDropdown: false },
   { label: 'Rankings', href: '/rankings', hasDropdown: false },
   { label: 'About Us', href: '/about', hasDropdown: false },
@@ -74,11 +74,11 @@ const exploreGroups: ExploreGroup[] = [
   {
     title: 'Platform Tools',
     items: [
-      { label: 'College Predictor', href: '/tools', icon: 'Search', badge: 'AI Tool' },
-      { label: 'Loan Calculator', href: '/loan-calculator', icon: 'IndianRupee' },
+      { label: 'College Predictor', href: '/colleges', icon: 'Search', badge: 'AI Tool' },
+      { label: 'Loan Calculator', href: '/#loan-calculator-section', icon: 'IndianRupee' },
       { label: 'Admission Alerts', href: '/alerts', icon: 'Bell', status: 'New' },
-      { label: 'College Finder', href: '/tools', icon: 'Search' },
-      { label: 'Compare Colleges', href: '/compare', icon: 'BarChart3' },
+      { label: 'College Finder', href: '/colleges', icon: 'Search' },
+      { label: 'Compare Colleges', href: '/#compare-section', icon: 'BarChart3' },
     ]
   }
 ]

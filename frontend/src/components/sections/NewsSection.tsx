@@ -64,7 +64,7 @@ export const newsItems = [
 
 export default function NewsSection() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-6">
         
         <h2 className="text-2xl font-bold text-ink mb-10 tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>

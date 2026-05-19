@@ -1,127 +1,116 @@
 'use client'
 
 import Link from 'next/link'
-import { UserCheck, Video, Building2, IndianRupee, ArrowRight, ShieldCheck, Target, GraduationCap } from 'lucide-react'
+import { UserCheck, Video, Building2, IndianRupee, ArrowRight, ShieldCheck, Target, GraduationCap, Clock, Zap, Heart, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const features = [
   {
-    title: 'Mentorship & Career Readiness',
-    desc: 'We go beyond academics to prepare students for real-world challenges. Our mentorship programs bridge the gap between classroom learning and professional excellence.',
+    title: 'Personalized Career Roadmap',
+    desc: 'We guide every student based on goals, budget, and academic background for better career decisions.',
     icon: Target,
-    color: 'text-blue-500',
-    bg: 'bg-blue-50',
+    color: 'from-sky-400 to-blue-500',
     href: '/mentorship'
   },
   {
-    title: 'Scholarship & Financial Aid',
-    desc: 'Cost should never be a barrier to quality education. We provide end-to-end assistance in securing scholarships and affordable educational financing for all.',
-    icon: IndianRupee,
-    color: 'text-emerald-500',
-    bg: 'bg-emerald-50',
-    href: '/scholarships'
-  },
-  {
-    title: 'Career Counseling & Guidance',
-    desc: 'Navigating through countless career paths can be overwhelming. Our experts provide data-driven profile assessments to identify your ideal trajectory.',
-    icon: UserCheck,
-    color: 'text-purple-500',
-    bg: 'bg-purple-50',
-    href: '/counseling'
-  },
-  {
-    title: 'Admission Support',
-    desc: 'Securing a seat in your dream college requires strategic planning. We simplify the complex admission process from documentation to final enrollment.',
+    title: 'Direct Admission Assistance',
+    desc: 'Secure your seat in top colleges through management quota with a simple and stress-free admission process.',
     icon: ShieldCheck,
-    color: 'text-amber-500',
-    bg: 'bg-amber-50',
+    color: 'from-emerald-400 to-teal-500',
     href: '/admission-support'
   },
   {
-    title: 'Course & University Selection',
-    desc: 'Choosing the right course shapes your future. We help you select institutions that offer the best mix of infrastructure, faculty, and placement records.',
+    title: 'India & Study Abroad Support',
+    desc: 'Get expert help for admissions in India and abroad with the right college and course selection guidance.',
     icon: GraduationCap,
-    color: 'text-sky-500',
-    bg: 'bg-sky-50',
+    color: 'from-purple-400 to-indigo-500',
+    href: '/counseling'
+  },
+  {
+    title: 'Complete End-to-End Process',
+    desc: 'From college selection to documentation and final admission, we handle every step with complete support.',
+    icon: Zap,
+    color: 'from-amber-400 to-orange-500',
     href: '/selection'
   },
   {
-    title: 'Free Digital Consultation',
-    desc: 'Connect with our expert counselors from the comfort of your home. We offer free video consultations to resolve all your academic and career queries.',
+    title: 'Experienced Counsellors',
+    desc: 'Our expert team provides honest advice and proven strategies to help you choose the right career path.',
+    icon: UserCheck,
+    color: 'from-rose-400 to-pink-500',
+    href: '/counseling'
+  },
+  {
+    title: 'Fast & Hassle-Free Admission',
+    desc: 'Avoid delays and confusion with our smooth process designed for quick, simple, and stress-free admissions.',
+    icon: Clock,
+    color: 'from-cyan-400 to-sky-500',
+    href: '/consultation'
+  },
+  {
+    title: 'Transparent Guidance',
+    desc: 'We ensure clear communication with no hidden charges, giving you a reliable and trustworthy experience.',
+    icon: Heart,
+    color: 'from-violet-400 to-purple-500',
+    href: '/about'
+  },
+  {
+    title: 'Dedicated Student Support',
+    desc: 'Our team stays connected at every step to ensure your admission process is completed without any issues.',
     icon: Video,
-    color: 'text-rose-500',
-    bg: 'bg-rose-50',
+    color: 'from-blue-400 to-indigo-500',
     href: '/consultation'
   }
 ]
 
 export default function WhyChooseUsSection() {
   return (
-    <section className="pt-8 pb-10 bg-white relative overflow-hidden">
+    <section className="py-20 bg-white relative overflow-hidden">
       {/* Background Decor */}
-      <div className="absolute top-0 left-0 w-full h-1/2 bg-slate-50/50 -skew-y-3 origin-top-left" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-sky-50 rounded-full blur-[150px] opacity-50" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-50 rounded-full blur-[150px] opacity-50" />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="text-center mb-20">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="w-8 h-[2px] bg-sky-500" />
-            <span className="text-[11px] font-black uppercase tracking-[0.2em] text-sky-500">Why Partner With Us</span>
-            <div className="w-8 h-[2px] bg-sky-500" />
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sky-50 border border-sky-100 mb-6">
+            <CheckCircle2 size={14} className="text-sky-500" />
+            <span className="text-xs font-bold text-sky-600 uppercase tracking-wider">Why Students Trust Us</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-medium text-slate-900 tracking-tight mb-6">
-            Everything You Need to <span className="text-sky-500 italic">Succeed</span>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight mb-4">
+            From India to abroad, we simplify your<br className="hidden md:block" /> entire admission journey
           </h2>
-          <p className="text-slate-500 text-lg max-w-2xl mx-auto font-medium leading-relaxed">
-            We bridge the gap between your aspirations and the right academic institutions with data-driven guidance and unwavering support.
+          <p className="text-slate-500 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+            Expert guidance and guaranteed support at every step of your educational journey.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature, i) => (
             <Link 
               key={i} 
               href={feature.href}
-              className="group p-8 rounded-[32px] bg-white border border-slate-100 hover:border-sky-500/30 hover:shadow-2xl hover:shadow-sky-500/5 transition-all duration-500 flex flex-col h-full border-b-4 border-b-slate-100 hover:border-b-sky-500"
+              className="group p-6 rounded-2xl bg-white border border-slate-100 hover:border-sky-200 hover:shadow-xl hover:shadow-sky-500/5 transition-all duration-500 flex flex-col h-full"
             >
               <div className={cn(
-                "w-14 h-14 rounded-2xl mb-8 flex items-center justify-center transition-transform group-hover:scale-110 duration-500",
-                feature.bg,
+                "w-12 h-12 rounded-xl mb-5 flex items-center justify-center text-white bg-gradient-to-br transition-transform group-hover:scale-110 group-hover:shadow-lg duration-500",
                 feature.color
               )}>
-                <feature.icon size={28} />
+                <feature.icon size={22} />
               </div>
               
-              <h3 className="text-xl font-bold text-slate-900 mb-4 group-hover:text-sky-600 transition-colors">
+              <h3 className="text-base font-bold text-slate-900 mb-2 group-hover:text-sky-600 transition-colors leading-snug">
                 {feature.title}
               </h3>
               
-              <p className="text-slate-500 text-sm leading-relaxed font-medium mb-8">
+              <p className="text-slate-500 text-sm leading-relaxed mb-4 flex-1">
                 {feature.desc}
               </p>
 
-              <div className="mt-auto flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 group-hover:text-sky-500 transition-colors">
-                Learn More <ArrowRight size={14} className="group-hover:translate-x-2 transition-transform" />
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-300 group-hover:text-sky-500 transition-colors mt-auto">
+                Learn More <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
           ))}
-        </div>
-
-        {/* Success Metrics Overlay (Optional/Bonus) */}
-        <div className="mt-10 flex flex-wrap justify-center gap-12 border-t border-slate-100 pt-10">
-            <div className="text-center">
-                <p className="text-3xl font-black text-slate-900 mb-1">98%</p>
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Student Satisfaction</p>
-            </div>
-            <div className="w-px h-12 bg-slate-100 hidden md:block" />
-            <div className="text-center">
-                <p className="text-3xl font-black text-slate-900 mb-1">10k+</p>
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Successful Admissions</p>
-            </div>
-            <div className="w-px h-12 bg-slate-100 hidden md:block" />
-            <div className="text-center">
-                <p className="text-3xl font-black text-slate-900 mb-1">24/7</p>
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Expert Support</p>
-            </div>
         </div>
       </div>
     </section>

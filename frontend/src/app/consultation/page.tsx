@@ -491,7 +491,7 @@ export default function ConsultationPage() {
                   ['/exams/neet-ug', 'NEET UG 2026 Strategy'],
                   ['/exams/jee-main', 'JEE Main 2026 Prep'],
                   ['/rankings', 'Latest University Rankings'],
-                  ['/compare', 'Compare Colleges 1-on-1'],
+                  ['/#compare-section', 'Compare Colleges 1-on-1'],
                   ['/articles/education-loan-guide', 'Education Loan Guide'],
                 ].map(([href, label]) => (
                   <Link

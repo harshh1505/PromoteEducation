@@ -1,61 +1,93 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Search, GraduationCap, BookOpen, Award, CheckCircle2, TrendingUp, Users, ArrowRight } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
-import { cn } from '@/lib/utils'
+import { Star, ArrowRight, Check } from 'lucide-react'
+import Link from 'next/link'
+import LeadModal from '@/components/ui/LeadModal'
 
-const carouselImages = [
-  "https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/amitynoida.jpg",
-  "https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/bitsgoa.webp",
-  "https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/coepPune.jpg",
-  "https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/mitwpu.webp",
-  "https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/parulUniversity.webp",
-  "https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/sapthagiriNps.webp"
+const avatars = [
+  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100&h=100",
+  "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=100&h=100",
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100&h=100",
+  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100&h=100",
+  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&q=80&w=100&h=100"
+]
+const platformTools = [
+  { name: 'College Predictor', icon: '🎯', href: '/colleges' },
+  { name: 'Compare Colleges', icon: '📊', href: '/#compare-section' },
+  { name: 'Loan Calculator', icon: '💵', href: '/#loan-calculator-section' },
+  { name: 'AI Brainstorm', icon: '💡', href: '/tools/brainstorm' },
+  { name: 'Course Directory', icon: '🎓', href: '/courses' },
+  { name: 'NIRF Rankings', icon: '🏆', href: '/rankings' },
+  { name: 'Entrance Exams', icon: '📚', href: '/exams' },
+  { name: 'Admission Support', icon: '🤝', href: '/admission-support' },
 ]
 
-// Optimization helper for Supabase Storage
-const getOptimizedUrl = (url: string) => {
-  return url.replace('/object/public/', '/render/image/public/') + '?width=1920&quality=80&format=webp';
-}
-
-const stats = [
-  { label: '6000+ Institutions', icon: GraduationCap },
-  { label: '50+ Entrance Exams', icon: BookOpen },
-  { label: '200+ Student Reviews', icon: Award },
-  { label: '10,000+ Monthly Students', icon: Users },
-]
-
-const trustBadges = [
-  { label: 'Entrance Support', icon: CheckCircle2 },
-  { label: 'Rank Prediction', icon: TrendingUp },
-  { label: 'Direct Admissions', icon: Users },
-  { label: 'Placement Stats', icon: Award },
+const carouselItems = [
+  {
+    name: 'Amity University, Noida',
+    slug: 'amity-university-noida',
+    image: 'https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/amitynoida.jpg'
+  },
+  {
+    name: 'BITS Goa',
+    slug: 'bits-goa',
+    image: 'https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/bitsgoa.webp'
+  },
+  {
+    name: 'COEP Technological University, Pune',
+    slug: 'coep-pune',
+    image: 'https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/coepPune.jpg'
+  },
+  {
+    name: 'MIT WPU, Pune',
+    slug: 'mit-wpu',
+    image: 'https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/mitwpu.webp'
+  },
+  {
+    name: 'Parul University, Vadodara',
+    slug: 'parul-university',
+    image: 'https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/parulUniversity.webp'
+  },
+  {
+    name: 'Sapthagiri College of Engineering, Bangalore',
+    slug: 'sapthagiri-college-of-engineering',
+    image: 'https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/sapthagiriNps.webp'
+  }
 ]
 
 const localFallbacks = [
-  "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=1920",
-  "https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=1920",
-  "https://images.unsplash.com/photo-1523050853064-802160043f21?auto=format&fit=crop&q=80&w=1920",
-  "https://images.unsplash.com/photo-1498243639391-f1f074e04996?auto=format&fit=crop&q=80&w=1920"
+  "https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1523050853064-802160043f21?auto=format&fit=crop&q=80&w=800",
+  "https://images.unsplash.com/photo-1498243639391-f1f074e04996?auto=format&fit=crop&q=80&w=800"
 ]
 
+const getOptimizedUrl = (url: string) => {
+  return url.replace('/object/public/', '/render/image/public/') + '?width=800&quality=80&format=webp';
+}
+
 export default function HeroSection() {
+  const [showLeadModal, setShowLeadModal] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
   const [nextSlide, setNextSlide] = useState(1)
   const [isTransitioning, setIsTransitioning] = useState(false)
-  const [query, setQuery] = useState('')
-  const [results, setResults] = useState<any[]>([])
-  const [loading, setLoading] = useState(false)
-  const [focused, setFocused] = useState(false)
   const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({})
   const [imagesLoaded, setImagesLoaded] = useState<Record<number, boolean>>({})
 
+  // Trigger auto pop up when page loads
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowLeadModal(true)
+    }, 1500)
+    return () => clearTimeout(timer)
+  }, [])
+
   // Preload all images on mount
   useEffect(() => {
-    carouselImages.forEach((url, idx) => {
+    carouselItems.forEach((item, idx) => {
       const img = new Image();
-      img.src = getOptimizedUrl(url);
+      img.src = getOptimizedUrl(item.image);
       img.onload = () => {
         setImagesLoaded(prev => ({ ...prev, [idx]: true }));
       };
@@ -69,213 +101,227 @@ export default function HeroSection() {
     const interval = setInterval(() => {
       setIsTransitioning(true);
       
-      // Set next slide index
-      const next = (currentSlide + 1) % carouselImages.length;
+      const next = (currentSlide + 1) % carouselItems.length;
       setNextSlide(next);
       
-      // After crossfade duration, update current slide and reset transition
       setTimeout(() => {
         setCurrentSlide(next);
         setIsTransitioning(false);
-      }, 1000); // Match transition duration
+      }, 1000);
       
-    }, 6000) // Change every 6 seconds
-    return () => clearInterval(interval)
-  }, [currentSlide])
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [currentSlide]);
 
-  // Live search logic
-  useEffect(() => {
-    const searchColleges = async () => {
-      if (query.length < 2) {
-        setResults([])
-        return
-      }
-      setLoading(true)
-      const { data, error } = await supabase
-        .from('colleges')
-        .select('name, location, stream')
-        .or(`name.ilike.%${query}%,location.ilike.%${query}%,stream.ilike.%${query}%`)
-        .limit(5)
-
-      if (!error && data) setResults(data)
-      setLoading(false)
-    }
-    const timer = setTimeout(searchColleges, 300)
-    return () => clearTimeout(timer)
-  }, [query])
-
-  // Get the current image URL
   const getCurrentImageUrl = (idx: number) => {
-    const url = carouselImages[idx];
+    const item = carouselItems[idx];
     if (imageErrors[idx]) return localFallbacks[idx % localFallbacks.length];
-    return getOptimizedUrl(url);
+    return getOptimizedUrl(item.image);
   };
 
   return (
-    <section className="relative min-h-screen w-full overflow-hidden flex items-center justify-center py-20 md:py-0 bg-black">
+    <section className="relative w-full overflow-hidden bg-gradient-to-br from-slate-50 via-white to-slate-100 pt-32 pb-24 md:py-36 flex items-center min-h-[90vh]">
       
-      {/* Background Carousel with Crossfade + Ken Burns Effect */}
-      <div className="absolute inset-0 bg-black">
-        {/* Base Placeholder Image (Visible immediately) */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/90 z-10" />
-          <img 
-            src={localFallbacks[0]}
-            alt="Promote Education Campus"
-            className="w-full h-full object-cover opacity-50"
-          />
-        </div>
+      {/* Background Decorative Blur */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-200/20 rounded-full blur-[120px] -z-10 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-100/30 rounded-full blur-[120px] -z-10 pointer-events-none" />
 
-        {/* Current Image */}
-        <div 
-          className={cn(
-            "absolute inset-0 transition-all duration-[3000ms] ease-in-out",
-            !isTransitioning ? "opacity-100 z-10" : "opacity-0 z-10"
-          )}
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/90 z-10" />
-          {imagesLoaded[currentSlide] && (
-            <img 
-              src={getCurrentImageUrl(currentSlide)}
-              alt={`College Campus ${currentSlide + 1}`}
-              className="w-full h-full object-cover animate-ken-burns"
-              style={{ imageRendering: 'auto' }}
-            />
-          )}
-        </div>
+      <div className="max-w-[1440px] w-full mx-auto px-6 md:px-12 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 items-center">
 
-        {/* Next Image (fading in) */}
-        <div 
-          className={cn(
-            "absolute inset-0 transition-all duration-1000 ease-in-out",
-            isTransitioning ? "opacity-100 z-20" : "opacity-0 z-0"
-          )}
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/90 z-10" />
-          {imagesLoaded[nextSlide] && (
-            <img 
-              src={getCurrentImageUrl(nextSlide)}
-              alt={`College Campus ${nextSlide + 1}`}
-              className="w-full h-full object-cover animate-ken-burns"
-              style={{ imageRendering: 'auto' }}
-            />
-          )}
-        </div>
-      </div>
-
-      {/* Main Content Area */}
-      <div className="relative z-30 max-w-4xl w-full px-6 flex flex-col items-center justify-center translate-y-4 md:translate-y-10">
-
-    <div className="w-full px-6 md:px-10 py-8 md:py-10 rounded-[40px] bg-white/[0.02] backdrop-blur-sm border border-white/10 shadow-2xl animate-in fade-in zoom-in duration-700 text-center">
-
-      <div className="mb-6 flex flex-col items-center">
-        {/* Hero Logo */}
-        <div className="mb-6 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-          <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-white/20 overflow-hidden bg-white shadow-2xl relative mx-auto">
-            <img
-              src="/images/PromoteEducationLogo.png"
-              alt="Promote Education"
-              className="w-full h-full object-contain scale-[1.2] -translate-y-[2px]" />
-          </div>
-        </div>
-
-        <h1 className="text-4xl md:text-5xl font-black text-white mb-3 tracking-tighter leading-[1.1]">
-          Top <span className="text-sky-400">Colleges in India 2026</span>
-          <span className="block text-xl md:text-2xl font-medium text-white/90 mt-1">NIRF Rankings & Admissions</span>
-        </h1>
-        <p className="text-white/60 text-sm md:text-base max-w-2xl mx-auto font-medium leading-relaxed">
-          Complete admission guidance for Engineering, Management, and Medical across India based on latest data.
-        </p>
-      </div>
-
-      {/* Stats Chips */}
-      <div className="flex flex-wrap justify-center gap-3 mb-6">
-        {stats.map((stat, i) => (
-          <div
-            key={i}
-            className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/70 text-[10px] font-bold uppercase tracking-wider hover:bg-white/10 transition-colors"
-          >
-            <stat.icon size={12} className="text-amber-400" />
-            {stat.label}
-          </div>
-        ))}
-      </div>
-
-      {/* Combined Search Bar */}
-      <div className="relative max-w-4xl mx-auto mb-6 group">
-        <div className={cn(
-          "flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 p-2 sm:p-1 rounded-[24px] sm:rounded-full shadow-2xl transition-all duration-300",
-          focused ? "bg-white ring-4 ring-amber-400/20" : "bg-white/95"
-        )}>
-          <div className="flex items-center flex-1">
-            <div className="pl-4 sm:pl-5 text-gray-400">
-              <Search size={18} />
+          {/* Left Column: Extensive Copy, Form/Button & Admission Pill Tags */}
+          <div className="lg:col-span-6 flex flex-col justify-center animate-in fade-in slide-in-from-left-6 duration-700">
+            
+            {/* Rating Badge */}
+            <div className="inline-flex items-center gap-3 mb-8 bg-white border border-slate-100 py-2 px-4 rounded-full shadow-sm w-fit">
+              <div className="flex -space-x-2">
+                {avatars.map((url, idx) => (
+                  <img
+                    key={idx}
+                    src={url}
+                    alt={`Student ${idx + 1}`}
+                    className="w-7 h-7 rounded-full border-2 border-white object-cover"
+                  />
+                ))}
+              </div>
+              <div className="flex items-center gap-1">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} size={13} className="text-amber-400 fill-amber-400" />
+                ))}
+                <span className="text-slate-800 font-extrabold text-xs ml-1">5.0</span>
+              </div>
+              <span className="text-slate-400 font-medium text-xs border-l border-slate-150 pl-3">2,400+ happy students</span>
             </div>
-            <input
-              type="text"
-              placeholder="Search Colleges, Courses, Exams..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onFocus={() => setFocused(true)}
-              onBlur={() => setTimeout(() => setFocused(false), 200)}
-              className="flex-1 bg-transparent px-2 py-3 sm:py-2.5 text-xs sm:text-sm font-medium text-gray-800 outline-none border-none placeholder:text-gray-400" />
-          </div>
-          <button className="px-8 py-3 sm:py-2.5 bg-blue-600 text-white text-xs sm:text-sm font-bold rounded-[18px] sm:rounded-full hover:bg-blue-700 active:scale-95 transition-all shadow-lg shadow-blue-600/20">
-            Search
-          </button>
-        </div>
 
-        {/* Search Results Dropdown */}
-        {focused && results.length > 0 && (
-          <div className="absolute top-full left-0 right-0 mt-3 bg-white rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl border border-gray-100 animate-in slide-in-from-top-2 duration-200 z-[60]">
-            {results.map((res, i) => (
+            {/* Main Heading */}
+            <h1 className="text-4xl md:text-5xl lg:text-[62px] font-black text-slate-900 leading-[1.08] tracking-tighter mb-6 font-display">
+              Your career begins with <br className="hidden md:inline" />
+              the <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-600">right admission</span>
+            </h1>
+
+            {/* Subtitle */}
+            <p className="text-slate-500 text-base md:text-lg max-w-xl leading-relaxed mb-10 font-medium">
+              Turn your dream into reality with the right guidance. We help you choose the best college, secure your admission, and start your journey with confidence.
+            </p>
+
+            {/* Sleek Primary CTA Button */}
+            <div className="mb-12">
               <button
-                key={i}
-                className="w-full flex flex-col items-start px-5 md:px-6 py-3 md:py-4 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0 text-left"
+                onClick={() => setShowLeadModal(true)}
+                className="px-10 py-5 bg-[#111111] text-white font-bold text-xs uppercase tracking-[0.2em] rounded-2xl hover:bg-slate-850 hover:shadow-2xl hover:shadow-slate-950/20 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3"
               >
-                <span className="text-xs md:text-sm font-bold text-gray-800">{res.name}</span>
-                <span className="text-[9px] md:text-[10px] text-gray-400 uppercase tracking-wider">{res.stream} • {res.location}</span>
+                Book free counselling
+                <ArrowRight size={15} />
               </button>
-            ))}
+            </div>
+
+            {/* Platform Tools Capsule List */}
+            <div>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.25em] mb-4">OUR PLATFORM TOOLS</p>
+              <div className="flex flex-wrap gap-2.5 max-w-xl">
+                {platformTools.map(tool => (
+                  <Link 
+                    key={tool.name} 
+                    href={tool.href}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-white border border-slate-100 hover:border-slate-200 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
+                  >
+                    <span className="text-base leading-none">{tool.icon}</span>
+                    <span className="text-slate-700 text-xs font-bold">{tool.name}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
-        )}
-      </div>
 
-      {/* CTAs */}
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
-        <button className="w-full sm:w-auto px-8 sm:px-10 py-3.5 sm:py-4 bg-blue-600 text-white text-sm font-bold rounded-xl md:rounded-2xl hover:bg-blue-700 hover:-translate-y-1 transition-all shadow-xl shadow-blue-600/30 flex items-center justify-center gap-2">
-          Find Top Colleges
-          <ArrowRight size={18} />
-        </button>
-        <button className="w-full sm:w-auto px-8 sm:px-10 py-3.5 sm:py-4 bg-white/10 hover:bg-white/20 text-white text-sm font-bold border border-white/30 rounded-xl md:rounded-2xl transition-all flex items-center justify-center gap-2">
-          Counseling 2026
-        </button>
-      </div>
-    </div>
+          {/* Right Column: Visual Container with College Images Carousel & Floating Info Cards */}
+          <div className="lg:col-span-6 flex justify-center lg:justify-end animate-in fade-in slide-in-from-right-6 duration-700">
+            <div className="relative w-full max-w-[460px] aspect-[4/5] bg-slate-900 rounded-[48px] shadow-2xl overflow-visible flex items-end">
+              
+              {/* Stars decorative icon */}
+              <div className="absolute top-10 right-10 text-amber-300/30 font-bold select-none text-2xl z-20">✦</div>
+              <div className="absolute top-36 left-12 text-amber-300/20 font-bold select-none text-lg z-20">✦</div>
 
-    {/* Bottom Trust Badges */}
-    <div className="flex flex-wrap justify-center gap-8 md:gap-12 mt-12">
-      {trustBadges.map((badge, i) => (
-        <div key={i} className="flex items-center gap-2 text-white/50 text-[11px] font-bold uppercase tracking-widest group cursor-default">
-          <badge.icon size={16} className="text-amber-400 group-hover:scale-125 transition-transform" />
-          {badge.label}
+              {/* College Campus Images Carousel (Clipped inside rounded wrapper) */}
+              <div className="absolute inset-0 rounded-[48px] overflow-hidden">
+                {/* Current Slide */}
+                <Link 
+                  href={`/colleges/${carouselItems[currentSlide].slug}`}
+                  className={`absolute inset-0 transition-opacity duration-[1000ms] ease-in-out z-10 ${
+                    !isTransitioning ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                  }`}
+                >
+                  <img
+                    src={getCurrentImageUrl(currentSlide)}
+                    alt={carouselItems[currentSlide].name}
+                    className="w-full h-full object-cover animate-ken-burns filter brightness-[0.85] contrast-[1.05]"
+                  />
+                </Link>
+
+                {/* Next Slide */}
+                <Link 
+                  href={`/colleges/${carouselItems[nextSlide].slug}`}
+                  className={`absolute inset-0 transition-opacity duration-[1000ms] ease-in-out z-10 ${
+                    isTransitioning ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                  }`}
+                >
+                  <img
+                    src={getCurrentImageUrl(nextSlide)}
+                    alt={carouselItems[nextSlide].name}
+                    className="w-full h-full object-cover animate-ken-burns filter brightness-[0.85] contrast-[1.05]"
+                  />
+                </Link>
+                
+                {/* Subtle dark gradient overlay to ensure text contrast and hide the green overlay film */}
+                <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/85 via-black/35 to-transparent pointer-events-none z-20" />
+                
+                {/* College Name Label */}
+                <div className="absolute bottom-20 inset-x-0 flex justify-center z-30 pointer-events-none">
+                  <div className="bg-black/60 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10 text-white font-extrabold text-[12px] tracking-wide shadow-lg text-center max-w-[85%] truncate animate-pulse">
+                    🏛️ {carouselItems[currentSlide].name}
+                  </div>
+                </div>
+
+                {/* Click to Explore helper tag */}
+                <div className="absolute bottom-14 inset-x-0 flex justify-center z-30 pointer-events-none">
+                  <span className="bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-[8px] text-white/80 uppercase tracking-[0.25em] font-black border border-white/10">
+                    Click to explore campus
+                  </span>
+                </div>
+              </div>
+
+              {/* Bottom Strip text inside container */}
+              <div className="absolute bottom-6 inset-x-0 text-center z-25 px-6 pointer-events-none">
+                <p className="text-white/60 text-[9px] font-black uppercase tracking-[0.2em] mb-0.5">
+                  Trusted by students heading to
+                </p>
+                <p className="text-white text-xs font-bold tracking-wide">
+                  MBBS · B.Tech · M.Tech · BBA · MBA
+                </p>
+              </div>
+
+              {/* FLOATING CARD 1: Top Left */}
+              <a 
+                href="tel:+919900116101"
+                className="absolute -left-12 top-10 bg-white border border-slate-100 rounded-[20px] p-5 shadow-xl w-60 hover:scale-105 transition-transform duration-300 pointer-events-auto z-30 block hover:border-sky-200"
+              >
+                <p className="text-slate-400 text-[9px] font-black tracking-widest uppercase mb-1">Student Guidance</p>
+                <h4 className="text-slate-800 text-base font-extrabold hover:text-sky-600 transition-colors">+91 99001 16101</h4>
+                <p className="text-slate-500 text-[11px] font-medium mt-0.5">Talk to Expert Counselors</p>
+              </a>
+
+              {/* FLOATING CARD 2: Top Right */}
+              <div className="absolute -right-8 top-24 bg-white border border-slate-100 rounded-[20px] p-5 shadow-xl w-56 hover:scale-105 transition-transform duration-300 pointer-events-auto z-30">
+                <p className="text-slate-400 text-[9px] font-black tracking-widest uppercase mb-1">Loan Assistance</p>
+                <h4 className="text-slate-800 text-sm font-extrabold mb-2">Education Loan</h4>
+                <span className="inline-block text-[10px] font-bold text-amber-600 bg-amber-50 border border-amber-200/60 px-3 py-1 rounded-full">
+                  Get Free Guidance
+                </span>
+              </div>
+
+              {/* FLOATING CARD 3: Bottom Left */}
+              <div className="absolute -left-10 bottom-24 bg-white border border-slate-100 rounded-[20px] p-5 shadow-xl w-64 hover:scale-105 transition-transform duration-300 pointer-events-auto z-30">
+                <p className="text-slate-400 text-[9px] font-black tracking-widest uppercase mb-1">Begin Your Journey</p>
+                <h4 className="text-slate-800 text-sm font-extrabold">Top Programs</h4>
+                <p className="text-slate-500 text-[11px] font-medium mt-0.5 mb-2">MBBS · MBA · B.Tech · M.Tech</p>
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">
+                  <Check size={10} className="stroke-[3px]" /> Admissions Open
+                </span>
+              </div>
+
+              {/* FLOATING CARD 4: Bottom Right */}
+              <div className="absolute -right-10 bottom-12 bg-white border border-slate-100 rounded-[20px] p-5 shadow-xl w-56 hover:scale-105 transition-transform duration-300 pointer-events-auto z-30">
+                <p className="text-slate-400 text-[9px] font-black tracking-widest uppercase mb-1">Course Guidance</p>
+                <h4 className="text-slate-800 text-sm font-extrabold">Choose Your Path</h4>
+                <p className="text-slate-500 text-[11px] font-medium mt-0.5">Diploma · UG · PG Courses</p>
+              </div>
+
+            </div>
+          </div>
+
         </div>
-      ))}
-    </div>
+      </div>
 
-  </div><style jsx>{`
+      <style jsx>{`
         @keyframes kenBurns {
           0% {
             transform: scale(1);
           }
           100% {
-            transform: scale(1.1);
+            transform: scale(1.15);
           }
         }
         .animate-ken-burns {
           animation: kenBurns 20s ease-in-out infinite alternate;
         }
       `}</style>
+
+      <LeadModal
+        isOpen={showLeadModal}
+        onClose={() => setShowLeadModal(false)}
+        collegeName="Top Indian Universities"
+        collegeLogo="https://ui-avatars.com/api/?name=Promote+Education&background=3B2EA8&color=fff"
+        stream="All Streams"
+      />
     </section>
   )
 }

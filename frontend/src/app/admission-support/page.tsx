@@ -506,7 +506,7 @@ export default function AdmissionSupportPage() {
                   ['/articles/neet-eligibility-2026', 'NEET Eligibility Criteria'],
                   ['/exams/cuet-ug', 'CUET UG 2026 Guide'],
                   ['/rankings', 'Latest NIRF Rankings'],
-                  ['/compare', 'Compare Colleges'],
+                  ['/#compare-section', 'Compare Colleges'],
                 ].map(([href, label]) => (
                   <Link
                     key={href}

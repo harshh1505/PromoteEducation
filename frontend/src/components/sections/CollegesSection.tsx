@@ -650,33 +650,33 @@ export default function CollegesSection() {
   }
 
   return (
-    <section id="colleges" className="pt-12 pb-8 relative overflow-hidden bg-slate-50">
-      <div className="w-full max-w-[1600px] mx-auto px-6">
+    <section id="colleges" className="py-12 relative overflow-hidden bg-white">
+      <div className="w-full max-w-[1440px] mx-auto px-6 md:px-8">
         
-        <div className="mb-12">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-10 h-[2px] bg-sky-500" />
-            <span className="text-[11px] font-black text-sky-500 uppercase tracking-[0.2em]">Featured Selection</span>
+        <div className="text-center mb-14">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sky-50 border border-sky-100 mb-5">
+            <Verified size={14} className="text-sky-500" />
+            <span className="text-xs font-bold text-sky-600 uppercase tracking-wider">Featured Colleges</span>
           </div>
-          <h2 className="text-4xl md:text-5xl font-medium text-slate-900 tracking-tight mb-3">
-             Explore <span className="text-sky-500 italic">Top Institutions</span>
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-3">
+            Find the best colleges for you
           </h2>
-          <p className="text-slate-500 font-medium max-w-xl leading-relaxed">
-            Discover prestigious colleges categorized by NIRF rankings, placement records, and infrastructure.
+          <p className="text-slate-500 text-base max-w-2xl mx-auto">
+            We help you compare, shortlist, and secure admission in the best colleges that align with your future goals.
           </p>
         </div>
 
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-8">
-          <div className="flex items-center gap-3 overflow-x-auto no-scrollbar py-2">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2">
             {filters.map((f) => (
               <button
                 key={f.value}
                 onClick={() => setActiveStream(f.value)}
                 className={cn(
-                  "px-8 py-3 rounded-full text-sm font-black uppercase tracking-widest transition-all duration-300 shrink-0",
+                  "px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 shrink-0",
                   activeStream === f.value 
-                    ? "bg-slate-900 text-white shadow-xl shadow-slate-900/20" 
-                    : "bg-white border border-slate-200 text-slate-500 hover:border-slate-400"
+                    ? "bg-sky-500 text-white shadow-lg shadow-sky-500/20" 
+                    : "bg-slate-50 border border-slate-200 text-slate-600 hover:border-sky-300 hover:text-sky-600"
                 )}
               >
                 {f.label}
@@ -684,18 +684,18 @@ export default function CollegesSection() {
             ))}
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
              <button 
                 onClick={prevPage}
-                className="p-3 rounded-full bg-white border border-slate-200 text-slate-400 hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all shadow-sm active:scale-90"
+                className="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-400 hover:bg-sky-50 hover:text-sky-500 hover:border-sky-200 transition-all active:scale-90"
              >
-                <ChevronLeft size={20} />
+                <ChevronLeft size={18} />
              </button>
              <button 
                 onClick={nextPage}
-                className="p-3 rounded-full bg-white border border-slate-200 text-slate-400 hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all shadow-sm active:scale-90"
+                className="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-400 hover:bg-sky-50 hover:text-sky-500 hover:border-sky-200 transition-all active:scale-90"
              >
-                <ChevronRight size={20} />
+                <ChevronRight size={18} />
              </button>
           </div>
         </div>
@@ -717,23 +717,32 @@ export default function CollegesSection() {
                   </div>
                 ))
               ) : (
-                <div className="col-span-full py-32 text-center rounded-[40px] bg-white border-2 border-dashed border-slate-100">
-                  <p className="text-slate-300 font-bold italic">No colleges found in this category.</p>
+                <div className="col-span-full py-24 text-center rounded-2xl bg-slate-50 border border-dashed border-slate-200">
+                  <p className="text-slate-400 font-medium">No colleges found in this category.</p>
                 </div>
               )}
            </div>
         </div>
 
-        <div className="mt-16 flex justify-center gap-2">
+        {/* Pagination Dots */}
+        <div className="mt-10 flex justify-center gap-2">
             {Array.from({ length: totalPages }).map((_, i) => (
                 <div 
                     key={i} 
                     className={cn(
-                        "h-1.5 rounded-full transition-all duration-500",
+                        "h-2 rounded-full transition-all duration-500",
                         page === i ? "w-8 bg-sky-500" : "w-2 bg-slate-200"
                     )} 
                 />
             ))}
+        </div>
+
+        {/* Explore All CTA */}
+        <div className="mt-10 text-center">
+          <p className="text-slate-400 text-sm mb-4">Explore a wide range of colleges across India and abroad.</p>
+          <a href="/colleges" className="inline-flex items-center gap-2 px-8 py-3 bg-slate-900 text-white text-sm font-bold rounded-xl hover:bg-slate-800 transition-all">
+            Explore All Colleges <ArrowRight size={16} />
+          </a>
         </div>
       </div>
 

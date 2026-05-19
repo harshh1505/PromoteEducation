@@ -37,7 +37,7 @@ export default function TestimonialsSection() {
   const displayedTestimonials = showAll ? testimonials : testimonials.slice(0, 3)
 
   return (
-    <section id="testimonials" className="py-20" style={{ background: 'var(--surface)' }}>
+    <section id="testimonials" className="py-12" style={{ background: 'var(--surface)' }}>
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Header */}

@@ -1,41 +1,60 @@
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import HeroSection from '@/components/sections/HeroSection'
-import LivePulse from '@/components/sections/LivePulse'
-import StatsBar from '@/components/sections/StatsBar'
-import CollegesSection from '@/components/sections/CollegesSection'
-import PopularCitiesSection from '@/components/sections/PopularCitiesSection'
-import ExamsSection from '@/components/sections/ExamsSection'
-import MockTestSection from '@/components/sections/MockTestSection'
-import PYQSection from '@/components/sections/PYQSection'
 import CompareSection from '@/components/sections/CompareSection'
+import CollegesSection from '@/components/sections/CollegesSection'
 import LoanSection from '@/components/sections/LoanSection'
-import NewsSection from '@/components/sections/NewsSection'
+import StatsBar from '@/components/sections/StatsBar'
 import TestimonialsSection from '@/components/sections/TestimonialsSection'
-import WhyChooseUsSection from '@/components/sections/WhyChooseUsSection'
-import NewsletterSection from '@/components/sections/NewsletterSection'
 import MoreFromUsSection from '@/components/sections/MoreFromUsSection'
+import NewsSection from '@/components/sections/NewsSection'
+import FAQSection from '@/components/sections/FAQSection'
+
+import NewsletterSection from '@/components/sections/NewsletterSection'
+import StickyCROElements from '@/components/ui/StickyCROElements'
+import ExitIntentPopup from '@/components/ui/ExitIntentPopup'
 
 export default function HomePage() {
   return (
-    <main>
+    <main className="relative">
       <Navbar />
+
+      {/* 1. Hero Section */}
       <HeroSection />
-      <LivePulse />
-      <StatsBar />
-      <MoreFromUsSection />
-      <CollegesSection />
-      <WhyChooseUsSection />
-      <PopularCitiesSection />
-      <ExamsSection />
-      <MockTestSection />
-      <PYQSection />
+
+      {/* 2. College Comparison Tool */}
       <CompareSection />
+
+      {/* 3. Top Colleges / Featured Colleges */}
+      <CollegesSection />
+
+      {/* 4. Loan Calculator */}
       <LoanSection />
-      <NewsSection />
+
+      {/* 5. Placement Statistics / Trust Indicators */}
+      <StatsBar />
+
+      {/* 6. Testimonials */}
       <TestimonialsSection />
+
+      {/* 7. Reels & YouTube Videos */}
+      <MoreFromUsSection />
+
+      {/* 8. News & Articles */}
+      <NewsSection />
+
+      {/* 9. FAQ */}
+      <FAQSection />
+
+      {/* 9. Newsletter */}
       <NewsletterSection />
+
+      {/* 11. Footer */}
       <Footer />
+
+      {/* Floating Conversion Optimizers */}
+      <StickyCROElements />
+      <ExitIntentPopup />
     </main>
   )
 }
