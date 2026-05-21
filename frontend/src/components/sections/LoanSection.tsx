@@ -94,10 +94,6 @@ export default function LoanSection() {
 
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sky-50 border border-sky-100 mb-4">
-            <IndianRupee size={14} className="text-sky-600" />
-            <span className="text-xs font-bold text-sky-600 uppercase tracking-wider">Education Finance Estimator</span>
-          </div>
           <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight leading-tight">
             Plan Your Education Loan &{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-indigo-600">EMI Instantly</span>

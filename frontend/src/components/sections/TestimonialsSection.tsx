@@ -43,21 +43,12 @@ export default function TestimonialsSection() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-4 h-px" style={{ background: 'var(--gold)' }} />
-              <span className="text-xs font-medium tracking-wider uppercase" style={{ color: 'var(--gold)', letterSpacing: '0.1em' }}>
-                Success Stories
-              </span>
-            </div>
             <h2
               className="text-3xl md:text-4xl font-medium"
               style={{ fontFamily: 'var(--font-display)', letterSpacing: '-0.03em', color: 'var(--ink)' }}
             >
-              What our students say
+              Hear from our students
             </h2>
-            <p className="mt-1.5 text-sm" style={{ color: 'var(--ink-3)' }}>
-              Real reviews from students who got admitted through our counseling
-            </p>
           </div>
 
           {/* Trust stat */}

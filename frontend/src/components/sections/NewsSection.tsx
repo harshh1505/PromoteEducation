@@ -62,7 +62,47 @@ export const newsItems = [
   }
 ]
 
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
+
 export default function NewsSection() {
+  const [articles, setArticles] = useState<any[]>(newsItems)
+
+  useEffect(() => {
+    async function fetchNews() {
+      const { data, error } = await supabase
+        .from('news_articles')
+        .select('*')
+        .order('date', { ascending: false })
+        .order('created_at', { ascending: false })
+      
+      if (error) {
+        console.error('Error fetching news from Supabase:', error)
+      } else if (data && data.length > 0) {
+        // Map database fields to the UI format
+        const mapped = data.map((item: any) => ({
+          isLive: item.is_live,
+          title: item.heading,
+          excerpt: item.content ? (item.content.length > 140 ? item.content.slice(0, 137) + '...' : item.content) : '',
+          author: item.editor,
+          date: new Date(item.date).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          }),
+          comments: item.comments_count > 0 ? String(item.comments_count) : undefined,
+          shares: item.shares_count > 0 ? String(item.shares_count) : undefined,
+          views: item.views >= 1000 ? `${(item.views / 1000).toFixed(1)}K` : String(item.views),
+          image: item.image_link,
+          slug: item.slug
+        }))
+        setArticles(mapped)
+      }
+    }
+    fetchNews()
+  }, [])
+
   return (
     <section className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-6">
@@ -72,12 +112,16 @@ export default function NewsSection() {
         </h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-12">
-          {newsItems.map((item, idx) => (
-            <div key={idx} className="flex gap-6 group cursor-pointer hover:bg-slate-50/50 p-2 rounded-2xl transition-all">
+          {articles.map((item, idx) => (
+            <Link 
+              href={item.slug ? `/news/${item.slug}` : '#'} 
+              key={idx} 
+              className="flex gap-6 group cursor-pointer hover:bg-slate-50/50 p-2 rounded-2xl transition-all"
+            >
               <div className="flex-1 min-w-0">
                  <div className="flex items-start gap-2 mb-2">
                    {item.isLive && (
-                     <span className="flex items-center gap-1 bg-red-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-md mt-0.5 animate-pulse">
+                     <span className="flex items-center gap-1 bg-red-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-md mt-0.5 animate-pulse shrink-0">
                        <span className="w-1.5 h-1.5 bg-white rounded-full" /> LIVE
                      </span>
                    )}
@@ -126,17 +170,18 @@ export default function NewsSection() {
                   }}
                 />
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
         <div className="mt-16 flex justify-center">
-           <button className="flex items-center gap-2 px-8 py-2.5 border border-action/30 rounded-lg text-action text-sm font-bold hover:bg-action hover:text-white transition-all group">
+           <Link href="/news" className="flex items-center gap-2 px-8 py-2.5 border border-action/30 rounded-lg text-action text-sm font-bold hover:bg-action hover:text-white transition-all group">
              View All Updates <ChevronRight size={16} className="transition-transform group-hover:translate-x-1" />
-           </button>
+           </Link>
         </div>
 
       </div>
     </section>
   )
 }
+

@@ -654,10 +654,6 @@ export default function CollegesSection() {
       <div className="w-full max-w-[1440px] mx-auto px-6 md:px-8">
         
         <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sky-50 border border-sky-100 mb-5">
-            <Verified size={14} className="text-sky-500" />
-            <span className="text-xs font-bold text-sky-600 uppercase tracking-wider">Featured Colleges</span>
-          </div>
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-3">
             Find the best colleges for you
           </h2>

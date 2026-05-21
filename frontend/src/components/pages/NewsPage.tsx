@@ -1,12 +1,48 @@
 'use client'
 
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import { Newspaper, Calendar, ArrowRight, TrendingUp, Bell, MessageSquare, Share2, Eye } from 'lucide-react'
+import { Calendar, ArrowRight, TrendingUp, Bell, MessageSquare, Share2, Eye } from 'lucide-react'
+import { supabase } from '@/lib/supabase'
 import { newsItems } from '@/components/sections/NewsSection'
 
 export default function NewsPageContent() {
-  // Use newsItems from NewsSection
+  const [articles, setArticles] = useState<any[]>(newsItems)
+
+  useEffect(() => {
+    async function fetchNews() {
+      const { data, error } = await supabase
+        .from('news_articles')
+        .select('*')
+        .order('date', { ascending: false })
+        .order('created_at', { ascending: false })
+      
+      if (error) {
+        console.error('Error fetching news from Supabase on news page:', error)
+      } else if (data && data.length > 0) {
+        const mapped = data.map((item: any) => ({
+          isLive: item.is_live,
+          title: item.heading,
+          author: item.editor,
+          date: new Date(item.date).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          }),
+          comments: item.comments_count > 0 ? String(item.comments_count) : undefined,
+          shares: item.shares_count > 0 ? String(item.shares_count) : undefined,
+          views: item.views >= 1000 ? `${(item.views / 1000).toFixed(1)}K` : String(item.views),
+          image: item.image_link,
+          slug: item.slug
+        }))
+        setArticles(mapped)
+      }
+    }
+    fetchNews()
+  }, [])
+
   return (
     <div className="min-h-screen flex flex-col bg-white font-body selection:bg-sky-500 selection:text-white">
       <Navbar />
@@ -57,8 +93,12 @@ export default function NewsPageContent() {
 
            {/* List of sub news */}
            <div className="space-y-6">
-              {newsItems.map((article, idx) => (
-                <div key={idx} className="group flex gap-6 p-4 rounded-3xl bg-white border border-slate-100 hover:shadow-xl shadow-slate-900/5 transition-all cursor-pointer">
+              {articles.map((article, idx) => (
+                <Link 
+                  href={article.slug ? `/news/${article.slug}` : '#'} 
+                  key={idx} 
+                  className="group flex gap-6 p-4 rounded-3xl bg-white border border-slate-100 hover:shadow-xl shadow-slate-900/5 transition-all cursor-pointer"
+                >
                    <div className="w-32 h-32 rounded-2xl overflow-hidden flex-shrink-0 relative shadow-sm">
                       {article.isLive && (
                         <span className="absolute top-2 left-2 z-10 flex items-center gap-1 bg-red-500 text-white text-[9px] font-black px-2 py-0.5 rounded-md animate-pulse shadow-md">
@@ -90,7 +130,7 @@ export default function NewsPageContent() {
                          )}
                       </div>
                    </div>
-                </div>
+                </Link>
               ))}
            </div>
         </div>
