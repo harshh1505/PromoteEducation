@@ -7,6 +7,8 @@ import { ArrowLeft, Share2, Clock, Calendar, Bookmark, ChevronRight, CheckCircle
 import { articleDatabase } from '@/data/articleDatabase'
 import { examDatabase } from '@/data/examDatabase'
 
+export async function generateStaticParams() { return [] }
+
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const dbArticle = articleDatabase[params.slug]
   const examKey = Object.keys(examDatabase).find(key => params.slug.startsWith(key))

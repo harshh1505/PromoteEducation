@@ -26,16 +26,6 @@ const navItems = [
   // { label: 'FAQ', href: '/faq', hasDropdown: false },
 ]
 
-const topCategories = [
-  { label: 'All Courses', href: '/courses' },
-  { label: 'B.Tech', href: '/courses/btech' },
-  { label: 'MBA', href: '/courses/mba' },
-  { label: 'M.Tech', href: '/courses/mtech' },
-  { label: 'MBBS', href: '/courses/mbbs' },
-  { label: 'BDS', href: '/courses/bds' },
-  { label: 'B.Sc Nursing', href: '/courses/bsc-nursing' },
-]
-
 interface ExploreItem {
   label: string
   href: string
@@ -100,6 +90,9 @@ export default function Navbar() {
   const [isSearching, setIsSearching] = useState(false)
   const [currentTime, setCurrentTime] = useState<string>('')
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null)
+  const [topCategories, setTopCategories] = useState<{label: string, href: string}[]>([
+    { label: 'All Courses', href: '/courses' }
+  ])
 
   const IconMap: any = {
     Trophy, GraduationCap, MessageSquare, Bell, Building2,
@@ -128,6 +121,15 @@ export default function Navbar() {
         hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
       }))
     }, 1000)
+
+    // Removed fetchTopCategories to use static array as requested
+    setTopCategories([
+      { label: 'All Courses', href: '/master-courses' },
+      { label: 'B.Tech', href: '/master-courses/btech' },
+      { label: 'MBBS', href: '/master-courses/mbbs' },
+      { label: 'MBA', href: '/master-courses/mba' },
+      { label: 'BDS', href: '/courses/mbbs-bds' } // BDS is a specific course
+    ])
 
     return () => {
       window.removeEventListener('scroll', handleScroll)

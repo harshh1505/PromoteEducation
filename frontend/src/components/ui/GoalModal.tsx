@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { X, ChevronRight, ChevronLeft, GraduationCap, Laptop, Stethoscope, Briefcase, Scale, Palette, Heart, MapPin, IndianRupee, Zap, Trees, Building2, Trophy, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { supabase } from '@/lib/supabase'
 
 interface GoalModalProps {
   isOpen: boolean
@@ -30,11 +31,7 @@ const fields = [
   { id: 'arts', label: 'Humanities', icon: Heart, color: 'text-purple-500', bg: 'bg-purple-50' },
 ]
 
-const specializations: any = {
-  eng: ['Computer Science', 'AI & Data Science', 'Robotics', 'Mechanical', 'Civil', 'Electronics'],
-  med: ['MBBS', 'Dental', 'Pharmacy', 'Nursing', 'Ayurveda', 'Physiotherapy'],
-  mgmt: ['Marketing', 'Finance', 'HR', 'International Business', 'Operations', 'Digital Marketing'],
-}
+
 
 const vibes = [
   { id: 'green', label: 'Green Campus', sub: 'Eco-friendly & peaceful', icon: Trees },
@@ -56,6 +53,41 @@ export default function GoalModal({ isOpen, onClose }: GoalModalProps) {
     stage: '',
     exams: [],
   })
+
+  const [specializations, setSpecializations] = useState<any>({
+    eng: [], med: [], mgmt: [], law: [], design: [], arts: []
+  })
+
+  useEffect(() => {
+    const fetchSpecs = async () => {
+      try {
+        const { data, error } = await supabase.from('courses').select('course_name, category')
+        if (!error && data) {
+           const specs: any = { eng: [], med: [], mgmt: [], law: [], design: [], arts: [] }
+           data.forEach(c => {
+             const cat = (c.category || '').toLowerCase()
+             if (cat.includes('engineering') || cat.includes('architecture') || cat.includes('computer') || cat.includes('technology')) specs.eng.push(c.course_name)
+             else if (cat.includes('medical') || cat.includes('health') || cat.includes('pharmacy') || cat.includes('nursing')) specs.med.push(c.course_name)
+             else if (cat.includes('management') || cat.includes('commerce') || cat.includes('business')) specs.mgmt.push(c.course_name)
+             else if (cat.includes('law')) specs.law.push(c.course_name)
+             else if (cat.includes('design') || cat.includes('media')) specs.design.push(c.course_name)
+             else specs.arts.push(c.course_name)
+           })
+           // Deduplicate and limit to top results
+           Object.keys(specs).forEach(k => {
+             specs[k] = Array.from(new Set(specs[k])).slice(0, 15)
+           })
+           setSpecializations(specs)
+        }
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    if (isOpen) {
+      fetchSpecs()
+    }
+  }, [isOpen])
 
   const nextStep = () => setStep(prev => Math.min(prev + 1, 6))
   const prevStep = () => setStep(prev => Math.max(prev - 1, 1))

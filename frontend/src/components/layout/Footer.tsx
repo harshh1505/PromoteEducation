@@ -78,7 +78,7 @@ export default function Footer() {
   }, [query])
 
   return (
-    <footer style={{ background: '#0F172A' }}>
+    <footer className="relative z-20" style={{ background: '#0F172A' }}>
       <div className="max-w-7xl mx-auto px-6 py-16">
 
         {/* Top Grid: Links & Search */}

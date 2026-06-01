@@ -64,5 +64,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   })) || []
 
-  return [...staticPages, ...collegePages, ...magnetPages, ...blogPages]
+  // 5. Individual Course Pages
+  const { data: courses } = await supabase.from('courses').select('slug, created_at')
+  const coursePages = courses?.map((c) => ({
+    url: `${baseUrl}/courses/${c.slug}`,
+    lastModified: c.created_at ? new Date(c.created_at) : new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  })) || []
+
+  return [...staticPages, ...collegePages, ...magnetPages, ...blogPages, ...coursePages]
 }

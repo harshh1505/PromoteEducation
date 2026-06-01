@@ -10,6 +10,22 @@ import { cn } from '@/lib/utils'
 import BrochureModal from '@/components/ui/BrochureModal'
 import { useLeadCapture } from '@/hooks/useLeadCapture'
 
+const CATEGORY_MAPPINGS: Record<string, string> = {
+  'Engineering & Technology': 'Engineering',
+  'Medical': 'Medical',
+  'Allied Health Sciences': 'Allied Health',
+  'Pharmacy': 'Pharmacy',
+  'Science': 'Science',
+  'Commerce & Finance': 'Commerce',
+  'Management': 'Management',
+  'Computer Applications': 'Computing',
+  'Arts & Humanities': 'Arts',
+  'Law': 'Law',
+  'Design & Media': 'Design',
+  'Architecture & Planning': 'Architecture',
+  'Hospitality & Tourism': 'Hospitality'
+}
+
 export default function RankingsPageContent() {
   const searchParams = useSearchParams()
   const cityParam = searchParams.get('city')
@@ -41,7 +57,18 @@ export default function RankingsPageContent() {
     setIsBrochureModalOpen(true)
   }
 
-  const categories = ['All', 'Engineering', 'Management', 'Medical', 'Pharmacy', 'Law', 'Architecture']
+  const [categories, setCategories] = useState<string[]>(['All'])
+
+  useEffect(() => {
+    async function fetchCategories() {
+      const { data } = await supabase.from('courses').select('category')
+      if (data) {
+         const uniqueCats = Array.from(new Set(data.map(c => CATEGORY_MAPPINGS[c.category] || c.category).filter(Boolean)))
+         setCategories(['All', ...uniqueCats.slice(0, 8)])
+      }
+    }
+    fetchCategories()
+  }, [])
 
   useEffect(() => {
     async function fetchRankings() {
