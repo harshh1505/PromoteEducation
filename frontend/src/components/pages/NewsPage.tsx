@@ -34,7 +34,7 @@ export default function NewsPageContent() {
           comments: item.comments_count > 0 ? String(item.comments_count) : undefined,
           shares: item.shares_count > 0 ? String(item.shares_count) : undefined,
           views: item.views >= 1000 ? `${(item.views / 1000).toFixed(1)}K` : String(item.views),
-          image: item.image_link,
+          image: item.image_link || 'https://images.unsplash.com/photo-1510074377623-8cf13fb86c08?w=800',
           slug: item.slug
         }))
         setArticles(mapped)

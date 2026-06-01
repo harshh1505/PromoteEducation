@@ -12,7 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/colleges/medical',
     '/admission-support',
     '/mentorship',
-    '/counseling',
+    '/counselling',
     '/selection',
     '/consultation',
     '/scholarships',

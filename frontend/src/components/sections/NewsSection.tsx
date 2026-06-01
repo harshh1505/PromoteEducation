@@ -66,6 +66,20 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 
+function stripMarkdown(text: string): string {
+  if (!text) return ''
+  return text
+    .replace(/<[^>]*>/g, '')
+    .replace(/^#+\s+/gm, '')
+    .replace(/([*_~`]{1,3})(\s*(?:(?!\1).)+?\s*)\1/g, '$2')
+    .replace(/[*_~`]/g, '')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/^\s*[-*_]{3,}\s*$/gm, '')
+    .replace(/^\s*>\s+/gm, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
 export default function NewsSection() {
   const [articles, setArticles] = useState<any[]>(newsItems)
 
@@ -81,22 +95,25 @@ export default function NewsSection() {
         console.error('Error fetching news from Supabase:', error)
       } else if (data && data.length > 0) {
         // Map database fields to the UI format
-        const mapped = data.map((item: any) => ({
-          isLive: item.is_live,
-          title: item.heading,
-          excerpt: item.content ? (item.content.length > 140 ? item.content.slice(0, 137) + '...' : item.content) : '',
-          author: item.editor,
-          date: new Date(item.date).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric'
-          }),
-          comments: item.comments_count > 0 ? String(item.comments_count) : undefined,
-          shares: item.shares_count > 0 ? String(item.shares_count) : undefined,
-          views: item.views >= 1000 ? `${(item.views / 1000).toFixed(1)}K` : String(item.views),
-          image: item.image_link,
-          slug: item.slug
-        }))
+        const mapped = data.map((item: any) => {
+          const cleanedContent = stripMarkdown(item.content || '')
+          return {
+            isLive: item.is_live,
+            title: item.heading,
+            excerpt: cleanedContent ? (cleanedContent.length > 140 ? cleanedContent.slice(0, 137) + '...' : cleanedContent) : '',
+            author: item.editor,
+            date: new Date(item.date).toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric'
+            }),
+            comments: item.comments_count > 0 ? String(item.comments_count) : undefined,
+            shares: item.shares_count > 0 ? String(item.shares_count) : undefined,
+            views: item.views >= 1000 ? `${(item.views / 1000).toFixed(1)}K` : String(item.views),
+            image: item.image_link || 'https://images.unsplash.com/photo-1510074377623-8cf13fb86c08?w=400',
+            slug: item.slug
+          }
+        })
         setArticles(mapped)
       }
     }

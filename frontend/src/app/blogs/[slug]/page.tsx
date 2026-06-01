@@ -15,9 +15,11 @@ import {
   ChevronRight,
   Bookmark,
   Check,
-  AlertTriangle
+  AlertTriangle,
+  ArrowRight
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import LeadModal from '@/components/ui/LeadModal'
 
 export default function BlogDetailsPage({ params }: { params: { slug: string } }) {
   const [blog, setBlog] = useState<any>(null)
@@ -25,8 +27,21 @@ export default function BlogDetailsPage({ params }: { params: { slug: string } }
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
+  const [showLeadModal, setShowLeadModal] = useState(false)
+  const [scrollProgress, setScrollProgress] = useState(0)
 
   const { slug } = params
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight
+      if (totalHeight > 0) {
+        setScrollProgress((window.scrollY / totalHeight) * 100)
+      }
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   useEffect(() => {
     async function loadData() {
@@ -158,7 +173,15 @@ export default function BlogDetailsPage({ params }: { params: { slug: string } }
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-white font-body selection:bg-sky-500 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-white font-body selection:bg-sky-500 selection:text-white relative">
+      {/* Top Scroll Progress Bar */}
+      <div className="fixed top-0 left-0 w-full h-[3px] bg-slate-100 z-50">
+        <div 
+          className="h-full bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-600 transition-all duration-75"
+          style={{ width: `${scrollProgress}%` }}
+        />
+      </div>
+
       <Navbar />
       
       <main className="flex-1 pt-32 pb-20">
@@ -172,64 +195,61 @@ export default function BlogDetailsPage({ params }: { params: { slug: string } }
             <ArrowLeft size={14} /> Back to Blogs
           </Link>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
             
             {/* Main Content Area */}
             <article className="lg:col-span-8">
               
               {/* Category / Meta Bar */}
-              <div className="flex items-center flex-wrap gap-4 mb-6">
-                <span className="px-3 py-1 bg-sky-50 text-sky-600 text-[10px] font-black uppercase tracking-widest rounded-md border border-sky-100">
+              <div className="flex items-center flex-wrap gap-3 mb-6">
+                <span className="text-[10px] font-black tracking-[0.2em] uppercase text-emerald-600">
                   {blog.category || 'Education'}
                 </span>
-                <div className="flex items-center gap-4 text-slate-400 text-[11px] font-medium">
-                  <span className="flex items-center gap-1">
-                    <Calendar size={12} /> 
-                    {new Date(blog.published_at).toLocaleDateString('en-US', {
-                      month: 'long',
-                      day: 'numeric',
-                      year: 'numeric'
-                    })}
-                  </span>
-                  <span className="w-1 h-1 rounded-full bg-slate-200" />
-                  <span className="flex items-center gap-1">
-                    <Clock size={12} /> {blog.read_time}
-                  </span>
-                  <span className="w-1 h-1 rounded-full bg-slate-200" />
-                  <span className="flex items-center gap-1">
-                    <Eye size={12} /> {blog.views} Views
-                  </span>
-                </div>
+                <span className="text-slate-200 text-xs">•</span>
+                <span className="text-[10px] text-slate-450 font-bold uppercase tracking-wider flex items-center gap-1">
+                  {new Date(blog.published_at).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                  })}
+                </span>
+                <span className="text-slate-200 text-xs">•</span>
+                <span className="text-[10px] text-slate-450 font-bold uppercase tracking-wider flex items-center gap-1">
+                  <Clock size={12} /> {blog.read_time}
+                </span>
+                <span className="text-slate-200 text-xs">•</span>
+                <span className="text-[10px] text-slate-450 font-bold uppercase tracking-wider flex items-center gap-1">
+                  <Eye size={12} /> {blog.views >= 1000 ? `${(blog.views / 1000).toFixed(1)}K` : blog.views} views
+                </span>
               </div>
 
               {/* Title */}
               <h1 
-                className="text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 leading-[1.15] tracking-tight mb-8"
-                style={{ fontFamily: 'var(--font-display)' }}
+                className="text-3xl md:text-4xl lg:text-[44px] font-black text-slate-900 leading-[1.12] tracking-tighter mb-8 font-display"
               >
                 {blog.title}
               </h1>
 
               {/* Author / Share Bar */}
-              <div className="flex items-center justify-between py-6 border-y border-slate-100 mb-8">
+              <div className="flex items-center justify-between py-6 border-y border-slate-100 mb-10">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 border border-slate-200 font-bold text-sm">
+                  <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-500 border border-slate-100 font-bold text-sm">
                     {blog.author?.[0] || 'P'}
                   </div>
                   <div>
                     <div className="text-sm font-black text-slate-900">{blog.author || 'Promote Education Contributor'}</div>
-                    <div className="text-[11px] text-slate-400 font-medium">Academic Specialist</div>
+                    <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Academic Advisor</div>
                   </div>
                 </div>
                 
                 <div className="flex items-center gap-2">
                   <button 
                     onClick={handleShare}
-                    className="flex items-center gap-2 px-4 py-2 rounded-full hover:bg-slate-50 text-slate-500 hover:text-slate-900 transition-all border border-slate-200 text-xs font-bold"
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-slate-50 text-slate-500 hover:text-slate-900 transition-all border border-slate-200 text-xs font-bold"
                   >
                     {copied ? (
                       <>
-                        <Check size={14} className="text-green-500" /> Copied Link
+                        <Check size={14} className="text-green-500" /> Copied
                       </>
                     ) : (
                       <>
@@ -242,7 +262,7 @@ export default function BlogDetailsPage({ params }: { params: { slug: string } }
 
               {/* Cover Image */}
               {blog.image_url && (
-                <div className="w-full aspect-video md:h-[400px] rounded-3xl overflow-hidden shadow-sm border border-slate-100 mb-10">
+                <div className="w-full h-[280px] md:h-[450px] rounded-[32px] overflow-hidden border border-slate-100 mb-12">
                   <img 
                     src={blog.image_url} 
                     alt={blog.title} 
@@ -260,13 +280,13 @@ export default function BlogDetailsPage({ params }: { params: { slug: string } }
                 prose-headings:font-black prose-headings:tracking-tight prose-headings:text-slate-900
                 prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
                 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
-                prose-p:text-slate-600 prose-p:leading-relaxed
-                prose-a:text-[#38b6ff] prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
+                prose-p:text-slate-650 prose-p:leading-relaxed prose-p:text-base
+                prose-a:text-emerald-600 prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
                 prose-strong:text-slate-800 prose-strong:font-bold
                 prose-ul:text-slate-600 prose-ol:text-slate-600
                 prose-li:my-1
-                prose-blockquote:border-l-[#38b6ff] prose-blockquote:text-slate-500 prose-blockquote:italic
-                prose-code:text-[#38b6ff] prose-code:bg-slate-100 prose-code:rounded prose-code:px-1 prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
+                prose-blockquote:border-l-emerald-500 prose-blockquote:text-slate-500 prose-blockquote:italic
+                prose-code:text-emerald-600 prose-code:bg-slate-50 prose-code:rounded prose-code:px-1 prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
                 prose-pre:bg-slate-900 prose-pre:text-slate-100 prose-pre:rounded-2xl
                 prose-img:rounded-2xl prose-img:shadow-md
                 prose-hr:border-slate-200">
@@ -276,87 +296,95 @@ export default function BlogDetailsPage({ params }: { params: { slug: string } }
               </article>
 
               {/* CTA callout */}
-              <div className="my-12 p-8 bg-sky-50/50 border border-sky-100 rounded-3xl text-sky-950">
-                <h3 className="text-base font-bold mb-2 flex items-center gap-2">
-                  <Bookmark size={16} className="text-sky-500" /> Confused about Admission Rules?
+              <div className="my-14 p-8 bg-slate-50 border border-slate-100 rounded-[28px] relative overflow-hidden">
+                <div className="absolute -top-12 -right-12 w-24 h-24 bg-emerald-50 rounded-full blur-xl pointer-events-none" />
+                <h3 className="text-base font-black text-slate-900 mb-3 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Confused about admission rules?
                 </h3>
-                <p className="text-slate-600 text-sm leading-relaxed mb-0">
-                  Talk directly to our top counsellors to build your custom academic timeline and find college options matching your rank and goals. Book a free consultation session today.
+                <p className="text-slate-500 text-xs leading-relaxed mb-5 font-medium">
+                  Our senior counselors can build a custom academic timeline and find college options matching your rank, budget, and goals. Speak directly to an expert today.
                 </p>
+                <button 
+                  onClick={() => setShowLeadModal(true)}
+                  className="px-6 py-3 bg-[#111111] hover:bg-slate-800 text-white font-bold text-[9px] uppercase tracking-widest rounded-xl transition-all flex items-center gap-2 w-fit"
+                >
+                  Book Free Consultation Session
+                  <ArrowRight size={12} />
+                </button>
               </div>
 
             </article>
 
             {/* Sidebar */}
-            <aside className="lg:col-span-4 space-y-8">
+            <aside className="lg:col-span-4 space-y-10 lg:sticky lg:top-32 h-fit">
               
               {/* Trending/Other Blogs */}
-              <div className="bg-slate-50 rounded-3xl p-6 border border-slate-100">
-                <h3 
-                  className="text-lg font-black text-slate-900 mb-6 flex items-center gap-2 border-b border-slate-200/60 pb-3"
-                  style={{ fontFamily: 'var(--font-display)' }}
-                >
-                  Trending Blogs
+              <div className="bg-white border border-slate-100 rounded-[28px] p-6 shadow-sm">
+                <h3 className="text-xs font-black text-slate-900 mb-6 uppercase tracking-wider border-b border-slate-50 pb-3">
+                  Trending Articles
                 </h3>
 
                 <div className="space-y-6">
                   {trending.length > 0 ? (
-                    trending.map((tBlog) => (
+                    trending.map((tBlog, index) => (
                       <Link 
                         href={`/blogs/${tBlog.slug}`} 
                         key={tBlog.slug} 
-                        className="group block"
+                        className="group flex gap-4 items-start"
                       >
-                        <div className="flex gap-4">
-                          {tBlog.image_url && (
-                            <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-slate-200">
-                              <img 
-                                src={tBlog.image_url} 
-                                alt="" 
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-                              />
-                            </div>
-                          )}
-                          <div className="flex-1 min-w-0">
-                            <h4 className="text-xs md:text-sm font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-sky-600 transition-colors mb-1">
-                              {tBlog.title}
-                            </h4>
-                            <div className="flex items-center gap-2 text-[10px] text-slate-400">
-                              <span>
-                                {new Date(tBlog.published_at).toLocaleDateString('en-US', {
-                                  month: 'short',
-                                  day: 'numeric'
-                                })}
-                              </span>
-                              <span>•</span>
-                              <span>{tBlog.views >= 1000 ? `${(tBlog.views / 1000).toFixed(1)}K` : tBlog.views} Views</span>
-                            </div>
+                        <span className="text-lg font-black text-slate-200 group-hover:text-emerald-500 transition-colors leading-none font-display">
+                          {String(index + 1).padStart(2, '0')}
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-xs md:text-sm font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-emerald-500 transition-colors mb-1">
+                            {tBlog.title}
+                          </h4>
+                          <div className="flex items-center gap-2 text-[10px] text-slate-400">
+                            <span>
+                              {new Date(tBlog.published_at).toLocaleDateString('en-US', {
+                                month: 'short',
+                                day: 'numeric'
+                              })}
+                            </span>
+                            <span>•</span>
+                            <span>{tBlog.views >= 1000 ? `${(tBlog.views / 1000).toFixed(1)}K` : tBlog.views} views</span>
                           </div>
                         </div>
                       </Link>
                     ))
                   ) : (
-                    <p className="text-xs text-slate-400">No other blogs available.</p>
+                    <p className="text-xs text-slate-400">No other articles available.</p>
                   )}
                 </div>
               </div>
 
-              {/* Call-to-action */}
-              <div className="bg-slate-900 text-white rounded-3xl p-8 relative overflow-hidden shadow-lg shadow-slate-900/10">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/10 rounded-full blur-2xl -mr-10 -mt-10" />
-                <div className="relative z-10">
-                  <span className="text-[10px] font-black text-sky-400 uppercase tracking-widest mb-2 block">Counselling</span>
-                  <h3 className="text-xl font-bold mb-4 leading-tight">Need expert help selecting a stream?</h3>
-                  <p className="text-slate-300 text-xs leading-relaxed mb-6">
-                    Connect with certified admission advisors who have helped over 50,000+ students secure seats in top Indian universities.
-                  </p>
-                  <Link 
-                    href="/admission-support" 
-                    className="w-full py-3 bg-white text-slate-900 font-bold rounded-xl text-center text-xs flex items-center justify-center gap-1.5 hover:bg-slate-100 transition-all"
-                  >
-                    Get Free Advice <ChevronRight size={14} />
-                  </Link>
+              {/* Counselor Help Widget */}
+              <div className="bg-slate-50 border border-slate-100 rounded-[28px] p-6 relative overflow-hidden shadow-sm hover:shadow-md hover:border-slate-200 transition-all duration-300">
+                {/* Decorative light gradient */}
+                <div className="absolute -top-12 -right-12 w-24 h-24 bg-emerald-100/50 rounded-full blur-xl pointer-events-none" />
+                
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                    Counselling open
+                  </span>
                 </div>
+                
+                <h3 className="text-slate-900 font-extrabold text-base mb-2">
+                  Need personalized advice?
+                </h3>
+                
+                <p className="text-slate-500 text-xs font-medium mb-5 leading-relaxed">
+                  Talk to our certified career advisors to map out your target colleges and admission strategy.
+                </p>
+                
+                <button 
+                  onClick={() => setShowLeadModal(true)}
+                  className="w-full py-3 bg-[#111111] hover:bg-slate-800 text-white font-bold text-[10px] uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2"
+                >
+                  Connect with advisor
+                  <ArrowRight size={12} />
+                </button>
               </div>
 
             </aside>
@@ -366,6 +394,13 @@ export default function BlogDetailsPage({ params }: { params: { slug: string } }
       </main>
 
       <Footer />
+      <LeadModal
+        isOpen={showLeadModal}
+        onClose={() => setShowLeadModal(false)}
+        collegeName="Top Indian Universities"
+        collegeLogo="https://ui-avatars.com/api/?name=Promote+Education&background=3B2EA8&color=fff"
+        stream="All Streams"
+      />
     </div>
   )
 }

@@ -174,7 +174,7 @@ const SPECIALTIES = [
     title: 'Psychiatric Nursing',
     count: '18 articles',
     textClass: 'text-teal-700',
-    description: 'Psychotherapy assistance, mental crisis management, substance abuse rehabilitation, and behavioral counseling.',
+    description: 'Psychotherapy assistance, mental crisis management, substance abuse rehabilitation, and behavioral counselling.',
     scope: 'Psychiatric Nurse Practitioner, Rehab Supervisor',
     recruiters: 'NIMHANS, Cadabams, Psychiatric Care Centers'
   },

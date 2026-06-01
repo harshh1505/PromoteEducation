@@ -31,10 +31,10 @@ const JOURNEY_LEVELS = [
     level: 'intermediate' as const,
     title: 'NEET Aspirant',
     subtitle: 'The Grind',
-    description: 'NEET exam strategy, dental college selection cutoffs, MCC counseling, and seat locking guidance.',
+    description: 'NEET exam strategy, dental college selection cutoffs, MCC counselling, and seat locking guidance.',
     articles: 64,
     icon: Target,
-    topics: ['NEET UG Strategy', 'Physics for NEET', 'Chemistry for NEET', 'Biology for NEET', 'Counseling Guide'],
+    topics: ['NEET UG Strategy', 'Physics for NEET', 'Chemistry for NEET', 'Biology for NEET', 'Counselling Guide'],
     extendedInfo: 'Formulating slot strategies, managing negative marking, and shortlisting government vs private BDS seats.'
   },
   {
@@ -93,7 +93,7 @@ const FREE_RESOURCES = [
   {
     icon: CheckSquare,
     title: 'SOP & Document Checklist',
-    description: 'Comprehensive checklist for MCC counseling documents, formats, and timelines.',
+    description: 'Comprehensive checklist for MCC counselling documents, formats, and timelines.',
     cta: 'Get Checklist',
     colorClass: 'bg-amber-600 hover:bg-amber-700',
     bgClass: 'bg-amber-50/50',
@@ -104,7 +104,7 @@ const FREE_RESOURCES = [
 
 const TESTIMONIALS = [
   {
-    quote: "This blog guided my BDS admission journey perfectly. The MCC counseling guides saved me from wasting my NEET rank on a low-patient-flow college.",
+    quote: "This blog guided my BDS admission journey perfectly. The MCC counselling guides saved me from wasting my NEET rank on a low-patient-flow college.",
     name: "Rahul Sharma",
     detail: "MAMC Delhi, BDS '28",
     avatar: "RS",
@@ -201,7 +201,7 @@ export default function BdsBlogPage() {
       heroGradient="Mastering Dentistry."
       heroSubtitle="Your complete dental career guide. India's most comprehensive resource for NEET UG dental preparation, clinical practices, and MDS pathways."
       searchPlaceholder="Search NEET dental strategy, Govt vs Private BDS, MDS entrance..."
-      trendingTopics={['NEET UG 2026', 'NEET-MDS Prep', 'AIIMS Dental', 'Dentist Salary', 'MCC Counseling', 'Private Dental Colleges', 'MDS Ortho', 'BDS Fees']}
+      trendingTopics={['NEET UG 2026', 'NEET-MDS Prep', 'AIIMS Dental', 'Dentist Salary', 'MCC Counselling', 'Private Dental Colleges', 'MDS Ortho', 'BDS Fees']}
       stats={STATS}
       journeyLevels={JOURNEY_LEVELS}
       freeResources={FREE_RESOURCES}

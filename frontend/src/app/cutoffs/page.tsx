@@ -16,7 +16,7 @@ const STREAMS = [
     title: 'Medical Sciences',
     subtitle: 'High Precision NEET Analysis',
     icon: Stethoscope,
-    description: 'Explore verified cutoff ranks for AIIMS, Govt. Colleges, and Private institutions across 28 states. Optimized for 2024-25 counseling.',
+    description: 'Explore verified cutoff ranks for AIIMS, Govt. Colleges, and Private institutions across 28 states. Optimized for 2024-25 counselling.',
     stats: ['150K+ Records', 'Real-time Stats'],
     color: 'emerald',
     href: '/cutoffs/medical',
@@ -173,7 +173,7 @@ export default function CutoffsPage() {
 
            <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
               {[
-                { title: 'Official Data', icon: Landmark, desc: 'Every rank and score is verified against MCC, JoSAA, and State counseling archives.' },
+                { title: 'Official Data', icon: Landmark, desc: 'Every rank and score is verified against MCC, JoSAA, and State counselling archives.' },
                 { title: 'Trend Analysis', icon: TrendingUp, desc: 'View 3-year historical trends to predict opening and closing ranks for the upcoming cycle.' },
                 { title: 'Expert Support', icon: GraduationCap, desc: 'Get personalized choice-filling assistance from our network of expert counselors.' }
               ].map((item, idx) => (

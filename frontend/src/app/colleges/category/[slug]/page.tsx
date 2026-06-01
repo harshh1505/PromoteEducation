@@ -174,7 +174,7 @@ export default async function CategoryPage({ params }: { params: { slug: string 
                 <h4 className="text-2xl font-bold mb-4">Need Career Guidance?</h4>
                 <p className="text-sky-100 mb-6 leading-relaxed">Talk to our experts and find the perfect college matching your profile and budget.</p>
                 <button className="w-full bg-white text-sky-600 py-4 rounded-xl font-bold shadow-lg hover:bg-sky-50 transition-colors uppercase tracking-wider text-sm">
-                  Get Free Counseling
+                  Get Free Counselling
                 </button>
               </div>
               <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700" />

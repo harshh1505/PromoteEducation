@@ -93,7 +93,7 @@ export default function CourseBlogPage({ course, slug }: CourseBlogPageProps) {
 
               <div className="flex flex-wrap gap-4">
                 <button className="px-10 py-5 rounded-2xl bg-slate-900 text-white font-black text-xs uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10 active:scale-95">
-                  Book Counseling →
+                  Book Counselling →
                 </button>
                 <button className="px-10 py-5 rounded-2xl bg-white border-2 border-slate-100 text-slate-900 font-black text-xs uppercase tracking-widest hover:bg-slate-50 transition-all active:scale-95">
                   Download Guide
@@ -172,7 +172,7 @@ export default function CourseBlogPage({ course, slug }: CourseBlogPageProps) {
                 <div className="space-y-4">
                   <input className="w-full p-5 bg-white/5 border border-white/10 rounded-2xl text-sm font-medium focus:outline-none focus:border-sky-500 transition-colors" placeholder="your@email.com" />
                   <button className="w-full py-5 bg-sky-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-sky-400 transition-all shadow-xl shadow-sky-500/20 active:scale-95">
-                    Join Counseling Waitlist
+                    Join Counselling Waitlist
                   </button>
                 </div>
               </div>

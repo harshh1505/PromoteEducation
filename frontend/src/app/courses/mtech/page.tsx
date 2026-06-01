@@ -93,7 +93,7 @@ const FREE_RESOURCES = [
   {
     icon: CheckSquare,
     title: 'COAP/CCMT Checklist',
-    description: 'Checklist for counseling documentation, seat acceptance, and offer rejection rules.',
+    description: 'Checklist for counselling documentation, seat acceptance, and offer rejection rules.',
     cta: 'Get Checklist',
     colorClass: 'bg-amber-600 hover:bg-amber-700',
     bgClass: 'bg-amber-50/50',
@@ -104,7 +104,7 @@ const FREE_RESOURCES = [
 
 const TESTIMONIALS = [
   {
-    quote: "This portal helped me navigate the COAP counseling rounds when I was extremely confused between IIT Delhi and IIT Bombay. Lifesaver!",
+    quote: "This portal helped me navigate the COAP counselling rounds when I was extremely confused between IIT Delhi and IIT Bombay. Lifesaver!",
     name: "Sandeep Kumar",
     detail: "IIT Bombay, M.Tech CSE '27",
     avatar: "SK",
@@ -201,7 +201,7 @@ export default function MtechBlogPage() {
       heroGradient="Your Specialization Starts Here."
       heroSubtitle="India's most trusted resource for GATE preparation, post-graduate engineering specializations, and R&D/PSU career paths."
       searchPlaceholder="Search GATE strategy, IIT M.Tech cutoffs, specializations..."
-      trendingTopics={['GATE 2026', 'IIT M.Tech', 'COAP 2026', 'CCMT Counseling', 'AI/ML Spec', 'PSU Jobs', 'Stipends']}
+      trendingTopics={['GATE 2026', 'IIT M.Tech', 'COAP 2026', 'CCMT Counselling', 'AI/ML Spec', 'PSU Jobs', 'Stipends']}
       stats={STATS}
       journeyLevels={JOURNEY_LEVELS}
       freeResources={FREE_RESOURCES}

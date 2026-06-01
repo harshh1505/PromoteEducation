@@ -24,7 +24,7 @@ const features = [
     desc: 'Get expert help for admissions in India and abroad with the right college and course selection guidance.',
     icon: GraduationCap,
     color: 'from-purple-400 to-indigo-500',
-    href: '/counseling'
+    href: '/counselling'
   },
   {
     title: 'Complete End-to-End Process',
@@ -38,7 +38,7 @@ const features = [
     desc: 'Our expert team provides honest advice and proven strategies to help you choose the right career path.',
     icon: UserCheck,
     color: 'from-rose-400 to-pink-500',
-    href: '/counseling'
+    href: '/counselling'
   },
   {
     title: 'Fast & Hassle-Free Admission',

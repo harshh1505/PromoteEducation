@@ -36,7 +36,7 @@ const SITEMAP_DATA = [
     color: 'text-sky-500',
     links: [
       { label: 'Admission Support', href: '/admission-support' },
-      { label: 'Counselling Strategy', href: '/counseling' },
+      { label: 'Counselling Strategy', href: '/counselling' },
       { label: 'Career Mentorship', href: '/mentorship' },
       { label: 'College Selection', href: '/selection' },
       { label: 'Expert Consultation', href: '/consultation' },
@@ -68,7 +68,7 @@ const SITEMAP_DATA = [
       { label: 'CUET UG', href: '/exams/cuet-ug' },
       { label: 'WBJEE Portal', href: '/exams/wbjee' },
       { label: 'COMEDK & KCET', href: '/exams/comedk' },
-      { label: 'TNEA Counseling', href: '/exams/tnea' },
+      { label: 'TNEA Counselling', href: '/exams/tnea' },
     ]
   },
   {

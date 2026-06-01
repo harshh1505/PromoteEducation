@@ -61,7 +61,7 @@ const SERVICES = [
     icon: Bell,
     title: "Alerts & Notifications",
     desc: "A personalized command center for your deadlines. Real-time updates via WhatsApp, SMS, and Email for every critical event in the admission cycle.",
-    features: ["Real-time Deadlines", "Exam Date Reminders", "Counseling Call Alerts", "Result Publication Pushes"]
+    features: ["Real-time Deadlines", "Exam Date Reminders", "Counselling Call Alerts", "Result Publication Pushes"]
   },
   {
     icon: Calendar,
@@ -85,7 +85,7 @@ const SERVICES = [
     icon: ShieldCheck,
     title: "NRI & Management Quota",
     desc: "Expert guidance for specialized seats. We help you navigate the eligibility and documentation required for NRI, Sponsored, and Management quotas.",
-    features: ["Eligibility Assessment", "Sponsorship Documentation", "Direct Admission Tracking", "Quota-specific Counseling"]
+    features: ["Eligibility Assessment", "Sponsorship Documentation", "Direct Admission Tracking", "Quota-specific Counselling"]
   },
   {
     icon: Clock,
@@ -105,7 +105,7 @@ const STEPS = [
   { n: '01', title: 'Phase 1: Registration', time: 'Nov – Jan', desc: 'Managing exam registrations for JEE, NEET, and university-specific entrances. We track 50+ deadlines simultaneously.' },
   { n: '02', title: 'Phase 2: Correction', time: 'Feb – April', desc: 'Opening the window for data correction, photo re-uploads, and ensuring your admit card generates without errors.' },
   { n: '03', title: 'Phase 3: Result Audit', time: 'May – June', desc: 'Analyzing your rank and percentile to determine the best possible tier-1 and tier-2 college options across India.' },
-  { n: '04', title: 'Phase 4: Counseling', time: 'June – Aug', desc: 'Strategic choice filling for JoSAA, MCC, and state rounds. Handling up to 7 rounds of allotment and upgrades.' },
+  { n: '04', title: 'Phase 4: Counselling', time: 'June – Aug', desc: 'Strategic choice filling for JoSAA, MCC, and state rounds. Handling up to 7 rounds of allotment and upgrades.' },
   { n: '05', title: 'Phase 5: Spot Rounds', time: 'Aug – Sept', desc: 'Maximizing chances in CSAB and institutional spot rounds where leftover seats in top colleges are filled at lower ranks.' },
   { n: '06', title: 'Phase 6: Enrollment', time: 'Sept – Oct', desc: 'Final document submission, physical verification, and commencement of the first semester of your degree.' },
 ]
@@ -133,13 +133,13 @@ const PROCESS_STEPS = [
   },
   { 
     title: 'Round-by-Round Optimization', 
-    desc: 'Counseling is a marathon. We guide you on when to "Float," "Freeze," or "Slide" after each round to ensure you get the best possible upgrade in subsequent counseling stages.' 
+    desc: 'Counselling is a marathon. We guide you on when to "Float," "Freeze," or "Slide" after each round to ensure you get the best possible upgrade in subsequent counselling stages.' 
   },
 ]
 
 const FAQS = [
   {
-    q: "What is JoSAA and MCC counseling?",
+    q: "What is JoSAA and MCC counselling?",
     a: "JoSAA handles admissions for 23 IITs, 31 NITs, and IIITs. MCC manages 15% All India Quota for MBBS/BDS in government colleges and 100% in Deemed/Central Universities. We provide specialized guidance for both."
   },
   {
@@ -156,7 +156,7 @@ const FAQS = [
   },
   {
     q: "Is your support limited to only one exam?",
-    a: "No. Our 'Premium Admission Support' covers up to 5 different entrance exams and their subsequent counseling rounds, ensuring you have multiple safety nets for your career."
+    a: "No. Our 'Premium Admission Support' covers up to 5 different entrance exams and their subsequent counselling rounds, ensuring you have multiple safety nets for your career."
   },
   {
     q: "How do you help in choice-filling?",
@@ -391,7 +391,7 @@ export default function AdmissionSupportPage() {
                       items: ['Caste/Category Certificate', 'Income Certificate (latest)', 'Domicile Certificate', 'Gap Year Affidavit (if applicable)'],
                     },
                     {
-                      cat: 'Counseling Kit',
+                      cat: 'Counselling Kit',
                       items: ['Entrance Exam Admit Card', 'Result / Rank Card', 'Seat Allotment Letter', 'Registration Fee Receipts'],
                     },
                   ].map((col) => (
@@ -426,7 +426,7 @@ export default function AdmissionSupportPage() {
                       { t: 'Expertise in 50+ Entrances', d: 'From national exams like JEE/NEET to state-specific WBJEE, KCET, and COMEDK.' },
                       { t: '100% Success in Documentation', d: 'We have a zero-rejection track record for category and income certificates.' },
                       { t: 'Data-Driven Choice Lists', d: 'Preference orders generated using our proprietary rank-matching algorithm.' },
-                      { t: 'Round-the-Clock Support', d: 'Direct access to senior admission experts during high-stress counseling rounds.' }
+                      { t: 'Round-the-Clock Support', d: 'Direct access to senior admission experts during high-stress counselling rounds.' }
                     ].map((item, i) => (
                       <li key={i} className="flex items-start gap-4">
                         <div className="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 mt-1">
@@ -442,7 +442,7 @@ export default function AdmissionSupportPage() {
                 </div>
                 <div className="bg-white border border-slate-200 rounded-3xl p-10 shadow-sm relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/5 rounded-full -mr-16 -mt-16" />
-                  <p className="text-[10px] font-black text-sky-500 uppercase tracking-widest mb-6">Counseling Statistics 2025</p>
+                  <p className="text-[10px] font-black text-sky-500 uppercase tracking-widest mb-6">Counselling Statistics 2025</p>
                   <div className="space-y-8 relative z-10">
                     {[
                       { l: 'Successful Allotments', v: '98.4%', p: 'w-[98.4%]' },
@@ -500,7 +500,7 @@ export default function AdmissionSupportPage() {
                   ['/exams/jee-main', 'JEE Main 2026 Cutoffs'],
                   ['/colleges/medical', 'Top Medical Colleges India'],
                   ['/colleges/engineering', 'Best Engineering Colleges'],
-                  ['/counseling', 'JoSAA Choice Filling Support'],
+                  ['/counselling', 'JoSAA Choice Filling Support'],
                   ['/mentorship', 'One-on-One Mentorship'],
                   ['/tools/college-predictor', 'Rank Predictor Tool'],
                   ['/articles/neet-eligibility-2026', 'NEET Eligibility Criteria'],
@@ -532,7 +532,7 @@ export default function AdmissionSupportPage() {
                   <span className="text-sky-400">Let's Secure Your Seat.</span>
                 </h2>
                 <p className="text-slate-300 font-medium max-w-2xl mx-auto mb-10 text-lg leading-relaxed relative z-10">
-                  Join 15,000+ students who secured top-tier admissions via Promote Education. Our helpdesk is active 24/7 during counseling rounds.
+                  Join 15,000+ students who secured top-tier admissions via Promote Education. Our helpdesk is active 24/7 during counselling rounds.
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-6 relative z-10">
                   <Link

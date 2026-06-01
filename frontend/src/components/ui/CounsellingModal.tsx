@@ -69,7 +69,7 @@ export default function CounsellingModal({ isOpen, onClose }: CounsellingModalPr
               <TrendingUp className="text-[#38b6ff]" size={20} />
             </div>
             <h3 className="text-2xl font-black text-white leading-tight mb-3">
-              Expert<br /><span className="text-[#38b6ff]">Counseling</span>
+              Expert<br /><span className="text-[#38b6ff]">Counselling</span>
             </h3>
             <p className="text-xs text-slate-400 leading-relaxed mb-6">
               Join 50k+ students who found their right career path with our experts.

@@ -55,7 +55,7 @@ const exploreGroups: ExploreGroup[] = [
     items: [
       { label: 'Admission Support', href: '/admission-support', icon: 'ShieldCheck', badge: 'High Priority' },
       { label: 'Career Mentorship', href: '/mentorship', icon: 'Users' },
-      { label: 'Counselling Strategy', href: '/counseling', icon: 'Compass' },
+      { label: 'Counselling Strategy', href: '/counselling', icon: 'Compass' },
       { label: 'Selection Support', href: '/selection', icon: 'Target' },
       { label: 'Expert Consultation', href: '/consultation', icon: 'Video', badge: 'Free' },
       { label: 'Scholarship Guide', href: '/scholarships', icon: 'Coins', status: '2026' },

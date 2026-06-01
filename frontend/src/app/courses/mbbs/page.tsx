@@ -31,10 +31,10 @@ const JOURNEY_LEVELS = [
     level: 'intermediate' as const,
     title: 'NEET Aspirant',
     subtitle: 'The Grind',
-    description: 'Mock test strategy, college shortlisting, MCC counseling navigation, and state quota mastery.',
+    description: 'Mock test strategy, college shortlisting, MCC counselling navigation, and state quota mastery.',
     articles: 68,
     icon: Target,
-    topics: ['NEET UG Strategy', 'Physics & Chem Prep', 'MCC Counseling', 'State vs AIQ Quota', 'Document Verification'],
+    topics: ['NEET UG Strategy', 'Physics & Chem Prep', 'MCC Counselling', 'State vs AIQ Quota', 'Document Verification'],
     extendedInfo: 'Focusing on NEET MCQ practices, handling negative marking, and choice-locking preferences during MCC seat allocation.'
   },
   {
@@ -92,8 +92,8 @@ const FREE_RESOURCES = [
   },
   {
     icon: CheckSquare,
-    title: 'MCC Counseling Checklist',
-    description: 'Checklist for counseling documentation, round schedules, and stray rounds.',
+    title: 'MCC Counselling Checklist',
+    description: 'Checklist for counselling documentation, round schedules, and stray rounds.',
     cta: 'Get Checklist',
     colorClass: 'bg-amber-600 hover:bg-amber-700',
     bgClass: 'bg-amber-50/50',
@@ -104,7 +104,7 @@ const FREE_RESOURCES = [
 
 const TESTIMONIALS = [
   {
-    quote: "This blog single-handedly guided my MBBS admission journey. The MCC counseling guide saved me from making huge mistakes in choice filling.",
+    quote: "This blog single-handedly guided my MBBS admission journey. The MCC counselling guide saved me from making huge mistakes in choice filling.",
     name: "Neha Sharma",
     detail: "AIIMS New Delhi, MBBS '28",
     avatar: "NS",

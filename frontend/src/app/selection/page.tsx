@@ -490,7 +490,7 @@ export default function SelectionPage() {
                   ['/colleges/medical', 'Best Medical Colleges'],
                   ['/colleges/engineering', 'Best Engineering Colleges'],
                   ['/mentorship', 'Expert Mentorship'],
-                  ['/counseling', 'Counselling Strategy'],
+                  ['/counselling', 'Counselling Strategy'],
                   ['/tools/college-predictor', 'College Predictor Tool'],
                   ['/rankings', 'Latest Rankings 2026'],
                   ['/#compare-section', 'Compare Colleges'],

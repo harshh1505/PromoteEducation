@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 const footerLinks = {
   Exams: ['JEE Main', 'NEET', 'CAT', 'CUET', 'All exams'],
   Courses: ['BTech', 'MBA', 'MBBS', 'BDS', 'Others'],
-  Services: ['Mentorship', 'Scholarship', 'Counseling', 'Admission Support', 'Selection', 'Consultation'],
+  Services: ['Mentorship', 'Scholarship', 'Counselling', 'Admission Support', 'Selection', 'Consultation'],
   Company: ['About', 'Careers', 'Events', 'Contact Us', 'FAQ', 'Sitemap'],
 }
 

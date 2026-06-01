@@ -105,7 +105,7 @@ export default function ExitIntentPopup() {
               Get the 2026 College<br />Admission Guide PDF
             </h3>
             <p className="text-slate-400 text-[11px] mt-2 leading-relaxed">
-              Includes cutoffs, fees structure, and direct quota counseling secrets.
+              Includes cutoffs, fees structure, and direct quota counselling secrets.
             </p>
           </div>
         </div>

@@ -32,10 +32,10 @@ const JOURNEY_LEVELS = [
     level: 'intermediate' as const,
     title: 'JEE Aspirant',
     subtitle: 'The Grind',
-    description: 'Mock test strategy, college shortlisting, JoSAA/CSAB counseling, and branch prioritization.',
+    description: 'Mock test strategy, college shortlisting, JoSAA/CSAB counselling, and branch prioritization.',
     articles: 64,
     icon: Target,
-    topics: ['JEE Mains Strategy', 'JEE Advanced Prep', 'JOSAA Counseling', 'College Shortlisting', 'SOP & Documents'],
+    topics: ['JEE Mains Strategy', 'JEE Advanced Prep', 'JOSAA Counselling', 'College Shortlisting', 'SOP & Documents'],
     extendedInfo: 'Navigating previous cutoffs, category quotas, seat allocation rules, and optimizing your options order list.'
   },
   {
@@ -94,7 +94,7 @@ const FREE_RESOURCES = [
   {
     icon: CheckSquare,
     title: 'SOP & Document Checklist',
-    description: 'Pre-counseling workbook to streamline document preparation and validation steps.',
+    description: 'Pre-counselling workbook to streamline document preparation and validation steps.',
     cta: 'Get Checklist',
     colorClass: 'bg-amber-600 hover:bg-amber-700',
     bgClass: 'bg-amber-50/50',
@@ -105,7 +105,7 @@ const FREE_RESOURCES = [
 
 const TESTIMONIALS = [
   {
-    quote: "This blog single-handedly guided my B.Tech admission journey. The JOSAA counseling guide saved me from making huge mistakes.",
+    quote: "This blog single-handedly guided my B.Tech admission journey. The JOSAA counselling guide saved me from making huge mistakes.",
     name: "Rahul Sharma",
     detail: "IIT Delhi, CSE '28",
     avatar: "RS",

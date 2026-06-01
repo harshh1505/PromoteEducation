@@ -171,7 +171,7 @@ export default function BrochureModal({
           </div>
 
           <div className="relative z-10 space-y-3">
-            {['Official Brochure & Fees', 'Placement Stats 2025', 'Scholarship Guidance', 'Expert Counseling'].map((item, i) => (
+            {['Official Brochure & Fees', 'Placement Stats 2025', 'Scholarship Guidance', 'Expert Counselling'].map((item, i) => (
               <div key={i} className="flex items-center gap-2 text-slate-300">
                 <div className="w-4 h-4 rounded-full bg-[#38b6ff]/15 flex items-center justify-center shrink-0">
                   <CheckCircle2 size={9} className="text-[#38b6ff]" />

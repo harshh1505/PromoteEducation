@@ -339,10 +339,10 @@ export default async function CourseSlugPage({ params }: any) {
                 </div>
 
                 <Link
-                  href="/counseling"
+                  href="/counselling"
                   className="w-full flex items-center justify-center gap-2 py-3.5 sm:py-4 rounded-xl sm:rounded-2xl font-black text-[10px] sm:text-xs uppercase tracking-widest text-white bg-sky-600 hover:bg-sky-700 transition-all mt-2"
                 >
-                  Get Free Counseling <ArrowRight size={14} />
+                  Get Free Counselling <ArrowRight size={14} />
                 </Link>
               </div>
             </div>

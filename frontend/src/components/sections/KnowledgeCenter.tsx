@@ -157,7 +157,7 @@ export default function KnowledgeCenter() {
                   Our expert counselors have helped thousands of students secure seats in top medical colleges like AIIMS Kalyani.
                 </p>
                 <button className="w-full py-4 bg-sky-500 hover:bg-sky-400 text-white font-bold rounded-xl transition-all shadow-lg shadow-sky-500/20 flex items-center justify-center gap-2 group">
-                  Get Free Counseling
+                  Get Free Counselling
                   <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </button>
                 <div className="mt-6 flex items-center gap-3 text-white/50 text-xs font-medium">

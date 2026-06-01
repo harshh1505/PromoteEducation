@@ -484,7 +484,7 @@ export default function ConsultationPage() {
                   ['/admission-support', 'Admission Support 2026'],
                   ['/scholarships', 'Scholarship Guide India'],
                   ['/mentorship', 'Expert Mentorship'],
-                  ['/counseling', 'Counselling Strategy'],
+                  ['/counselling', 'Counselling Strategy'],
                   ['/selection', 'Smart College Selection'],
                   ['/tools/college-predictor', 'College Predictor Tool'],
                   ['/articles/career-pivot-guide', 'Career Pivot Guide'],

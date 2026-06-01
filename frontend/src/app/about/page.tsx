@@ -516,7 +516,7 @@ export default function AboutPage() {
 
                             <div className="space-y-6 max-w-2xl leading-relaxed text-slate-500 text-sm md:text-base font-medium mb-12">
                                 <p className="text-slate-700 text-base md:text-lg">
-                                    Promote Education stands as India's premier admissions authority, bridging the gap between student aspirations and institutional excellence. For over 15 years, we have meticulously analyzed the academic landscape to provide data-driven, empathetic counseling to over 50,000 students.
+                                    Promote Education stands as India's premier admissions authority, bridging the gap between student aspirations and institutional excellence. For over 15 years, we have meticulously analyzed the academic landscape to provide data-driven, empathetic counselling to over 50,000 students.
                                 </p>
                                 <p>
                                     Our mission is simple: To democratize high-end career guidance. We leverage proprietary institutional data, placement metrics, and real-world outcomes to ensure that your choice of college is a strategic step toward a lifelong career, not just a four-year degree.
@@ -753,7 +753,7 @@ export default function AboutPage() {
                     <div className="grid lg:grid-cols-2 gap-x-16 gap-y-12 max-w-6xl mx-auto">
                         {[
                             {
-                                title: 'Student-First Counseling',
+                                title: 'Student-First Counselling',
                                 desc: 'Unbiased, research-backed guidance aligned to your goals. We don\'t just look at grades; we look at aspirations, budget, and long-term career viability.',
                                 icon: Heart
                             },

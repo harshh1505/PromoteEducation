@@ -41,9 +41,9 @@ export const metadata: Metadata = {
     description:
       'Maximize your rank potential with scientific choice filling. End-to-end counselling support for all major national and state-level entrance exams.',
     type: 'website',
-    url: 'https://promoteeducation.in/counseling',
+    url: 'https://promoteeducation.in/counselling',
   },
-  alternates: { canonical: 'https://promoteeducation.in/counseling' },
+  alternates: { canonical: 'https://promoteeducation.in/counselling' },
 }
 
 // ─────────────────────────────────────────────
@@ -154,7 +154,7 @@ const FAQS = [
 // ─────────────────────────────────────────────
 // PAGE COMPONENT
 // ─────────────────────────────────────────────
-export default function CounselingPage() {
+export default function CounsellingPage() {
   const jsonLdService = {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -195,7 +195,7 @@ export default function CounselingPage() {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://promoteeducation.in' },
-      { '@type': 'ListItem', position: 2, name: 'Counselling', item: 'https://promoteeducation.in/counseling' },
+      { '@type': 'ListItem', position: 2, name: 'Counselling', item: 'https://promoteeducation.in/counselling' },
     ],
   }
 
@@ -224,7 +224,7 @@ export default function CounselingPage() {
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12">
               <div className="flex-1 max-w-3xl">
                 <div className="inline-flex items-center gap-2 bg-sky-50 border border-sky-100 text-sky-700 text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-sm mb-6">
-                  Counseling Cycle 2026 · Strategy Hub Open
+                  Counselling Cycle 2026 · Strategy Hub Open
                 </div>
 
                 <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-[1] mb-6">

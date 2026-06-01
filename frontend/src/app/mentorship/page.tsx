@@ -113,7 +113,7 @@ const STEPS = [
   { n: '03', title: 'Phase 3: Intensification', time: 'Month 3-5', desc: 'Deep-diving into complex problem solving and increasing study stamina for long-duration exams.' },
   { n: '04', title: 'Phase 4: Mock Mastery', time: 'Month 6-8', desc: 'Transitioning to full-length tests with focus on speed, accuracy, and minimizing negative marking.' },
   { n: '05', title: 'Phase 5: Final Strategy', time: 'Month 9-11', desc: 'Refining the final attempt strategy, revision of high-yield topics, and mental conditioning.' },
-  { n: '06', title: 'Phase 6: Result & Beyond', time: 'Month 12', desc: 'Post-exam analysis, counseling guidance, and transition into your dream college campus.' },
+  { n: '06', title: 'Phase 6: Result & Beyond', time: 'Month 12', desc: 'Post-exam analysis, counselling guidance, and transition into your dream college campus.' },
 ]
 
 const PROCESS_STEPS = [
@@ -380,7 +380,7 @@ export default function MentorshipPage() {
                     },
                     {
                       cat: 'Career Readiness',
-                      items: ['Profile Audit Reports', 'Networking Opportunities', 'University Choice Guidance', 'Mental Health Counseling'],
+                      items: ['Profile Audit Reports', 'Networking Opportunities', 'University Choice Guidance', 'Mental Health Counselling'],
                     },
                   ].map((col) => (
                     <div key={col.cat}>
@@ -489,7 +489,7 @@ export default function MentorshipPage() {
                   ['/exams/jee-main', 'JEE Main Prep Guide'],
                   ['/colleges/medical', 'Top Medical Colleges'],
                   ['/colleges/engineering', 'Top Engineering Colleges'],
-                  ['/counseling', 'Counselling Experts'],
+                  ['/counselling', 'Counselling Experts'],
                   ['/tools/college-predictor', 'College Predictor Tool'],
                   ['/articles/best-books-neet', 'Best Books for NEET'],
                   ['/articles/jee-advanced-preparation-strategy', 'JEE Advanced Strategy'],
