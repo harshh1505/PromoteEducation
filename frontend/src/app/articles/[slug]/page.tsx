@@ -1,3 +1,4 @@
+import ReactMarkdown from 'react-markdown'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Link from 'next/link'
@@ -97,8 +98,20 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
               dbArticle.sections.map((section, idx) => (
                 <div key={idx} className="mb-12">
                   <h2 className="text-2xl font-black text-slate-900 mt-12 mb-6">{section.title}</h2>
-                  <div className="text-slate-600 leading-relaxed text-[16px] space-y-4">
-                    {section.content}
+                  <div className="prose prose-slate prose-base max-w-none
+                    prose-p:text-slate-600 prose-p:leading-relaxed
+                    prose-headings:font-black prose-headings:text-slate-900
+                    prose-a:text-[#38b6ff] prose-a:no-underline hover:prose-a:underline
+                    prose-strong:text-slate-800
+                    prose-ul:text-slate-600 prose-ol:text-slate-600
+                    prose-li:my-1
+                    prose-blockquote:border-l-[#38b6ff] prose-blockquote:text-slate-500 prose-blockquote:italic
+                    prose-code:text-[#38b6ff] prose-code:bg-slate-100 prose-code:rounded prose-code:px-1 prose-code:before:content-none prose-code:after:content-none">
+                    {typeof section.content === 'string' ? (
+                      <ReactMarkdown>{section.content}</ReactMarkdown>
+                    ) : (
+                      section.content
+                    )}
                   </div>
                 </div>
               ))

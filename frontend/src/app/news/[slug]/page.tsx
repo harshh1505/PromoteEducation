@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import ReactMarkdown from 'react-markdown'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Link from 'next/link'
@@ -261,13 +262,24 @@ export default function NewsArticleDetailsPage({ params }: { params: { slug: str
               )}
 
               {/* Article Content Body */}
-              <div className="prose prose-slate max-w-none">
-                <div className="text-slate-600 leading-relaxed text-base md:text-lg space-y-6 font-light">
-                  {article.content.split('\n\n').map((paragraph: string, index: number) => (
-                    <p key={index}>{paragraph}</p>
-                  ))}
-                </div>
-              </div>
+              <article className="prose prose-slate prose-lg max-w-none
+                prose-headings:font-black prose-headings:tracking-tight prose-headings:text-slate-900
+                prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
+                prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
+                prose-p:text-slate-600 prose-p:leading-relaxed
+                prose-a:text-[#38b6ff] prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
+                prose-strong:text-slate-800 prose-strong:font-bold
+                prose-ul:text-slate-600 prose-ol:text-slate-600
+                prose-li:my-1
+                prose-blockquote:border-l-[#38b6ff] prose-blockquote:text-slate-500 prose-blockquote:italic
+                prose-code:text-[#38b6ff] prose-code:bg-slate-100 prose-code:rounded prose-code:px-1 prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
+                prose-pre:bg-slate-900 prose-pre:text-slate-100 prose-pre:rounded-2xl
+                prose-img:rounded-2xl prose-img:shadow-md
+                prose-hr:border-slate-200">
+                <ReactMarkdown>
+                  {article.content}
+                </ReactMarkdown>
+              </article>
 
               {/* Side note / Advice block */}
               <div className="my-12 p-8 bg-sky-50/50 border border-sky-100 rounded-3xl text-sky-950 relative overflow-hidden">
