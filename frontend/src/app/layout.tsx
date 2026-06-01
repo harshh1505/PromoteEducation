@@ -24,6 +24,14 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/icon.png', type: 'image/png', sizes: '32x32' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/apple-icon.png',
+  },
   openGraph: {
     title: 'Promote Education — Find Your Dream College in India',
     description: "Compare rankings, fees, and placements for 50,000+ institutions. India's most trusted college discovery platform.",

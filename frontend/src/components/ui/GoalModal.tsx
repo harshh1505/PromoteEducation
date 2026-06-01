@@ -150,22 +150,22 @@ export default function GoalModal({ isOpen, onClose }: GoalModalProps) {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-300">
-      <div className="bg-white w-full max-w-5xl rounded-[40px] overflow-hidden shadow-2xl flex flex-col md:flex-row relative animate-in zoom-in-95 duration-500">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-300">
+      <div className="bg-white w-full max-w-5xl rounded-[28px] overflow-hidden shadow-2xl flex flex-col md:flex-row relative animate-in zoom-in-95 duration-300">
         
         {/* Left Side: Progress & Info */}
         <div className="w-full md:w-80 bg-slate-900 p-8 text-white flex flex-col justify-between relative overflow-hidden shrink-0">
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-10">
-                <GraduationCap size={32} className="text-sky-500" />
-                <span className="text-sm font-black tracking-widest text-sky-400">GOAL WIZARD</span>
+                <GraduationCap size={32} className="text-[#38b6ff]" />
+                <span className="text-sm font-black tracking-widest text-[#38b6ff]">GOAL WIZARD</span>
             </div>
             <div className="space-y-6">
               {steps.map((s) => (
                 <div key={s.id} className="flex gap-4 items-center">
                   <div className={cn(
                     "w-6 h-6 rounded-full border-2 flex items-center justify-center text-[10px] font-black transition-all",
-                    step === s.id ? "bg-sky-500 border-sky-500 text-white" : 
+                    step === s.id ? "bg-[#38b6ff] border-[#38b6ff] text-white" : 
                     step > s.id ? "bg-emerald-500 border-emerald-500 text-white" : "border-white/20 text-white/20"
                   )}>
                     {step > s.id ? '✓' : s.id}
@@ -183,7 +183,7 @@ export default function GoalModal({ isOpen, onClose }: GoalModalProps) {
           
           <div className="relative z-10 pt-12">
             <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
-                <p className="text-[10px] font-black uppercase tracking-widest text-sky-500 mb-2">Smart Matching</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-[#38b6ff] mb-2">Smart Matching</p>
                 <p className="text-[11px] font-medium text-white/40 leading-relaxed italic">
                   "Our algorithm analyzes your interests and budget to recommend the most favourable academic paths for your career."
                 </p>
@@ -197,7 +197,7 @@ export default function GoalModal({ isOpen, onClose }: GoalModalProps) {
         <div className="flex-1 p-8 md:p-12 flex flex-col max-h-[90vh] overflow-y-auto">
           <button 
             onClick={onClose}
-            className="absolute top-8 right-8 p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400"
+            className="absolute top-5 right-5 w-9 h-9 flex items-center justify-center bg-slate-100 hover:bg-slate-200 rounded-full transition-all z-50"
           >
             <X size={20} />
           </button>
@@ -216,7 +216,7 @@ export default function GoalModal({ isOpen, onClose }: GoalModalProps) {
                     onClick={() => toggleField(f.id)}
                     className={cn(
                       "flex flex-col items-center justify-center p-6 rounded-3xl border-2 transition-all group",
-                      selections.fields.includes(f.id) ? "border-sky-500 bg-sky-50 shadow-lg shadow-sky-500/5" : "border-slate-100 hover:border-sky-200 hover:bg-slate-50"
+                      selections.fields.includes(f.id) ? "border-[#38b6ff] bg-[#38b6ff]/5 shadow-lg shadow-[#38b6ff]/5" : "border-slate-100 hover:border-[#38b6ff]/30 hover:bg-slate-50"
                     )}
                   >
                     <div className={cn("w-12 h-12 rounded-2xl mb-4 flex items-center justify-center transition-transform group-hover:scale-110", f.bg, f.color)}>
@@ -257,10 +257,10 @@ export default function GoalModal({ isOpen, onClose }: GoalModalProps) {
                     onClick={() => toggleVibe(v.id)}
                     className={cn(
                       "flex items-center gap-5 p-5 rounded-3xl border-2 transition-all text-left",
-                      selections.vibes.includes(v.id) ? "border-sky-500 bg-sky-50" : "border-slate-100 hover:border-slate-200"
+                      selections.vibes.includes(v.id) ? "border-[#38b6ff] bg-[#38b6ff]/5" : "border-slate-100 hover:border-slate-200"
                     )}
                   >
-                    <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-sky-500 border border-slate-100">
+                    <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-[#38b6ff] border border-slate-100">
                       <v.icon size={24} />
                     </div>
                     <div>
@@ -277,7 +277,7 @@ export default function GoalModal({ isOpen, onClose }: GoalModalProps) {
                 <div className="space-y-4">
                   <div className="flex justify-between items-end">
                     <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Total Course Budget</label>
-                    <span className="text-lg font-black text-sky-600">
+                    <span className="text-lg font-black text-[#38b6ff]">
                       {selections.budget >= 5000000 ? "₹50L+" : `₹${(selections.budget / 100000).toFixed(1)}L`}
                     </span>
                   </div>
@@ -288,7 +288,7 @@ export default function GoalModal({ isOpen, onClose }: GoalModalProps) {
                     step="100000"
                     value={selections.budget}
                     onChange={(e) => setSelections({ ...selections, budget: Number(e.target.value) })}
-                    className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-sky-500"
+                    className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-[#38b6ff]"
                   />
                   <div className="flex justify-between text-[10px] font-bold text-slate-300">
                     <span>₹1.0L</span>
@@ -306,7 +306,7 @@ export default function GoalModal({ isOpen, onClose }: GoalModalProps) {
                         className={cn(
                           "px-4 py-2 rounded-xl text-xs font-bold border transition-all",
                           selections.cities.includes(city) 
-                            ? "bg-sky-500 border-sky-500 text-white shadow-lg shadow-sky-500/20" 
+                            ? "bg-[#38b6ff] border-[#38b6ff] text-white shadow-lg shadow-[#38b6ff]/20" 
                             : "border-slate-100 text-slate-600 hover:bg-slate-50"
                         )}
                       >
@@ -329,7 +329,7 @@ export default function GoalModal({ isOpen, onClose }: GoalModalProps) {
                         onClick={() => setSelections({ ...selections, stage: s })}
                         className={cn(
                           "p-4 rounded-2xl border-2 text-sm font-bold transition-all text-left",
-                          selections.stage === s ? "border-sky-500 bg-sky-50" : "border-slate-100 hover:border-slate-200"
+                          selections.stage === s ? "border-[#38b6ff] bg-[#38b6ff]/5" : "border-slate-100 hover:border-slate-200"
                         )}
                       >
                         {s}
@@ -413,14 +413,14 @@ export default function GoalModal({ isOpen, onClose }: GoalModalProps) {
               <button 
                 onClick={nextStep}
                 disabled={(step === 1 && selections.fields.length === 0) || (step === 5 && !selections.stage)}
-                className="px-8 py-3 bg-slate-900 text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-slate-800 transition-all flex items-center gap-2 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-8 py-3 bg-slate-900 text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-slate-800 transition-all flex items-center gap-2 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {step === 5 ? 'Generate Recommendations' : 'Continue'} <ChevronRight size={16} />
               </button>
             ) : (
               <button 
                 onClick={onClose}
-                className="px-10 py-3 bg-sky-500 text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-sky-400 transition-all flex items-center gap-2 active:scale-95 shadow-xl shadow-sky-500/20"
+                className="px-10 py-3 bg-[#38b6ff] text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:brightness-110 transition-all flex items-center gap-2 active:scale-[0.98] shadow-xl shadow-[#38b6ff]/20"
               >
                 Finish & Explore <Zap size={16} fill="white" />
               </button>

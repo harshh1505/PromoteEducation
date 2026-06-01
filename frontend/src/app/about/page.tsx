@@ -77,8 +77,6 @@ const educationQuotes = [
     { text: "If you think education is expensive, try ignorance.", author: "Derek Bok" }
 ]
 
-
-
 const leadership = [
     { name: 'Ritesh Rastogi', role: 'MD & Founder', image: '/images/Leadership/RiteshRastogi.jpeg' },
     { name: 'Aman Rastogi', role: 'Managing Director', image: '/images/Leadership/AmanRastogi.jpeg' },
@@ -93,11 +91,8 @@ const gameOptions = [
     { id: 'design', label: 'Creative', result: 'NID or NIFT could be your destination. Build a stellar portfolio.', icon: Palette },
 ]
 
-const suggestedColleges = featuredColleges
-
 // ─── Board Config ─────────────────────────────────────────────────────────────
 
-// Snakes: head → tail (go DOWN)
 const SNAKES: Record<number, number> = {
     17: 4,
     54: 34,
@@ -109,7 +104,6 @@ const SNAKES: Record<number, number> = {
     99: 78,
 }
 
-// Ladders: base → top (go UP)
 const LADDERS: Record<number, number> = {
     3: 22,
     8: 30,
@@ -122,35 +116,25 @@ const LADDERS: Record<number, number> = {
 
 const DICE_ICONS = [Dice1, Dice2, Dice3, Dice4, Dice5, Dice6]
 
-// ─── Coordinate Helper ────────────────────────────────────────────────────────
-// Returns center % coordinates for a given square number (1–100) on a 10x10 board.
-// Row 0 = bottom (squares 1–10), Row 9 = top (squares 91–100).
-// Even rows (0,2,...) go left→right; odd rows (1,3,...) go right→left (snake numbering).
 function getCenter(square: number): { cx: number; cy: number } {
-    const idx = square - 1                      // 0-based
-    const row = Math.floor(idx / 10)            // 0 = bottom row
-    const col = idx % 10                        // 0–9
-
-    // In even rows, col 0 is left; in odd rows, col 0 is right
+    const idx = square - 1
+    const row = Math.floor(idx / 10)
+    const col = idx % 10
     const visualCol = row % 2 === 0 ? col : 9 - col
-
-    // Each cell is 10% wide/tall; center is at +5%
     const cx = visualCol * 10 + 5
-    // Row 0 → bottom → cy = 95%; Row 9 → top → cy = 5%
     const cy = 95 - row * 10
-
     return { cx, cy }
 }
 
-// ─── Component ───────────────────────────────────────────────────────────────
+// ─── Sub-component: SnakeLadderGame ──────────────────────────────────────────
 
 const SnakeLadderGame: React.FC = () => {
-    const [position, setPosition] = useState(0)          // 0 = off-board (start)
+    const [position, setPosition] = useState(0)
     const [isRolling, setIsRolling] = useState(false)
     const [diceValue, setDiceValue] = useState(1)
     const [gameStatus, setGameStatus] = useState<'ready' | 'playing' | 'won'>('ready')
     const [message, setMessage] = useState('Roll the dice to begin your journey!')
-    const [highlight, setHighlight] = useState<number | null>(null)  // flashes snake/ladder destination
+    const [highlight, setHighlight] = useState<number | null>(null)
 
     const rollDice = useCallback(() => {
         if (isRolling || gameStatus === 'won') return
@@ -158,7 +142,6 @@ const SnakeLadderGame: React.FC = () => {
         setIsRolling(true)
         setHighlight(null)
 
-        // Animate dice face cycling
         let ticks = 0
         const interval = setInterval(() => {
             setDiceValue(Math.floor(Math.random() * 6) + 1)
@@ -186,7 +169,6 @@ const SnakeLadderGame: React.FC = () => {
                 return
             }
 
-            // Check snake or ladder
             if (LADDERS[newRaw]) {
                 const dest = LADDERS[newRaw]
                 setPosition(dest)
@@ -215,21 +197,18 @@ const SnakeLadderGame: React.FC = () => {
     }
 
     const DiceIcon = DICE_ICONS[diceValue - 1]
-
-    // Player token position
     const playerPos = position > 0 ? getCenter(position) : null
 
     return (
-        <div className="w-full max-w-4xl bg-white rounded-[40px] p-6 md:p-10 shadow-2xl border border-slate-100 relative overflow-hidden">
-            <div className="absolute -top-12 -right-12 w-64 h-64 bg-sky-500/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute -bottom-12 -left-12 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="w-full max-w-4xl bg-white border border-slate-100 rounded-[40px] p-6 md:p-10 shadow-2xl relative overflow-hidden">
+            <div className="absolute -top-12 -right-12 w-64 h-64 bg-sky-200/20 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute -bottom-12 -left-12 w-64 h-64 bg-emerald-100/20 rounded-full blur-[120px] pointer-events-none" />
 
-            <div className="flex flex-col md:flex-row items-center md:items-stretch gap-8 md:gap-12 relative z-10">
-                {/* ── BOARD (LEFT) ─────────────────────────────────────────────────── */}
-                <div className="w-full max-w-[440px] aspect-square select-none shrink-0">
+            <div className="flex flex-col md:flex-row items-center md:items-stretch gap-10 md:gap-12 relative z-10">
+                {/* Board grid (Left) */}
+                <div className="w-full max-w-[420px] aspect-square select-none shrink-0 bg-slate-50 border border-slate-150/70 p-2.5 rounded-3xl shadow-inner">
                     <div className="relative w-full h-full">
-                        {/* Number Grid */}
-                        <div className="absolute inset-0 grid grid-cols-10 gap-[2px] p-0">
+                        <div className="absolute inset-0 grid grid-cols-10 gap-1 p-0">
                             {Array.from({ length: 100 }).map((_, i) => {
                                 const row = Math.floor(i / 10)
                                 const col = i % 10
@@ -246,19 +225,19 @@ const SnakeLadderGame: React.FC = () => {
                                     <div
                                         key={displayNum}
                                         className={cn(
-                                            'flex items-center justify-center text-[8px] font-bold rounded-sm relative transition-all duration-300',
+                                            'flex items-center justify-center text-[9px] font-black rounded-lg relative transition-all duration-300 shadow-sm aspect-square',
                                             isPlayer
-                                                ? 'bg-sky-500 text-white z-30 ring-2 ring-white ring-offset-1 scale-110 shadow-lg'
+                                                ? 'bg-sky-500 text-white z-30 ring-4 ring-sky-200 scale-110 shadow-lg'
                                                 : isSnakeHead
-                                                    ? 'bg-red-50 text-red-400'
+                                                    ? 'bg-rose-50 text-rose-500 border border-rose-100/50'
                                                     : isLadderBase
-                                                        ? 'bg-emerald-50 text-emerald-500'
-                                                        : 'bg-white text-slate-400 border border-slate-100',
+                                                        ? 'bg-emerald-50 text-emerald-600 border border-emerald-100/50'
+                                                        : 'bg-white text-slate-450 border border-slate-100/70 hover:border-slate-200',
                                             highlight === displayNum && !isPlayer ? 'ring-2 ring-amber-400 bg-amber-50 text-amber-600' : ''
                                         )}
                                     >
                                         {isPlayer ? (
-                                            <span className="relative z-10 text-white font-black">{displayNum}</span>
+                                            <span className="relative z-10 text-white font-extrabold">{displayNum}</span>
                                         ) : (
                                             displayNum
                                         )}
@@ -267,7 +246,7 @@ const SnakeLadderGame: React.FC = () => {
                             })}
                         </div>
 
-                        {/* SVG Overlay: Snakes & Ladders */}
+                        {/* SVG Snakes & Ladders */}
                         <svg
                             className="absolute inset-0 w-full h-full pointer-events-none"
                             viewBox="0 0 100 100"
@@ -291,9 +270,9 @@ const SnakeLadderGame: React.FC = () => {
                                 const py = (dx / len) * 1.8
                                 const numRungs = 5
                                 return (
-                                    <g key={`ladder-${start}`} opacity="0.75">
-                                        <line x1={s.cx - px} y1={s.cy - py} x2={e.cx - px} y2={e.cy - py} stroke="#059669" strokeWidth="0.9" strokeLinecap="round" />
-                                        <line x1={s.cx + px} y1={s.cy + py} x2={e.cx + px} y2={e.cy + py} stroke="#059669" strokeWidth="0.9" strokeLinecap="round" />
+                                    <g key={`ladder-${start}`} opacity="0.8">
+                                        <line x1={s.cx - px} y1={s.cy - py} x2={e.cx - px} y2={e.cy - py} stroke="#10b981" strokeWidth="1" strokeLinecap="round" />
+                                        <line x1={s.cx + px} y1={s.cy + py} x2={e.cx + px} y2={e.cy + py} stroke="#10b981" strokeWidth="1" strokeLinecap="round" />
                                         {Array.from({ length: numRungs }).map((_, ri) => {
                                             const t = (ri + 1) / (numRungs + 1)
                                             const rx = s.cx + dx * t
@@ -303,7 +282,7 @@ const SnakeLadderGame: React.FC = () => {
                                                     key={ri}
                                                     x1={rx - px} y1={ry - py}
                                                     x2={rx + px} y2={ry + py}
-                                                    stroke="#059669" strokeWidth="0.7" strokeLinecap="round"
+                                                    stroke="#10b981" strokeWidth="0.8" strokeLinecap="round"
                                                 />
                                             )
                                         })}
@@ -324,28 +303,28 @@ const SnakeLadderGame: React.FC = () => {
                                 const angle = Math.atan2(cpY - h.cy, cpX - h.cx) * (180 / Math.PI)
 
                                 return (
-                                    <g key={`snake-${head}`} opacity="0.95">
+                                    <g key={`snake-${head}`} opacity="0.9">
                                         <path
                                             d={`M ${h.cx} ${h.cy} Q ${cpX} ${cpY} ${t.cx} ${t.cy}`}
-                                            stroke="rgba(0,0,0,0.15)" strokeWidth="5" fill="none" strokeLinecap="round"
+                                            stroke="rgba(244,63,94,0.15)" strokeWidth="5.5" fill="none" strokeLinecap="round"
                                         />
                                         <path
                                             d={`M ${h.cx} ${h.cy} Q ${cpX} ${cpY} ${t.cx} ${t.cy}`}
-                                            stroke="#ef4444" strokeWidth="3.5" fill="none" strokeLinecap="round"
+                                            stroke="#f43f5e" strokeWidth="3.2" fill="none" strokeLinecap="round"
                                         />
                                         <path
                                             d={`M ${h.cx} ${h.cy} Q ${cpX} ${cpY} ${t.cx} ${t.cy}`}
-                                            stroke="#fca5a5" strokeWidth="1.2" fill="none" strokeLinecap="round"
-                                            strokeDasharray="2 4"
+                                            stroke="#fecdd3" strokeWidth="1" fill="none" strokeLinecap="round"
+                                            strokeDasharray="2 3"
                                         />
                                         <g transform={`translate(${h.cx}, ${h.cy}) rotate(${angle + 90})`}>
-                                            <path d="M 0 0 L -0.8 -4 M 0 0 L 0.8 -4" stroke="#ef4444" strokeWidth="0.5" fill="none" />
-                                            <path d="M 0 -2.5 L 2.5 0 L 0 3.5 L -2.5 0 Z" fill="#dc2626" />
+                                            <path d="M 0 0 L -0.8 -4 M 0 0 L 0.8 -4" stroke="#f43f5e" strokeWidth="0.5" fill="none" />
+                                            <path d="M 0 -2.5 L 2.5 0 L 0 3.5 L -2.5 0 Z" fill="#e11d48" />
                                             <circle cx="-0.8" cy="-0.5" r="0.5" fill="white" />
                                             <circle cx="0.8" cy="-0.5" r="0.5" fill="white" />
                                         </g>
                                         <g transform={`translate(${t.cx}, ${t.cy}) rotate(${Math.atan2(t.cy - cpY, t.cx - cpX) * (180 / Math.PI)})`}>
-                                            <path d="M 0 0 L -2.5 -1.5 L -2.5 1.5 Z" fill="#b91c1c" />
+                                            <path d="M 0 0 L -2.5 -1.5 L -2.5 1.5 Z" fill="#be123c" />
                                         </g>
                                     </g>
                                 )
@@ -353,8 +332,8 @@ const SnakeLadderGame: React.FC = () => {
 
                             {playerPos && position !== 0 && (
                                 <g>
-                                    <circle cx={playerPos.cx} cy={playerPos.cy} r="3.8" fill="#0ea5e9" opacity="0.25" />
-                                    <circle cx={playerPos.cx} cy={playerPos.cy} r="2.4" fill="#0ea5e9" stroke="white" strokeWidth="0.8" />
+                                    <circle cx={playerPos.cx} cy={playerPos.cy} r="4" fill="#0ea5e9" opacity="0.25" />
+                                    <circle cx={playerPos.cx} cy={playerPos.cy} r="2.5" fill="#0ea5e9" stroke="white" strokeWidth="0.8" />
                                     <circle cx={playerPos.cx} cy={playerPos.cy} r="1" fill="white" />
                                 </g>
                             )}
@@ -362,50 +341,49 @@ const SnakeLadderGame: React.FC = () => {
                     </div>
                 </div>
 
-                {/* ── CONTROLS (RIGHT) ─────────────────────────────────────────────── */}
-                <div className="flex-1 flex flex-col justify-center gap-8 md:border-l md:border-slate-100 md:pl-12">
+                {/* Control Panel (Right) */}
+                <div className="flex-1 flex flex-col justify-center gap-6 md:border-l md:border-slate-100 md:pl-10">
                     <div className="text-left">
                         <p className={cn(
-                            'text-[10px] font-black uppercase tracking-[0.2em] mb-2',
-                            gameStatus === 'won' ? 'text-emerald-500' : 'text-slate-400'
+                            'text-[9px] font-black uppercase tracking-[0.25em] mb-2.5',
+                            gameStatus === 'won' ? 'text-emerald-600' : 'text-slate-400'
                         )}>
-                            {gameStatus === 'won' ? 'Victory!' : `Position: Square ${position}`}
+                            {gameStatus === 'won' ? 'Victory Achieved!' : `Player Progress: Square ${position}`}
                         </p>
-                        <h3 className="text-xl font-bold text-slate-900 leading-tight">
+                        <h3 className="text-lg md:text-xl font-extrabold text-slate-900 leading-snug">
                             {message}
                         </h3>
                     </div>
 
-                    <div className="flex flex-row md:flex-col items-center md:items-start gap-6">
-                        {/* Dice Button */}
+                    <div className="flex flex-row md:flex-col items-center md:items-start gap-4">
                         <button
                             onClick={rollDice}
                             disabled={isRolling || gameStatus === 'won'}
                             className={cn(
-                                'w-28 h-28 md:w-32 md:h-32 rounded-[40px] flex flex-col items-center justify-center gap-2 transition-all shadow-2xl',
+                                'w-24 h-24 md:w-28 md:h-28 rounded-[36px] flex flex-col items-center justify-center gap-1.5 transition-all shadow-xl',
                                 isRolling
                                     ? 'bg-slate-100 scale-95 cursor-wait'
                                     : gameStatus === 'won'
-                                        ? 'bg-emerald-400 opacity-40 cursor-not-allowed'
-                                        : 'bg-sky-500 hover:bg-sky-600 hover:-translate-y-2 active:scale-95 cursor-pointer'
+                                        ? 'bg-emerald-100 opacity-40 cursor-not-allowed text-emerald-800'
+                                        : 'bg-gradient-to-br from-sky-400 to-indigo-600 hover:from-sky-500 hover:to-indigo-700 active:scale-95 text-white cursor-pointer hover:shadow-sky-200 hover:shadow-lg'
                             )}
                             aria-label="Roll dice"
                         >
                             <DiceIcon
                                 className={cn(
-                                    'w-14 h-14 md:w-16 md:h-16',
-                                    isRolling ? 'text-slate-300 animate-spin' : 'text-white'
+                                    'w-10 h-10 md:w-12 md:h-12',
+                                    isRolling ? 'text-slate-400 animate-spin' : 'text-white'
                                 )}
                             />
                             {!isRolling && (
-                                <span className="text-[10px] font-black text-white/60 uppercase tracking-[0.2em]">Roll Dice</span>
+                                <span className="text-[9px] font-black text-white/80 uppercase tracking-widest">Roll Dice</span>
                             )}
                         </button>
 
                         {gameStatus !== 'ready' && (
                             <button
                                 onClick={resetGame}
-                                className="px-8 py-4 bg-slate-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-slate-800 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-slate-900/20"
+                                className="px-6 py-3 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-850 transition-all hover:scale-105 active:scale-95 shadow-md shadow-slate-900/10"
                             >
                                 Restart Game
                             </button>
@@ -413,51 +391,48 @@ const SnakeLadderGame: React.FC = () => {
                     </div>
 
                     {/* Legend */}
-                    <div className="grid grid-cols-2 md:grid-cols-1 gap-4 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                        <span className="flex items-center gap-2 bg-emerald-50 py-2 px-3 rounded-xl border border-emerald-100/50">
-                            <span className="inline-block w-4 h-1 bg-emerald-500 rounded" />
+                    <div className="grid grid-cols-2 md:grid-cols-1 gap-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        <span className="flex items-center gap-2.5 bg-emerald-50/50 py-2 px-3.5 rounded-xl border border-emerald-100/50">
+                            <span className="inline-block w-4 h-1.5 bg-emerald-500 rounded" />
                             <span className="text-emerald-700">Ladders climb</span>
                         </span>
-                        <span className="flex items-center gap-2 bg-red-50 py-2 px-3 rounded-xl border border-red-100/50">
-                            <span className="inline-block w-4 h-1 bg-red-400 rounded" />
-                            <span className="text-red-700">Snakes slide</span>
+                        <span className="flex items-center gap-2.5 bg-rose-50/50 py-2 px-3.5 rounded-xl border border-rose-100/50">
+                            <span className="inline-block w-4 h-1.5 bg-rose-400 rounded" />
+                            <span className="text-rose-700">Snakes slide</span>
                         </span>
                     </div>
 
-                    {/* Win reward side note */}
+                    {/* Reward Panel */}
                     {gameStatus === 'won' && (
-                        <div className="p-8 bg-emerald-500 rounded-[40px] border border-emerald-400 text-white animate-in zoom-in duration-700 shadow-2xl shadow-emerald-500/30">
-                            <div className="flex items-center gap-4 mb-6">
-                                <div className="p-3 bg-white/20 rounded-2xl">
-                                    <Trophy className="w-8 h-8" />
+                        <div className="p-6 bg-emerald-600 rounded-[30px] border border-emerald-500 text-white animate-in zoom-in duration-500 shadow-xl shadow-emerald-500/20">
+                            <div className="flex items-center gap-3.5 mb-4">
+                                <div className="p-2.5 bg-white/20 rounded-xl">
+                                    <Trophy className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <p className="text-[10px] font-black uppercase tracking-widest text-emerald-100 mb-1">Legendary Status</p>
-                                    <p className="text-xl font-bold">Rewards Unlocked!</p>
+                                    <p className="text-[9px] font-black uppercase tracking-widest text-emerald-100 mb-0.5">Reward Unlocked</p>
+                                    <p className="text-base font-bold">Premium Admission Pack!</p>
                                 </div>
                             </div>
 
-                            <div className="space-y-4 mb-8">
-                                <p className="text-[10px] font-black uppercase tracking-widest text-emerald-100/70 border-b border-emerald-400 pb-2">Exclusive Benefits:</p>
-                                <ul className="space-y-3">
-                                    {[
-                                        "1-on-1 Dedicated Senior Counselor",
-                                        "Direct Fast-Track College Appointments",
-                                        "Priority Documentation & SOP Support",
-                                        "Guaranteed Scholarship Eligibility Check"
-                                    ].map((benefit, i) => (
-                                        <li key={i} className="flex items-center gap-3 text-xs font-bold text-emerald-50">
-                                            <CheckCircle2 size={14} className="text-white shrink-0" />
-                                            {benefit}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
+                            <ul className="space-y-2 mb-6">
+                                {[
+                                    "1-on-1 Dedicated Senior Counselor",
+                                    "Direct Fast-Track College Appointments",
+                                    "Priority Documentation & SOP Support",
+                                    "Guaranteed Scholarship Eligibility Check"
+                                ].map((benefit, i) => (
+                                    <li key={i} className="flex items-center gap-2 text-[11px] font-medium text-emerald-50">
+                                        <CheckCircle2 size={12} className="text-white shrink-0" />
+                                        {benefit}
+                                    </li>
+                                ))}
+                            </ul>
 
-                            <div className="bg-white/10 rounded-2xl p-4 border border-white/10">
-                                <p className="text-[9px] font-black uppercase tracking-widest text-emerald-100 mb-1">Use Promo Code:</p>
-                                <p className="text-2xl font-black tracking-tight">PREMIUMFREE</p>
-                                <p className="text-[9px] font-medium text-emerald-50/80 mt-2 italic">Mention this during your free consultation!</p>
+                            <div className="bg-white/10 rounded-xl p-3.5 border border-white/10 text-center">
+                                <p className="text-[8px] font-black uppercase tracking-widest text-emerald-100 mb-0.5">Use Promo Code:</p>
+                                <p className="text-xl font-black tracking-widest">PREMIUMFREE</p>
+                                <p className="text-[8px] font-medium text-emerald-150 mt-1.5 italic">Mention this code during your consultation!</p>
                             </div>
                         </div>
                     )}
@@ -466,6 +441,8 @@ const SnakeLadderGame: React.FC = () => {
         </div>
     )
 }
+
+// ─── Main Component: AboutPage ───────────────────────────────────────────────
 
 export default function AboutPage() {
     const router = useRouter()
@@ -477,16 +454,16 @@ export default function AboutPage() {
     const [reviewCollege, setReviewCollege] = useState<College | null>(null)
 
     const handleOpenLead = async (college: College) => {
-      if (isAuthorized) {
-        router.push(`/colleges/${college.id}`)
-      } else {
-        setSelectedCollege(college)
-      }
+        if (isAuthorized) {
+            router.push(`/colleges/${college.id}`)
+        } else {
+            setSelectedCollege(college)
+        }
     }
 
     useEffect(() => {
         const day = Math.floor((new Date().getTime() - new Date(new Date().getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24))
-        setDailyQuote(educationQuotes[day % 50])
+        setDailyQuote(educationQuotes[day % educationQuotes.length])
     }, [])
 
     const [topCollegesPage, setTopCollegesPage] = useState(0)
@@ -512,138 +489,145 @@ export default function AboutPage() {
     }, [totalNewsPages])
 
     return (
-        <main className="min-h-screen bg-white selection:bg-sky-500 selection:text-white font-body">
+        <main className="min-h-screen bg-slate-50/50 selection:bg-sky-500 selection:text-white font-sans">
             <Navbar />
 
-            {/* ── REDESIGNED HERO: TEXT-RICH & INTERACTIVE ──────────────────────── */}
-            <section className="relative pt-[120px] pb-20 overflow-hidden bg-slate-50">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(56,182,255,0.05),transparent)] pointer-events-none" />
+            {/* ── HERO SECTION ──────────────────────────────────────────────────────── */}
+            <section className="relative pt-32 pb-20 md:pt-40 md:pb-24 overflow-hidden bg-gradient-to-br from-slate-50 via-white to-slate-100">
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-200/20 rounded-full blur-[120px] pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-100/30 rounded-full blur-[120px] pointer-events-none" />
 
-                <div className="w-full max-w-[1440px] mx-auto px-6 relative z-10">
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-10">
                     <div className="grid lg:grid-cols-12 gap-16 items-start">
-
-                        {/* Left Column: Extensive Text & Interactive Game */}
-                        <div className="lg:col-span-7">
-                            <div className="inline-flex items-center gap-3 mb-8">
-                                <span className="w-10 h-[2.5px] bg-sky-500 rounded-full" />
-                                <span className="text-[10px] font-black text-sky-600 uppercase tracking-[0.3em]">Institutional Authority</span>
+                        {/* Left Column: Mission Content & Career Compass */}
+                        <div className="lg:col-span-7 flex flex-col justify-center">
+                            <div className="inline-flex items-center gap-2 mb-6">
+                                <span className="text-[10px] font-black text-sky-600 tracking-[0.25em] uppercase">
+                                    About Promote Education
+                                </span>
                             </div>
-                            <h1 className="font-display text-4xl md:text-5xl lg:text-[54px] text-slate-900 leading-[1.1] tracking-tighter mb-8">
-                                Guidance that <br /> Defines Your <span className="text-sky-600">Destiny</span>.
+
+                            <h1 className="text-4xl md:text-5xl lg:text-[62px] font-black text-slate-900 leading-[1.08] tracking-tighter mb-8">
+                                Guidance that <br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 via-teal-500 to-indigo-600">
+                                    Defines Your Destiny.
+                                </span>
                             </h1>
 
-                            <div className="space-y-6 max-w-2xl mb-12">
-                                <p className="text-lg text-slate-700 leading-relaxed font-medium">
+                            <div className="space-y-6 max-w-2xl leading-relaxed text-slate-500 text-sm md:text-base font-medium mb-12">
+                                <p className="text-slate-700 text-base md:text-lg">
                                     Promote Education stands as India's premier admissions authority, bridging the gap between student aspirations and institutional excellence. For over 15 years, we have meticulously analyzed the academic landscape to provide data-driven, empathetic counseling to over 50,000 students.
                                 </p>
-                                <p className="text-base text-slate-500 leading-relaxed">
+                                <p>
                                     Our mission is simple: To democratize high-end career guidance. We leverage proprietary institutional data, placement metrics, and real-world outcomes to ensure that your choice of college is a strategic step toward a lifelong career, not just a four-year degree.
                                 </p>
                             </div>
 
-                            {/* Mini-Game: The Career Compass */}
-                            <div className="bg-white border border-sky-100 rounded-[40px] p-10 shadow-2xl shadow-sky-900/5 relative overflow-hidden group mb-12">
-                                <div className="absolute top-0 right-0 p-8 text-sky-500/5">
-                                    <Compass size={120} className="group-hover:rotate-45 transition-transform duration-1000" />
+                            {/* Career Compass Widget */}
+                            <div className="bg-white border border-slate-100 rounded-[30px] p-8 shadow-xl shadow-slate-100/50 relative overflow-hidden group mb-10">
+                                <div className="absolute top-0 right-0 p-4 text-sky-500/5 pointer-events-none">
+                                    <Compass size={110} className="group-hover:rotate-45 transition-transform duration-1000" />
                                 </div>
                                 <div className="relative z-10">
-                                    <div className="flex items-center gap-3 mb-6">
-                                        <Gamepad2 size={24} className="text-sky-500" />
-                                        <h3 className="text-xl font-bold text-slate-900">The Career Compass</h3>
+                                    <div className="flex items-center gap-2.5 mb-4">
+                                        <Gamepad2 size={20} className="text-sky-500" />
+                                        <h3 className="text-base font-extrabold text-slate-900">The Career Compass</h3>
                                     </div>
-                                    <p className="text-sm text-slate-500 mb-8 max-w-md">What's your primary field of interest? Pick one to see your ideal path recommendation.</p>
+                                    <p className="text-xs text-slate-500 mb-6 max-w-md">What's your primary field of interest? Pick one to see your ideal path recommendation.</p>
 
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                                        {gameOptions.map((opt) => (
-                                            <button
-                                                key={opt.id}
-                                                onClick={() => setGameResult(opt.result)}
-                                                className={`p-4 rounded-2xl border flex flex-col items-center gap-3 transition-all ${gameResult === opt.result
-                                                    ? 'bg-sky-500 border-sky-500 text-white'
-                                                    : 'bg-slate-50 border-slate-100 text-slate-600 hover:border-sky-300'
-                                                    }`}
-                                            >
-                                                <opt.icon size={20} />
-                                                <span className="text-[10px] font-black uppercase tracking-widest">{opt.label}</span>
-                                            </button>
-                                        ))}
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                                        {gameOptions.map((opt) => {
+                                            const Icon = opt.icon
+                                            const isActive = gameResult === opt.result
+                                            return (
+                                                <button
+                                                    key={opt.id}
+                                                    onClick={() => setGameResult(opt.result)}
+                                                    className={cn(
+                                                        "p-4 rounded-xl border flex flex-col items-center gap-2.5 transition-all text-center",
+                                                        isActive
+                                                            ? "bg-slate-900 border-slate-900 text-white shadow-md scale-95"
+                                                            : "bg-slate-50 border-slate-100 text-slate-650 hover:bg-white hover:border-slate-300"
+                                                    )}
+                                                >
+                                                    <Icon size={16} />
+                                                    <span className="text-[9px] font-black uppercase tracking-wider">{opt.label}</span>
+                                                </button>
+                                            )
+                                        })}
                                     </div>
 
                                     {gameResult && (
-                                        <div className="p-6 bg-sky-50 border border-sky-200 rounded-2xl animate-in fade-in slide-in-from-top-4">
-                                            <p className="text-[10px] font-black text-sky-600 uppercase tracking-widest mb-2">Your Strategy</p>
-                                            <p className="text-slate-900 font-bold leading-relaxed">{gameResult}</p>
+                                        <div className="p-5 bg-sky-50/50 border border-sky-100 rounded-2xl animate-in fade-in slide-in-from-top-3">
+                                            <p className="text-[9px] font-black text-sky-600 uppercase tracking-widest mb-1.5">Your Strategy</p>
+                                            <p className="text-slate-800 font-bold leading-relaxed text-xs md:text-sm">{gameResult}</p>
                                         </div>
                                     )}
                                 </div>
                             </div>
 
-                            <div className="max-w-xl bg-white border border-slate-200 p-8 rounded-3xl shadow-xl shadow-sky-900/5 mb-12 relative overflow-hidden group">
-                                <Quote className="absolute -top-4 -right-4 w-24 h-24 text-slate-50 group-hover:text-sky-50 transition-colors" />
-                                <p className="text-slate-800 text-xl font-medium leading-relaxed italic relative z-10">"{dailyQuote.text}"</p>
-                                <p className="text-sky-600 text-[11px] font-black mt-4 uppercase tracking-widest relative z-10">— {dailyQuote.author}</p>
+                            {/* Daily Quote Box */}
+                            <div className="max-w-xl bg-white border border-slate-100 p-6 rounded-2xl shadow-md relative overflow-hidden group mb-10">
+                                <Quote className="absolute -top-3 -right-3 w-16 h-16 text-slate-50 group-hover:text-sky-50 transition-colors" />
+                                <p className="text-slate-800 text-sm md:text-base leading-relaxed italic relative z-10">"{dailyQuote.text}"</p>
+                                <p className="text-sky-650 text-[10px] font-black mt-3 uppercase tracking-wider relative z-10">— {dailyQuote.author}</p>
                             </div>
 
-                            <div className="flex flex-wrap gap-5">
-                                <button className="px-10 py-5 bg-sky-500 text-white font-bold rounded-2xl hover:bg-sky-600 transition-all hover:-translate-y-1 shadow-2xl shadow-sky-500/20 text-xs uppercase tracking-widest">
+                            {/* Buttons */}
+                            <div className="flex flex-wrap gap-4">
+                                <button className="px-8 py-4 bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-xl hover:-translate-y-0.5 active:scale-95 transition-all shadow-md text-xs uppercase tracking-widest">
                                     Book Free Consultation
                                 </button>
-                                <Link href="/courses" className="px-10 py-5 bg-white border border-slate-200 text-slate-900 font-bold rounded-2xl hover:bg-slate-50 transition-all text-xs uppercase tracking-widest text-center shadow-sm">
+                                <Link href="/courses" className="px-8 py-4 bg-white border border-slate-150 text-slate-850 font-bold rounded-xl hover:bg-slate-50 transition-all text-xs uppercase tracking-widest text-center shadow-sm">
                                     Explore Programs
                                 </Link>
                             </div>
                         </div>
 
-                        {/* Right Column: News & Colleges (Already Polished) */}
-                        <div className="lg:col-span-5 space-y-8">
-                            {/* Latest News & Articles Section (Sliding) */}
-                            <div className="bg-white border border-slate-100 rounded-[32px] p-8 shadow-2xl shadow-sky-900/5">
-                                <div className="flex items-center justify-between mb-10">
-                                    <h3 className="text-slate-900 font-display text-2xl">Latest News & Articles</h3>
-                                    <div className="flex items-center gap-3">
-                                        <div className="flex items-center gap-1.5 mr-2">
-                                            <button 
-                                                onClick={() => setNewsPage((prev) => (prev - 1 + totalNewsPages) % totalNewsPages)}
-                                                className="w-8 h-8 rounded-full border border-slate-100 flex items-center justify-center text-slate-400 hover:text-sky-500 hover:border-sky-100 transition-all"
-                                            >
-                                                <ChevronLeft size={16} />
-                                            </button>
-                                            <button 
-                                                onClick={() => setNewsPage((prev) => (prev + 1) % totalNewsPages)}
-                                                className="w-8 h-8 rounded-full border border-slate-100 flex items-center justify-center text-slate-400 hover:text-sky-500 hover:border-sky-100 transition-all"
-                                            >
-                                                <ChevronRight size={16} />
-                                            </button>
-                                        </div>
-                                        <Link href="/news" className="text-sky-500 font-bold text-[10px] uppercase tracking-widest flex items-center gap-2 group">
-                                            Explore All <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                                        </Link>
+                        {/* Right Column: Sliding News & Sliding Colleges */}
+                        <div className="lg:col-span-5 space-y-6">
+                            {/* News Carousel Widget */}
+                            <div className="bg-white border border-slate-100 rounded-[30px] p-6 md:p-8 shadow-xl shadow-slate-150/10">
+                                <div className="flex items-center justify-between mb-8">
+                                    <h3 className="text-slate-900 font-extrabold text-lg">Latest News & Articles</h3>
+                                    <div className="flex items-center gap-2">
+                                        <button 
+                                            onClick={() => setNewsPage((prev) => (prev - 1 + totalNewsPages) % totalNewsPages)}
+                                            className="w-7 h-7 rounded-full border border-slate-150 flex items-center justify-center text-slate-400 hover:text-sky-500 hover:border-sky-100 transition-all"
+                                        >
+                                            <ChevronLeft size={14} />
+                                        </button>
+                                        <button 
+                                            onClick={() => setNewsPage((prev) => (prev + 1) % totalNewsPages)}
+                                            className="w-7 h-7 rounded-full border border-slate-150 flex items-center justify-center text-slate-400 hover:text-sky-500 hover:border-sky-100 transition-all"
+                                        >
+                                            <ChevronRight size={14} />
+                                        </button>
                                     </div>
                                 </div>
-                                <div className="space-y-10 min-h-[400px]">
+
+                                <div className="space-y-6 min-h-[360px]">
                                     {newsItems.slice(newsPage * itemsPerNewsPage, (newsPage + 1) * itemsPerNewsPage).map((it, i) => (
-                                        <div key={i} className="flex gap-6 group cursor-pointer border-b border-slate-50 pb-10 last:border-0 last:pb-0 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                                        <div key={i} className="flex gap-4 group cursor-pointer border-b border-slate-50 pb-5 last:border-0 last:pb-0 animate-in fade-in duration-500">
                                             <div className="flex-1">
-                                                <div className="flex items-start gap-2 mb-2">
+                                                <div className="flex items-start gap-1.5 mb-1.5">
                                                     {it.isLive && (
-                                                        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-red-500 text-white text-[8px] font-black uppercase rounded-full animate-pulse shrink-0 mt-0.5">
-                                                            <div className="w-1 h-1 bg-white rounded-full" /> LIVE
+                                                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-rose-500 text-white text-[7px] font-black uppercase rounded-full animate-pulse shrink-0">
+                                                            LIVE
                                                         </span>
                                                     )}
-                                                    <h4 className="text-slate-900 text-sm font-bold leading-snug group-hover:text-sky-600 transition-colors">
+                                                    <h4 className="text-slate-900 text-xs md:text-sm font-bold leading-snug group-hover:text-sky-600 transition-colors line-clamp-2">
                                                         {it.title}
                                                     </h4>
                                                 </div>
-                                                <p className="text-slate-500 text-[11px] leading-relaxed line-clamp-2 mb-3">{it.excerpt}</p>
-
-                                                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                                                    <p className="text-[9px] font-bold text-slate-900">{it.author}</p>
-                                                    <span className="text-[9px] text-slate-300">•</span>
-                                                    <p className="text-[9px] text-slate-400 font-medium">{it.date}</p>
+                                                <p className="text-slate-450 text-[11px] leading-relaxed line-clamp-2 mb-2">{it.excerpt}</p>
+                                                <div className="flex items-center gap-2 text-[9px] text-slate-400 font-bold">
+                                                    <span>{it.author}</span>
+                                                    <span>•</span>
+                                                    <span>{it.date}</span>
                                                 </div>
                                             </div>
-
-                                            <div className="w-20 h-20 rounded-xl overflow-hidden shadow-sm shrink-0 self-start group-hover:scale-105 transition-transform">
+                                            <div className="w-16 h-16 rounded-xl overflow-hidden shadow-sm shrink-0 self-start group-hover:scale-103 transition-transform">
                                                 <img src={it.image} alt="" className="w-full h-full object-cover" />
                                             </div>
                                         </div>
@@ -651,55 +635,38 @@ export default function AboutPage() {
                                 </div>
                             </div>
 
-                            {/* Compact Top Institutions Card (Sliding) */}
-                            <div className="bg-sky-500 rounded-[32px] p-8 relative overflow-hidden group shadow-2xl shadow-sky-500/20">
-                                <Globe size={100} className="absolute -bottom-10 -right-10 text-white/20 group-hover:rotate-12 transition-transform duration-700" />
+                            {/* Top Institutions Slider Widget */}
+                            <div className="bg-sky-600 rounded-[30px] p-6 md:p-8 relative overflow-hidden group shadow-xl shadow-sky-600/10">
+                                <Globe size={90} className="absolute -bottom-8 -right-8 text-white/10 group-hover:rotate-12 transition-transform duration-1000" />
                                 
                                 <div className="flex items-center justify-between mb-6 relative z-10">
-                                    <h3 className="text-white font-display text-xl">Top Institutions</h3>
+                                    <h3 className="text-white font-extrabold text-lg">Top Institutions</h3>
                                     <div className="flex items-center gap-2">
                                         <button 
                                             onClick={() => setTopCollegesPage((prev) => (prev - 1 + totalMiniPages) % totalMiniPages)}
-                                            className="w-8 h-8 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all"
+                                            className="w-7 h-7 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all"
                                         >
-                                            <ChevronLeft size={16} />
+                                            <ChevronLeft size={14} />
                                         </button>
                                         <button 
                                             onClick={() => setTopCollegesPage((prev) => (prev + 1) % totalMiniPages)}
-                                            className="w-8 h-8 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all"
+                                            className="w-7 h-7 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all"
                                         >
-                                            <ChevronRight size={16} />
+                                            <ChevronRight size={14} />
                                         </button>
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 relative z-10 min-h-[170px]">
                                     {featuredColleges.slice(topCollegesPage * itemsPerMiniPage, (topCollegesPage + 1) * itemsPerMiniPage).map((college) => (
-                                        <div key={college.id} className="animate-in fade-in slide-in-from-right-4 duration-700">
+                                        <div key={college.id} className="animate-in fade-in duration-550">
                                             <CollegeCard 
-                                              college={college} 
-                                              onOpenLead={handleOpenLead}
-                                              onOpenReview={(c) => setReviewCollege(c)}
+                                                college={college} 
+                                                onOpenLead={handleOpenLead}
+                                                onOpenReview={(c) => setReviewCollege(c)}
                                             />
                                         </div>
                                     ))}
-                                </div>
-
-                                <div className="mt-8 flex items-center justify-between relative z-10">
-                                    <Link href="/colleges" className="flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-widest hover:underline group/link">
-                                        Explore All Partners <ChevronRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
-                                    </Link>
-                                    <div className="flex gap-1.5">
-                                        {Array.from({ length: totalMiniPages }).map((_, i) => (
-                                            <div 
-                                                key={i} 
-                                                className={cn(
-                                                    "h-1 rounded-full transition-all duration-500",
-                                                    topCollegesPage === i ? "w-4 bg-white" : "w-1 bg-white/30"
-                                                )} 
-                                            />
-                                        ))}
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -707,61 +674,63 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* ── THE MANIFESTO: WHY CHOOSE US, MISSION & VISION ────────────────── */}
-            <section className="py-20 bg-white relative overflow-hidden">
-                <div className="w-full max-w-[1440px] mx-auto px-6">
-                    <div className="grid lg:grid-cols-2 gap-24 items-center mb-20">
-                        <div>
-                            <div className="inline-flex items-center gap-3 mb-8">
-                                <span className="w-10 h-[2px] bg-sky-500 rounded-full" />
-                                <span className="text-[11px] font-black text-sky-600 uppercase tracking-widest">About Promote Education</span>
-                            </div>
-                            <h2 className="font-display text-4xl md:text-5xl text-slate-900 mb-8 leading-[1.1] tracking-tight">
-                                Why Choose <br /> <span className="text-sky-500 underline decoration-sky-100 decoration-8 underline-offset-4">Promote Education?</span>
+            {/* ── THE MANIFESTO: WHY CHOOSE US & CORE VALUES ───────────────────────── */}
+            <section className="py-24 bg-white relative overflow-hidden border-b border-slate-100">
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-10">
+                    <div className="grid lg:grid-cols-12 gap-16 items-center mb-20">
+                        {/* Text description */}
+                        <div className="lg:col-span-7">
+                            <span className="text-[10px] font-black text-sky-600 tracking-[0.25em] uppercase mb-2 block">
+                                About Promote Education
+                            </span>
+                            <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-6">
+                                Why Choose Promote Education?
                             </h2>
-                            <p className="text-lg text-slate-600 leading-relaxed font-medium mb-10">
+                            <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium mb-8">
                                 At Promote Education, we believe education is the foundation of success—and the right guidance changes everything. As a trusted admission consultancy in India, we help students secure seats in <span className="text-sky-900 font-bold border-b-2 border-sky-500/20">Medical, Engineering, Management</span>, and other professional programs across India and abroad.
                             </p>
                             <div className="flex items-center gap-12">
                                 <div className="group">
-                                    <p className="text-5xl font-black text-sky-900 tracking-tighter group-hover:text-sky-500 transition-colors">50K+</p>
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">Counseled</p>
+                                    <p className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter group-hover:text-sky-600 transition-colors">50K+</p>
+                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-2">Counseled</p>
                                 </div>
                                 <div className="group">
-                                    <p className="text-5xl font-black text-sky-900 tracking-tighter group-hover:text-sky-500 transition-colors">15+</p>
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">Years Exp</p>
+                                    <p className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter group-hover:text-sky-600 transition-colors">15+</p>
+                                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-2">Years Exp</p>
                                 </div>
                             </div>
                         </div>
-                        <div className="relative">
-                            <div className="aspect-[16/10] rounded-[48px] overflow-hidden shadow-2xl relative border-8 border-slate-50">
+
+                        {/* Image decoration */}
+                        <div className="lg:col-span-5 relative">
+                            <div className="aspect-[16/10] rounded-[36px] overflow-hidden shadow-xl relative border border-slate-100">
                                 <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071" className="w-full h-full object-cover" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/10 to-transparent" />
                             </div>
-                            <div className="absolute -bottom-10 -left-10 bg-white p-8 rounded-[32px] shadow-2xl border border-slate-100 max-w-xs hidden md:block">
-                                <Quote size={32} className="text-sky-500 mb-4" />
-                                <p className="text-slate-700 font-medium italic leading-relaxed text-sm">"We don't just find you a college; we find you the right foundation for your entire career."</p>
+                            <div className="absolute -bottom-8 -left-8 bg-white p-6 rounded-2xl shadow-xl border border-slate-100 max-w-xs hidden md:block">
+                                <Quote size={24} className="text-sky-500 mb-3" />
+                                <p className="text-slate-655 font-medium italic leading-relaxed text-xs">"We don't just find you a college; we find you the right foundation for your entire career."</p>
                             </div>
                         </div>
                     </div>
 
                     {/* Mission & Vision Cards */}
                     <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                        <div className="bg-slate-50 rounded-[40px] p-12 border border-slate-100 relative group hover:bg-white hover:shadow-2xl transition-all duration-500">
-                            <div className="w-14 h-14 bg-sky-500 text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-sky-500/20 group-hover:scale-110 transition-transform">
-                                <Target size={28} />
+                        <div className="bg-slate-50/50 border border-slate-100 rounded-3xl p-10 relative group hover:bg-white hover:shadow-lg transition-all duration-500">
+                            <div className="w-12 h-12 bg-sky-500 text-white rounded-xl flex items-center justify-center mb-6 shadow-md shadow-sky-500/20 group-hover:scale-105 transition-transform">
+                                <Target size={22} />
                             </div>
-                            <h3 className="text-2xl font-bold text-slate-900 mb-6">Our Mission</h3>
-                            <p className="text-slate-600 leading-relaxed font-medium">
+                            <h3 className="text-xl font-extrabold text-slate-900 mb-4">Our Mission</h3>
+                            <p className="text-slate-550 leading-relaxed font-medium text-sm">
                                 To democratize high-end career guidance by providing every student with data-backed, empathetic, and transparent admission support. We aim to ensure that financial or geographical barriers never prevent a deserving student from reaching their dream institution.
                             </p>
                         </div>
-                        <div className="bg-slate-50 rounded-[40px] p-12 border border-slate-100 relative group hover:bg-white hover:shadow-2xl transition-all duration-500">
-                            <div className="w-14 h-14 bg-sky-900 text-white rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-sky-900/20 group-hover:scale-110 transition-transform">
-                                <TrendingUp size={28} />
+                        <div className="bg-slate-50/50 border border-slate-100 rounded-3xl p-10 relative group hover:bg-white hover:shadow-lg transition-all duration-500">
+                            <div className="w-12 h-12 bg-slate-900 text-white rounded-xl flex items-center justify-center mb-6 shadow-md shadow-slate-900/20 group-hover:scale-105 transition-transform">
+                                <TrendingUp size={22} />
                             </div>
-                            <h3 className="text-2xl font-bold text-slate-900 mb-6">Our Vision</h3>
-                            <p className="text-slate-600 leading-relaxed font-medium">
+                            <h3 className="text-xl font-extrabold text-slate-900 mb-4">Our Vision</h3>
+                            <p className="text-slate-550 leading-relaxed font-medium text-sm">
                                 To become India's most trusted and technologically advanced educational gateway, where every academic journey is optimized for success through a perfect blend of human expertise and institutional intelligence.
                             </p>
                         </div>
@@ -769,199 +738,234 @@ export default function AboutPage() {
                 </div>
             </section>
 
-            {/* ── DESCRIPTIVE DIFFERENTIATORS (Light Blue/White Mix) ─────────────── */}
-            <section className="py-20 bg-slate-50 border-y border-slate-100 relative overflow-hidden">
-                <div className="w-full max-w-[1440px] mx-auto px-6 relative z-10">
+            {/* ── THE DIFFERENTIATORS (Why choose us detail list) ──────────────────── */}
+            <section className="py-24 bg-slate-50/30 border-b border-slate-100 relative overflow-hidden">
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-10">
                     <div className="text-center mb-16">
-                        <span className="text-[10px] font-black text-sky-600 uppercase tracking-[0.4em] mb-4 block text-center">The Differentiators</span>
-                        <h2 className="font-display text-4xl md:text-5xl text-slate-900 text-center">What sets us apart</h2>
+                        <span className="text-[10px] font-black text-sky-600 uppercase tracking-[0.25em] mb-2 block">
+                            The Differentiators
+                        </span>
+                        <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
+                            What Sets Us Apart
+                        </h2>
                     </div>
 
-                    <div className="grid lg:grid-cols-2 gap-x-20 gap-y-16">
+                    <div className="grid lg:grid-cols-2 gap-x-16 gap-y-12 max-w-6xl mx-auto">
                         {[
                             {
-                                title: 'Student-first counseling',
+                                title: 'Student-First Counseling',
                                 desc: 'Unbiased, research-backed guidance aligned to your goals. We don\'t just look at grades; we look at aspirations, budget, and long-term career viability.',
                                 icon: Heart
                             },
                             {
-                                title: 'Course & college fit',
+                                title: 'Course & College Fit',
                                 desc: 'Data-driven college shortlisting and course selection (India & abroad). We utilize a massive internal database of placement statistics and faculty quality scores.',
                                 icon: Target
                             },
                             {
-                                title: 'End-to-end admission support',
+                                title: 'End-to-End Admission Support',
                                 desc: 'SOP/LOR guidance, accurate form filling, deadline tracking, mock interviews. We manage the paperwork so you can focus on your entrance exams.',
                                 icon: CheckCircle
                             },
                             {
-                                title: 'Scholarship & loan help',
+                                title: 'Scholarship & Loan Help',
                                 desc: 'Pointers on scholarships and education loans (where eligible). Our financial advisors help navigate the complex world of student lending and grants.',
                                 icon: GraduationCap
                             },
                             {
-                                title: 'Network & experience',
+                                title: 'Network & Experience',
                                 desc: 'Strong relationships with reputed institutions; transparent processes. Over 15 years, we\'ve built a network that provides students with inside insights into campus life.',
                                 icon: Globe
                             },
                             {
-                                title: 'Ethical & compliant',
+                                title: 'Ethical & Compliant',
                                 desc: 'We do not sell or guarantee seats—admissions are per official rules and merit. We maintain strict compliance with all institutional and government guidelines.',
                                 icon: Shield
                             },
-                        ].map((item, i) => (
-                            <div key={i} className="flex gap-8 group">
-                                <div className="w-16 h-16 rounded-3xl bg-white border border-slate-200 flex items-center justify-center text-sky-500 group-hover:bg-sky-500 group-hover:text-white transition-all shrink-0 shadow-sm">
-                                    <item.icon size={28} />
+                        ].map((item, i) => {
+                            const Icon = item.icon
+                            return (
+                                <div key={i} className="flex gap-6 group items-start">
+                                    <div className="w-12 h-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-sky-500 group-hover:bg-slate-900 group-hover:text-white transition-all shrink-0 shadow-sm">
+                                        <Icon size={20} />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-base font-extrabold text-slate-900 mb-2 group-hover:text-sky-600 transition-colors">
+                                            {item.title}
+                                        </h3>
+                                        <p className="text-slate-500 text-xs md:text-sm leading-relaxed font-medium">
+                                            {item.desc}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h3 className="text-2xl font-bold text-slate-900 mb-4 leading-tight group-hover:text-sky-600 transition-colors">{item.title}</h3>
-                                    <p className="text-slate-600 text-base leading-relaxed font-medium">{item.desc}</p>
-                                </div>
-                            </div>
-                        ))}
+                            )
+                        })}
                     </div>
                 </div>
             </section>
 
-            {/* ── THE BLUEPRINT (White) ────────────────────────────────────────── */}
-            <section className="py-20 bg-white">
-                <div className="w-full max-w-[1440px] mx-auto px-6">
+            {/* ── THE BLUEPRINT: HOW WE WORK (Step checklist) ────────────────────────── */}
+            <section className="py-24 bg-white border-b border-slate-100">
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12">
                     <div className="text-center mb-16">
-                        <span className="text-[10px] font-black text-sky-600 uppercase tracking-[0.4em] mb-4 block text-center">The Blueprint</span>
-                        <h2 className="font-display text-4xl md:text-5xl text-slate-900 tracking-tight text-center">How We Work <br /><span className="text-sky-500 italic text-3xl">(simple, structured)</span></h2>
+                        <span className="text-[10px] font-black text-sky-600 uppercase tracking-[0.25em] mb-2 block">
+                            The Blueprint
+                        </span>
+                        <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
+                            Simple & Structured Workflows
+                        </h2>
                     </div>
 
-                    <div className="grid lg:grid-cols-5 gap-12">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 max-w-6xl mx-auto">
                         {[
                             { step: '01', title: 'Profile & Goals', desc: 'Evaluate academics, interests, budget, timelines.' },
                             { step: '02', title: 'Shortlist & Plan', desc: 'Create a Dream/Target/Safe list + application calendar.' },
                             { step: '03', title: 'Docs & Forms', desc: 'SOP/LOR/resume polish, error-free applications.' },
                             { step: '04', title: 'Interview & Results', desc: 'Mock interviews, status tracking, next steps.' },
-                            { step: '05', title: 'Financials & Onboarding', desc: 'Scholarship/loan guidance, joining formalities.' },
+                            { step: '05', title: 'Financials & Joining', desc: 'Scholarship/loan guidance, joining formalities.' },
                         ].map((s, i) => (
                             <div key={i} className="flex flex-col items-center text-center group">
-                                <div className="w-20 h-20 rounded-full bg-slate-50 border-4 border-white flex items-center justify-center mb-8 shadow-xl group-hover:bg-sky-500 group-hover:text-white transition-all">
-                                    <span className="text-2xl font-black text-slate-900 group-hover:text-white">{s.step}</span>
+                                <div className="w-16 h-16 rounded-full bg-slate-50 border-2 border-slate-100 flex items-center justify-center mb-6 shadow-sm group-hover:bg-slate-900 group-hover:border-slate-900 group-hover:text-white transition-all duration-300">
+                                    <span className="text-base font-extrabold text-slate-800 group-hover:text-white">{s.step}</span>
                                 </div>
-                                <h4 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-sky-600 transition-colors">{s.title}</h4>
-                                <p className="text-slate-500 text-sm leading-relaxed font-medium">{s.desc}</p>
+                                <h4 className="text-sm font-extrabold text-slate-900 mb-2 group-hover:text-sky-600 transition-colors">
+                                    {s.title}
+                                </h4>
+                                <p className="text-slate-450 text-[11px] leading-relaxed font-medium">
+                                    {s.desc}
+                                </p>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* ── CORE VALUES (Light theme) ─────────────────────────────────────── */}
-            <section className="py-20 bg-slate-50 border-y border-slate-100">
-                <div className="w-full max-w-[1440px] mx-auto px-6">
+            {/* ── CORE VALUES SECTION ────────────────────────────────────────────────── */}
+            <section className="py-24 bg-slate-50/50 border-b border-slate-100">
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12">
                     <div className="text-center mb-16">
-                        <span className="text-[10px] font-black text-sky-600 uppercase tracking-[0.4em] mb-4 block text-center">Our DNA</span>
-                        <h2 className="font-display text-4xl md:text-5xl text-slate-900 mb-6 text-center">Our core values</h2>
+                        <span className="text-[10px] font-black text-sky-600 tracking-[0.25em] uppercase mb-2 block">
+                            Our DNA
+                        </span>
+                        <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
+                            Our Core Values
+                        </h2>
                     </div>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
                         {[
                             { title: 'Trust', desc: 'Building lasting relationships through transparency and integrity.', icon: Shield },
                             { title: 'Excellence', desc: 'Committed to delivering the highest quality guidance and support.', icon: Award },
                             { title: 'Empathy', desc: 'Understanding and addressing each student\'s unique needs.', icon: Heart },
                             { title: 'Innovation', desc: 'Embracing new technologies to enhance the admission process.', icon: Lightbulb },
-                        ].map((v, i) => (
-                            <div key={i} className="text-center group p-10 bg-white rounded-3xl shadow-lg shadow-sky-900/5 hover:shadow-xl transition-all border border-slate-100">
-                                <div className="w-16 h-16 rounded-2xl bg-sky-50 mx-auto flex items-center justify-center text-sky-500 mb-8 group-hover:bg-sky-500 group-hover:text-white transition-all">
-                                    <v.icon size={28} />
+                        ].map((v, i) => {
+                            const Icon = v.icon
+                            return (
+                                <div key={i} className="text-center group p-8 bg-white rounded-3xl shadow-sm border border-slate-100/85 hover:shadow-md transition-all duration-300">
+                                    <div className="w-12 h-12 rounded-2xl bg-sky-50 mx-auto flex items-center justify-center text-sky-500 mb-6 group-hover:bg-slate-900 group-hover:text-white transition-all duration-300">
+                                        <Icon size={20} />
+                                    </div>
+                                    <h3 className="text-sm font-extrabold text-slate-900 mb-2 group-hover:text-sky-600 transition-colors">
+                                        {v.title}
+                                    </h3>
+                                    <p className="text-slate-450 text-xs leading-relaxed font-semibold">
+                                        {v.desc}
+                                    </p>
                                 </div>
-                                <h3 className="text-xl font-bold text-slate-900 mb-4 group-hover:text-sky-600 transition-colors">{v.title}</h3>
-                                <p className="text-sm text-slate-500 leading-relaxed font-medium">{v.desc}</p>
-                            </div>
-                        ))}
+                            )
+                        })}
                     </div>
                 </div>
             </section>
 
-            {/* ── THE TEAM (White) ─────────────────────────────────────────────── */}
-            <section className="py-20 bg-white">
-                <div className="w-full max-w-[1440px] mx-auto px-6">
-                    <div className="text-center mb-12">
-                        <h2 className="font-display text-4xl md:text-5xl text-slate-900 text-center">The Leadership</h2>
+            {/* ── LEADERSHIP SECTION ─────────────────────────────────────────────────── */}
+            <section className="py-24 bg-white border-b border-slate-100">
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+                    <div className="text-center mb-16">
+                        <span className="text-[10px] font-black text-sky-600 tracking-[0.25em] uppercase mb-2 block">
+                            Our Leadership
+                        </span>
+                        <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
+                            The Advisory Team
+                        </h2>
                     </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-12 max-w-5xl mx-auto">
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
                         {leadership.map((member, i) => (
                             <div key={i} className="text-center group">
-                                <div className="aspect-[4/5] rounded-[32px] overflow-hidden mb-8 shadow-xl relative border-4 border-slate-50">
-                                    <img src={member.image} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" />
+                                <div className="aspect-[4/5] rounded-[30px] overflow-hidden mb-6 shadow-sm relative border-4 border-slate-50/50 bg-slate-100">
+                                    <img 
+                                        src={member.image} 
+                                        alt={member.name}
+                                        className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" 
+                                    />
                                 </div>
-                                <h4 className="text-lg font-bold text-slate-900 mb-1 group-hover:text-sky-600 transition-colors">{member.name}</h4>
-                                <p className="text-[10px] font-black text-sky-500 uppercase tracking-widest">{member.role}</p>
+                                <h4 className="text-sm font-extrabold text-slate-900 mb-1 group-hover:text-sky-600 transition-colors">
+                                    {member.name}
+                                </h4>
+                                <p className="text-[9px] font-black text-sky-500 uppercase tracking-widest">
+                                    {member.role}
+                                </p>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* ── THE CHALLENGE: SNAKE & LADDERS (Interactive Reward) ───────────── */}
-            <section className="pb-20 px-6">
-                <div className="max-w-[1440px] mx-auto">
-                    <div className="bg-slate-50 rounded-[64px] p-8 md:p-20 relative overflow-hidden border border-slate-100 shadow-sm">
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(14,165,233,0.03),transparent)] pointer-events-none" />
-
-                        <div className="relative z-10 flex flex-col items-center text-center">
-                            {/* Text Content */}
-                            <div className="w-full mb-16">
-                                <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-sky-500/10 border border-sky-500/20 mb-8">
-                                    <span className="text-[10px] font-black text-sky-600 uppercase tracking-widest">Exclusive Reward</span>
+            {/* ── THE SNAKE & LADDERS INTERACTIVE SECTION ──────────────────────────── */}
+            <section className="py-24 bg-slate-50/50">
+                <div className="max-w-[1440px] mx-auto px-6 md:px-12">
+                    <div className="bg-white rounded-[40px] border border-slate-100 p-8 md:p-12 shadow-xl shadow-slate-150/10">
+                        <div className="flex flex-col items-center text-center">
+                            <div className="w-full mb-12">
+                                <div className="inline-flex items-center gap-2 bg-sky-50 border border-sky-100 px-3 py-1.5 rounded-full mb-4">
+                                    <span className="text-[9px] font-black text-sky-600 uppercase tracking-widest">Interactive Challenge</span>
                                 </div>
-                                <h2 className="font-display text-4xl md:text-6xl text-slate-900 mb-6 tracking-tight leading-tight">
-                                    The Path to <span className="text-sky-600 italic">Success</span> isn't Linear.
+                                <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight mb-4 leading-tight">
+                                    The Path to Success Isn't Linear.
                                 </h2>
-                                <p className="text-slate-500 text-sm md:text-base mb-12 leading-relaxed mx-auto max-w-2xl font-medium">
-                                    Reach the final square to unlock <strong>Free Premium Admission Support</strong>. Our journey is full of leaps (ladders) and lessons (snakes) — just like your career.
+                                <p className="text-slate-500 text-sm md:text-base mb-10 leading-relaxed mx-auto max-w-2xl font-medium">
+                                    Reach the final square on our board to unlock <strong>Free Premium Admission Support</strong>. Our journey is full of leaps (ladders) and lessons (snakes) — just like your career.
                                 </p>
 
-                                {/* Permanent Reward Cards */}
-                                <div className="w-full max-w-7xl mx-auto grid md:grid-cols-[1.1fr_0.9fr] gap-10 text-left mb-24 px-4">
-
-                                    {/* Winner's Reward Card */}
-                                    <div className="rounded-[40px] bg-white border border-slate-100 shadow-xl shadow-sky-900/5 p-12 xl:p-16 flex flex-col justify-between gap-16 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
-
-                                        <div className="pb-10 border-b border-slate-100">
-                                            <div className="flex items-start gap-6 mb-10">
-                                                <div className="w-16 h-16 rounded-2xl bg-sky-500 flex items-center justify-center shadow-lg shadow-sky-500/25 shrink-0 group-hover:scale-110 transition-transform duration-500">
-                                                    <Trophy className="text-white w-8 h-8" />
+                                {/* Instruction Cards */}
+                                <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto text-left mb-16">
+                                    {/* Reward details */}
+                                    <div className="rounded-3xl bg-slate-50/50 border border-slate-100 p-8 flex flex-col justify-between gap-10 hover:shadow-lg transition-all duration-300 group hover:bg-white">
+                                        <div>
+                                            <div className="flex items-start gap-4 mb-6">
+                                                <div className="w-12 h-12 rounded-2xl bg-sky-500 flex items-center justify-center shadow-md shrink-0 group-hover:scale-105 transition-transform">
+                                                    <Trophy className="text-white w-6 h-6" />
                                                 </div>
-
                                                 <div>
-                                                    <h4 className="text-slate-900 font-bold text-3xl leading-tight">
+                                                    <h4 className="text-slate-900 font-extrabold text-xl leading-tight">
                                                         Winner's Reward
                                                     </h4>
-                                                    <p className="text-sky-600 text-xs font-bold uppercase tracking-[0.2em] mt-2">
-                                                        Premium Admission Support — Free
+                                                    <p className="text-sky-600 text-[10px] font-black uppercase tracking-wider mt-1">
+                                                        Premium Admission Package — Free
                                                     </p>
                                                 </div>
                                             </div>
 
-                                            <p className="text-slate-500 text-[15px] leading-relaxed max-w-md font-medium">
+                                            <p className="text-slate-500 text-xs md:text-sm leading-relaxed font-semibold">
                                                 Reach square 100 and unlock India's most comprehensive admission package — worth ₹15,000 — at zero cost. Our experts handle everything so you focus on what matters: your entrance exams.
                                             </p>
                                         </div>
 
-                                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                             {[
-                                                { t: "1-on-1 Senior Counselor", d: "Dedicated expert for your entire admission journey" },
-                                                { t: "Direct College Appointments", d: "Fast-track access, no waiting queues" },
-                                                { t: "Priority SOP & LOR Writing", d: "Editorial-grade documents that stand out" },
-                                                { t: "Scholarship Eligibility Audit", d: "Identify every grant and fee waiver you qualify for" },
+                                                { t: "1-on-1 Senior Counselor", d: "Dedicated expert for your journey" },
+                                                { t: "Direct College Appointments", d: "Fast-track access, no queues" },
+                                                { t: "Priority SOP & LOR Writing", d: "Editorial-grade documents" },
+                                                { t: "Scholarship Eligibility Audit", d: "Identify every waiver" },
                                             ].map((item, i) => (
-                                                <li key={i} className="flex items-start gap-4">
-                                                    <div className="w-6 h-6 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center shrink-0 mt-1">
-                                                        <CheckCircle2 size={14} className="text-emerald-500" />
-                                                    </div>
-
+                                                <li key={i} className="flex items-start gap-2.5">
+                                                    <CheckCircle2 size={13} className="text-emerald-500 shrink-0 mt-0.5" />
                                                     <div>
-                                                        <p className="text-slate-900 text-sm font-semibold leading-tight mb-1">
+                                                        <p className="text-slate-900 text-xs font-bold leading-none mb-1">
                                                             {item.t}
                                                         </p>
-                                                        <p className="text-slate-400 text-xs leading-relaxed font-medium">
+                                                        <p className="text-slate-400 text-[10px] leading-relaxed font-medium">
                                                             {item.d}
                                                         </p>
                                                     </div>
@@ -970,60 +974,46 @@ export default function AboutPage() {
                                         </ul>
                                     </div>
 
-
-                                    {/* How to Win Card */}
-                                    <div className="rounded-[40px] bg-gradient-to-br from-sky-50 to-white border border-sky-100 p-12 xl:p-16 flex flex-col justify-between gap-16 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group">
-
-                                        <div className="pb-10 border-b border-sky-100/50">
-                                            <div className="flex items-start gap-6 mb-10">
-                                                <div className="w-16 h-16 rounded-2xl bg-white flex items-center justify-center shadow-sm shrink-0 group-hover:rotate-12 transition-transform duration-500">
-                                                    <Award className="text-sky-600 w-8 h-8" />
+                                    {/* Game instructions details */}
+                                    <div className="rounded-3xl bg-slate-50/50 border border-slate-100 p-8 flex flex-col justify-between gap-10 hover:shadow-lg transition-all duration-300 group hover:bg-white">
+                                        <div>
+                                            <div className="flex items-start gap-4 mb-6">
+                                                <div className="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center shadow-md shrink-0 group-hover:scale-105 transition-transform">
+                                                    <Award className="text-white w-6 h-6" />
                                                 </div>
-
                                                 <div>
-                                                    <h4 className="text-slate-900 font-bold text-3xl leading-tight">
-                                                        How to Win?
+                                                    <h4 className="text-slate-900 font-extrabold text-xl leading-tight">
+                                                        Rules of the Road
                                                     </h4>
-                                                    <p className="text-sky-600 text-xs font-bold uppercase tracking-[0.2em] mt-2">
+                                                    <p className="text-sky-600 text-[10px] font-black uppercase tracking-wider mt-1">
                                                         Simple Rules, Big Reward
                                                     </p>
                                                 </div>
                                             </div>
 
-                                            <p className="text-slate-600 text-[15px] leading-relaxed mb-6 max-w-md font-medium">
-                                                Roll the dice and navigate from square 1 to square{" "}
-                                                <span className="text-sky-600 font-semibold underline underline-offset-4 decoration-sky-300">
-                                                    100
-                                                </span>. Land exactly on 100 to win.
+                                            <p className="text-slate-500 text-xs md:text-sm leading-relaxed mb-4 font-semibold">
+                                                Roll the dice and navigate from square 1 to square <span className="text-sky-600 font-bold underline">100</span>. Land exactly on 100 to win.
                                             </p>
-
-                                            <p className="text-slate-500 text-sm italic leading-relaxed font-medium">
+                                            <p className="text-slate-400 text-xs italic leading-relaxed font-medium">
                                                 "Every setback on this board is a lesson. Every ladder is the result of preparation."
                                             </p>
                                         </div>
 
-                                        <div className="flex flex-col gap-5 mt-2">
-                                            <span className="w-full px-6 py-4 rounded-2xl bg-white border border-emerald-200 text-xs font-bold text-emerald-600 uppercase tracking-wider flex items-center gap-3 shadow-sm">
-                                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                                Green ladders — climb higher faster
+                                        <div className="flex flex-col gap-3">
+                                            <span className="w-full px-4 py-3 rounded-xl bg-white border border-emerald-100 text-[9px] font-black text-emerald-600 uppercase tracking-widest flex items-center gap-2 shadow-sm">
+                                                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                                                Green ladders — climb higher
                                             </span>
-
-                                            <span className="w-full px-6 py-4 rounded-2xl bg-white border border-red-200 text-xs font-bold text-red-500 uppercase tracking-wider flex items-center gap-3 shadow-sm">
-                                                <span className="w-2 h-2 rounded-full bg-red-500" />
-                                                Red snakes — learn & strategize
-                                            </span>
-
-                                            <span className="w-full px-6 py-5 rounded-2xl bg-sky-500 text-sm font-bold text-white uppercase tracking-wider flex items-center gap-3 shadow-lg shadow-sky-500/20">
-                                                <Trophy size={16} />
-                                                Land on 100 — unlock premium support
+                                            <span className="w-full px-4 py-3 rounded-xl bg-white border border-rose-100 text-[9px] font-black text-rose-500 uppercase tracking-widest flex items-center gap-2 shadow-sm">
+                                                <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+                                                Red snakes — slide back down
                                             </span>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
 
-                            {/* The Game */}
+                            {/* The Game Render */}
                             <div className="w-full flex justify-center">
                                 <SnakeLadderGame />
                             </div>
@@ -1033,21 +1023,22 @@ export default function AboutPage() {
             </section>
 
             <Footer />
+
             {/* Modals */}
             {selectedCollege && (
-              <LeadModal 
-                isOpen={!!selectedCollege} 
-                onClose={() => setSelectedCollege(null)} 
-                collegeName={selectedCollege.name} 
-                stream={selectedCollege.stream}
-              />
+                <LeadModal 
+                    isOpen={!!selectedCollege} 
+                    onClose={() => setSelectedCollege(null)} 
+                    collegeName={selectedCollege.name} 
+                    stream={selectedCollege.stream}
+                />
             )}
             {reviewCollege && (
-              <ReviewModal
-                isOpen={!!reviewCollege}
-                onClose={() => setReviewCollege(null)}
-                collegeName={reviewCollege.name}
-              />
+                <ReviewModal
+                    isOpen={!!reviewCollege}
+                    onClose={() => setReviewCollege(null)}
+                    collegeName={reviewCollege.name}
+                />
             )}
         </main>
     )

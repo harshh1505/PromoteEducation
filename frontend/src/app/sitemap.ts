@@ -18,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/scholarships',
     '/rankings',
     '/news',
+    '/blogs',
     '/sitemap',
     '/about',
     '/contact',
@@ -54,5 +55,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     })
   })
 
-  return [...staticPages, ...collegePages, ...magnetPages]
+  // 4. Individual Blog Pages
+  const { data: blogs } = await supabase.from('blogs').select('slug, updated_at').eq('is_live', true)
+  const blogPages = blogs?.map((b) => ({
+    url: `${baseUrl}/blogs/${b.slug}`,
+    lastModified: b.updated_at ? new Date(b.updated_at) : new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  })) || []
+
+  return [...staticPages, ...collegePages, ...magnetPages, ...blogPages]
 }

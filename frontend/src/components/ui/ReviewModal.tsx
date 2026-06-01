@@ -35,18 +35,14 @@ export default function ReviewModal({ isOpen, onClose, collegeName }: ReviewModa
     if (rating === 0) return alert('Please select a rating')
 
     setLoading(true)
-    const { error } = await supabase
-      .from('reviews')
-      .insert([
-        {
-          student_name: name,
-          college_name: collegeName,
-          rating: rating,
-          review_text: comment,
-          verified: !!user,
-          initials: name.charAt(0).toUpperCase()
-        }
-      ])
+    const { error } = await supabase.from('reviews').insert([{
+      student_name: name,
+      college_name: collegeName,
+      rating: rating,
+      review_text: comment,
+      verified: !!user,
+      initials: name.charAt(0).toUpperCase()
+    }])
 
     if (!error) {
       setSuccess(true)
@@ -64,138 +60,104 @@ export default function ReviewModal({ isOpen, onClose, collegeName }: ReviewModa
 
   if (!isOpen) return null
 
+  const ratingLabels: Record<number, string> = {
+    1: 'Disappointed', 2: 'Could be better', 3: "It's Okay", 4: 'Great Experience', 5: 'Excellence Guaranteed!'
+  }
+
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-white w-full max-w-xl rounded-[32px] overflow-hidden shadow-2xl relative animate-in zoom-in-95 duration-300">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-300">
+      <div className="bg-white w-full max-w-lg rounded-[28px] overflow-hidden shadow-2xl relative animate-in zoom-in-95 duration-300">
         
         {/* Header */}
-        <div className="bg-slate-900 px-8 py-10 text-white relative overflow-hidden">
-          <button 
-            onClick={onClose}
-            className="absolute top-6 right-6 p-2 hover:bg-white/10 rounded-full transition-colors z-20"
-          >
-            <X size={20} />
+        <div className="bg-slate-900 px-8 py-9 text-white relative overflow-hidden">
+          <button onClick={onClose} className="absolute top-5 right-5 w-9 h-9 flex items-center justify-center bg-white/10 hover:bg-white/15 rounded-full transition-all z-20">
+            <X size={16} />
           </button>
+          <div className="absolute top-0 right-0 w-48 h-48 bg-[#38b6ff]/8 rounded-full blur-3xl pointer-events-none" />
           
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-3">
-              <div className="w-8 h-[2px] bg-sky-500" />
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-sky-400">Student Feedback</span>
+              <div className="w-6 h-[2px] bg-[#38b6ff] rounded-full" />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-[#38b6ff]">Student Feedback</span>
             </div>
-            <h2 className="text-3xl font-bold tracking-tight mb-2">Review {collegeName}</h2>
-            <p className="text-white/60 text-sm font-medium">Your honest review helps thousands of other students make better decisions.</p>
+            <h2 className="text-2xl font-black tracking-tight mb-1">Review {collegeName}</h2>
+            <p className="text-slate-400 text-xs leading-relaxed">Your honest review helps thousands of other students make better decisions.</p>
           </div>
           
-          <Star size={120} className="absolute -bottom-10 -right-10 text-white/5 rotate-12" />
+          <Star size={100} className="absolute -bottom-8 -right-8 text-white/4 rotate-12" />
         </div>
 
         {/* Body */}
-        <div className="p-8">
+        <div className="p-7">
           {success ? (
-            <div className="py-12 flex flex-col items-center text-center animate-in zoom-in duration-500">
-              <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mb-6">
-                <CheckCircle2 size={40} className="text-green-500" />
+            <div className="py-10 flex flex-col items-center text-center animate-in zoom-in duration-500">
+              <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mb-5 shadow-lg shadow-emerald-500/10">
+                <CheckCircle2 size={36} className="text-emerald-500" />
               </div>
-              <h3 className="text-2xl font-black text-slate-900 mb-2">Review Submitted!</h3>
-              <p className="text-slate-500 font-medium">Thank you for sharing your experience. Your review is now live.</p>
+              <h3 className="text-xl font-black text-slate-900 mb-2">Review Submitted!</h3>
+              <p className="text-slate-400 text-sm">Thank you for sharing your experience. Your review is now live.</p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              
-              {/* Rating Section */}
-              <div className="flex flex-col items-center gap-3 py-4 bg-slate-50 rounded-2xl border border-slate-100">
-                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Overall Rating</p>
-                <div className="flex items-center gap-2">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Rating */}
+              <div className="flex flex-col items-center gap-3 py-5 bg-slate-50 rounded-2xl border border-slate-100">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Overall Rating</p>
+                <div className="flex items-center gap-1.5">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <button
-                      key={star}
-                      type="button"
-                      className={cn(
-                        "transition-all duration-200 transform hover:scale-110",
-                        (hover || rating) >= star ? "text-amber-400" : "text-slate-200"
-                      )}
-                      onMouseEnter={() => setHover(star)}
-                      onMouseLeave={() => setHover(0)}
-                      onClick={() => setRating(star)}
-                    >
-                      <Star 
-                        size={32} 
-                        fill={(hover || rating) >= star ? "currentColor" : "none"} 
-                        strokeWidth={2}
-                      />
+                    <button key={star} type="button"
+                      className={cn("transition-all duration-200 hover:scale-110", (hover || rating) >= star ? "text-amber-400" : "text-slate-200")}
+                      onMouseEnter={() => setHover(star)} onMouseLeave={() => setHover(0)} onClick={() => setRating(star)}>
+                      <Star size={30} fill={(hover || rating) >= star ? "currentColor" : "none"} strokeWidth={1.5} />
                     </button>
                   ))}
                 </div>
-                <p className="text-xs font-bold text-slate-600">
-                  {rating === 1 && "Disappointed"}
-                  {rating === 2 && "Could be better"}
-                  {rating === 3 && "It's Okay"}
-                  {rating === 4 && "Great Experience"}
-                  {rating === 5 && "Excellence Guaranteed!"}
-                  {rating === 0 && "Select a star"}
+                <p className="text-xs font-bold text-slate-600 h-4">
+                  {rating > 0 ? ratingLabels[rating] : 'Select a star'}
                 </p>
               </div>
 
-              {/* Name Input */}
-              <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Your Name</label>
+              {/* Name */}
+              <div className="space-y-1.5">
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 pl-1">Your Name</label>
                 <div className="relative group">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-sky-500 transition-colors" size={16} />
-                  <input
-                    type="text"
-                    required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#38b6ff] transition-colors pointer-events-none" size={14} />
+                  <input type="text" required value={name} onChange={(e) => setName(e.target.value)}
                     placeholder="Enter your full name"
-                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-4 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:bg-white transition-all"
-                  />
+                    className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-900 placeholder:text-slate-300 focus:outline-none focus:border-[#38b6ff] focus:bg-white focus:ring-4 focus:ring-[#38b6ff]/8 transition-all" />
                 </div>
               </div>
 
-              {/* Comment Input */}
-              <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Review Comment</label>
+              {/* Comment */}
+              <div className="space-y-1.5">
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 pl-1">Review Comment</label>
                 <div className="relative group">
-                  <MessageSquare className="absolute left-4 top-5 text-slate-400 group-focus-within:text-sky-500 transition-colors" size={16} />
-                  <textarea
-                    required
-                    rows={4}
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
+                  <MessageSquare className="absolute left-4 top-4 text-slate-300 group-focus-within:text-[#38b6ff] transition-colors pointer-events-none" size={14} />
+                  <textarea required rows={3} value={comment} onChange={(e) => setComment(e.target.value)}
                     placeholder="Describe your experience with this college, placements, faculty, and campus life..."
-                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-4 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500/20 focus:bg-white transition-all resize-none"
-                  />
+                    className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-900 placeholder:text-slate-300 focus:outline-none focus:border-[#38b6ff] focus:bg-white focus:ring-4 focus:ring-[#38b6ff]/8 transition-all resize-none" />
                 </div>
               </div>
 
-               {/* T&C Checkbox */}
-              <div className="flex items-start gap-2 px-1">
+              {/* T&C */}
+              <div className="flex items-start gap-2.5">
                 <div className="flex items-center h-5 mt-0.5">
-                  <input 
-                    id="terms-review"
-                    type="checkbox"
-                    required
-                    checked={agreed}
+                  <input id="terms-review" type="checkbox" required checked={agreed}
                     onChange={(e) => setAgreed(e.target.checked)}
-                    className="w-4 h-4 text-sky-600 bg-slate-50 border-slate-200 rounded focus:ring-sky-500 transition-all cursor-pointer"
-                  />
+                    className="w-4 h-4 text-[#38b6ff] bg-slate-50 border-slate-300 rounded focus:ring-[#38b6ff] cursor-pointer" />
                 </div>
-                <label htmlFor="terms-review" className="text-[10px] text-slate-500 font-bold leading-normal cursor-pointer select-none uppercase tracking-wider">
-                  I agree to the <a href="/terms" className="text-sky-500 hover:underline mx-1">Terms & Conditions</a> for submitting reviews
+                <label htmlFor="terms-review" className="text-[10px] text-slate-400 leading-normal cursor-pointer select-none">
+                  I agree to the{' '}
+                  <a href="/terms" className="text-[#38b6ff] font-bold hover:underline">Terms & Conditions</a>
+                  {' '}for submitting reviews
                 </label>
               </div>
 
-              <button
-                type="submit"
-                disabled={loading || !agreed}
-                className="w-full bg-slate-900 text-white py-4 rounded-2xl text-sm font-black uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center justify-center gap-3 shadow-xl shadow-slate-900/10 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
+              <button type="submit" disabled={loading || !agreed}
+                className="w-full bg-slate-900 hover:bg-slate-800 text-white py-4 rounded-2xl text-sm font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-xl shadow-slate-900/10 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed">
                 {loading ? (
                   <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 ) : (
-                  <>
-                    Submit Review <Send size={16} />
-                  </>
+                  <>Submit Review <Send size={14} /></>
                 )}
               </button>
             </form>

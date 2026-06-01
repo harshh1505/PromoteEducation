@@ -21,6 +21,7 @@ const navItems = [
   { label: 'Colleges', href: '/colleges', hasDropdown: false },
   { label: 'Exams', href: '/exams', hasDropdown: false },
   { label: 'Rankings', href: '/rankings', hasDropdown: false },
+  { label: 'Blogs', href: '/blogs', hasDropdown: false },
   { label: 'About Us', href: '/about', hasDropdown: false },
   // { label: 'FAQ', href: '/faq', hasDropdown: false },
 ]

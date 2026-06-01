@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { X, Mail, Phone, User, Download, CheckCircle2, Loader2, Info, Share2, Bell } from 'lucide-react'
+import { X, Mail, Phone, User, Download, CheckCircle2, Loader2, Info, Share2, Bell, ArrowRight, Shield } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
 type ModalMode = 'brochure' | 'details' | 'share' | 'remind'
@@ -13,38 +13,43 @@ const MODAL_CONFIG: Record<ModalMode, {
   buttonText: string
   buttonIcon: React.ReactNode
   source: string
+  accentColor: string
 }> = {
   brochure: {
     title: 'Download',
     highlight: 'Brochure',
     description: (name) => `Enter your details to receive the official brochure and fee structure for ${name}.`,
     buttonText: 'Send Me the Brochure',
-    buttonIcon: <Download size={18} />,
+    buttonIcon: <Download size={16} />,
     source: 'brochure_download',
+    accentColor: '#38b6ff',
   },
   details: {
     title: 'View',
     highlight: 'College Details',
     description: (name) => `Enter your details to unlock the full profile, placement stats, and reviews for ${name}.`,
     buttonText: 'View Full Details',
-    buttonIcon: <Info size={18} />,
+    buttonIcon: <Info size={16} />,
     source: 'college_details',
+    accentColor: '#38b6ff',
   },
   share: {
     title: 'Share',
     highlight: 'College Info',
     description: (name) => `Enter your details to share the profile of ${name} with friends and family.`,
     buttonText: 'Share Now',
-    buttonIcon: <Share2 size={18} />,
+    buttonIcon: <Share2 size={16} />,
     source: 'share_college',
+    accentColor: '#38b6ff',
   },
   remind: {
     title: 'Set',
     highlight: 'Exam Reminder',
     description: (name) => `Enter your details and we'll remind you about important dates and deadlines for ${name}.`,
     buttonText: 'Set Reminder',
-    buttonIcon: <Bell size={18} />,
+    buttonIcon: <Bell size={16} />,
     source: 'exam_reminder',
+    accentColor: '#38b6ff',
   },
 }
 
@@ -58,6 +63,8 @@ interface BrochureModalProps {
   targetUrl?: string
 }
 
+const inputCls = "w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-900 placeholder:text-slate-300 focus:outline-none focus:border-[#38b6ff] focus:bg-white focus:ring-4 focus:ring-[#38b6ff]/8 transition-all"
+
 export default function BrochureModal({ 
   isOpen, 
   onClose, 
@@ -67,11 +74,7 @@ export default function BrochureModal({
   mode = 'brochure', 
   targetUrl 
 }: BrochureModalProps) {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: ''
-  })
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '' })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [agreed, setAgreed] = useState(false)
@@ -85,19 +88,15 @@ export default function BrochureModal({
     setIsSubmitting(true)
 
     try {
-      const { error } = await supabase
-        .from('leads')
-        .insert([
-          {
-            full_name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            ...(collegeId ? { college_id: collegeId } : {}),
-            college_name: collegeName,
-            stream: stream,
-            source: config.source
-          }
-        ])
+      const { error } = await supabase.from('leads').insert([{
+        full_name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        ...(collegeId ? { college_id: collegeId } : {}),
+        college_name: collegeName,
+        stream: stream,
+        source: config.source
+      }])
 
       if (error) throw error
       setIsSuccess(true)
@@ -105,9 +104,8 @@ export default function BrochureModal({
 
       if (mode === 'details') {
         setTimeout(() => {
-          if (targetUrl) {
-            window.location.href = targetUrl
-          } else {
+          if (targetUrl) window.location.href = targetUrl
+          else {
             const slug = collegeName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
             window.location.href = `/colleges/${slug}`
           }
@@ -116,15 +114,7 @@ export default function BrochureModal({
         const shareUrl = `${window.location.origin}/colleges/${collegeName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`
         setTimeout(async () => {
           if (navigator.share) {
-            try {
-              await navigator.share({
-                title: collegeName,
-                text: `Check out ${collegeName} on Promote Education — rankings, fees, placements & more.`,
-                url: shareUrl,
-              })
-            } catch {
-              // Ignore
-            }
+            try { await navigator.share({ title: collegeName, text: `Check out ${collegeName} on Promote Education — rankings, fees, placements & more.`, url: shareUrl }) } catch {}
           } else {
             await navigator.clipboard.writeText(shareUrl)
             alert('Link copied to clipboard!')
@@ -140,7 +130,6 @@ export default function BrochureModal({
           setFormData({ name: '', email: '', phone: '' })
         }, 2500)
       }
-
     } catch (err) {
       console.error('Lead capture error:', err)
       alert('Something went wrong. Please try again.')
@@ -158,45 +147,34 @@ export default function BrochureModal({
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6">
-      {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-300" onClick={onClose} />
       
-      {/* Modal Container */}
-      <div className="relative w-full max-w-5xl h-[90vh] md:h-auto md:min-h-[600px] bg-white rounded-[32px] shadow-2xl overflow-hidden flex flex-col md:flex-row animate-in zoom-in-95 slide-in-from-bottom-4 duration-500 z-10">
-        {/* Left Sidebar - Branding & Value Prop */}
-        <div className="hidden md:flex w-[40%] bg-slate-900 p-10 flex-col justify-between relative overflow-hidden">
-          <div className="absolute inset-0 opacity-20 pointer-events-none">
-            <div className="absolute top-[-10%] right-[-10%] w-64 h-64 rounded-full bg-sky-500 blur-3xl" />
-            <div className="absolute bottom-[-10%] left-[-10%] w-64 h-64 rounded-full bg-emerald-500 blur-3xl" />
-          </div>
+      <div className="relative w-full max-w-4xl bg-white rounded-[28px] shadow-2xl overflow-hidden flex flex-col md:flex-row animate-in zoom-in-95 duration-300 z-10">
+        
+        {/* Left Panel */}
+        <div className="hidden md:flex w-[38%] bg-slate-900 p-8 flex-col justify-between relative overflow-hidden shrink-0">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-[#38b6ff]/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-8 h-8 bg-sky-500 rounded-lg flex items-center justify-center font-black text-white italic text-sm">P</div>
-              <span className="text-sm font-black text-white uppercase tracking-widest">Promote Education</span>
+            <div className="flex items-center gap-2.5 mb-8">
+              <div className="w-8 h-8 bg-[#38b6ff] rounded-xl flex items-center justify-center font-black text-white italic text-sm">P</div>
+              <span className="text-xs font-black text-white uppercase tracking-widest">Promote Education</span>
             </div>
 
-            <h2 className="text-2xl font-medium text-white leading-tight mb-4">
-              Unlock Your <span className="text-sky-400">Dream Career</span> at {collegeName}
+            <h2 className="text-2xl font-black text-white leading-tight mb-3">
+              Unlock Your<br /><span className="text-[#38b6ff]">Dream Career</span><br />at {collegeName}
             </h2>
-            <p className="text-slate-400 text-sm leading-relaxed font-medium">
+            <p className="text-slate-400 text-xs leading-relaxed">
               Join thousands of successful students who found their perfect match.
             </p>
           </div>
 
-          <div className="relative z-10 space-y-4">
-            {[
-              'Official Brochure & Fees',
-              'Placement Stats 2025',
-              'Scholarship Guidance',
-              'Expert Counseling'
-            ].map((item, i) => (
+          <div className="relative z-10 space-y-3">
+            {['Official Brochure & Fees', 'Placement Stats 2025', 'Scholarship Guidance', 'Expert Counseling'].map((item, i) => (
               <div key={i} className="flex items-center gap-2 text-slate-300">
-                <div className="w-4 h-4 rounded-full bg-sky-500/20 flex items-center justify-center">
-                  <CheckCircle2 size={10} className="text-sky-400" />
+                <div className="w-4 h-4 rounded-full bg-[#38b6ff]/15 flex items-center justify-center shrink-0">
+                  <CheckCircle2 size={9} className="text-[#38b6ff]" />
                 </div>
                 <span className="text-[10px] font-bold uppercase tracking-wider">{item}</span>
               </div>
@@ -204,126 +182,91 @@ export default function BrochureModal({
           </div>
         </div>
 
-        {/* Right Sidebar - Form Area */}
-        <div className="flex-1 bg-white relative flex flex-col justify-center items-center p-8 md:p-12 overflow-y-auto">
-          {/* Close Button */}
-          <button 
-            onClick={onClose}
-            className="absolute top-8 right-8 p-3 hover:bg-slate-50 rounded-full transition-all group z-50"
-          >
-            <X size={24} className="text-slate-400 group-hover:text-slate-900 group-hover:rotate-90 transition-all duration-300" />
+        {/* Right Panel — Form */}
+        <div className="flex-1 p-7 md:p-10 relative">
+          <button onClick={onClose} className="absolute top-5 right-5 w-9 h-9 flex items-center justify-center bg-slate-100 hover:bg-slate-200 rounded-full transition-all z-50">
+            <X size={16} className="text-slate-500" />
           </button>
 
-          <div className="w-full max-w-lg">
-            {isSuccess ? (
-              <div className="text-center animate-in zoom-in-95 duration-500">
-                <div className="w-24 h-24 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl shadow-emerald-500/10">
-                  <CheckCircle2 size={48} />
-                </div>
-                <h3 className="text-3xl font-black text-slate-900 mb-4">
-                  {mode === 'details' ? 'Redirecting...' : mode === 'share' ? 'Sharing...' : 'Request Successful!'}
-                </h3>
-                <p className="text-slate-500 text-lg leading-relaxed font-medium" dangerouslySetInnerHTML={{ __html: successMessages[mode] }} />
+          {isSuccess ? (
+            <div className="text-center py-14 animate-in zoom-in-95 duration-500">
+              <div className="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl shadow-emerald-500/10">
+                <CheckCircle2 size={40} />
               </div>
-            ) : (
-              <>
-                <div className="mb-12">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-8 h-[2px] bg-sky-500" />
-                    <span className="text-[11px] font-black text-sky-500 uppercase tracking-[0.2em]">Personalized Admissions</span>
+              <h3 className="text-2xl font-black text-slate-900 mb-3">
+                {mode === 'details' ? 'Redirecting...' : mode === 'share' ? 'Sharing...' : 'Request Successful!'}
+              </h3>
+              <p className="text-slate-400 text-sm leading-relaxed max-w-sm mx-auto" dangerouslySetInnerHTML={{ __html: successMessages[mode] }} />
+            </div>
+          ) : (
+            <>
+              <div className="mb-7">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-6 h-[2px] bg-[#38b6ff] rounded-full" />
+                  <span className="text-[10px] font-bold text-[#38b6ff] uppercase tracking-widest">Personalized Admissions</span>
+                </div>
+                <h3 className="text-2xl font-black text-slate-900">
+                  {config.title} <span className="text-[#38b6ff]">{config.highlight}</span>
+                </h3>
+                <p className="text-slate-400 text-sm mt-1.5 leading-relaxed">{config.description(collegeName)}</p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-1.5">
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Student Full Name</label>
+                  <div className="relative group">
+                    <User size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#38b6ff] transition-colors pointer-events-none" />
+                    <input required type="text" placeholder="e.g. Aryan Singh" className={inputCls}
+                      value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} />
                   </div>
-                  <h3 className="text-4xl font-black text-slate-900 mb-4 leading-tight">
-                    {config.title} <span className="text-sky-500 italic">{config.highlight}</span>
-                  </h3>
-                  <p className="text-slate-500 text-lg font-medium leading-relaxed">
-                    {config.description(collegeName)}
-                  </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-1">Student Full Name</label>
-                      <div className="relative group">
-                        <User size={18} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-sky-500 transition-colors" />
-                        <input 
-                          required
-                          type="text" 
-                          placeholder="e.g. Aryan Singh" 
-                          className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-3xl text-sm font-bold focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:bg-white focus:border-sky-500/30 transition-all"
-                          value={formData.name}
-                          onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-1">Official Email Address</label>
-                      <div className="relative group">
-                        <Mail size={18} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-sky-500 transition-colors" />
-                        <input 
-                          required
-                          type="email" 
-                          placeholder="aryan@gmail.com" 
-                          className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-3xl text-sm font-bold focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:bg-white focus:border-sky-500/30 transition-all"
-                          value={formData.email}
-                          onChange={(e) => setFormData({...formData, email: e.target.value})}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] px-1">Contact Mobile Number</label>
-                      <div className="relative group">
-                        <Phone size={18} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-sky-500 transition-colors" />
-                        <input 
-                          required
-                          type="tel" 
-                          placeholder="+91 99XXXXXX01" 
-                          className="w-full pl-14 pr-6 py-5 bg-slate-50 border border-slate-100 rounded-3xl text-sm font-bold focus:outline-none focus:ring-4 focus:ring-sky-500/10 focus:bg-white focus:border-sky-500/30 transition-all"
-                          value={formData.phone}
-                          onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        />
-                      </div>
-                    </div>
+                <div className="space-y-1.5">
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Email Address</label>
+                  <div className="relative group">
+                    <Mail size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#38b6ff] transition-colors pointer-events-none" />
+                    <input required type="email" placeholder="aryan@gmail.com" className={inputCls}
+                      value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
                   </div>
+                </div>
 
-                  <div className="flex items-start gap-2 px-2 mt-2">
-                    <div className="flex items-center h-5 mt-0.5">
-                      <input 
-                        id="terms-brochure"
-                        type="checkbox"
-                        required
-                        checked={agreed}
-                        onChange={(e) => setAgreed(e.target.checked)}
-                        className="w-4 h-4 text-sky-600 bg-white border-slate-300 rounded focus:ring-sky-500 transition-all cursor-pointer"
-                      />
-                    </div>
-                    <label htmlFor="terms-brochure" className="text-[10px] text-slate-500 font-bold leading-normal cursor-pointer select-none uppercase tracking-wider">
-                      I agree to receive info via call/SMS/email and accept the 
-                      <a href="/terms" className="text-sky-500 hover:underline mx-1">Terms & Conditions</a>
-                    </label>
+                <div className="space-y-1.5">
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Mobile Number</label>
+                  <div className="relative group">
+                    <Phone size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#38b6ff] transition-colors pointer-events-none" />
+                    <input required type="tel" placeholder="+91 99XXXXXX01" className={inputCls}
+                      value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} />
                   </div>
+                </div>
 
-                  <button 
-                    type="submit" 
-                    disabled={isSubmitting || !agreed}
-                    className="w-full bg-slate-900 text-white py-6 rounded-[32px] font-black text-xs uppercase tracking-[0.2em] hover:bg-slate-800 transition-all shadow-2xl shadow-slate-900/20 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 size={20} className="animate-spin" /> Processing...
-                      </>
-                    ) : (
-                      <>
-                        {config.buttonIcon} {config.buttonText}
-                      </>
-                    )}
-                  </button>
-                </form>
-              </>
-            )}
-          </div>
+                <div className="flex items-start gap-2.5 pt-1">
+                  <div className="flex items-center h-5 mt-0.5">
+                    <input id="terms-brochure" type="checkbox" required checked={agreed}
+                      onChange={(e) => setAgreed(e.target.checked)}
+                      className="w-4 h-4 text-[#38b6ff] bg-white border-slate-300 rounded focus:ring-[#38b6ff] cursor-pointer" />
+                  </div>
+                  <label htmlFor="terms-brochure" className="text-[10px] text-slate-400 leading-normal cursor-pointer select-none">
+                    I agree to receive info via call/SMS/email and accept the{' '}
+                    <a href="/terms" className="text-[#38b6ff] font-bold hover:underline">Terms & Conditions</a>
+                  </label>
+                </div>
+
+                <button type="submit" disabled={isSubmitting || !agreed}
+                  className="w-full bg-slate-900 hover:bg-slate-800 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2.5 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] shadow-xl shadow-slate-900/10">
+                  {isSubmitting ? (
+                    <><Loader2 size={16} className="animate-spin" /> Processing...</>
+                  ) : (
+                    <>{config.buttonIcon} {config.buttonText}</>
+                  )}
+                </button>
+
+                <div className="flex items-center justify-center gap-1.5 text-[10px] text-slate-400 pt-1">
+                  <Shield size={10} />
+                  <span>Your information is 100% secure and private.</span>
+                </div>
+              </form>
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -1,31 +1,34 @@
 'use client'
 
 import { useState } from 'react'
-import { X, User, Mail, Phone, MessageSquare, GraduationCap, Loader2, Building2, CheckCircle2, TrendingUp } from 'lucide-react'
+import { X, User, Mail, Phone, GraduationCap, Loader2, CheckCircle2, TrendingUp, Users } from 'lucide-react'
 
 interface CounsellingModalProps {
   isOpen: boolean
   onClose: () => void
 }
 
+// Replace with your actual Google Form Action URL and Entry IDs
+// To find these: 
+// 1. View your Google Form
+// 2. Inspect the form element to get the 'action' URL
+// 3. Inspect each input element to get the 'name' (e.g., entry.123456)
+const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse"
+const FIELD_IDS = {
+  name: "entry.111111111",
+  email: "entry.222222222",
+  phone: "entry.333333333",
+  stream: "entry.444444444",
+  preferredCollege: "entry.555555555",
+  message: "entry.666666666"
+}
+
+const inputCls = "w-full pl-10 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-900 placeholder:text-slate-300 focus:outline-none focus:border-[#38b6ff] focus:bg-white focus:ring-4 focus:ring-[#38b6ff]/8 transition-all"
+const selectCls = inputCls + " appearance-none cursor-pointer"
+
 export default function CounsellingModal({ isOpen, onClose }: CounsellingModalProps) {
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
-
-  // Replace with your actual Google Form Action URL and Entry IDs
-  // To find these: 
-  // 1. View your Google Form
-  // 2. Inspect the form element to get the 'action' URL
-  // 3. Inspect each input element to get the 'name' (e.g., entry.123456)
-  const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse"
-  const FIELD_IDS = {
-    name: "entry.111111111",
-    email: "entry.222222222",
-    phone: "entry.333333333",
-    stream: "entry.444444444",
-    preferredCollege: "entry.555555555",
-    message: "entry.666666666"
-  }
 
   if (!isOpen) return null
 
@@ -36,14 +39,7 @@ export default function CounsellingModal({ isOpen, onClose }: CounsellingModalPr
     const formData = new FormData(e.currentTarget)
     
     try {
-      // Using no-cors because Google Forms doesn't support CORS for direct POST from JS
-      // This will 'fail' the fetch but the data will still be sent
-      await fetch(GOOGLE_FORM_ACTION, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: formData
-      })
-      
+      await fetch(GOOGLE_FORM_ACTION, { method: 'POST', mode: 'no-cors', body: formData })
       setSubmitted(true)
       setTimeout(() => {
         onClose()
@@ -58,131 +54,112 @@ export default function CounsellingModal({ isOpen, onClose }: CounsellingModalPr
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
-      {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-midnight/80 backdrop-blur-sm"
-        onClick={onClose}
-      />
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-300" onClick={onClose} />
       
-      {/* Modal */}
-      <div className="relative w-full max-w-2xl bg-white rounded-[32px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
-        <button 
-          onClick={onClose}
-          className="absolute top-6 right-6 text-ink-3 hover:text-ink transition-colors z-10"
-        >
-          <X size={24} />
-        </button>
+      <div className="relative w-full max-w-3xl bg-white rounded-[28px] shadow-2xl overflow-hidden flex flex-col md:flex-row animate-in zoom-in-95 duration-300 z-10">
+        
+        {/* Left Panel */}
+        <div className="md:w-[38%] bg-slate-900 p-8 text-white flex flex-col justify-between relative overflow-hidden shrink-0">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-[#38b6ff]/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        {submitted ? (
-          <div className="px-8 py-20 text-center">
-            <div className="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
-               <Loader2 className="animate-pulse" size={40} />
+          <div className="relative z-10">
+            <div className="w-10 h-10 rounded-2xl bg-[#38b6ff]/15 flex items-center justify-center mb-6">
+              <TrendingUp className="text-[#38b6ff]" size={20} />
             </div>
-            <h2 className="text-2xl font-medium text-ink mb-2">Application Received!</h2>
-            <p className="text-ink-3">An expert counselor will reach out to you within 24 hours.</p>
+            <h3 className="text-2xl font-black text-white leading-tight mb-3">
+              Expert<br /><span className="text-[#38b6ff]">Counseling</span>
+            </h3>
+            <p className="text-xs text-slate-400 leading-relaxed mb-6">
+              Join 50k+ students who found their right career path with our experts.
+            </p>
+            <div className="space-y-3">
+              {[
+                { text: 'Admission Support' },
+                { text: 'Scholarship Guide' },
+                { text: 'Career Roadmap' }
+              ].map((item, i) => (
+                <div key={i} className="flex items-center gap-2 text-slate-300">
+                  <div className="w-4 h-4 rounded-full bg-[#38b6ff]/15 flex items-center justify-center shrink-0">
+                    <CheckCircle2 size={9} className="text-[#38b6ff]" />
+                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider">{item.text}</span>
+                </div>
+              ))}
+            </div>
           </div>
-        ) : (
-          <div className="flex flex-col md:flex-row">
-            {/* Sidebar */}
-            <div className="md:w-1/3 bg-slate-900 p-8 text-white flex flex-col justify-between">
-              <div>
-                <div className="w-10 h-10 rounded-xl bg-[#38b6ff]/20 flex items-center justify-center mb-6">
-                  <Star className="text-[#38b6ff]" size={20} />
+
+          <div className="relative z-10 mt-8">
+            <div className="flex -space-x-2 mb-3">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className="w-8 h-8 rounded-full border-2 border-slate-900 bg-slate-800 overflow-hidden">
+                  <img src={`https://i.pravatar.cc/100?u=${i + 10}`} alt="User" />
                 </div>
-                <h3 className="text-2xl font-medium leading-tight mb-4" style={{ fontFamily: 'Georgia, serif' }}>
-                  Expert <span className="text-[#38b6ff] italic">Counseling</span>
-                </h3>
-                <p className="text-xs text-white/50 leading-relaxed mb-6">
-                  Join 50k+ students who found their right career path with our experts.
-                </p>
-                <div className="space-y-4">
-                   {[
-                     { text: 'Admission Support', icon: CheckCircle2 },
-                     { text: 'Scholarship Guide', icon: CheckCircle2 },
-                     { text: 'Career Roadmap', icon: CheckCircle2 }
-                   ].map((item, i) => (
-                     <div key={i} className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-white/70">
-                        <item.icon size={12} className="text-[#38b6ff]" />
-                        {item.text}
-                     </div>
-                   ))}
-                </div>
-              </div>
-              <div className="mt-8">
-                <div className="flex -space-x-2">
-                  {[1,2,3,4].map(i => (
-                    <div key={i} className="w-8 h-8 rounded-full border-2 border-slate-900 bg-slate-800 overflow-hidden">
-                      <img src={`https://i.pravatar.cc/100?u=${i + 10}`} alt="User" />
-                    </div>
-                  ))}
-                </div>
-                <p className="text-[10px] text-white/40 mt-3 font-medium uppercase tracking-widest leading-loose">Trusted by 2M+ <br/> Aspirants Yearly</p>
-              </div>
+              ))}
             </div>
+            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-relaxed">
+              Trusted by 2M+<br />Aspirants Yearly
+            </p>
+          </div>
+        </div>
 
-            {/* Form */}
-            <div className="flex-1 p-10">
-              <div className="mb-10">
-                <h2 className="text-3xl font-medium text-slate-900 tracking-tight mb-2" style={{ fontFamily: 'Georgia, serif' }}>
-                  Apply for Guidance
-                </h2>
-                <p className="text-sm text-slate-500 font-medium">Professional admission support in minutes.</p>
+        {/* Right Panel — Form */}
+        <div className="flex-1 p-7 md:p-9">
+          <button onClick={onClose} className="absolute top-5 right-5 w-9 h-9 flex items-center justify-center bg-slate-100 hover:bg-slate-200 rounded-full transition-all z-50">
+            <X size={16} className="text-slate-500" />
+          </button>
+
+          {submitted ? (
+            <div className="py-16 flex flex-col items-center text-center animate-in zoom-in-95 duration-500">
+              <div className="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mb-5 shadow-lg shadow-emerald-500/10">
+                <CheckCircle2 size={36} />
+              </div>
+              <h2 className="text-2xl font-black text-slate-900 mb-2">Application Received!</h2>
+              <p className="text-sm text-slate-400">An expert counselor will reach out to you within 24 hours.</p>
+            </div>
+          ) : (
+            <>
+              <div className="mb-7">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-6 h-[2px] bg-[#38b6ff] rounded-full" />
+                  <span className="text-[10px] font-bold text-[#38b6ff] uppercase tracking-widest">Free Session</span>
+                </div>
+                <h2 className="text-2xl font-black text-slate-900 mb-1">Apply for Guidance</h2>
+                <p className="text-sm text-slate-400">Professional admission support in minutes.</p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid grid-cols-2 gap-5">
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Full Name</label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
-                      <input
-                        name={FIELD_IDS.name}
-                        type="text"
-                        required
-                        placeholder="John Doe"
-                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:border-[#38b6ff] focus:bg-white outline-none transition-all"
-                      />
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Full Name</label>
+                    <div className="relative group">
+                      <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#38b6ff] transition-colors pointer-events-none" size={14} />
+                      <input name={FIELD_IDS.name} type="text" required placeholder="John Doe" className={inputCls} />
                     </div>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Phone</label>
-                    <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
-                      <input
-                        name={FIELD_IDS.phone}
-                        type="tel"
-                        required
-                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:border-[#38b6ff] focus:bg-white outline-none transition-all"
-                        placeholder="+91 00000 00000"
-                      />
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Phone</label>
+                    <div className="relative group">
+                      <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#38b6ff] transition-colors pointer-events-none" size={14} />
+                      <input name={FIELD_IDS.phone} type="tel" required placeholder="+91 00000 00000" className={inputCls} />
                     </div>
                   </div>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email address</label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
-                    <input
-                      name={FIELD_IDS.email}
-                      type="email"
-                      required
-                      placeholder="hello@example.com"
-                      className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:border-[#38b6ff] focus:bg-white outline-none transition-all"
-                    />
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Email Address</label>
+                  <div className="relative group">
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#38b6ff] transition-colors pointer-events-none" size={14} />
+                    <input name={FIELD_IDS.email} type="email" required placeholder="hello@example.com" className={inputCls} />
                   </div>
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Selected Stream</label>
-                  <div className="relative">
-                    <GraduationCap className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
-                    <select
-                      name={FIELD_IDS.stream}
-                      required
-                      className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:border-[#38b6ff] focus:bg-white outline-none appearance-none transition-all cursor-pointer"
-                    >
+                  <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Selected Stream</label>
+                  <div className="relative group">
+                    <GraduationCap className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#38b6ff] transition-colors pointer-events-none" size={14} />
+                    <select name={FIELD_IDS.stream} required className={selectCls}>
                       <option value="">Choose Course Category</option>
                       <option value="Engineering">Engineering & Tech</option>
                       <option value="Medical">Medical & Sciences</option>
@@ -193,38 +170,17 @@ export default function CounsellingModal({ isOpen, onClose }: CounsellingModalPr
                   </div>
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full py-4 bg-[#38b6ff] text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2 mt-6 shadow-xl shadow-[#38b6ff]/20"
-                >
-                  {loading ? <Loader2 className="animate-spin" size={18} /> : (
-                    <>Submit Application <TrendingUp size={16} /></>
+                <button type="submit" disabled={loading}
+                  className="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white text-xs font-black uppercase tracking-widest rounded-2xl transition-all flex items-center justify-center gap-2 shadow-xl shadow-slate-900/10 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed mt-2">
+                  {loading ? <Loader2 className="animate-spin" size={16} /> : (
+                    <>Submit Application <TrendingUp size={14} /></>
                   )}
                 </button>
               </form>
-            </div>
-          </div>
-        )}
+            </>
+          )}
+        </div>
       </div>
     </div>
-  )
-}
-
-function Star({ className, size }: { className?: string, size?: number }) {
-  return (
-    <svg 
-      className={className} 
-      width={size || 24} 
-      height={size || 24} 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="round" 
-      strokeLinejoin="round"
-    >
-      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-    </svg>
   )
 }
