@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { X, User, Mail, Phone, GraduationCap, Loader2, CheckCircle2, TrendingUp, Users } from 'lucide-react'
+import { X, User, Mail, Phone, GraduationCap, Loader2, CheckCircle2, TrendingUp, Users, Check } from 'lucide-react'
 
 interface CounsellingModalProps {
   isOpen: boolean
@@ -60,18 +60,18 @@ export default function CounsellingModal({ isOpen, onClose }: CounsellingModalPr
       <div className="relative w-full max-w-3xl bg-white rounded-[28px] shadow-2xl overflow-hidden flex flex-col md:flex-row animate-in zoom-in-95 duration-300 z-10">
         
         {/* Left Panel */}
-        <div className="md:w-[38%] bg-slate-900 p-8 text-white flex flex-col justify-between relative overflow-hidden shrink-0">
-          <div className="absolute top-0 right-0 w-48 h-48 bg-[#38b6ff]/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="md:w-[38%] bg-[linear-gradient(to_right,#f8fafc_1px,transparent_1px),linear-gradient(to_bottom,#f8fafc_1px,transparent_1px)] bg-[size:24px_24px] bg-white p-8 flex flex-col justify-between relative overflow-hidden shrink-0 border-r border-slate-100">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-50/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-40 h-40 bg-emerald-50/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10">
-            <div className="w-10 h-10 rounded-2xl bg-[#38b6ff]/15 flex items-center justify-center mb-6">
-              <TrendingUp className="text-[#38b6ff]" size={20} />
+            <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center mb-6">
+              <TrendingUp className="text-indigo-600" size={20} />
             </div>
-            <h3 className="text-2xl font-black text-white leading-tight mb-3">
-              Expert<br /><span className="text-[#38b6ff]">Counselling</span>
+            <h3 className="text-2xl font-black text-slate-900 leading-tight mb-3">
+              Expert<br />Counselling
             </h3>
-            <p className="text-xs text-slate-400 leading-relaxed mb-6">
+            <p className="text-xs text-slate-500 leading-relaxed mb-6 font-medium">
               Join 50k+ students who found their right career path with our experts.
             </p>
             <div className="space-y-3">
@@ -80,11 +80,11 @@ export default function CounsellingModal({ isOpen, onClose }: CounsellingModalPr
                 { text: 'Scholarship Guide' },
                 { text: 'Career Roadmap' }
               ].map((item, i) => (
-                <div key={i} className="flex items-center gap-2 text-slate-300">
-                  <div className="w-4 h-4 rounded-full bg-[#38b6ff]/15 flex items-center justify-center shrink-0">
-                    <CheckCircle2 size={9} className="text-[#38b6ff]" />
+                <div key={i} className="flex items-center gap-2.5 text-slate-650">
+                  <div className="w-4.5 h-4.5 rounded-full bg-indigo-50 flex items-center justify-center shrink-0 border border-indigo-100/50">
+                    <Check size={10} className="text-indigo-600 stroke-[3.5px]" />
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider">{item.text}</span>
+                  <span className="text-[10px] font-black uppercase tracking-wider">{item.text}</span>
                 </div>
               ))}
             </div>
@@ -93,7 +93,7 @@ export default function CounsellingModal({ isOpen, onClose }: CounsellingModalPr
           <div className="relative z-10 mt-8">
             <div className="flex -space-x-2 mb-3">
               {[1, 2, 3, 4].map(i => (
-                <div key={i} className="w-8 h-8 rounded-full border-2 border-slate-900 bg-slate-800 overflow-hidden">
+                <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-slate-100 overflow-hidden shadow-sm">
                   <img src={`https://i.pravatar.cc/100?u=${i + 10}`} alt="User" />
                 </div>
               ))}

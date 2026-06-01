@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { X, CheckCircle2, Loader2, User, Mail, Phone, MapPin, GraduationCap, Building2, Lock, Eye, EyeOff, ArrowRight, Shield } from 'lucide-react'
+import { X, CheckCircle2, Loader2, User, Mail, Phone, MapPin, GraduationCap, Building2, Lock, Eye, EyeOff, ArrowRight, Shield, Check } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import AuthModal from './AuthModal'
@@ -165,45 +165,58 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
           ) : (
             <>
               {/* Left Panel */}
-              <div className="w-full lg:w-[42%] bg-slate-900 p-8 md:p-10 flex flex-col justify-between relative overflow-hidden shrink-0">
+              <div className="w-full lg:w-[42%] bg-[linear-gradient(to_right,#f8fafc_1px,transparent_1px),linear-gradient(to_bottom,#f8fafc_1px,transparent_1px)] bg-[size:24px_24px] bg-white p-8 md:p-10 flex flex-col justify-between relative overflow-hidden shrink-0 border-r border-slate-100">
                 {/* Glow blobs */}
-                <div className="absolute top-0 right-0 w-56 h-56 bg-[#38b6ff]/10 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute top-0 right-0 w-56 h-56 bg-indigo-50/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-50/10 rounded-full blur-3xl pointer-events-none" />
 
                 <div className="relative z-10 space-y-6">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-[10px] font-bold text-[#38b6ff] uppercase tracking-widest">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-200/80 text-[10px] font-black text-slate-800 uppercase tracking-widest">
                     Admissions Open 2026
                   </div>
 
                   <div>
-                    <h2 className="text-3xl md:text-4xl font-black text-white leading-[1.1] tracking-tight">
-                      Plan your<br />admission<br /><span className="text-[#38b6ff]">the right way.</span>
+                    <h2 className="text-3xl md:text-4xl font-black text-slate-900 leading-[1.1] tracking-tighter font-display">
+                      Plan your admission <br />
+                      the right way.
                     </h2>
-                    <p className="text-slate-400 text-sm leading-relaxed mt-4">
-                      Expert guidance, college comparisons, and a clear path to your seat — all in one place.
+                    <p className="text-slate-500 text-xs md:text-sm leading-relaxed mt-5 font-medium">
+                      Get expert guidance, compare the best colleges, and secure your seat without confusion. Fill in your details and we'll help you take the next step with clarity and confidence.
                     </p>
                   </div>
 
-                  <div className="space-y-3 pt-4 border-t border-white/10">
-                    {[
-                      'Right course & college for your profile',
-                      'Clear guidance from application to admission',
-                      'Direct counsellor support, no bots',
-                    ].map((text, i) => (
-                      <div key={i} className="flex items-start gap-3">
-                        <div className="w-4 h-4 rounded-full bg-[#38b6ff]/20 flex items-center justify-center shrink-0 mt-0.5">
-                          <CheckCircle2 size={10} className="text-[#38b6ff]" />
-                        </div>
-                        <span className="text-slate-300 text-xs font-medium">{text}</span>
+                  {/* Horizontal Divider */}
+                  <div className="h-[1px] bg-slate-150 my-6" />
+
+                  {/* Bullet points side-by-side grid */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="flex items-start gap-2.5">
+                      <div className="w-4.5 h-4.5 rounded-full bg-indigo-50 flex items-center justify-center shrink-0 mt-0.5 border border-indigo-100/50">
+                        <Check size={10} className="text-indigo-600 stroke-[3.5px]" />
                       </div>
-                    ))}
+                      <span className="text-slate-650 text-[11px] md:text-xs font-bold leading-snug">
+                        Right course & college based on your profile
+                      </span>
+                    </div>
+
+                    <div className="flex items-start gap-2.5">
+                      <div className="w-4.5 h-4.5 rounded-full bg-indigo-50 flex items-center justify-center shrink-0 mt-0.5 border border-indigo-100/50">
+                        <Check size={10} className="text-indigo-600 stroke-[3.5px]" />
+                      </div>
+                      <span className="text-slate-650 text-[11px] md:text-xs font-bold leading-snug">
+                        Simple guidance from application to admission
+                      </span>
+                    </div>
                   </div>
+
+                  {/* Horizontal Divider */}
+                  <div className="h-[1px] bg-slate-150 my-6" />
                 </div>
 
                 <div className="relative z-10 mt-8">
                   <a 
                     href="tel:+919900116101"
-                    className="inline-flex w-full items-center justify-center gap-2 py-3.5 bg-white/8 hover:bg-white/12 border border-white/15 text-white font-bold text-xs rounded-2xl transition-all"
+                    className="inline-flex w-full items-center justify-center gap-2 py-3.5 bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 font-extrabold text-xs rounded-2xl shadow-sm transition-all"
                   >
                     Talk to a Counsellor
                   </a>

@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useState } from 'react'
-import { X, Mail, Phone, User, Download, CheckCircle2, Loader2, Info, Share2, Bell, ArrowRight, Shield } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
+import { X, Mail, Phone, User, Download, CheckCircle2, Loader2, Info, Share2, Bell, ArrowRight, Shield, Check } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
 type ModalMode = 'brochure' | 'details' | 'share' | 'remind'
@@ -152,31 +152,31 @@ export default function BrochureModal({
       <div className="relative w-full max-w-4xl bg-white rounded-[28px] shadow-2xl overflow-hidden flex flex-col md:flex-row animate-in zoom-in-95 duration-300 z-10">
         
         {/* Left Panel */}
-        <div className="hidden md:flex w-[38%] bg-slate-900 p-8 flex-col justify-between relative overflow-hidden shrink-0">
-          <div className="absolute top-0 right-0 w-48 h-48 bg-[#38b6ff]/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="hidden md:flex w-[38%] bg-[linear-gradient(to_right,#f8fafc_1px,transparent_1px),linear-gradient(to_bottom,#f8fafc_1px,transparent_1px)] bg-[size:24px_24px] bg-white p-8 flex flex-col justify-between relative overflow-hidden shrink-0 border-r border-slate-100">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-50/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-40 h-40 bg-emerald-50/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10">
             <div className="flex items-center gap-2.5 mb-8">
-              <div className="w-8 h-8 bg-[#38b6ff] rounded-xl flex items-center justify-center font-black text-white italic text-sm">P</div>
-              <span className="text-xs font-black text-white uppercase tracking-widest">Promote Education</span>
+              <div className="w-8 h-8 bg-indigo-600 rounded-xl flex items-center justify-center font-black text-white italic text-sm shadow-sm">P</div>
+              <span className="text-[10px] font-black text-slate-800 uppercase tracking-widest">Promote Education</span>
             </div>
 
-            <h2 className="text-2xl font-black text-white leading-tight mb-3">
-              Unlock Your<br /><span className="text-[#38b6ff]">Dream Career</span><br />at {collegeName}
+            <h2 className="text-2xl font-black text-slate-900 leading-tight mb-3 font-display">
+              Unlock Your<br />Dream Career<br />at {collegeName}
             </h2>
-            <p className="text-slate-400 text-xs leading-relaxed">
+            <p className="text-slate-500 text-xs leading-relaxed font-medium">
               Join thousands of successful students who found their perfect match.
             </p>
           </div>
 
           <div className="relative z-10 space-y-3">
             {['Official Brochure & Fees', 'Placement Stats 2025', 'Scholarship Guidance', 'Expert Counselling'].map((item, i) => (
-              <div key={i} className="flex items-center gap-2 text-slate-300">
-                <div className="w-4 h-4 rounded-full bg-[#38b6ff]/15 flex items-center justify-center shrink-0">
-                  <CheckCircle2 size={9} className="text-[#38b6ff]" />
+              <div key={i} className="flex items-center gap-2.5 text-slate-650">
+                <div className="w-4.5 h-4.5 rounded-full bg-indigo-50 flex items-center justify-center shrink-0 border border-indigo-100/50">
+                  <Check size={10} className="text-indigo-600 stroke-[3.5px]" />
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-wider">{item}</span>
+                <span className="text-[10px] font-black uppercase tracking-wider">{item}</span>
               </div>
             ))}
           </div>
