@@ -218,43 +218,51 @@ function CoursesPageContent() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100/60">
-                  {filteredCourses.map(course => (
-                    <tr key={course.id} className="hover:bg-slate-50/50 transition-colors group">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <span className="text-[9px] font-black text-indigo-600 bg-indigo-50 border border-indigo-100/50 px-2.5 py-0.5 rounded uppercase shrink-0">
-                            {course.degree}
+                  {filteredCourses.map(course => {
+                    const degreeLower = (course.degree || '').toLowerCase();
+                    const specSlug = course.slug && course.slug.startsWith(`${degreeLower}-`)
+                      ? course.slug.slice(degreeLower.length + 1)
+                      : course.slug;
+                    const courseLink = course.slug ? `/courses/${degreeLower}/${specSlug}` : `/courses/${course.id}`;
+
+                    return (
+                      <tr key={course.id} className="hover:bg-slate-50/50 transition-colors group">
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <span className="text-[9px] font-black text-indigo-600 bg-indigo-50 border border-indigo-100/50 px-2.5 py-0.5 rounded uppercase shrink-0">
+                              {course.degree}
+                            </span>
+                            <span className="font-extrabold text-slate-900 text-sm group-hover:text-indigo-600 transition-colors leading-tight">
+                              {course.course_name}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-xs text-slate-500 font-bold uppercase tracking-wider">
+                          {CATEGORY_MAPPINGS[course.category] || course.category}
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="text-[9px] font-bold text-slate-400 bg-slate-50 border border-slate-150 px-2 py-0.5 rounded uppercase">
+                            {course.level}
                           </span>
-                          <span className="font-extrabold text-slate-900 text-sm group-hover:text-indigo-600 transition-colors leading-tight">
-                            {course.course_name}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-xs text-slate-500 font-bold uppercase tracking-wider">
-                        {CATEGORY_MAPPINGS[course.category] || course.category}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="text-[9px] font-bold text-slate-400 bg-slate-50 border border-slate-150 px-2 py-0.5 rounded uppercase">
-                          {course.level}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-xs text-slate-600 font-semibold">
-                        {course.duration_years ? `${course.duration_years} Years` : '—'}
-                      </td>
-                      <td className="px-6 py-4 text-xs text-slate-500 font-medium max-w-xs truncate">
-                        {course.career_domain || '—'}
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <Link
-                          href={`/courses/${course.slug || course.id}`}
-                          className="inline-flex items-center gap-1.5 py-2 px-3 bg-slate-50 hover:bg-slate-950 hover:text-white border border-slate-150 text-slate-700 font-extrabold text-[10px] uppercase tracking-wider rounded-lg transition-all"
-                        >
-                          Explore
-                          <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                        <td className="px-6 py-4 text-xs text-slate-600 font-semibold">
+                          {course.duration_years ? `${course.duration_years} Years` : '—'}
+                        </td>
+                        <td className="px-6 py-4 text-xs text-slate-500 font-medium max-w-xs truncate">
+                          {course.career_domain || '—'}
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <Link
+                            href={courseLink}
+                            className="inline-flex items-center gap-1.5 py-2 px-3 bg-slate-50 hover:bg-slate-950 hover:text-white border border-slate-150 text-slate-700 font-extrabold text-[10px] uppercase tracking-wider rounded-lg transition-all"
+                          >
+                            Explore
+                            <ArrowRight size={10} className="group-hover:translate-x-0.5 transition-transform" />
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

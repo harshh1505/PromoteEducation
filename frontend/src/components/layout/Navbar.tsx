@@ -124,11 +124,11 @@ export default function Navbar() {
 
     // Removed fetchTopCategories to use static array as requested
     setTopCategories([
-      { label: 'All Courses', href: '/master-courses' },
-      { label: 'B.Tech', href: '/master-courses/btech' },
-      { label: 'MBBS', href: '/master-courses/mbbs' },
-      { label: 'MBA', href: '/master-courses/mba' },
-      { label: 'BDS', href: '/courses/mbbs-bds' } // BDS is a specific course
+      { label: 'All Courses', href: '/courses' },
+      { label: 'B.Tech', href: '/courses/btech' },
+      { label: 'MBBS', href: '/courses/mbbs' },
+      { label: 'MBA', href: '/courses/mba' },
+      { label: 'BDS', href: '/courses/mbbs/bds' }
     ])
 
     return () => {
