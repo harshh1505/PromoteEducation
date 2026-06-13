@@ -91,6 +91,7 @@ export default function Navbar() {
   const [authVisible, setAuthVisible] = useState(false)
   const [counsellingVisible, setCounsellingVisible] = useState(false)
   const [goalVisible, setGoalVisible] = useState(false)
+  const [exploreMobileOpen, setExploreMobileOpen] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [userDropdown, setUserDropdown] = useState(false)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
@@ -528,13 +529,15 @@ export default function Navbar() {
         {/* Mobile Menu */}
         {mobileOpen && (
           <div className="md:hidden fixed inset-x-0 top-[60px] bottom-0 bg-white z-[45] overflow-y-auto modal-overlay" style={{ maxHeight: 'calc(100dvh - 60px)' }}>
-            <div className="p-6 pb-28 space-y-8">
+            <div className="p-6 pb-28 space-y-6">
+              
+              {/* Search Bar */}
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                 <input
                   type="text"
                   placeholder="Search Colleges, Exams..."
-                  className="w-full pl-11 pr-4 py-3 bg-slate-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  className="w-full pl-11 pr-4 py-3 bg-slate-100 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-sky-500/20"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -544,7 +547,7 @@ export default function Navbar() {
                       <button
                         key={i}
                         onClick={() => { window.location.href = `/colleges/${res.slug}`; setMobileOpen(false); }}
-                        className="w-full flex items-center gap-3 px-4 py-3 border-b border-slate-50 last:border-0 hover:bg-slate-50"
+                        className="w-full flex items-center gap-3 px-4 py-3 border-b border-slate-50 last:border-0 hover:bg-slate-50 animate-in fade-in duration-100"
                       >
                         <Building2 size={14} className="text-slate-400" />
                         <div className="flex flex-col text-left">
@@ -557,32 +560,145 @@ export default function Navbar() {
                 )}
               </div>
 
-              <div className="space-y-4">
-                <p className="text-[10px] uppercase font-black text-slate-400 tracking-widest">Main Menu</p>
+              {/* Goal & City Selection CTA */}
+              <button
+                onClick={() => { setMobileOpen(false); setGoalVisible(true); }}
+                className="w-full flex items-center gap-3 p-4 min-h-[52px] bg-[#3B2EA8] hover:bg-[#2c2196] text-white rounded-2xl text-xs font-bold uppercase tracking-wider shadow-lg shadow-indigo-900/10 transition-all active:scale-[0.98]"
+              >
+                <GraduationCap size={16} className="text-sky-400" />
+                <span>Select Goal & City</span>
+                <ChevronDown size={14} className="ml-auto opacity-60" />
+              </button>
+
+              {/* Quick CTAs Grid from Secondary Navbar */}
+              <div className="grid grid-cols-2 gap-3">
+                <a
+                  href="/cutoffs"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center justify-center gap-2 py-3 bg-amber-50 hover:bg-amber-100/50 border border-amber-200 rounded-xl text-xs font-bold text-amber-800 transition-colors shadow-sm"
+                >
+                  <BarChart3 size={14} className="text-amber-500" /> Cutoffs
+                </a>
+                <a
+                  href="/abroad"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center justify-center gap-2 py-3 bg-sky-50 hover:bg-sky-100/50 border border-sky-200 rounded-xl text-xs font-bold text-sky-800 transition-colors shadow-sm"
+                >
+                  <Globe size={14} className="text-sky-500" /> Study Abroad
+                </a>
+              </div>
+
+              {/* Main Menu with Explore Accordion */}
+              <div className="space-y-3">
+                <p className="text-[10px] uppercase font-black text-slate-400 tracking-widest pl-1">Main Menu</p>
                 <div className="grid gap-2">
-                  {navItems.map(item => (
-                    <a
-                      key={item.label}
-                      href={item.href}
-                      className="flex items-center justify-between p-4 min-h-[52px] bg-slate-50 rounded-2xl text-sm font-bold text-slate-900 active:bg-sky-50 transition-colors"
-                    >
-                      {item.label}
-                      <ChevronDown size={16} className="-rotate-90 opacity-20" />
-                    </a>
-                  ))}
+                  {navItems.map(item => {
+                    if (item.label === 'Explore') {
+                      return (
+                        <div key={item.label} className="space-y-2">
+                          <button
+                            onClick={() => setExploreMobileOpen(!exploreMobileOpen)}
+                            className="w-full flex items-center justify-between p-4 min-h-[52px] bg-slate-50 rounded-2xl text-sm font-bold text-slate-900 active:bg-sky-50 transition-colors"
+                          >
+                            <span className="flex items-center gap-2">
+                              <Compass size={16} className="text-sky-500" />
+                              {item.label}
+                            </span>
+                            <ChevronDown size={16} className={cn("transition-transform duration-300", exploreMobileOpen ? "rotate-180" : "-rotate-90 opacity-40")} />
+                          </button>
+                          
+                          {exploreMobileOpen && (
+                            <div className="pl-4 pr-1 py-1 space-y-6 border-l-2 border-slate-100 animate-in slide-in-from-top-2 duration-300">
+                              {exploreGroups.map(group => (
+                                <div key={group.title} className="space-y-2.5">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <div className="w-1 h-3.5 bg-sky-500 rounded-full" />
+                                    <h5 className="text-[10px] uppercase font-black text-slate-900 tracking-widest">{group.title}</h5>
+                                  </div>
+                                  <div className="grid gap-2">
+                                    {group.items.map(subItem => {
+                                      const Icon = IconMap[subItem.icon]
+                                      return (
+                                        <a
+                                          key={subItem.label}
+                                          href={subItem.href}
+                                          onClick={() => setMobileOpen(false)}
+                                          className="flex items-center justify-between p-3.5 rounded-xl bg-white border border-slate-100 active:bg-slate-50 transition-all shadow-sm"
+                                        >
+                                          <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center text-sky-500 border border-sky-100 shrink-0">
+                                              {Icon && <Icon size={14} />}
+                                            </div>
+                                            <div className="flex flex-col">
+                                              <span className="text-[12px] font-bold text-slate-700 leading-tight">{subItem.label}</span>
+                                              {subItem.badge && <span className="text-[8px] text-sky-600 font-bold mt-0.5 uppercase tracking-tighter opacity-70">{subItem.badge}</span>}
+                                            </div>
+                                          </div>
+                                          {subItem.status && (
+                                            <span className="text-[8px] bg-sky-50 text-sky-600 px-2 py-0.5 rounded-full font-black uppercase tracking-tighter border border-sky-100/50 shrink-0">
+                                              {subItem.status}
+                                            </span>
+                                          )}
+                                        </a>
+                                      )
+                                    })}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )
+                    }
+
+                    return (
+                      <a
+                        key={item.label}
+                        href={item.href}
+                        onClick={() => setMobileOpen(false)}
+                        className="flex items-center justify-between p-4 min-h-[52px] bg-slate-50 rounded-2xl text-sm font-bold text-slate-900 active:bg-sky-50 transition-colors"
+                      >
+                        {item.label}
+                        <ChevronDown size={16} className="-rotate-90 opacity-20" />
+                      </a>
+                    )
+                  })}
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <p className="text-[10px] uppercase font-black text-slate-400 tracking-widest">Explore Categories</p>
+              {/* Explore Categories Scroll */}
+              <div className="space-y-3">
+                <p className="text-[10px] uppercase font-black text-slate-400 tracking-widest pl-1">Course Streams</p>
                 <div className="flex flex-wrap gap-2">
                   {topCategories.map(cat => (
-                    <a key={cat.label} href={cat.href} className="px-4 py-2 bg-slate-100 rounded-lg text-xs font-bold text-slate-600 active:bg-sky-600 active:text-white transition-all">
+                    <a
+                      key={cat.label}
+                      href={cat.href}
+                      onClick={() => setMobileOpen(false)}
+                      className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-bold text-slate-600 active:bg-sky-600 active:text-white transition-all"
+                    >
                       {cat.label}
                     </a>
                   ))}
                 </div>
               </div>
+
+              {/* Extra Secondary Action: Write a Review */}
+              <button
+                onClick={() => { setMobileOpen(false); setAuthVisible(true); }}
+                className="w-full flex items-center justify-center gap-2 py-3.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-2xl text-xs font-bold text-slate-700 transition-colors"
+              >
+                <FileEdit size={14} className="text-slate-500" /> Write a Review
+              </button>
+
+              {/* Time display indicator */}
+              <div className="flex items-center justify-center gap-2 py-2.5 bg-slate-50 border border-slate-100 rounded-2xl">
+                <Clock size={14} className="text-sky-500" />
+                <span className="text-xs font-extrabold text-slate-500 tabular-nums">
+                  CLOCK: {currentTime || '--:--:-- --'}
+                </span>
+              </div>
+
             </div>
           </div>
         )}

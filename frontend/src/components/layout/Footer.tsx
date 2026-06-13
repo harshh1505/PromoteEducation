@@ -142,7 +142,7 @@ export default function Footer() {
           </div>
 
           {/* Link columns (4 categories) */}
-          <div className="col-span-2 md:col-span-5 grid grid-cols-2 gap-6">
+          <div className="col-span-2 md:col-span-5 grid grid-cols-2 sm:grid-cols-4 gap-6">
             {Object.entries(footerLinks).map(([category, links]) => (
               <div key={category}>
                 <h4 className="text-[9px] font-black mb-5 tracking-[0.15em] text-slate-500 uppercase">
