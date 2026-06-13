@@ -150,7 +150,7 @@ export default function LoanSection() {
                 {/* Tenure */}
                 <div>
                   <label className="text-xs font-bold text-slate-400 block mb-3 uppercase tracking-wider">Tenure (Years)</label>
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     {[3, 5, 7, 10].map((yr) => (
                       <button key={yr} onClick={() => setTenure(yr * 12)}
                         className={cn("py-2.5 text-xs font-bold rounded-xl border transition-all",
@@ -167,7 +167,7 @@ export default function LoanSection() {
             </div>
 
             {/* Output Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-slate-100">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-100">
               <div className="bg-sky-50 border border-sky-100 rounded-2xl p-4 text-center">
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block mb-1">Monthly EMI</span>
                 <div className="text-xl font-black text-slate-800">
@@ -187,7 +187,7 @@ export default function LoanSection() {
             {/* Benefits */}
             <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4">
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Finance Benefits</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs font-semibold text-slate-600">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-semibold text-slate-600">
                 {benefits.map(b => (
                   <div key={b} className="flex items-center gap-2">
                     <CheckCircle2 size={13} className="text-sky-500 shrink-0" />
@@ -219,16 +219,16 @@ export default function LoanSection() {
               <form onSubmit={handleSubmitLead} className="space-y-3.5">
                 <input required type="text" placeholder="Your Name*" value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-white border border-slate-200 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 rounded-xl px-4 py-3.5 text-xs md:text-sm font-semibold outline-none text-slate-800 placeholder:text-slate-300 transition-all" />
+                  className="w-full bg-white border border-slate-200 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 rounded-xl px-4 py-3.5 text-base md:text-sm font-semibold outline-none text-slate-800 placeholder:text-slate-300 transition-all" />
                 <input required type="tel" placeholder="Phone Number*" value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full bg-white border border-slate-200 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 rounded-xl px-4 py-3.5 text-xs md:text-sm font-semibold outline-none text-slate-800 placeholder:text-slate-300 transition-all" />
+                  className="w-full bg-white border border-slate-200 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 rounded-xl px-4 py-3.5 text-base md:text-sm font-semibold outline-none text-slate-800 placeholder:text-slate-300 transition-all" />
                 <input required type="text" placeholder="Your City*" value={city}
                   onChange={(e) => setCity(e.target.value)}
-                  className="w-full bg-white border border-slate-200 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 rounded-xl px-4 py-3.5 text-xs md:text-sm font-semibold outline-none text-slate-800 placeholder:text-slate-300 transition-all" />
+                  className="w-full bg-white border border-slate-200 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 rounded-xl px-4 py-3.5 text-base md:text-sm font-semibold outline-none text-slate-800 placeholder:text-slate-300 transition-all" />
                 <select required value={incomeRange}
                   onChange={(e) => setIncomeRange(e.target.value)}
-                  className="w-full bg-white border border-slate-200 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 rounded-xl px-4 py-3.5 text-xs md:text-sm font-semibold outline-none text-slate-500 transition-all cursor-pointer appearance-none">
+                  className="w-full bg-white border border-slate-200 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 rounded-xl px-4 py-3.5 text-base md:text-sm font-semibold outline-none text-slate-505 transition-all cursor-pointer appearance-none">
                   <option value="">Family Income Range*</option>
                   <option value="< 3 LPA">Under ₹3 Lakhs</option>
                   <option value="3 - 6 LPA">₹3 Lakhs – ₹6 Lakhs</option>

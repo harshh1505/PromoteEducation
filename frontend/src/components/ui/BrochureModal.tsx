@@ -81,6 +81,16 @@ export default function BrochureModal({
 
   const config = MODAL_CONFIG[mode]
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('body-modal-open')
+    } else {
+      document.body.classList.remove('body-modal-open')
+    }
+    return () => document.body.classList.remove('body-modal-open')
+  }, [isOpen])
+
   if (!isOpen) return null
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -146,10 +156,10 @@ export default function BrochureModal({
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6">
+    <div className="fixed inset-0 z-[100] flex items-start md:items-center justify-center p-3 md:p-6 overflow-y-auto modal-overlay">
       <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-300" onClick={onClose} />
       
-      <div className="relative w-full max-w-4xl bg-white rounded-[28px] shadow-2xl overflow-hidden flex flex-col md:flex-row animate-in zoom-in-95 duration-300 z-10">
+      <div className="relative w-full max-w-4xl bg-white rounded-[28px] shadow-2xl overflow-hidden flex flex-col md:flex-row animate-in zoom-in-95 duration-300 z-10 my-auto" style={{ maxHeight: 'calc(100dvh - 1.5rem)' }}>
         
         {/* Left Panel */}
         <div className="hidden md:flex w-[38%] bg-[linear-gradient(to_right,#f8fafc_1px,transparent_1px),linear-gradient(to_bottom,#f8fafc_1px,transparent_1px)] bg-[size:24px_24px] bg-white p-8 flex flex-col justify-between relative overflow-hidden shrink-0 border-r border-slate-100">
@@ -183,8 +193,8 @@ export default function BrochureModal({
         </div>
 
         {/* Right Panel — Form */}
-        <div className="flex-1 p-7 md:p-10 relative">
-          <button onClick={onClose} className="absolute top-5 right-5 w-9 h-9 flex items-center justify-center bg-slate-100 hover:bg-slate-200 rounded-full transition-all z-50">
+        <div className="flex-1 p-5 md:p-10 relative overflow-y-auto" style={{ maxHeight: 'calc(100dvh - 2rem)', WebkitOverflowScrolling: 'touch' }}>
+          <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 min-w-[44px] min-h-[44px] flex items-center justify-center bg-slate-100 hover:bg-slate-200 rounded-full transition-all z-50">
             <X size={16} className="text-slate-500" />
           </button>
 

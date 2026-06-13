@@ -44,6 +44,17 @@ const cities = ['Kolkata', 'Bangalore', 'Mumbai', 'Delhi', 'Pune', 'Hyderabad', 
 
 export default function GoalModal({ isOpen, onClose }: GoalModalProps) {
   const [step, setStep] = useState(1)
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('body-modal-open')
+    } else {
+      document.body.classList.remove('body-modal-open')
+    }
+    return () => document.body.classList.remove('body-modal-open')
+  }, [isOpen])
+
   const [selections, setSelections] = useState<any>({
     fields: [],
     interests: [],
@@ -182,21 +193,21 @@ export default function GoalModal({ isOpen, onClose }: GoalModalProps) {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-300">
-      <div className="bg-white w-full max-w-5xl rounded-[28px] overflow-hidden shadow-2xl flex flex-col md:flex-row relative animate-in zoom-in-95 duration-300">
+    <div className="fixed inset-0 z-[100] flex items-start md:items-center justify-center p-3 md:p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-300 overflow-y-auto modal-overlay">
+      <div className="bg-white w-full max-w-5xl rounded-[28px] overflow-hidden shadow-2xl flex flex-col md:flex-row relative animate-in zoom-in-95 duration-300 my-auto" style={{ maxHeight: 'calc(100dvh - 1.5rem)' }}>
         
-        {/* Left Side: Progress & Info */}
-        <div className="w-full md:w-80 bg-slate-900 p-8 text-white flex flex-col justify-between relative overflow-hidden shrink-0">
+        {/* Left Side: Progress — compact on mobile, full sidebar on desktop */}
+        <div className="w-full md:w-80 bg-slate-900 p-4 md:p-8 text-white flex flex-col md:justify-between relative overflow-hidden shrink-0">
           <div className="relative z-10">
-            <div className="flex items-center gap-3 mb-10">
-                <GraduationCap size={32} className="text-[#38b6ff]" />
-                <span className="text-sm font-black tracking-widest text-[#38b6ff]">GOAL WIZARD</span>
+            <div className="flex items-center gap-3 mb-4 md:mb-10">
+                <GraduationCap size={24} className="text-[#38b6ff] md:w-8 md:h-8" />
+                <span className="text-xs md:text-sm font-black tracking-widest text-[#38b6ff]">GOAL WIZARD</span>
             </div>
-            <div className="space-y-6">
+            <div className="flex md:flex-col gap-3 md:gap-6 overflow-x-auto md:overflow-x-visible no-scrollbar pb-2 md:pb-0">
               {steps.map((s) => (
-                <div key={s.id} className="flex gap-4 items-center">
+                <div key={s.id} className="flex gap-2 md:gap-4 items-center shrink-0">
                   <div className={cn(
-                    "w-6 h-6 rounded-full border-2 flex items-center justify-center text-[10px] font-black transition-all",
+                    "w-5 h-5 md:w-6 md:h-6 rounded-full border-2 flex items-center justify-center text-[8px] md:text-[10px] font-black transition-all shrink-0",
                     step === s.id ? "bg-[#38b6ff] border-[#38b6ff] text-white" : 
                     step > s.id ? "bg-emerald-500 border-emerald-500 text-white" : "border-white/20 text-white/20"
                   )}>
@@ -204,16 +215,16 @@ export default function GoalModal({ isOpen, onClose }: GoalModalProps) {
                   </div>
                   <div className={cn(
                     "transition-all",
-                    step === s.id ? "opacity-100" : "opacity-40"
+                    step === s.id ? "opacity-100" : "opacity-40 hidden md:block"
                   )}>
-                    <p className="text-[10px] font-bold uppercase tracking-widest">{s.title}</p>
+                    <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">{s.title}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
           
-          <div className="relative z-10 pt-12">
+          <div className="relative z-10 pt-4 md:pt-12 hidden md:block">
             <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
                 <p className="text-[10px] font-black uppercase tracking-widest text-[#38b6ff] mb-2">Smart Matching</p>
                 <p className="text-[11px] font-medium text-white/40 leading-relaxed italic">
@@ -225,29 +236,29 @@ export default function GoalModal({ isOpen, onClose }: GoalModalProps) {
           <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-sky-500/10 rounded-full blur-3xl" />
         </div>
 
-        {/* Right Side: Step Content */}
-        <div className="flex-1 p-8 md:p-12 flex flex-col max-h-[90vh] overflow-y-auto">
+        {/* Right Side: Step Content — scrollable on mobile */}
+        <div className="flex-1 p-5 md:p-12 flex flex-col overflow-y-auto" style={{ maxHeight: 'calc(100dvh - 10rem)', WebkitOverflowScrolling: 'touch' }}>
           <button 
             onClick={onClose}
-            className="absolute top-5 right-5 w-9 h-9 flex items-center justify-center bg-slate-100 hover:bg-slate-200 rounded-full transition-all z-50"
+            className="absolute top-3 right-3 md:top-5 md:right-5 w-10 h-10 min-w-[44px] min-h-[44px] flex items-center justify-center bg-slate-100 hover:bg-slate-200 rounded-full transition-all z-50"
           >
             <X size={20} />
           </button>
 
-          <div className="mb-10">
-            <h2 className="text-3xl font-bold text-slate-900 tracking-tight">{steps[step-1].title}</h2>
+          <div className="mb-6 md:mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">{steps[step-1].title}</h2>
             <p className="text-slate-500 font-medium">{steps[step-1].subtitle}</p>
           </div>
 
           <div className="flex-1 min-h-0">
             {step === 1 && (
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 animate-in slide-in-from-bottom-4 duration-500">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 animate-in slide-in-from-bottom-4 duration-500">
                 {fields.map((f) => (
                   <button
                     key={f.id}
                     onClick={() => toggleField(f.id)}
                     className={cn(
-                      "flex flex-col items-center justify-center p-6 rounded-3xl border-2 transition-all group",
+                      "flex flex-col items-center justify-center p-4 md:p-6 rounded-3xl border-2 transition-all group",
                       selections.fields.includes(f.id) ? "border-[#38b6ff] bg-[#38b6ff]/5 shadow-lg shadow-[#38b6ff]/5" : "border-slate-100 hover:border-[#38b6ff]/30 hover:bg-slate-50"
                     )}
                   >
@@ -430,11 +441,11 @@ export default function GoalModal({ isOpen, onClose }: GoalModalProps) {
           </div>
 
           {/* Navigation Buttons */}
-          <div className="mt-12 flex items-center justify-between pt-8 border-t border-slate-100">
+          <div className="mt-6 md:mt-12 flex flex-col-reverse sm:flex-row items-center justify-between pt-6 md:pt-8 border-t border-slate-100 gap-3">
             <button 
               onClick={prevStep}
               className={cn(
-                "flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-slate-900 transition-colors",
+                "flex items-center justify-center gap-2 text-xs font-bold text-slate-400 hover:text-slate-900 transition-colors min-h-[44px] w-full sm:w-auto",
                 step === 1 && "invisible"
               )}
             >
@@ -445,14 +456,14 @@ export default function GoalModal({ isOpen, onClose }: GoalModalProps) {
               <button 
                 onClick={nextStep}
                 disabled={(step === 1 && selections.fields.length === 0) || (step === 5 && !selections.stage)}
-                className="px-8 py-3 bg-slate-900 text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-slate-800 transition-all flex items-center gap-2 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full sm:w-auto px-8 py-3 bg-slate-900 text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-slate-800 transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed min-h-[48px]"
               >
                 {step === 5 ? 'Generate Recommendations' : 'Continue'} <ChevronRight size={16} />
               </button>
             ) : (
               <button 
                 onClick={onClose}
-                className="px-10 py-3 bg-[#38b6ff] text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:brightness-110 transition-all flex items-center gap-2 active:scale-[0.98] shadow-xl shadow-[#38b6ff]/20"
+                className="w-full sm:w-auto px-10 py-3 bg-[#38b6ff] text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:brightness-110 transition-all flex items-center justify-center gap-2 active:scale-[0.98] shadow-xl shadow-[#38b6ff]/20 min-h-[48px]"
               >
                 Finish & Explore <Zap size={16} fill="white" />
               </button>

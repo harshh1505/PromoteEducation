@@ -289,3 +289,84 @@ img {
   color: var(--sky);
   box-shadow: 0 4px 15px rgba(56, 182, 255, 0.1);
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVENESS & iOS SAFARI FIXES
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* iOS Safari safe viewport height — fixes 100vh bug where address bar
+   is not accounted for. Use min-h-dvh or .min-h-safe instead of min-h-screen. */
+@supports (min-height: 100dvh) {
+  .min-h-safe { min-height: 100dvh; }
+  .h-safe { height: 100dvh; }
+}
+@supports not (min-height: 100dvh) {
+  .min-h-safe { min-height: -webkit-fill-available; }
+  .h-safe { height: -webkit-fill-available; }
+}
+
+/* Body scroll lock when a modal is open — prevents background content
+   from scrolling on iOS Safari. Applied via JS. */
+body.body-modal-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  -webkit-overflow-scrolling: none;
+}
+
+/* Modal overlay — ensures proper scrolling on iOS Safari */
+.modal-overlay {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* iOS input zoom prevention: iOS Safari auto-zooms any input with
+   font-size < 16px. Force 16px minimum on all form elements. */
+@media screen and (max-width: 767px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Touch-friendly range slider (cross-browser) */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  border-radius: 999px;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--sky, #38b6ff);
+  cursor: pointer;
+  border: 3px solid white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--sky, #38b6ff);
+  cursor: pointer;
+  border: 3px solid white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Minimum touch target size for interactive elements (WCAG / mobile UX) */
+@media (pointer: coarse) {
+  button, a, [role="button"], select {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Prevent horizontal overflow globally */
+main, section, article {
+  overflow-x: hidden;
+}

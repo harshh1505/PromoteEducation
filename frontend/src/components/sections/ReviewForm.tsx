@@ -64,48 +64,48 @@ export default function ReviewForm({ collegeId }: { collegeId: string }) {
           <span style={{ fontSize: '18px' }}>+</span> Write a Review
         </button>
       ) : (
-        <div style={{ background: '#f8fafc', padding: '20px', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 700 }}>Share your experience</h3>
-            <button onClick={() => setIsOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}>Cancel</button>
+        <div className="bg-slate-50 p-6 rounded-3xl border border-slate-200 shadow-lg animate-in zoom-in-95 duration-200">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-base font-extrabold text-slate-900">Share your experience</h3>
+            <button onClick={() => setIsOpen(false)} className="text-xs font-bold text-slate-400 hover:text-slate-950 transition-colors">Cancel</button>
           </div>
 
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label style={{ display: 'block', fontSize: '11px', color: '#64748b', marginBottom: '4px', fontWeight: 600 }}>Your Name</label>
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 pl-0.5">Your Name</label>
                 <input 
                   required
                   value={formData.user_name}
                   onChange={(e) => setFormData({...formData, user_name: e.target.value})}
                   placeholder="e.g. Aman Gupta"
-                  style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '13px' }}
+                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-base sm:text-xs font-semibold text-slate-800 placeholder:text-slate-300 outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 transition-all"
                 />
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: '11px', color: '#64748b', marginBottom: '4px', fontWeight: 600 }}>Your Status</label>
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 pl-0.5">Your Status</label>
                 <input 
                   required
                   value={formData.user_tag}
                   onChange={(e) => setFormData({...formData, user_tag: e.target.value})}
                   placeholder="e.g. B.Tech Student, 2024"
-                  style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '13px' }}
+                  className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-base sm:text-xs font-semibold text-slate-800 placeholder:text-slate-300 outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 transition-all"
                 />
               </div>
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '11px', color: '#64748b', marginBottom: '4px', fontWeight: 600 }}>Rating</label>
-              <div style={{ display: 'flex', gap: '5px' }}>
+              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 pl-0.5">Rating</label>
+              <div className="flex gap-1.5">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
                     key={star}
                     type="button"
                     onClick={() => setFormData({...formData, rating: star})}
+                    className="p-1 min-w-[36px] min-h-[36px] flex items-center justify-center text-2xl transition-transform active:scale-90"
                     style={{ 
                       background: 'none', 
                       border: 'none', 
-                      fontSize: '20px', 
                       cursor: 'pointer',
                       color: star <= formData.rating ? '#f59e0b' : '#cbd5e1'
                     }}
@@ -117,31 +117,20 @@ export default function ReviewForm({ collegeId }: { collegeId: string }) {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '11px', color: '#64748b', marginBottom: '4px', fontWeight: 600 }}>Your Review</label>
+              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 pl-0.5">Your Review</label>
               <textarea 
                 required
                 value={formData.comment}
                 onChange={(e) => setFormData({...formData, comment: e.target.value})}
                 placeholder="What do you think about the campus, faculty, and placements?"
-                style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #cbd5e1', fontSize: '13px', height: '80px', resize: 'vertical' }}
+                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-base sm:text-xs font-semibold text-slate-800 placeholder:text-slate-300 outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-500/5 transition-all min-h-[100px] resize-vertical"
               />
             </div>
 
             <button 
               disabled={loading}
               type="submit"
-              style={{ 
-                background: '#1a3557', 
-                color: '#fff', 
-                padding: '10px', 
-                borderRadius: '6px', 
-                fontSize: '13px', 
-                fontWeight: 700,
-                cursor: loading ? 'not-allowed' : 'pointer',
-                border: 'none',
-                marginTop: '10px',
-                opacity: loading ? 0.7 : 1
-              }}
+              className="w-full py-3.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-slate-900/10 active:scale-[0.98] disabled:opacity-50 mt-1"
             >
               {loading ? 'Posting...' : 'Submit Review'}
             </button>

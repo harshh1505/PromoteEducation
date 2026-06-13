@@ -77,6 +77,16 @@ const exploreGroups: ExploreGroup[] = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.classList.add('body-modal-open')
+    } else {
+      document.body.classList.remove('body-modal-open')
+    }
+    return () => document.body.classList.remove('body-modal-open')
+  }, [mobileOpen])
   const [activeItem, setActiveItem] = useState('Home')
   const [authVisible, setAuthVisible] = useState(false)
   const [counsellingVisible, setCounsellingVisible] = useState(false)
@@ -368,9 +378,9 @@ export default function Navbar() {
 
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="md:hidden p-2 text-white"
+                className="md:hidden p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-white"
               >
-                {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+                {mobileOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
             </div>
           </div>
@@ -517,8 +527,8 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {mobileOpen && (
-          <div className="md:hidden fixed inset-0 top-14 bg-white z-[45] overflow-y-auto">
-            <div className="p-6 space-y-8">
+          <div className="md:hidden fixed inset-x-0 top-[60px] bottom-0 bg-white z-[45] overflow-y-auto modal-overlay" style={{ maxHeight: 'calc(100dvh - 60px)' }}>
+            <div className="p-6 pb-28 space-y-8">
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
                 <input
@@ -554,7 +564,7 @@ export default function Navbar() {
                     <a
                       key={item.label}
                       href={item.href}
-                      className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl text-sm font-bold text-slate-900 active:bg-sky-50 transition-colors"
+                      className="flex items-center justify-between p-4 min-h-[52px] bg-slate-50 rounded-2xl text-sm font-bold text-slate-900 active:bg-sky-50 transition-colors"
                     >
                       {item.label}
                       <ChevronDown size={16} className="-rotate-90 opacity-20" />

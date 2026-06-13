@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { X, CheckCircle2, Loader2, User, Mail, Phone, MapPin, GraduationCap, Building2, Lock, Eye, EyeOff, ArrowRight, Shield, Check } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -91,6 +91,16 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
     return () => { subscription.unsubscribe() }
   }, [isOpen])
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('body-modal-open')
+    } else {
+      document.body.classList.remove('body-modal-open')
+    }
+    return () => document.body.classList.remove('body-modal-open')
+  }, [isOpen])
+
   if (!isOpen) return null
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -141,13 +151,13 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
 
   return (
     <>
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 md:p-6 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-300 overflow-y-auto">
-        <div className="relative bg-white w-full max-w-5xl rounded-[28px] overflow-hidden shadow-2xl flex flex-col lg:flex-row animate-in zoom-in-95 duration-300 my-6">
+      <div className="fixed inset-0 z-[100] flex items-start md:items-center justify-center p-3 md:p-6 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-300 overflow-y-auto modal-overlay">
+        <div className="relative bg-white w-full max-w-5xl rounded-[28px] overflow-hidden shadow-2xl flex flex-col lg:flex-row animate-in zoom-in-95 duration-300 my-auto mx-auto" style={{ maxHeight: 'calc(100dvh - 1.5rem)' }}>
           
           {/* Close Button */}
           <button 
             onClick={onClose}
-            className="absolute top-5 right-5 w-9 h-9 flex items-center justify-center bg-slate-100 hover:bg-slate-200 rounded-full transition-all z-50"
+            className="absolute top-4 right-4 w-10 h-10 min-w-[44px] min-h-[44px] flex items-center justify-center bg-slate-100 hover:bg-slate-200 rounded-full transition-all z-50"
           >
             <X size={16} className="text-slate-500" />
           </button>
@@ -164,8 +174,8 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
             </div>
           ) : (
             <>
-              {/* Left Panel */}
-              <div className="w-full lg:w-[42%] bg-[linear-gradient(to_right,#f8fafc_1px,transparent_1px),linear-gradient(to_bottom,#f8fafc_1px,transparent_1px)] bg-[size:24px_24px] bg-white p-8 md:p-10 flex flex-col justify-between relative overflow-hidden shrink-0 border-r border-slate-100">
+              {/* Left Panel — hidden on mobile to give form full space */}
+              <div className="hidden lg:flex w-full lg:w-[42%] bg-[linear-gradient(to_right,#f8fafc_1px,transparent_1px),linear-gradient(to_bottom,#f8fafc_1px,transparent_1px)] bg-[size:24px_24px] bg-white p-8 md:p-10 flex-col justify-between relative overflow-hidden shrink-0 border-r border-slate-100">
                 {/* Glow blobs */}
                 <div className="absolute top-0 right-0 w-56 h-56 bg-indigo-50/10 rounded-full blur-3xl pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-50/10 rounded-full blur-3xl pointer-events-none" />
@@ -223,8 +233,8 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
                 </div>
               </div>
 
-              {/* Right Panel */}
-              <div className="flex-1 p-6 md:p-8 bg-white overflow-y-auto max-h-[90vh]">
+              {/* Right Panel — form scrollable on mobile */}
+              <div className="flex-1 p-5 md:p-8 bg-white overflow-y-auto" style={{ maxHeight: 'calc(100dvh - 2rem)', WebkitOverflowScrolling: 'touch' }}>
                 <div className="mb-5">
                   <p className="text-[10px] font-bold text-[#38b6ff] uppercase tracking-widest mb-1">Quick Registration</p>
                   <h3 className="text-xl font-black text-slate-900">Fill in your details</h3>

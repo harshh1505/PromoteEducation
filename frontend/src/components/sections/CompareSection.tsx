@@ -159,33 +159,39 @@ export default function CompareSection() {
           <div className="lg:col-span-8 space-y-4">
 
             {/* Dropdowns */}
-            <div className="bg-white/80 border border-slate-200 rounded-[28px] p-5 shadow-lg flex flex-col md:flex-row gap-4 items-center">
+            <div className="bg-white/80 border border-slate-200 rounded-[28px] p-4 md:p-5 shadow-lg flex flex-col gap-4 items-center">
+              <div className="flex flex-col sm:flex-row gap-4 w-full items-center">
               <SearchableDropdown label="Compare College A" selected={collegeA} options={collegesList} onSelect={setCollegeA} />
-              <div className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-slate-500 text-xs shrink-0 self-center md:mt-5">VS</div>
+              <div className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-slate-500 text-xs shrink-0 self-center">VS</div>
               <SearchableDropdown label="Compare College B" selected={collegeB} options={collegesList} onSelect={setCollegeB} />
+              </div>
             </div>
 
-            {/* Comparison Table */}
+            {/* Comparison Table — horizontally scrollable on mobile */}
             <div className="bg-white border border-slate-200 rounded-[28px] overflow-hidden shadow-xl">
-              <div className="grid grid-cols-12 bg-slate-900 text-white font-extrabold text-xs uppercase tracking-wider py-4 px-5 md:px-7">
-                <div className="col-span-4 text-slate-400">Metrics</div>
-                <div className="col-span-4 text-center truncate px-2">{collegeA.name}</div>
-                <div className="col-span-4 text-center truncate px-2">{collegeB.name}</div>
-              </div>
-              <div className="divide-y divide-slate-100">
-                {comparisonRows.map((row, idx) => {
-                  const isLockedRow = row.lock && !isUnlocked
-                  return (
-                    <div key={row.label}
-                      className={`grid grid-cols-12 py-4 px-5 md:px-7 items-center text-xs md:text-sm font-semibold transition-all ${
-                        idx % 2 === 0 ? 'bg-slate-50/40' : 'bg-white'
-                      } ${isLockedRow ? 'blur-[4px] select-none pointer-events-none opacity-40' : ''}`}>
-                      <div className="col-span-4 text-slate-500">{row.label}</div>
-                      <div className="col-span-4 text-center text-slate-800 font-bold px-2">{collegeA[row.key]}</div>
-                      <div className="col-span-4 text-center text-slate-800 font-bold px-2">{collegeB[row.key]}</div>
-                    </div>
-                  )
-                })}
+              <div className="overflow-x-auto">
+                <div className="min-w-[600px]">
+                  <div className="grid grid-cols-12 bg-slate-900 text-white font-extrabold text-[10px] md:text-xs uppercase tracking-wider py-3 md:py-4 px-4 md:px-7">
+                    <div className="col-span-4 text-slate-400">Metrics</div>
+                    <div className="col-span-4 text-center truncate px-2">{collegeA.name}</div>
+                    <div className="col-span-4 text-center truncate px-2">{collegeB.name}</div>
+                  </div>
+                  <div className="divide-y divide-slate-100">
+                    {comparisonRows.map((row, idx) => {
+                      const isLockedRow = row.lock && !isUnlocked
+                      return (
+                        <div key={row.label}
+                          className={`grid grid-cols-12 py-3 md:py-4 px-4 md:px-7 items-center text-xs md:text-sm font-semibold transition-all ${
+                            idx % 2 === 0 ? 'bg-slate-50/40' : 'bg-white'
+                          } ${isLockedRow ? 'blur-[4px] select-none pointer-events-none opacity-40' : ''}`}>
+                          <div className="col-span-4 text-slate-500">{row.label}</div>
+                          <div className="col-span-4 text-center text-slate-800 font-bold px-2">{collegeA[row.key]}</div>
+                          <div className="col-span-4 text-center text-slate-800 font-bold px-2">{collegeB[row.key]}</div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -224,13 +230,13 @@ export default function CompareSection() {
 
                 <form onSubmit={handleUnlock} className="space-y-3">
                   <input required type="text" placeholder="Your Name*" value={name} onChange={(e) => setName(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 transition-all text-slate-800 placeholder:text-slate-300" />
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-base md:text-xs font-semibold outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 transition-all text-slate-800 placeholder:text-slate-300" />
                   <input required type="tel" placeholder="Phone Number*" value={phone} onChange={(e) => setPhone(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 transition-all text-slate-800 placeholder:text-slate-300" />
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-base md:text-xs font-semibold outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 transition-all text-slate-800 placeholder:text-slate-300" />
                   <input required type="email" placeholder="Email Address*" value={email} onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 transition-all text-slate-800 placeholder:text-slate-300" />
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-base md:text-xs font-semibold outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 transition-all text-slate-800 placeholder:text-slate-300" />
                   <select required value={course} onChange={(e) => setCourse(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 transition-all appearance-none cursor-pointer text-slate-500">
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-base md:text-xs font-semibold outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 transition-all appearance-none cursor-pointer text-slate-500">
                     <option value="">Preferred Course*</option>
                     <option value="B.Tech">B.Tech (Engineering)</option>
                     <option value="MBA">MBA (Management)</option>

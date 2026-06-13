@@ -32,7 +32,7 @@ export default function PYQSection() {
              <input 
                type="text" 
                placeholder="Search by exam or year..." 
-               className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-action/20 focus:bg-white transition-all"
+               className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-base md:text-sm focus:outline-none focus:ring-2 focus:ring-action/20 focus:bg-white transition-all"
              />
              <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-4 group-focus-within:text-action transition-colors" />
           </div>

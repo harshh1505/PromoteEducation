@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { X, Mail, Lock, Loader2, ArrowRight, Shield } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
@@ -15,6 +15,16 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('body-modal-open')
+    } else {
+      document.body.classList.remove('body-modal-open')
+    }
+    return () => document.body.classList.remove('body-modal-open')
+  }, [isOpen])
 
   if (!isOpen) return null
 
@@ -71,14 +81,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const inputCls = "w-full pl-10 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-900 placeholder:text-slate-300 focus:outline-none focus:border-[#38b6ff] focus:bg-white focus:ring-4 focus:ring-[#38b6ff]/8 transition-all"
 
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[110] flex items-start md:items-center justify-center p-3 md:p-4 overflow-y-auto modal-overlay">
       <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-200" onClick={onClose} />
       
-      <div className="relative w-full max-w-sm bg-white rounded-[28px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 z-10">
+      <div className="relative w-full max-w-sm bg-white rounded-[28px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 z-10 my-auto">
         
         {/* Header */}
         <div className="bg-slate-900 px-8 py-8 text-white relative overflow-hidden">
-          <button onClick={onClose} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-white/10 hover:bg-white/15 rounded-full transition-all z-20">
+          <button onClick={onClose} className="absolute top-4 right-4 w-9 h-9 min-w-[44px] min-h-[44px] flex items-center justify-center bg-white/10 hover:bg-white/15 rounded-full transition-all z-20">
             <X size={14} />
           </button>
           <div className="absolute top-0 right-0 w-40 h-40 bg-[#38b6ff]/10 rounded-full blur-3xl pointer-events-none" />

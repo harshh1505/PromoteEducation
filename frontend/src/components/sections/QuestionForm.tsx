@@ -44,7 +44,7 @@ export default function QuestionForm({ collegeId }: { collegeId: string }) {
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
             placeholder="e.g. Is there a swimming pool in the campus?"
-            style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '13px', marginBottom: '10px' }}
+            style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '16px', marginBottom: '10px' }}
           />
           <div style={{ display: 'flex', gap: '8px' }}>
             <button disabled={loading} type="submit" style={{ background: '#1a3557', color: '#fff', padding: '8px 16px', borderRadius: '6px', fontSize: '13px', fontWeight: 700, border: 'none', cursor: 'pointer' }}>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { X, User, Mail, Phone, GraduationCap, Loader2, CheckCircle2, TrendingUp, Users, Check } from 'lucide-react'
 
 interface CounsellingModalProps {
@@ -30,6 +30,16 @@ export default function CounsellingModal({ isOpen, onClose }: CounsellingModalPr
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('body-modal-open')
+    } else {
+      document.body.classList.remove('body-modal-open')
+    }
+    return () => document.body.classList.remove('body-modal-open')
+  }, [isOpen])
+
   if (!isOpen) return null
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -54,13 +64,13 @@ export default function CounsellingModal({ isOpen, onClose }: CounsellingModalPr
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[100] flex items-start md:items-center justify-center p-3 md:p-4 overflow-y-auto modal-overlay">
       <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-300" onClick={onClose} />
       
-      <div className="relative w-full max-w-3xl bg-white rounded-[28px] shadow-2xl overflow-hidden flex flex-col md:flex-row animate-in zoom-in-95 duration-300 z-10">
+      <div className="relative w-full max-w-3xl bg-white rounded-[28px] shadow-2xl overflow-hidden flex flex-col md:flex-row animate-in zoom-in-95 duration-300 z-10 my-auto" style={{ maxHeight: 'calc(100dvh - 1.5rem)' }}>
         
-        {/* Left Panel */}
-        <div className="md:w-[38%] bg-[linear-gradient(to_right,#f8fafc_1px,transparent_1px),linear-gradient(to_bottom,#f8fafc_1px,transparent_1px)] bg-[size:24px_24px] bg-white p-8 flex flex-col justify-between relative overflow-hidden shrink-0 border-r border-slate-100">
+        {/* Left Panel — hidden on mobile */}
+        <div className="hidden md:flex md:w-[38%] bg-[linear-gradient(to_right,#f8fafc_1px,transparent_1px),linear-gradient(to_bottom,#f8fafc_1px,transparent_1px)] bg-[size:24px_24px] bg-white p-8 flex-col justify-between relative overflow-hidden shrink-0 border-r border-slate-100">
           <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-50/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-40 h-40 bg-emerald-50/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -105,8 +115,8 @@ export default function CounsellingModal({ isOpen, onClose }: CounsellingModalPr
         </div>
 
         {/* Right Panel — Form */}
-        <div className="flex-1 p-7 md:p-9">
-          <button onClick={onClose} className="absolute top-5 right-5 w-9 h-9 flex items-center justify-center bg-slate-100 hover:bg-slate-200 rounded-full transition-all z-50">
+        <div className="flex-1 p-5 md:p-9 overflow-y-auto" style={{ maxHeight: 'calc(100dvh - 2rem)', WebkitOverflowScrolling: 'touch' }}>
+          <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 min-w-[44px] min-h-[44px] flex items-center justify-center bg-slate-100 hover:bg-slate-200 rounded-full transition-all z-50">
             <X size={16} className="text-slate-500" />
           </button>
 
@@ -130,7 +140,7 @@ export default function CounsellingModal({ isOpen, onClose }: CounsellingModalPr
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Full Name</label>
                     <div className="relative group">

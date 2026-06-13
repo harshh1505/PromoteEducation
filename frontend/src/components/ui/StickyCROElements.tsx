@@ -42,7 +42,7 @@ export default function StickyCROElements() {
       {/* 1. Sticky WhatsApp Button */}
       <button
         onClick={handleWhatsAppClick}
-        className="fixed bottom-20 md:bottom-6 right-6 z-40 bg-[#25D366] hover:bg-[#20BA5A] text-white p-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 group flex items-center gap-2"
+        className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] md:bottom-6 right-6 z-40 bg-[#25D366] hover:bg-[#20BA5A] text-white p-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 group flex items-center gap-2"
         aria-label="Contact on WhatsApp"
       >
         <MessageCircle size={24} className="fill-white" />
@@ -63,7 +63,7 @@ export default function StickyCROElements() {
       </button>
 
       {/* 3. Sticky Mobile Bottom CTAs */}
-      <div className="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-3.5 flex gap-3 z-40 shadow-[0_-10px_30px_rgba(0,0,0,0.08)] md:hidden">
+      <div className="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-3.5 pb-[calc(0.875rem+env(safe-area-inset-bottom))] flex gap-3 z-40 shadow-[0_-10px_30px_rgba(0,0,0,0.08)] md:hidden">
         <button
           onClick={scrollToCompare}
           className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-black uppercase tracking-wider rounded-xl transition-all active:scale-[0.98]"

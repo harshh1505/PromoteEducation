@@ -48,16 +48,16 @@ export default function NewsletterSection() {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="bg-white p-3 md:p-2 rounded-[32px] shadow-2xl shadow-slate-200/60 border border-slate-100 max-w-6xl mx-auto">
-            <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2">
+            <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2 p-2">
               
               {/* Name Input */}
-              <div className="flex-1 relative group">
+              <div className="flex-1 relative group bg-slate-50 md:bg-transparent rounded-2xl md:rounded-none">
                 <User size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#002B5B] transition-colors" />
                 <input 
                   required
                   type="text"
                   placeholder="Student Name*"
-                  className="w-full pl-12 pr-4 py-4 bg-transparent text-sm font-bold text-slate-900 outline-none border-none placeholder:text-slate-400"
+                  className="w-full pl-12 pr-4 py-4 bg-transparent text-base md:text-sm font-bold text-slate-900 outline-none border-none placeholder:text-slate-400"
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
                 />
@@ -65,13 +65,13 @@ export default function NewsletterSection() {
               </div>
 
               {/* Email Input */}
-              <div className="flex-1 relative group">
+              <div className="flex-1 relative group bg-slate-50 md:bg-transparent rounded-2xl md:rounded-none">
                 <Mail size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#002B5B] transition-colors" />
                 <input 
                   required
                   type="email"
                   placeholder="Enter your email id*"
-                  className="w-full pl-12 pr-4 py-4 bg-transparent text-sm font-bold text-slate-900 outline-none border-none placeholder:text-slate-400"
+                  className="w-full pl-12 pr-4 py-4 bg-transparent text-base md:text-sm font-bold text-slate-900 outline-none border-none placeholder:text-slate-400"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                 />
@@ -79,13 +79,13 @@ export default function NewsletterSection() {
               </div>
 
               {/* Phone Input */}
-              <div className="flex-1 relative group">
+              <div className="flex-1 relative group bg-slate-50 md:bg-transparent rounded-2xl md:rounded-none">
                 <Phone size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#002B5B] transition-colors" />
                 <input 
                   required
                   type="tel"
                   placeholder="Enter your mobile no*"
-                  className="w-full pl-12 pr-4 py-4 bg-transparent text-sm font-bold text-slate-900 outline-none border-none placeholder:text-slate-400"
+                  className="w-full pl-12 pr-4 py-4 bg-transparent text-base md:text-sm font-bold text-slate-900 outline-none border-none placeholder:text-slate-400"
                   value={formData.phone}
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
                 />
@@ -93,11 +93,11 @@ export default function NewsletterSection() {
               </div>
 
               {/* Course Selection */}
-              <div className="flex-1 relative group">
+              <div className="flex-1 relative group bg-slate-50 md:bg-transparent rounded-2xl md:rounded-none">
                 <GraduationCap size={16} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#002B5B] transition-colors pointer-events-none" />
                 <select 
                   required
-                  className="w-full pl-12 pr-10 py-4 bg-transparent text-sm font-bold text-slate-600 outline-none border-none appearance-none cursor-pointer"
+                  className="w-full pl-12 pr-10 py-4 bg-transparent text-base md:text-sm font-bold text-slate-600 outline-none border-none appearance-none cursor-pointer"
                   value={formData.course}
                   onChange={(e) => setFormData({...formData, course: e.target.value})}
                 >

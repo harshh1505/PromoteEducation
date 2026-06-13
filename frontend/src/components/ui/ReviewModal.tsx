@@ -58,6 +58,16 @@ export default function ReviewModal({ isOpen, onClose, collegeName }: ReviewModa
     setLoading(false)
   }
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('body-modal-open')
+    } else {
+      document.body.classList.remove('body-modal-open')
+    }
+    return () => document.body.classList.remove('body-modal-open')
+  }, [isOpen])
+
   if (!isOpen) return null
 
   const ratingLabels: Record<number, string> = {
@@ -65,12 +75,12 @@ export default function ReviewModal({ isOpen, onClose, collegeName }: ReviewModa
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-300">
-      <div className="bg-white w-full max-w-lg rounded-[28px] overflow-hidden shadow-2xl relative animate-in zoom-in-95 duration-300">
+    <div className="fixed inset-0 z-[100] flex items-start md:items-center justify-center p-3 md:p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-300 overflow-y-auto modal-overlay">
+      <div className="bg-white w-full max-w-lg rounded-[28px] overflow-hidden shadow-2xl relative animate-in zoom-in-95 duration-300 my-auto">
         
         {/* Header */}
         <div className="bg-slate-900 px-8 py-9 text-white relative overflow-hidden">
-          <button onClick={onClose} className="absolute top-5 right-5 w-9 h-9 flex items-center justify-center bg-white/10 hover:bg-white/15 rounded-full transition-all z-20">
+          <button onClick={onClose} className="absolute top-4 right-4 md:top-5 md:right-5 w-10 h-10 min-w-[44px] min-h-[44px] flex items-center justify-center bg-white/10 hover:bg-white/15 rounded-full transition-all z-20">
             <X size={16} />
           </button>
           <div className="absolute top-0 right-0 w-48 h-48 bg-[#38b6ff]/8 rounded-full blur-3xl pointer-events-none" />
@@ -88,7 +98,7 @@ export default function ReviewModal({ isOpen, onClose, collegeName }: ReviewModa
         </div>
 
         {/* Body */}
-        <div className="p-7">
+        <div className="p-5 md:p-7 overflow-y-auto" style={{ maxHeight: 'calc(100dvh - 12rem)', WebkitOverflowScrolling: 'touch' }}>
           {success ? (
             <div className="py-10 flex flex-col items-center text-center animate-in zoom-in duration-500">
               <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mb-5 shadow-lg shadow-emerald-500/10">
@@ -105,9 +115,9 @@ export default function ReviewModal({ isOpen, onClose, collegeName }: ReviewModa
                 <div className="flex items-center gap-1.5">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button key={star} type="button"
-                      className={cn("transition-all duration-200 hover:scale-110", (hover || rating) >= star ? "text-amber-400" : "text-slate-200")}
+                      className={cn("p-1 transition-all duration-200 hover:scale-110", (hover || rating) >= star ? "text-amber-400" : "text-slate-200")}
                       onMouseEnter={() => setHover(star)} onMouseLeave={() => setHover(0)} onClick={() => setRating(star)}>
-                      <Star size={30} fill={(hover || rating) >= star ? "currentColor" : "none"} strokeWidth={1.5} />
+                      <Star size={28} fill={(hover || rating) >= star ? "currentColor" : "none"} strokeWidth={1.5} />
                     </button>
                   ))}
                 </div>

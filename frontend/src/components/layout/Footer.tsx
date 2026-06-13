@@ -79,7 +79,7 @@ export default function Footer() {
 
   return (
     <footer className="relative z-20" style={{ background: '#0F172A' }}>
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-10 md:py-16 pb-24 md:pb-16">
 
         {/* Top Grid: Links & Search */}
         <div className="grid grid-cols-2 md:grid-cols-12 gap-8 md:gap-12 mb-16">
@@ -88,7 +88,7 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-3">
             <div className="flex items-center gap-6 mb-10">
               <a href="/" className="flex items-center gap-5 group">
-                <div className="w-20 h-20 -ml-2 rounded-full border border-white/10 overflow-hidden bg-white flex-shrink-0 shadow-2xl transition-all duration-300 group-hover:border-sky-500 group-hover:scale-105 transform">
+                <div className="w-14 h-14 md:w-20 md:h-20 -ml-1 md:-ml-2 rounded-full border border-white/10 overflow-hidden bg-white flex-shrink-0 shadow-2xl transition-all duration-300 group-hover:border-sky-500 group-hover:scale-105 transform">
                   <img
                     src="/images/PromoteEducationLogo.png"
                     alt="Promote Education"
@@ -96,8 +96,8 @@ export default function Footer() {
                   />
                 </div>
                 <div className="flex flex-col items-center -space-y-2">
-                  <span className="font-black text-[18px] md:text-[22px] text-white tracking-[0.2em] leading-tight">PROMOTE</span>
-                  <span className="font-black text-[18px] md:text-[22px] text-sky-400 tracking-[0.2em] leading-tight">EDUCATION</span>
+                  <span className="font-black text-[15px] md:text-[22px] text-white tracking-[0.2em] leading-tight">PROMOTE</span>
+                  <span className="font-black text-[15px] md:text-[22px] text-sky-400 tracking-[0.2em] leading-tight">EDUCATION</span>
                 </div>
               </a>
             </div>
@@ -122,11 +122,11 @@ export default function Footer() {
                 <HelpCircle size={14} className="text-sky-500" />
                 Frequently Asked Questions
               </a>
-              <div className="mt-20 ml-1">
+              <div className="mt-10 md:mt-20 ml-1">
                 <h4 className="text-[9px] font-black mb-4 tracking-[0.15em] text-slate-500 uppercase">
                   More from us
                 </h4>
-                <div className="flex gap-6">
+                <div className="flex flex-wrap gap-4 md:gap-6">
                   {['Careers', 'Events', 'News', 'Media'].map(link => (
                     <a
                       key={link}
@@ -142,7 +142,7 @@ export default function Footer() {
           </div>
 
           {/* Link columns (4 categories) */}
-          <div className="col-span-2 md:col-span-5 grid grid-cols-2 sm:grid-cols-4 gap-6">
+          <div className="col-span-2 md:col-span-5 grid grid-cols-2 gap-6">
             {Object.entries(footerLinks).map(([category, links]) => (
               <div key={category}>
                 <h4 className="text-[9px] font-black mb-5 tracking-[0.15em] text-slate-500 uppercase">
@@ -342,7 +342,7 @@ export default function Footer() {
           <p className="text-[10px] text-slate-500">
             © 2026 Promote Education Technologies Pvt. Ltd. All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
             {[
               { label: 'Privacy policy', href: '/privacy-policy' },
               { label: 'Terms of use', href: '/terms-of-use' },

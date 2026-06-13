@@ -120,13 +120,13 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative w-full overflow-hidden bg-gradient-to-br from-slate-50 via-white to-slate-100 pt-32 pb-24 md:py-36 flex items-center min-h-[90vh]">
+    <section className="relative w-full overflow-hidden bg-gradient-to-br from-slate-50 via-white to-slate-100 pt-24 pb-16 md:pt-36 md:pb-24 flex items-center min-h-[80vh] md:min-h-[90vh]">
       
       {/* Background Decorative Blur */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-200/20 rounded-full blur-[120px] -z-10 pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-100/30 rounded-full blur-[120px] -z-10 pointer-events-none" />
 
-      <div className="max-w-[1440px] w-full mx-auto px-6 md:px-12 relative z-10">
+      <div className="max-w-[1440px] w-full mx-auto px-4 md:px-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 items-center">
 
           {/* Left Column: Extensive Copy, Form/Button & Admission Pill Tags */}
@@ -154,18 +154,18 @@ export default function HeroSection() {
             </div>
 
             {/* Main Heading */}
-            <h1 className="text-4xl md:text-5xl lg:text-[62px] font-black text-slate-900 leading-[1.08] tracking-tighter mb-6 font-display">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[62px] font-black text-slate-900 leading-[1.08] tracking-tighter mb-6 font-display">
               Your career begins with <br className="hidden md:inline" />
               the <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-600">right admission</span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-slate-500 text-base md:text-lg max-w-xl leading-relaxed mb-10 font-medium">
+            <p className="text-slate-500 text-sm md:text-base lg:text-lg max-w-xl leading-relaxed mb-8 md:mb-10 font-medium">
               Turn your dream into reality with the right guidance. We help you choose the best college, secure your admission, and start your journey with confidence.
             </p>
 
             {/* Sleek Primary CTA Button */}
-            <div className="mb-12">
+            <div className="mb-8 md:mb-12">
               <button
                 onClick={() => setShowLeadModal(true)}
                 className="px-10 py-5 bg-[#111111] text-white font-bold text-xs uppercase tracking-[0.2em] rounded-2xl hover:bg-slate-850 hover:shadow-2xl hover:shadow-slate-950/20 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-3"
@@ -195,14 +195,14 @@ export default function HeroSection() {
 
           {/* Right Column: Visual Container with College Images Carousel & Floating Info Cards */}
           <div className="lg:col-span-6 flex justify-center lg:justify-end animate-in fade-in slide-in-from-right-6 duration-700">
-            <div className="relative w-full max-w-[460px] aspect-[4/5] bg-slate-900 rounded-[48px] shadow-2xl overflow-visible flex items-end">
+            <div className="relative w-full max-w-[340px] md:max-w-[460px] aspect-[3/4] md:aspect-[4/5] bg-slate-900 rounded-[32px] md:rounded-[48px] shadow-2xl overflow-hidden lg:overflow-visible flex items-end">
               
               {/* Stars decorative icon */}
               <div className="absolute top-10 right-10 text-amber-300/30 font-bold select-none text-2xl z-20">✦</div>
               <div className="absolute top-36 left-12 text-amber-300/20 font-bold select-none text-lg z-20">✦</div>
 
               {/* College Campus Images Carousel (Clipped inside rounded wrapper) */}
-              <div className="absolute inset-0 rounded-[48px] overflow-hidden">
+              <div className="absolute inset-0 rounded-[32px] md:rounded-[48px] overflow-hidden">
                 {/* Current Slide */}
                 <Link 
                   href={`/colleges/${carouselItems[currentSlide].slug}`}
@@ -259,18 +259,18 @@ export default function HeroSection() {
                 </p>
               </div>
 
-              {/* FLOATING CARD 1: Top Left */}
+              {/* FLOATING CARD 1: Top Left — hidden on mobile */}
               <a 
                 href="tel:+919900116101"
-                className="absolute -left-12 top-10 bg-white border border-slate-100 rounded-[20px] p-5 shadow-xl w-60 hover:scale-105 transition-transform duration-300 pointer-events-auto z-30 block hover:border-sky-200"
+                className="hidden lg:block absolute -left-12 top-10 bg-white border border-slate-100 rounded-[20px] p-5 shadow-xl w-60 hover:scale-105 transition-transform duration-300 pointer-events-auto z-30 hover:border-sky-200"
               >
                 <p className="text-slate-400 text-[9px] font-black tracking-widest uppercase mb-1">Student Guidance</p>
                 <h4 className="text-slate-800 text-base font-extrabold hover:text-sky-600 transition-colors">+91 99001 16101</h4>
                 <p className="text-slate-500 text-[11px] font-medium mt-0.5">Talk to Expert Counselors</p>
               </a>
 
-              {/* FLOATING CARD 2: Top Right */}
-              <div className="absolute -right-8 top-24 bg-white border border-slate-100 rounded-[20px] p-5 shadow-xl w-56 hover:scale-105 transition-transform duration-300 pointer-events-auto z-30">
+              {/* FLOATING CARD 2: Top Right — hidden on mobile */}
+              <div className="hidden lg:block absolute -right-8 top-24 bg-white border border-slate-100 rounded-[20px] p-5 shadow-xl w-56 hover:scale-105 transition-transform duration-300 pointer-events-auto z-30">
                 <p className="text-slate-400 text-[9px] font-black tracking-widest uppercase mb-1">Loan Assistance</p>
                 <h4 className="text-slate-800 text-sm font-extrabold mb-2">Education Loan</h4>
                 <span className="inline-block text-[10px] font-bold text-amber-600 bg-amber-50 border border-amber-200/60 px-3 py-1 rounded-full">
@@ -278,8 +278,8 @@ export default function HeroSection() {
                 </span>
               </div>
 
-              {/* FLOATING CARD 3: Bottom Left */}
-              <div className="absolute -left-10 bottom-24 bg-white border border-slate-100 rounded-[20px] p-5 shadow-xl w-64 hover:scale-105 transition-transform duration-300 pointer-events-auto z-30">
+              {/* FLOATING CARD 3: Bottom Left — hidden on mobile */}
+              <div className="hidden lg:block absolute -left-10 bottom-24 bg-white border border-slate-100 rounded-[20px] p-5 shadow-xl w-64 hover:scale-105 transition-transform duration-300 pointer-events-auto z-30">
                 <p className="text-slate-400 text-[9px] font-black tracking-widest uppercase mb-1">Begin Your Journey</p>
                 <h4 className="text-slate-800 text-sm font-extrabold">Top Programs</h4>
                 <p className="text-slate-500 text-[11px] font-medium mt-0.5 mb-2">MBBS · MBA · B.Tech · M.Tech</p>
@@ -288,8 +288,8 @@ export default function HeroSection() {
                 </span>
               </div>
 
-              {/* FLOATING CARD 4: Bottom Right */}
-              <div className="absolute -right-10 bottom-12 bg-white border border-slate-100 rounded-[20px] p-5 shadow-xl w-56 hover:scale-105 transition-transform duration-300 pointer-events-auto z-30">
+              {/* FLOATING CARD 4: Bottom Right — hidden on mobile */}
+              <div className="hidden lg:block absolute -right-10 bottom-12 bg-white border border-slate-100 rounded-[20px] p-5 shadow-xl w-56 hover:scale-105 transition-transform duration-300 pointer-events-auto z-30">
                 <p className="text-slate-400 text-[9px] font-black tracking-widest uppercase mb-1">Course Guidance</p>
                 <h4 className="text-slate-800 text-sm font-extrabold">Choose Your Path</h4>
                 <p className="text-slate-500 text-[11px] font-medium mt-0.5">Diploma · UG · PG Courses</p>

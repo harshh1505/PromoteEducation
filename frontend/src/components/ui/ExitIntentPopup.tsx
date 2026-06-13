@@ -80,18 +80,26 @@ export default function ExitIntentPopup() {
     }
   }
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('body-modal-open')
+    }
+    return () => document.body.classList.remove('body-modal-open')
+  }, [isOpen])
+
   if (!isOpen) return null
 
   const inputCls = "w-full pl-10 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-900 placeholder:text-slate-300 focus:outline-none focus:border-[#38b6ff] focus:bg-white focus:ring-4 focus:ring-[#38b6ff]/8 transition-all"
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-md animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-[100] flex items-start md:items-center justify-center p-3 md:p-4 bg-slate-950/75 backdrop-blur-md animate-in fade-in duration-300 overflow-y-auto modal-overlay">
       
-      <div className="relative bg-white w-full max-w-sm rounded-[28px] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+      <div className="relative bg-white w-full max-w-sm rounded-[28px] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300 my-auto">
         
         {/* Header */}
         <div className="bg-slate-900 px-7 py-8 relative overflow-hidden">
-          <button onClick={handleClose} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-white/10 hover:bg-white/15 rounded-full transition-all z-20">
+          <button onClick={handleClose} className="absolute top-4 right-4 w-9 h-9 min-w-[44px] min-h-[44px] flex items-center justify-center bg-white/10 hover:bg-white/15 rounded-full transition-all z-20">
             <X size={14} className="text-white" />
           </button>
           <div className="absolute top-0 right-0 w-40 h-40 bg-[#38b6ff]/10 rounded-full blur-3xl pointer-events-none" />
