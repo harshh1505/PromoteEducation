@@ -65,3 +65,5 @@ Desktop.ini
 scratch/
 .eslintcache
 
+node_modules
+.next

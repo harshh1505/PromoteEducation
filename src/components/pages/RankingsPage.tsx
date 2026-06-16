@@ -1,0 +1,278 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { supabase } from '@/lib/supabase'
+import Navbar from '@/components/layout/Navbar'
+import Footer from '@/components/layout/Footer'
+import { Trophy, Filter, Star, MapPin, Building2, TrendingUp, Info, Download, ArrowRight, FileText, Share2 } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import BrochureModal from '@/components/ui/BrochureModal'
+import { useLeadCapture } from '@/hooks/useLeadCapture'
+
+const CATEGORY_MAPPINGS: Record<string, string> = {
+  'Engineering & Technology': 'Engineering',
+  'Medical': 'Medical',
+  'Allied Health Sciences': 'Allied Health',
+  'Pharmacy': 'Pharmacy',
+  'Science': 'Science',
+  'Commerce & Finance': 'Commerce',
+  'Management': 'Management',
+  'Computer Applications': 'Computing',
+  'Arts & Humanities': 'Arts',
+  'Law': 'Law',
+  'Design & Media': 'Design',
+  'Architecture & Planning': 'Architecture',
+  'Hospitality & Tourism': 'Hospitality'
+}
+
+export default function RankingsPageContent() {
+  const searchParams = useSearchParams()
+  const cityParam = searchParams.get('city')
+  
+  const { isAuthorized } = useLeadCapture()
+  const [colleges, setColleges] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [filter, setFilter] = useState(cityParam ? 'All' : 'Engineering')
+  const [isBrochureModalOpen, setIsBrochureModalOpen] = useState(false)
+  const [selectedCollege, setSelectedCollege] = useState<any>(null)
+  const [modalMode, setModalMode] = useState<'brochure' | 'details' | 'share' | 'remind'>('brochure')
+  const [visibleCount, setVisibleCount] = useState(20)
+
+  const handleAction = (college: any, mode: 'brochure' | 'details' | 'share') => {
+    if (isAuthorized && mode !== 'share') {
+      if (mode === 'details') {
+        const targetSlug = college.slug || college.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+        window.location.href = `/colleges/${targetSlug}`
+        return
+      }
+      if (mode === 'brochure') {
+        alert(`Brochure for ${college.name} has been sent to your registered email!`)
+        return
+      }
+    }
+    
+    setSelectedCollege(college)
+    setModalMode(mode)
+    setIsBrochureModalOpen(true)
+  }
+
+  const [categories, setCategories] = useState<string[]>(['All'])
+
+  useEffect(() => {
+    async function fetchCategories() {
+      const { data } = await supabase.from('courses').select('category')
+      if (data) {
+         const uniqueCats = Array.from(new Set(data.map(c => CATEGORY_MAPPINGS[c.category] || c.category).filter(Boolean)))
+         setCategories(['All', ...uniqueCats.slice(0, 8)])
+      }
+    }
+    fetchCategories()
+  }, [])
+
+  useEffect(() => {
+    async function fetchRankings() {
+      setLoading(true)
+      setVisibleCount(20) // Reset count on filter change
+      let query = supabase
+        .from('colleges')
+        .select('*')
+        .not('ranking', 'is', null)
+        .gt('ranking', 0)
+        .order('ranking', { ascending: true })
+
+      if (filter !== 'All') {
+        query = query.eq('stream', filter)
+      }
+      
+      if (cityParam) {
+        query = query.ilike('location', cityParam)
+      }
+
+      const { data, error } = await query
+      if (!error && data) {
+        // Double-check filtering in JS to be safe
+        const rankedColleges = data.filter(c => c.ranking !== null && c.ranking > 0)
+        const sortedData = rankedColleges.sort((a, b) => a.ranking - b.ranking);
+        setColleges(sortedData)
+      } else {
+        setColleges([])
+      }
+      setLoading(false)
+    }
+    fetchRankings()
+  }, [filter, cityParam])
+
+  const displayedColleges = colleges.slice(0, visibleCount)
+
+  return (
+    <div className="min-h-screen flex flex-col bg-slate-50">
+      <Navbar />
+
+      <main className="flex-1 max-w-7xl mx-auto w-full px-6 pt-32 pb-20">
+        
+        {/* Header */}
+        <div className="mb-12 text-center">
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <Trophy size={20} className="text-action" />
+            <span className="text-xs font-bold uppercase tracking-widest text-action">National Institutional Ranking Framework 2025</span>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-medium text-ink tracking-tight mb-6">
+            Institutional <span className="text-midnight italic">Excellence</span> Rankings
+          </h1>
+          <p className="text-sm text-ink-3 max-w-xl mx-auto leading-relaxed">
+            Directly synchronized with the National Institutional Ranking Framework. Download brochures to compare fee structures and placement reports.
+          </p>
+        </div>
+
+        {/* Professional Tabs */}
+        <div className="flex items-center justify-center mb-12">
+          <div className="bg-white p-1.5 rounded-2xl border border-border shadow-sm flex flex-wrap justify-center gap-1">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setFilter(cat)}
+                className={cn(
+                  "px-8 py-3 rounded-xl text-xs font-bold transition-all duration-300 uppercase tracking-wider",
+                  filter === cat 
+                    ? "bg-midnight text-white shadow-lg active:scale-95" 
+                    : "text-ink-3 hover:text-midnight hover:bg-slate-50"
+                )}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Legend / Info */}
+        <div className="mb-8 max-w-2xl mx-auto p-4 rounded-xl bg-action/5 border border-action/10 flex items-center gap-3">
+          <Info size={16} className="text-midnight flex-shrink-0" />
+          <p className="text-[10px] text-midnight font-medium uppercase tracking-wider">
+            Click 'Brochure' to receive the official {filter} department report via email.
+          </p>
+        </div>
+
+        {/* Official NIRF Style Data Grid */}
+        <div className="bg-white border border-slate-300 shadow-sm overflow-hidden text-slate-800">
+          {loading ? (
+            <div className="py-24 flex flex-col items-center justify-center gap-4">
+              <div className="w-8 h-8 border-2 border-slate-300 border-t-slate-800 rounded-full animate-spin" />
+              <p className="text-sm font-medium text-slate-500 italic">Loading Ranking Data...</p>
+            </div>
+          ) : colleges.length > 0 ? (
+            <div className="flex flex-col">
+              <div className="overflow-x-auto">
+                <table className="w-full border-collapse text-[13px]">
+                  <thead>
+                    <tr className="bg-[#f8f9fa] border-b border-slate-300">
+                      <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-20">Rank</th>
+                      <th className="px-4 py-3 text-left font-bold border-r border-slate-200">College Name</th>
+                      <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-32">Average Package</th>
+                      <th className="px-4 py-3 text-center font-bold border-r border-slate-200 w-32">Total Fees</th>
+                      <th className="px-4 py-3 text-left font-bold border-r border-slate-200 w-32">City</th>
+                      <th className="px-4 py-3 text-left font-bold w-32">State</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {displayedColleges.map((college, index) => (
+                      <tr 
+                        key={college.id}
+                        className="border-b border-slate-200 hover:bg-slate-50 transition-colors"
+                      >
+                        <td className="px-4 py-4 text-center font-bold text-slate-900 border-r border-slate-200 bg-slate-50/50">
+                           {college.ranking && college.ranking > 0 ? `#${college.ranking}` : '-'}
+                        </td>
+                        <td className="px-4 py-4 border-r border-slate-200">
+                           <div className="flex flex-col gap-1">
+                              <span className="font-semibold text-slate-900 leading-tight">
+                                {college.name}
+                              </span>
+                              <div className="flex items-center gap-2 text-[11px]">
+                                 <button 
+                                   onClick={() => handleAction(college, 'details')}
+                                   className="text-action hover:underline font-medium flex items-center gap-1"
+                                 >
+                                   View Details
+                                 </button>
+                                 <span className="text-slate-300">|</span>
+                                 <button 
+                                   onClick={() => handleAction(college, 'brochure')}
+                                   className="text-red-600 hover:scale-110 transition-transform"
+                                   title="Download Brochure"
+                                  >
+                                   <FileText size={14} />
+                                 </button>
+                                 <span className="text-slate-300">|</span>
+                                 <button 
+                                   onClick={() => handleAction(college, 'share')}
+                                   className="text-slate-400 hover:text-action transition-colors"
+                                   title="Share College"
+                                 >
+                                   <Share2 size={12} />
+                                 </button>
+                              </div>
+                           </div>
+                        </td>
+                        <td className="px-4 py-4 border-r border-slate-200 text-center font-bold text-slate-700 bg-slate-50/30">
+                           {college.avg_ctc || '-'}
+                        </td>
+                        <td className="px-4 py-4 border-r border-slate-200 text-center font-medium text-slate-600">
+                           {college.total_fee || '-'}
+                        </td>
+                        <td className="px-4 py-4 border-r border-slate-200 text-slate-600">
+                           {college.location}
+                        </td>
+                        <td className="px-4 py-4 text-slate-600">
+                           {college.state}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {visibleCount < colleges.length && (
+                <div className="p-8 flex justify-center bg-slate-50/50 border-t border-slate-200">
+                  <button
+                    onClick={() => setVisibleCount(prev => prev + 20)}
+                    className="group flex items-center gap-2 px-8 py-3 bg-white border border-slate-300 rounded-xl text-xs font-bold text-slate-700 hover:bg-slate-900 hover:text-white hover:border-slate-900 transition-all shadow-sm active:scale-95"
+                  >
+                    Load More Rankings
+                    <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="py-24 text-center bg-slate-50/30">
+                <p className="text-sm text-slate-400 italic">Ranking data currently being updated by the National Institutional Ranking Framework...</p>
+            </div>
+          )}
+        </div>
+
+        {/* Lead Capture Modal */}
+        {selectedCollege && (
+          <BrochureModal 
+            isOpen={isBrochureModalOpen}
+            onClose={() => setIsBrochureModalOpen(false)}
+            collegeName={selectedCollege.name}
+            collegeId={selectedCollege.id}
+            stream={selectedCollege.stream}
+            mode={modalMode}
+            targetUrl={`/colleges/${selectedCollege.slug || selectedCollege.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`}
+          />
+        )}
+
+        {/* Footer info */}
+        <div className="mt-16 text-center">
+            <p className="text-xs text-ink-4">
+                Showing {colleges.length} top ranked institutions. Data is updated every admission cycle.
+            </p>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  )
+}
