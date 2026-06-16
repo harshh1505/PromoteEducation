@@ -6,18 +6,13 @@ import { supabase } from '@/lib/supabase'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import {
-  Search, Filter, ArrowUpDown, GraduationCap, Building,
-  CheckCircle2, MapPin, Star, Award, Layers,
-  ChevronRight, ArrowRight, DollarSign,
-  TrendingUp, HelpCircle, BookOpen
+  Search, MapPin, ChevronDown, Building2
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useLeadCapture } from '@/hooks/useLeadCapture'
 import LeadModal from '@/components/ui/LeadModal'
 import ReviewModal from '@/components/ui/ReviewModal'
 import { useRouter } from 'next/navigation'
-
-// ─── Interfaces ──────────────────────────────────────────────────────────────
 
 interface DbCollege {
   id: string
@@ -38,32 +33,23 @@ interface DbCollege {
   verified: boolean
 }
 
-// Accent configuration per stream
-const STREAM_ACCENTS: Record<string, { bg: string; text: string; border: string; accent: string }> = {
-  Engineering: { bg: 'bg-sky-50', text: 'text-sky-600', border: 'border-sky-100', accent: 'sky' },
-  Medical: { bg: 'bg-rose-50', text: 'text-rose-600', border: 'border-rose-100', accent: 'rose' },
-  Management: { bg: 'bg-violet-50', text: 'text-violet-600', border: 'border-violet-100', accent: 'violet' },
-  Pharmacy: { bg: 'bg-emerald-50', text: 'text-emerald-600', border: 'border-emerald-100', accent: 'emerald' },
-  Law: { bg: 'bg-amber-50', text: 'text-amber-600', border: 'border-amber-100', accent: 'amber' },
-  Architecture: { bg: 'bg-teal-50', text: 'text-teal-600', border: 'border-teal-100', accent: 'teal' },
-}
-
-const DEFAULT_ACCENT = { bg: 'bg-slate-50', text: 'text-slate-600', border: 'border-slate-100', accent: 'slate' }
-
 export default function CollegesListPage() {
   const router = useRouter()
   const { isAuthorized } = useLeadCapture()
 
   const [colleges, setColleges] = useState<DbCollege[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [fetchError, setFetchError] = useState<string | null>(null)
 
   // Filters State
   const [searchQuery, setSearchQuery] = useState('')
-  const [activeStream, setActiveStream] = useState('All')
-  const [selectedState, setSelectedState] = useState('All')
-  const [selectedOwnership, setSelectedOwnership] = useState('All')
-  const [sortBy, setSortBy] = useState('rank') // rank, package, fee
+  const [activeTab, setActiveTab] = useState('All Colleges')
+  const [selectedState, setSelectedState] = useState('All States')
+  const [selectedCity, setSelectedCity] = useState('All Cities')
+  
+  const [selectedCourseTypes, setSelectedCourseTypes] = useState<string[]>([])
+  const [selectedOwnerships, setSelectedOwnerships] = useState<string[]>([])
+  
+  const [sortBy, setSortBy] = useState('NIRF Ranking') 
 
   // Modals state
   const [selectedCollege, setSelectedCollege] = useState<DbCollege | null>(null)
@@ -75,18 +61,14 @@ export default function CollegesListPage() {
         setIsLoading(true)
         const { data, error } = await supabase
           .from('colleges')
-          .select('id, slug, name, short_name, location, state, stream, nirf_rank, total_fee, avg_package, highest_package, rating, type, ownership, entrance_exam, verified')
+          .select('*')
           .eq('is_active', true)
           .limit(500)
 
         if (error) throw error
-
-        if (data) {
-          setColleges(data)
-        }
-      } catch (err: any) {
+        if (data) setColleges(data)
+      } catch (err) {
         console.error('Error loading colleges:', err)
-        setFetchError(err.message || 'Failed to fetch colleges data')
       } finally {
         setIsLoading(false)
       }
@@ -94,21 +76,39 @@ export default function CollegesListPage() {
     loadColleges()
   }, [])
 
-  // Dynamic filter arrays
-  const uniqueStreams = ['All', ...Array.from(new Set(colleges.map(c => c.stream))).filter(Boolean)]
-  const uniqueStates = ['All', ...Array.from(new Set(colleges.map(c => c.state))).filter(Boolean)].sort()
-  const uniqueOwnerships = ['All', 'Government', 'Private']
+  const uniqueStreams = Array.from(new Set(colleges.map(c => c.stream))).filter(Boolean)
+  const uniqueStates = Array.from(new Set(colleges.map(c => c.state))).filter(Boolean).sort()
+  const uniqueCities = Array.from(new Set(colleges.map(c => c.location))).filter(Boolean).sort()
+
+  const topTabs = ['All Colleges', ...uniqueStreams, 'More']
+
+  const handleCourseTypeChange = (stream: string) => {
+    setSelectedCourseTypes(prev => 
+      prev.includes(stream) ? prev.filter(s => s !== stream) : [...prev, stream]
+    )
+  }
+
+  const handleOwnershipChange = (own: string) => {
+    setSelectedOwnerships(prev => 
+      prev.includes(own) ? prev.filter(o => o !== own) : [...prev, own]
+    )
+  }
+
+  const clearAllFilters = () => {
+    setSearchQuery('')
+    setSelectedState('All States')
+    setSelectedCity('All Cities')
+    setSelectedCourseTypes([])
+    setSelectedOwnerships([])
+  }
 
   // Helper to parse fees numerically for sorting
   const parseFeeNumeric = (feeStr: string | null | undefined): number => {
     if (!feeStr) return 9999999
-    // Try to extract lakhs or absolute numbers
     const cleaned = feeStr.toLowerCase().replace(/[^0-9.]/g, '')
     const num = parseFloat(cleaned)
     if (isNaN(num)) return 9999999
-    if (feeStr.toLowerCase().includes('lakh')) {
-      return num * 100000
-    }
+    if (feeStr.toLowerCase().includes('lakh')) return num * 100000
     return num
   }
 
@@ -116,403 +116,317 @@ export default function CollegesListPage() {
   const filteredColleges = colleges.filter(college => {
     const matchesSearch = !searchQuery || 
       college.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (college.short_name && college.short_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-      college.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      college.state.toLowerCase().includes(searchQuery.toLowerCase())
+      (college.short_name && college.short_name.toLowerCase().includes(searchQuery.toLowerCase()))
 
-    const matchesStream = activeStream === 'All' || college.stream === activeStream
-    const matchesState = selectedState === 'All' || college.state === selectedState
-    const matchesOwnership = selectedOwnership === 'All' || 
-      (college.ownership && college.ownership.toLowerCase().includes(selectedOwnership.toLowerCase())) ||
-      (college.type && college.type.toLowerCase().includes(selectedOwnership.toLowerCase()))
+    const matchesTab = activeTab === 'All Colleges' || activeTab === 'More' || college.stream === activeTab
+    
+    const matchesState = selectedState === 'All States' || college.state === selectedState
+    const matchesCity = selectedCity === 'All Cities' || college.location === selectedCity
+    
+    const matchesCourseType = selectedCourseTypes.length === 0 || selectedCourseTypes.includes(college.stream)
+    const matchesOwnership = selectedOwnerships.length === 0 || 
+      (college.ownership && selectedOwnerships.some(o => college.ownership!.toLowerCase().includes(o.toLowerCase())))
 
-    return matchesSearch && matchesStream && matchesState && matchesOwnership
+    return matchesSearch && matchesTab && matchesState && matchesCity && matchesCourseType && matchesOwnership
   })
 
-  // Sorting
   const sortedColleges = [...filteredColleges].sort((a, b) => {
-    if (sortBy === 'rank') {
-      const rankA = a.nirf_rank ?? 9999
-      const rankB = b.nirf_rank ?? 9999
-      return rankA - rankB
+    if (sortBy === 'NIRF Ranking') {
+      return (a.nirf_rank ?? 9999) - (b.nirf_rank ?? 9999)
     }
-    if (sortBy === 'package') {
-      const pkgA = a.avg_package ?? 0
-      const pkgB = b.avg_package ?? 0
-      return pkgB - pkgA
+    if (sortBy === 'Average Package') {
+      return (b.avg_package ?? 0) - (a.avg_package ?? 0)
     }
-    if (sortBy === 'fee') {
+    if (sortBy === 'Lowest Fee') {
       return parseFeeNumeric(a.total_fee) - parseFeeNumeric(b.total_fee)
     }
     return 0
   })
 
-  // Dynamic statistics based on filtered results
-  const totalVerified = filteredColleges.filter(c => c.verified).length
-  const maxPackage = filteredColleges.reduce((max, c) => Math.max(max, c.avg_package || 0, c.highest_package || 0), 0)
-  const avgPackage = filteredColleges.filter(c => c.avg_package).reduce((sum, c, _, arr) => sum + (c.avg_package || 0) / arr.length, 0)
-
-  const handleOpenLead = (college: DbCollege) => {
-    if (isAuthorized) {
-      router.push(`/colleges/${college.slug}`)
-    } else {
-      setSelectedCollege(college)
-    }
-  }
-
   return (
-    <main className="min-h-screen bg-slate-50/50 text-slate-800 font-sans">
+    <main className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-blue-100 selection:text-blue-900">
       <Navbar />
 
-      {/* Dynamic Schema generation */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "ItemList",
-            "itemListElement": sortedColleges.slice(0, 50).map((c, i) => ({
-              "@type": "ListItem",
-              "position": i + 1,
-              "name": c.name,
-              "url": `https://promoteeducation.org/colleges/${c.slug}`,
-            })),
-          }),
-        }}
-      />
-
-      {/* ── HERO SECTION ──────────────────────────────────────────────────────── */}
-      <section className="relative pt-32 pb-16 md:pt-40 md:pb-20 overflow-hidden bg-gradient-to-br from-slate-50 via-white to-slate-100 border-b border-slate-100">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-200/20 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-emerald-100/30 rounded-full blur-[120px] pointer-events-none" />
-
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12 relative z-10">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 mb-4">
-              <span className="text-[10px] font-black text-sky-600 tracking-[0.25em] uppercase">
-                Directory Hub
-              </span>
-            </div>
-
-            <h1 className="text-4xl md:text-5xl lg:text-[56px] font-black text-slate-900 leading-[1.1] tracking-tighter mb-6">
-              Top Colleges in India <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-500 via-teal-500 to-indigo-600">
-                Rankings, Fees & Placements
-              </span>
-            </h1>
-
-            <p className="text-slate-500 text-base md:text-lg max-w-2xl leading-relaxed font-medium">
-              Explore and evaluate the finest universities in India. Filter by streams, states, and fee brackets to find the ideal match for your career objectives.
-            </p>
+      {/* ── BREADCRUMBS & HERO ────────────────────────────────────────────────── */}
+      <div className="bg-white pt-32 pb-0 border-b border-slate-200">
+        <div className="max-w-[1440px] mx-auto px-6 lg:px-8">
+          <div className="text-xs text-blue-600 font-medium mb-5 flex items-center gap-2">
+            <Link href="/" className="hover:text-blue-800 transition-colors">Home</Link>
+            <span className="text-slate-300">/</span>
+            <span className="text-slate-500">Colleges</span>
           </div>
 
-          {/* Stats Bar */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-10 border-t border-slate-200/60 mt-12">
-            <div>
-              <p className="text-2xl font-black text-slate-900 leading-none mb-1">
-                {isLoading ? '...' : filteredColleges.length}
-              </p>
-              <span className="text-[9px] text-slate-400 font-black uppercase tracking-wider">Matching Institutes</span>
-            </div>
-            <div>
-              <p className="text-2xl font-black text-emerald-600 leading-none mb-1">
-                {isLoading ? '...' : maxPackage ? `₹${maxPackage.toFixed(1)} L` : 'N/A'}
-              </p>
-              <span className="text-[9px] text-slate-400 font-black uppercase tracking-wider">Top CTC Package</span>
-            </div>
-            <div>
-              <p className="text-2xl font-black text-sky-600 leading-none mb-1">
-                {isLoading ? '...' : avgPackage ? `₹${avgPackage.toFixed(1)} L` : 'N/A'}
-              </p>
-              <span className="text-[9px] text-slate-400 font-black uppercase tracking-wider">Average Package</span>
-            </div>
-            <div>
-              <p className="text-2xl font-black text-indigo-600 leading-none mb-1">
-                {isLoading ? '...' : `${totalVerified}`}
-              </p>
-              <span className="text-[9px] text-slate-400 font-black uppercase tracking-wider">Verified Audits</span>
-            </div>
+          <h1 className="text-4xl lg:text-[40px] font-bold text-slate-900 tracking-tight mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+            Explore Top Colleges in India
+          </h1>
+          <p className="text-slate-500 text-[15px] max-w-2xl leading-relaxed mb-10">
+            Discover the most prestigious institutions. Filter by rankings, fees, and packages to find the perfect match for your educational journey.
+          </p>
+
+          {/* Top Tabs */}
+          <div className="flex items-center gap-8 overflow-x-auto no-scrollbar">
+            {topTabs.map(tab => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={cn(
+                  "pb-4 text-[14px] font-semibold whitespace-nowrap transition-all border-b-[3px] relative -bottom-[1px]",
+                  activeTab === tab 
+                    ? "border-blue-600 text-blue-700" 
+                    : "border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-300"
+                )}
+              >
+                {tab}
+                {tab === 'More' && <ChevronDown size={14} className="inline ml-1" />}
+              </button>
+            ))}
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* ── SEARCH & FILTER DIRECTORY ENGINE ──────────────────────────────────── */}
-      <section className="py-16">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12">
-          {/* Controls Bar */}
-          <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-xl shadow-slate-100/50 mb-10 flex flex-col gap-6">
-            {/* Search + Selectors */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
-              {/* Search input */}
-              <div className="lg:col-span-6 relative">
-                <Search size={16} className="text-slate-400 absolute left-4.5 top-1/2 -translate-y-1/2" />
+      {/* ── MAIN CONTENT (SIDEBAR + LIST) ─────────────────────────────────────── */}
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-8 py-10">
+        <div className="flex flex-col lg:flex-row gap-8 items-start">
+          
+          {/* LEFT SIDEBAR FILTERS */}
+          <div className="w-full lg:w-[260px] flex-shrink-0 bg-white border border-slate-200/80 shadow-sm shadow-slate-100 rounded-xl p-5 hidden lg:block">
+            <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-100">
+              <h2 className="text-[15px] font-bold text-slate-900 uppercase tracking-wide">Filters</h2>
+              <button onClick={clearAllFilters} className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors">
+                Clear All
+              </button>
+            </div>
+
+            {/* Search */}
+            <div className="mb-8">
+              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Search</h3>
+              <div className="relative group">
+                <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
                 <input
                   type="text"
-                  placeholder="Search by college name, short name, city or state..."
+                  placeholder="Find by name..."
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-slate-200 transition-all font-medium"
+                  className="w-full pl-9 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm placeholder:text-slate-400 focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
                 />
               </div>
+            </div>
 
-              {/* State Filter */}
-              <div className="lg:col-span-2 relative">
-                <select
-                  value={selectedState}
-                  onChange={e => setSelectedState(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-4 py-3.5 text-sm text-slate-800 focus:outline-none focus:border-slate-200 font-bold appearance-none cursor-pointer"
-                >
-                  <option value="All">All States</option>
-                  {uniqueStates.filter(s => s !== 'All').map(st => (
-                    <option key={st} value={st}>{st}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Ownership Type */}
-              <div className="lg:col-span-2 relative">
-                <select
-                  value={selectedOwnership}
-                  onChange={e => setSelectedOwnership(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-4 py-3.5 text-sm text-slate-800 focus:outline-none focus:border-slate-200 font-bold appearance-none cursor-pointer"
-                >
-                  <option value="All">All Types</option>
-                  <option value="Government">Government / Public</option>
-                  <option value="Private">Private</option>
-                </select>
-              </div>
-
-              {/* Sort selector */}
-              <div className="lg:col-span-2 relative">
-                <select
-                  value={sortBy}
-                  onChange={e => setSortBy(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-100 rounded-2xl px-4 py-3.5 text-sm text-slate-800 focus:outline-none focus:border-slate-200 font-bold appearance-none cursor-pointer"
-                >
-                  <option value="rank">Sort: NIRF Rank</option>
-                  <option value="package">Sort: Avg Package</option>
-                  <option value="fee">Sort: Low Course Fee</option>
-                </select>
+            {/* Location */}
+            <div className="mb-8">
+              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+                Location
+              </h3>
+              <div className="space-y-3">
+                <div className="relative">
+                  <select
+                    value={selectedState}
+                    onChange={e => setSelectedState(e.target.value)}
+                    className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-700 appearance-none cursor-pointer focus:outline-none focus:bg-white focus:border-blue-500 transition-all hover:bg-slate-100"
+                  >
+                    <option value="All States">All States</option>
+                    {uniqueStates.map(st => (
+                      <option key={st} value={st}>{st}</option>
+                    ))}
+                  </select>
+                  <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                </div>
+                <div className="relative">
+                  <select
+                    value={selectedCity}
+                    onChange={e => setSelectedCity(e.target.value)}
+                    className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-700 appearance-none cursor-pointer focus:outline-none focus:bg-white focus:border-blue-500 transition-all hover:bg-slate-100"
+                  >
+                    <option value="All Cities">All Cities</option>
+                    {uniqueCities.map(city => (
+                      <option key={city} value={city}>{city}</option>
+                    ))}
+                  </select>
+                  <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                </div>
               </div>
             </div>
 
-            {/* Stream tabs */}
-            <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar border-t border-slate-50 pt-4">
-              {uniqueStreams.map(stream => {
-                const isActive = activeStream === stream
-                const count = stream === 'All' ? colleges.length : colleges.filter(c => c.stream === stream).length
-                const accent = STREAM_ACCENTS[stream] || DEFAULT_ACCENT
-                return (
-                  <button
-                    key={stream}
-                    onClick={() => setActiveStream(stream)}
-                    className={cn(
-                      "flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-200 border",
-                      isActive
-                        ? "bg-slate-900 text-white border-slate-900 shadow-sm"
-                        : "bg-white hover:bg-slate-50 text-slate-650 border-slate-150/70"
-                    )}
-                  >
-                    <span>{stream}</span>
-                    <span className={cn(
-                      "text-[9px] px-1.5 py-0.5 rounded-full font-black",
-                      isActive ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500"
-                    )}>
-                      {count}
-                    </span>
+            {/* Course Type */}
+            <div className="mb-8">
+              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Course Type</h3>
+              <div className="space-y-3.5">
+                {uniqueStreams.slice(0, 6).map(stream => (
+                  <label key={stream} className="flex items-center gap-3 cursor-pointer group">
+                    <div className="relative flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedCourseTypes.includes(stream)}
+                        onChange={() => handleCourseTypeChange(stream)}
+                        className="peer w-4 h-4 border-slate-300 rounded text-blue-600 focus:ring-blue-500 cursor-pointer appearance-none checked:bg-blue-600 checked:border-blue-600 transition-all"
+                      />
+                      <svg className="absolute w-3 h-3 pointer-events-none hidden peer-checked:block text-white left-0.5 top-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <span className="text-sm font-medium text-slate-600 group-hover:text-slate-900 transition-colors">{stream}</span>
+                  </label>
+                ))}
+                {uniqueStreams.length > 6 && (
+                  <button className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors mt-2">
+                    + View More
                   </button>
-                )
-              })}
+                )}
+              </div>
+            </div>
+
+            {/* Ownership */}
+            <div className="mb-2">
+              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Ownership</h3>
+              <div className="space-y-3.5">
+                {['Government', 'Private', 'Deemed'].map(own => (
+                  <label key={own} className="flex items-center gap-3 cursor-pointer group">
+                     <div className="relative flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={selectedOwnerships.includes(own)}
+                        onChange={() => handleOwnershipChange(own)}
+                        className="peer w-4 h-4 border-slate-300 rounded text-blue-600 focus:ring-blue-500 cursor-pointer appearance-none checked:bg-blue-600 checked:border-blue-600 transition-all"
+                      />
+                      <svg className="absolute w-3 h-3 pointer-events-none hidden peer-checked:block text-white left-0.5 top-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <span className="text-sm font-medium text-slate-600 group-hover:text-slate-900 transition-colors">{own}</span>
+                  </label>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Directory Listings */}
-          {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="rounded-3xl bg-slate-100 min-h-[350px]" />
-              ))}
-            </div>
-          ) : fetchError ? (
-            <div className="text-center py-20 bg-white border border-slate-100 rounded-3xl max-w-lg mx-auto p-8 shadow-sm">
-              <h3 className="text-lg font-bold text-rose-600 mb-2">Failed to load directory</h3>
-              <p className="text-slate-500 text-sm">{fetchError}</p>
-            </div>
-          ) : sortedColleges.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {sortedColleges.map((college) => {
-                const streamStyle = STREAM_ACCENTS[college.stream] || DEFAULT_ACCENT
-                return (
-                  <div
-                    key={college.id}
-                    className="bg-white border border-slate-100 rounded-3xl overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-350 flex flex-col justify-between h-full group"
-                  >
-                    <div className="p-6 flex-1">
-                      {/* Top badges */}
-                      <div className="flex items-center justify-between mb-4">
-                        <span className={cn(
-                          'text-[9px] font-black px-2.5 py-0.5 rounded-full tracking-wider uppercase border',
-                          streamStyle.bg, streamStyle.text, streamStyle.border
-                        )}>
-                          {college.stream}
-                        </span>
-
-                        <div className="flex items-center gap-1.5">
-                          {college.verified && (
-                            <span className="bg-emerald-50 text-emerald-600 text-[8px] font-black px-2 py-0.5 rounded-full border border-emerald-100 uppercase tracking-wider">
-                              Verified
-                            </span>
-                          )}
-                          {college.nirf_rank && (
-                            <span className="text-slate-400 text-[9px] font-extrabold uppercase">
-                              NIRF #{college.nirf_rank}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Name & Location */}
-                      <h3 className="text-base md:text-lg font-extrabold text-slate-900 group-hover:text-sky-600 transition-colors mb-2 leading-snug">
-                        {college.name}
-                      </h3>
-                      
-                      <p className="text-slate-550 text-xs flex items-center gap-1.5 mb-6">
-                        <MapPin size={12} className="text-slate-400" />
-                        {college.location}, {college.state}
-                      </p>
-
-                      {/* Info grid */}
-                      <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-50 mb-6">
-                        <div>
-                          <p className="text-[9px] text-slate-400 font-black uppercase tracking-wider mb-1">Total Fee</p>
-                          <p className="text-slate-900 font-extrabold text-xs md:text-sm">
-                            {college.total_fee || 'TBD'}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-[9px] text-slate-400 font-black uppercase tracking-wider mb-1">Avg Package</p>
-                          <p className="text-sky-600 font-extrabold text-xs md:text-sm">
-                            {college.avg_package ? `₹${college.avg_package} LPA` : 'N/A'}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex flex-wrap gap-2 pt-2">
-                        {college.entrance_exam && (
-                          <span className="bg-slate-50 border border-slate-100 text-[9px] font-black text-slate-500 px-2 py-1 rounded-lg">
-                            Exam: {college.entrance_exam}
-                          </span>
-                        )}
-                        {college.ownership && (
-                          <span className="bg-slate-50 border border-slate-100 text-[9px] font-black text-slate-500 px-2 py-1 rounded-lg">
-                            {college.ownership}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Actions bar */}
-                    <div className="grid grid-cols-2 border-t border-slate-100 bg-slate-50/50">
-                      <button
-                        onClick={() => handleOpenLead(college)}
-                        className="py-3.5 text-center text-[10px] font-black uppercase tracking-wider text-slate-600 hover:bg-sky-600 hover:text-white transition-colors border-r border-slate-100"
-                      >
-                        Get Counselor Help
-                      </button>
-                      <Link
-                        href={`/colleges/${college.slug}`}
-                        className="py-3.5 text-center text-[10px] font-black uppercase tracking-wider text-sky-600 hover:bg-sky-600 hover:text-white transition-colors"
-                      >
-                        Full Details
-                      </Link>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          ) : (
-            <div className="text-center py-20 bg-white border border-slate-100 rounded-[32px] max-w-lg mx-auto">
-              <Search size={36} className="mx-auto text-slate-350 mb-4" />
-              <h3 className="text-base font-extrabold text-slate-900 mb-1">No matches found</h3>
-              <p className="text-xs text-slate-400">Try modifying your state, stream, or query filters.</p>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ── FEATURED COMPARISONS SECTION ───────────────────────────────────────── */}
-      {!isLoading && sortedColleges.length > 1 && (
-        <section className="py-16 bg-white border-y border-slate-100">
-          <div className="max-w-[1440px] mx-auto px-6 md:px-12">
-            <div className="mb-12">
-              <span className="text-[10px] font-black text-sky-600 tracking-[0.25em] uppercase mb-2 block">
-                Popular Head-to-Head
+          {/* RIGHT LIST VIEW */}
+          <div className="flex-1 w-full">
+            {/* Top Bar */}
+            <div className="flex items-center justify-between mb-5">
+              <span className="text-sm text-slate-500 font-medium">
+                Showing <strong className="text-slate-900 font-bold">{Math.min(20, sortedColleges.length)}</strong> of <strong className="text-slate-900 font-bold">{sortedColleges.length}</strong> colleges
               </span>
-              <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
-                Featured Comparisons
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {sortedColleges.slice(0, 12).map((c1, i) => {
-                const c2 = sortedColleges[i + 1]
-                if (!c2) return null
-                return (
-                  <Link
-                    key={i}
-                    href="/#compare-section"
-                    className="bg-slate-50 border border-slate-100/70 p-5 rounded-2xl text-xs md:text-sm font-extrabold text-slate-700 hover:text-sky-600 hover:border-sky-200 hover:bg-white hover:shadow-md transition-all flex items-center justify-between group"
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-widest hidden sm:inline-block">Sort By:</span>
+                <div className="relative">
+                  <select
+                    value={sortBy}
+                    onChange={e => setSortBy(e.target.value)}
+                    className="pl-4 pr-10 py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 appearance-none cursor-pointer focus:outline-none focus:border-blue-500 hover:border-slate-300 shadow-sm transition-all"
                   >
-                    <span className="truncate pr-4">{c1.name} vs {c2.name}</span>
-                    <span className="text-slate-300 group-hover:text-sky-500 group-hover:translate-x-1.5 transition-all">
-                      →
-                    </span>
-                  </Link>
-                )
-              })}
+                    <option value="NIRF Ranking">NIRF Ranking</option>
+                    <option value="Average Package">Average Package</option>
+                    <option value="Lowest Fee">Lowest Fee</option>
+                  </select>
+                  <ChevronDown size={14} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                </div>
+              </div>
             </div>
-          </div>
-        </section>
-      )}
 
-      {/* ── SEO TRAFFIC MAGNETS ────────────────────────────────────────────────── */}
-      <section className="py-20 bg-slate-50/20">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-12">
-          <h3 className="text-sm font-black uppercase text-slate-405 tracking-wider mb-6">
-            Explore by Stream & Location
-          </h3>
-          <div className="flex flex-wrap gap-x-8 gap-y-3">
-            <Link href="/colleges/engineering-in-delhi" className="text-sky-600 hover:text-sky-700 font-bold text-xs uppercase tracking-wider">
-              Engineering in Delhi
-            </Link>
-            <Link href="/colleges/engineering-in-mumbai" className="text-sky-600 hover:text-sky-700 font-bold text-xs uppercase tracking-wider">
-              Engineering in Mumbai
-            </Link>
-            <Link href="/colleges/mbbs-in-india" className="text-sky-600 hover:text-sky-700 font-bold text-xs uppercase tracking-wider">
-              MBBS in India
-            </Link>
-            <Link href="/colleges/law-in-india" className="text-sky-600 hover:text-sky-700 font-bold text-xs uppercase tracking-wider">
-              Law in India
-            </Link>
-          </div>
-        </div>
-      </section>
+            {/* List */}
+            {isLoading ? (
+              <div className="bg-white border border-slate-200/80 shadow-sm shadow-slate-100 rounded-xl p-8">
+                <div className="animate-pulse flex flex-col gap-10">
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} className="flex gap-6 items-center">
+                      <div className="w-16 h-16 bg-slate-100 rounded-full" />
+                      <div className="flex-1 space-y-3">
+                        <div className="h-5 bg-slate-100 rounded w-1/3" />
+                        <div className="h-4 bg-slate-100 rounded w-1/4" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : sortedColleges.length > 0 ? (
+              <div className="bg-white border border-slate-200/80 shadow-sm shadow-slate-100 rounded-xl overflow-hidden flex flex-col divide-y divide-slate-100">
+                {sortedColleges.map((college, index) => (
+                  <div key={college.id} className="p-6 md:p-8 hover:bg-[#f8fafc] transition-colors duration-200 flex flex-col xl:flex-row items-start xl:items-center gap-6 group">
+                    
+                    {/* Number + Logo + Main Details Container */}
+                    <div className="flex-1 min-w-0 flex items-start gap-5 w-full">
+                        {/* Number */}
+                        <div className="w-6 pt-1 text-center hidden sm:block">
+                           <span className="text-[26px] font-bold text-slate-300 group-hover:text-blue-500 transition-colors leading-none" style={{ fontFamily: 'var(--font-display)' }}>
+                             {index + 1}
+                           </span>
+                        </div>
 
-      {/* ── FOOTER CALL-TO-ACTION ──────────────────────────────────────────────── */}
-      <section className="bg-slate-900 py-24 text-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,182,255,0.08),transparent)] pointer-events-none" />
-        <div className="max-w-4xl mx-auto px-6 relative z-10">
-          <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-6">
-            Can't find what you're looking for?
-          </h2>
-          <p className="text-slate-400 text-sm md:text-base mb-10 max-w-xl mx-auto leading-relaxed font-medium">
-            Our education experts are here to help you find the perfect college matching your profile, budget, and career goals.
-          </p>
-          <button className="bg-sky-500 hover:bg-sky-600 text-white px-10 py-5 rounded-2xl font-bold hover:-translate-y-0.5 active:scale-95 transition-all shadow-xl shadow-sky-500/10 text-xs uppercase tracking-widest">
-            Speak to a Counselor
-          </button>
+                        {/* Logo */}
+                        <div className="w-[68px] h-[68px] rounded-full border border-slate-200 flex-shrink-0 flex items-center justify-center bg-white shadow-sm overflow-hidden p-3 mt-1">
+                           <Building2 size={28} className="text-slate-300" />
+                        </div>
+
+                        {/* Details */}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-xl font-bold text-slate-900 leading-tight mb-2 group-hover:text-blue-700 transition-colors cursor-pointer" style={{ fontFamily: 'var(--font-display)' }}>
+                            {college.name}
+                          </h3>
+                          <div className="flex items-center gap-1.5 text-sm font-medium text-slate-500 mb-4">
+                            <MapPin size={15} className="text-slate-400" />
+                            {college.location}, {college.state}
+                          </div>
+                          
+                          <div className="flex flex-wrap gap-2">
+                            {college.stream && (
+                              <span className="px-3.5 py-1.5 bg-slate-100 text-slate-600 text-xs font-semibold rounded-full border border-slate-200/60">
+                                {college.stream}
+                              </span>
+                            )}
+                            {college.ownership && (
+                              <span className="px-3.5 py-1.5 bg-slate-100 text-slate-600 text-xs font-semibold rounded-full border border-slate-200/60">
+                                {college.ownership}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                    </div>
+
+                    {/* Stats Columns & Button Container */}
+                    <div className="flex flex-col md:flex-row items-start md:items-center w-full xl:w-auto gap-6 xl:gap-10 pl-0 sm:pl-[104px] xl:pl-0 mt-4 xl:mt-0">
+                        {/* Stats */}
+                        <div className="flex items-start gap-8 md:gap-12 w-full md:w-auto justify-between md:justify-start">
+                          <div className="text-left min-w-[70px]">
+                            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">NIRF Rank</p>
+                            <p className="text-base font-black text-slate-800">{college.nirf_rank ? `#${college.nirf_rank}` : '-'}</p>
+                          </div>
+                          <div className="text-left min-w-[110px]">
+                            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">Avg Package</p>
+                            <p className="text-base font-black text-slate-800">{college.avg_package ? `₹${college.avg_package.toFixed(2)} LPA` : '-'}</p>
+                          </div>
+                          <div className="text-left min-w-[90px] hidden sm:block">
+                            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">Total Fee</p>
+                            <p className="text-base font-black text-slate-800">{college.total_fee || '-'}</p>
+                          </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="w-full md:w-[150px] flex-shrink-0 mt-2 md:mt-0">
+                          <Link
+                            href={`/colleges/${college.slug}`}
+                            className="block w-full py-3 px-5 bg-white border-2 border-blue-600 text-blue-700 text-[14px] font-bold rounded-lg hover:bg-blue-600 hover:text-white transition-all duration-300 text-center shadow-sm"
+                          >
+                            View Details
+                          </Link>
+                        </div>
+                    </div>
+
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="bg-white border border-slate-200/80 shadow-sm rounded-xl p-20 text-center">
+                <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Search size={24} className="text-slate-400" />
+                </div>
+                <p className="text-[17px] font-bold text-slate-900 mb-1">No colleges found</p>
+                <p className="text-sm font-medium text-slate-500">Try adjusting your filters to see more results.</p>
+              </div>
+            )}
+          </div>
+
         </div>
-      </section>
+      </div>
 
       <Footer />
 
