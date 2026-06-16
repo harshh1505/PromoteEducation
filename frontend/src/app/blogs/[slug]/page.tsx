@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Link from 'next/link'
@@ -19,6 +20,7 @@ import {
   ArrowRight
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { resolveImageUrl } from '@/lib/utils'
 import LeadModal from '@/components/ui/LeadModal'
 
 export default function BlogDetailsPage({ params }: { params: { slug: string } }) {
@@ -264,7 +266,7 @@ export default function BlogDetailsPage({ params }: { params: { slug: string } }
               {blog.image_url && (
                 <div className="w-full h-[280px] md:h-[450px] rounded-[32px] overflow-hidden border border-slate-100 mb-12">
                   <img 
-                    src={blog.image_url} 
+                    src={resolveImageUrl(blog.image_url) || ''} 
                     alt={blog.title} 
                     className="w-full h-full object-cover"
                     onError={(e) => {
@@ -289,8 +291,11 @@ export default function BlogDetailsPage({ params }: { params: { slug: string } }
                 prose-code:text-emerald-600 prose-code:bg-slate-50 prose-code:rounded prose-code:px-1 prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
                 prose-pre:bg-slate-900 prose-pre:text-slate-100 prose-pre:rounded-2xl
                 prose-img:rounded-2xl prose-img:shadow-md
-                prose-hr:border-slate-200">
-                <ReactMarkdown>
+                prose-hr:border-slate-200
+                prose-table:w-full prose-table:border-collapse prose-table:my-8
+                prose-th:bg-slate-50 prose-th:text-left prose-th:font-black prose-th:text-slate-900 prose-th:p-4 prose-th:border prose-th:border-slate-200 prose-th:uppercase prose-th:tracking-wider prose-th:text-xs
+                prose-td:p-4 prose-td:border prose-td:border-slate-200 prose-td:text-slate-600 prose-td:text-sm">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {blog.content}
                 </ReactMarkdown>
               </article>
@@ -332,9 +337,13 @@ export default function BlogDetailsPage({ params }: { params: { slug: string } }
                         key={tBlog.slug} 
                         className="group flex gap-4 items-start"
                       >
-                        <span className="text-lg font-black text-slate-200 group-hover:text-emerald-500 transition-colors leading-none font-display">
-                          {String(index + 1).padStart(2, '0')}
-                        </span>
+                        <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-slate-200">
+                           <img 
+                              src={resolveImageUrl(tBlog.image_url) || ''} 
+                              alt="" 
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                           />
+                        </div>
                         <div className="flex-1 min-w-0">
                           <h4 className="text-xs md:text-sm font-bold text-slate-800 line-clamp-2 leading-snug group-hover:text-emerald-500 transition-colors mb-1">
                             {tBlog.title}

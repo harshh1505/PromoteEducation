@@ -38,3 +38,16 @@ export function getTypeLabel(type: string): string {
     default: return type
   }
 }
+
+export function resolveImageUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+  
+  // Automatically convert Google Drive view links to direct image hotlink URLs
+  const driveIdMatch = url.match(/(?:file\/d\/|id=|v\/|uc\?id=)([a-zA-Z0-9_-]{20,})/i);
+  if (driveIdMatch && driveIdMatch[1] && url.includes('drive.google.com')) {
+    // lh3.googleusercontent.com is much more reliable for image hotlinking than drive.google.com/uc
+    return `https://lh3.googleusercontent.com/d/${driveIdMatch[1]}=w1000`;
+  }
+
+  return url;
+}
