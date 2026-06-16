@@ -375,10 +375,11 @@ export default function RankingsPage() {
       )}
 
       {/* ── RANKINGS TABLE ─────────────────────────────────────────────────── */}
-      <section className="max-w-[1440px] mx-auto px-8 pb-10 flex items-start gap-6 relative">
-        <div className="flex-1 overflow-hidden border border-slate-200 rounded-t-lg bg-white">
-          {/* Table Header */}
-          <div className="bg-[#071A44] h-12 flex items-center text-white px-6">
+      <section className="max-w-[1440px] mx-auto px-4 md:px-8 pb-10 flex flex-col lg:flex-row items-start gap-6 relative">
+        <div className="flex-1 w-full overflow-x-auto border border-slate-200 rounded-lg bg-white shadow-sm">
+          <div className="min-w-[960px]">
+            {/* Table Header */}
+            <div className="bg-[#071A44] h-12 flex items-center text-white px-6">
              <div className="w-16 flex-shrink-0 text-xs font-semibold uppercase tracking-wider text-white/80">Rank</div>
              <div className="flex-1 min-w-[280px] text-xs font-semibold uppercase tracking-wider text-white/80">College</div>
              <div className="w-[120px] text-xs font-semibold uppercase tracking-wider text-white/80 text-center">Ownership</div>
@@ -458,10 +459,11 @@ export default function RankingsPage() {
               ))}
             </div>
           )}
+          </div>
         </div>
 
         {/* ── STICKY COMPARE WIDGET ────────────────────────────────────────── */}
-        <div className="w-[120px] flex-shrink-0 sticky top-32">
+        <div className="hidden lg:block w-[120px] flex-shrink-0 sticky top-32">
            <div className="border border-slate-200 rounded-lg bg-white p-5 flex flex-col items-center justify-center min-h-[160px] shadow-sm">
              <Scale size={24} className="text-[#071A44] mb-3" />
              <p className="text-[13px] font-bold text-[#071A44] mb-3">Compare</p>
@@ -483,6 +485,28 @@ export default function RankingsPage() {
            </div>
         </div>
       </section>
+
+      {/* ── MOBILE STICKY COMPARE BOTTOM BAR ──────────────────────────────── */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-6 py-4 shadow-[0_-4px_10px_rgba(0,0,0,0.05)] z-40 flex items-center justify-between">
+         <div className="flex items-center gap-3">
+           <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm">
+             {selectedColleges.size}
+           </div>
+           <p className="text-sm font-bold text-slate-800">Selected</p>
+         </div>
+         <button 
+           onClick={() => setIsCompareModalOpen(true)}
+           disabled={selectedColleges.size < 2}
+           className={cn(
+             "px-6 py-2.5 rounded text-sm font-bold transition-all",
+             selectedColleges.size >= 2 
+              ? "bg-[#2563EB] text-white hover:bg-[#1D4ED8]" 
+              : "bg-slate-100 text-slate-400 cursor-not-allowed"
+           )}
+         >
+           Compare Now
+         </button>
+      </div>
 
       {/* ── SIDE-BY-SIDE COMPARE MODAL ─────────────────────────────────────── */}
       {isCompareModalOpen && (
