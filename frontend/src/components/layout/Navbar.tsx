@@ -204,9 +204,9 @@ export default function Navbar() {
           <div className="w-full max-w-[1440px] mx-auto px-4 md:px-6 flex items-center justify-between gap-4 md:gap-8">
 
             {/* Logo Section */}
-            <div className="flex items-center gap-4 md:gap-8 shrink-0">
-              <a href="/" className="flex items-center gap-2.5 group">
-                <div className="w-11 h-11 rounded-full border border-sky-500/20 overflow-hidden bg-white flex-shrink-0 shadow-lg group-hover:border-sky-500 transition-all duration-300 relative">
+            <div className="flex items-center gap-2 sm:gap-4 md:gap-8 shrink-0">
+              <a href="/" className="flex items-center gap-2 sm:gap-2.5 group">
+                <div className="w-9 h-9 md:w-11 md:h-11 rounded-full border border-sky-500/20 overflow-hidden bg-white flex-shrink-0 shadow-lg group-hover:border-sky-500 transition-all duration-300 relative">
                   <img
                     src="/images/PromoteEducationLogo.png"
                     alt="Promote Education"
@@ -304,7 +304,7 @@ export default function Navbar() {
             </div>
 
             {/* Action Items */}
-            <div className="flex items-center gap-3 md:gap-5 shrink-0">
+            <div className="flex items-center gap-1 sm:gap-3 md:gap-5 shrink-0">
               <div className="hidden xl:flex flex-col items-center">
                 <button className="flex items-center gap-2 text-white hover:text-sky-400 transition-colors">
                   <FileEdit size={16} className="text-sky-500" />
@@ -316,22 +316,30 @@ export default function Navbar() {
 
               <div 
                 className="relative group/explore"
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
+                onMouseEnter={() => {
+                  if (typeof window !== 'undefined' && window.innerWidth >= 1024) handleMouseEnter();
+                }}
+                onMouseLeave={() => {
+                  if (typeof window !== 'undefined' && window.innerWidth >= 1024) handleMouseLeave();
+                }}
               >
                 <button
+                  onClick={() => {
+                    if (typeof window !== 'undefined' && window.innerWidth < 1024) setMegaMenuOpen(!megaMenuOpen);
+                  }}
                   className={cn(
-                    "flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all",
+                    "flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 rounded-lg transition-all",
                     megaMenuOpen ? "bg-white text-slate-900" : "text-white/80 hover:text-white hover:bg-white/10"
                   )}
                 >
-                  <div className="grid grid-cols-2 gap-0.5 w-3.5 h-3.5">
+                  <div className="grid grid-cols-2 gap-0.5 w-3 h-3 sm:w-3.5 sm:h-3.5">
                     {[1, 2, 3, 4].map(i => (
                       <div key={i} className={cn("rounded-[1px]", megaMenuOpen ? "bg-sky-500" : "bg-current")} />
                     ))}
                   </div>
-                  <span className="text-xs font-bold uppercase tracking-wide">Explore</span>
-                  <ChevronDown size={14} className={cn("transition-transform duration-300", megaMenuOpen ? "rotate-180" : "")} />
+                  <span className="hidden sm:inline-block text-[10px] sm:text-xs font-bold uppercase tracking-wide">Explore</span>
+                  <span className="sm:hidden text-[10px] font-bold uppercase tracking-wide">Explore</span>
+                  <ChevronDown size={14} className={cn("transition-transform duration-300 hidden sm:block", megaMenuOpen ? "rotate-180" : "")} />
                 </button>
               </div>
 
@@ -379,7 +387,7 @@ export default function Navbar() {
 
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="md:hidden p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center text-white"
+                className="md:hidden p-1.5 sm:p-2.5 flex items-center justify-center text-white"
               >
                 {mobileOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
@@ -398,12 +406,20 @@ export default function Navbar() {
                     "text-[13px] font-bold whitespace-nowrap transition-colors flex items-center gap-1",
                     (activeItem === item.label || (item.label === 'Explore' && megaMenuOpen)) ? "text-sky-600" : "text-slate-600 hover:text-slate-900"
                   )}
-                  onMouseEnter={item.label === 'Explore' ? handleMouseEnter : undefined}
-                  onMouseLeave={item.label === 'Explore' ? handleMouseLeave : undefined}
+                  onMouseEnter={item.label === 'Explore' ? () => {
+                    if (typeof window !== 'undefined' && window.innerWidth >= 1024) handleMouseEnter();
+                  } : undefined}
+                  onMouseLeave={item.label === 'Explore' ? () => {
+                    if (typeof window !== 'undefined' && window.innerWidth >= 1024) handleMouseLeave();
+                  } : undefined}
                   onClick={() => {
                     if (item.label !== 'Explore') {
                       setActiveItem(item.label)
                       window.location.href = item.href
+                    } else {
+                      if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+                        setMegaMenuOpen(!megaMenuOpen);
+                      }
                     }
                   }}
                 >
@@ -445,19 +461,23 @@ export default function Navbar() {
         {/* Mega Menu Overlay */}
         {megaMenuOpen && (
           <div
-            className="absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-2xl animate-in slide-in-from-top-2 duration-300 z-50"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
+            className="absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-2xl animate-in slide-in-from-top-2 duration-300 z-50 max-h-[85vh] overflow-y-auto lg:max-h-none lg:overflow-visible"
+            onMouseEnter={() => {
+              if (typeof window !== 'undefined' && window.innerWidth >= 1024) handleMouseEnter();
+            }}
+            onMouseLeave={() => {
+              if (typeof window !== 'undefined' && window.innerWidth >= 1024) handleMouseLeave();
+            }}
           >
               <button 
                 onClick={() => setMegaMenuOpen(false)}
-                className="absolute top-4 right-6 p-2 text-slate-400 hover:text-slate-900 transition-colors"
+                className="absolute top-4 right-4 sm:right-6 p-2 text-slate-400 hover:text-slate-900 transition-colors lg:hidden"
               >
                 <X size={20} />
               </button>
-            <div className="max-w-[1440px] mx-auto px-6 py-12 grid grid-cols-12 gap-10">
+            <div className="max-w-[1440px] mx-auto px-4 sm:px-6 py-8 lg:py-12 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
               {/* Groups Section */}
-              <div className="col-span-9 grid grid-cols-3 gap-10">
+              <div className="lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 lg:gap-10">
                 {exploreGroups.map(group => (
                   <div key={group.title} className="flex flex-col">
                     <div className="flex items-center gap-2 mb-6">
@@ -496,8 +516,8 @@ export default function Navbar() {
               </div>
 
               {/* Sidebar Feature */}
-              <div className="col-span-3 flex flex-col gap-4">
-                <div className="flex-1 bg-slate-900 rounded-[2rem] p-8 text-white relative overflow-hidden flex flex-col justify-end border border-white/5 shadow-2xl">
+              <div className="lg:col-span-3 flex flex-col gap-4">
+                <div className="flex-1 bg-slate-900 rounded-[2rem] p-6 lg:p-8 text-white relative overflow-hidden flex flex-col justify-end border border-white/5 shadow-2xl">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/10 blur-[80px] -mr-16 -mt-16" />
                   <div className="relative z-10">
                     <div className="w-10 h-10 rounded-2xl bg-sky-500 flex items-center justify-center mb-6 shadow-lg shadow-sky-500/40">
@@ -526,10 +546,64 @@ export default function Navbar() {
           </div>
         )}
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu Dropdown */}
         {mobileOpen && (
-          <div className="md:hidden fixed inset-x-0 top-[60px] bottom-0 bg-white z-[45] overflow-y-auto modal-overlay" style={{ maxHeight: 'calc(100dvh - 60px)' }}>
-            <div className="p-6 pb-28 space-y-6">
+          <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-2xl z-[45] animate-in slide-in-from-top-2 max-h-[calc(100dvh-60px)] overflow-y-auto flex flex-col">
+            
+            {/* Primary Navigation Items (The "Second Navbar") */}
+            <div className="flex flex-col">
+              {navItems.map(item => {
+                if (item.label === 'Explore') {
+                  return (
+                    <div key={item.label} className="flex flex-col border-b border-slate-100 last:border-0">
+                      <button
+                        onClick={() => setExploreMobileOpen(!exploreMobileOpen)}
+                        className="w-full flex items-center justify-between px-6 py-4 text-[15px] font-bold text-slate-900 active:bg-slate-50 transition-colors"
+                      >
+                        {item.label}
+                        <ChevronDown size={16} className={cn("transition-transform duration-300 text-slate-400", exploreMobileOpen ? "rotate-180" : "")} />
+                      </button>
+                      
+                      {exploreMobileOpen && (
+                        <div className="bg-slate-50/50 px-6 pb-4 pt-1 flex flex-col gap-5 border-t border-slate-50 animate-in slide-in-from-top-2 duration-200">
+                          {exploreGroups.map(group => (
+                            <div key={group.title} className="flex flex-col gap-2">
+                              <span className="text-[10px] font-black uppercase text-sky-600 tracking-widest">{group.title}</span>
+                              <div className="flex flex-col gap-1">
+                                {group.items.map(subItem => (
+                                  <a 
+                                    key={subItem.label} 
+                                    href={subItem.href} 
+                                    onClick={() => setMobileOpen(false)} 
+                                    className="py-2 text-[13px] font-bold text-slate-600 hover:text-sky-600 active:text-sky-700 transition-colors"
+                                  >
+                                    {subItem.label}
+                                  </a>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )
+                }
+
+                return (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center justify-between px-6 py-4 text-[15px] font-bold text-slate-900 active:bg-slate-50 transition-colors border-b border-slate-100 last:border-0"
+                  >
+                    {item.label}
+                  </a>
+                )
+              })}
+            </div>
+
+            {/* Utilities and Search Section */}
+            <div className="bg-slate-50 p-6 space-y-6 border-t border-slate-200 mt-auto">
               
               {/* Search Bar */}
               <div className="relative">
@@ -537,7 +611,7 @@ export default function Navbar() {
                 <input
                   type="text"
                   placeholder="Search Colleges, Exams..."
-                  className="w-full pl-11 pr-4 py-3 bg-slate-100 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  className="w-full pl-11 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-sky-500/20 shadow-sm"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -563,147 +637,34 @@ export default function Navbar() {
               {/* Goal & City Selection CTA */}
               <button
                 onClick={() => { setMobileOpen(false); setGoalVisible(true); }}
-                className="w-full flex items-center gap-3 p-4 min-h-[52px] bg-[#3B2EA8] hover:bg-[#2c2196] text-white rounded-2xl text-xs font-bold uppercase tracking-wider shadow-lg shadow-indigo-900/10 transition-all active:scale-[0.98]"
+                className="w-full flex items-center justify-center gap-3 p-4 bg-[#3B2EA8] hover:bg-[#2c2196] text-white rounded-xl text-xs font-bold uppercase tracking-wider shadow-lg shadow-indigo-900/10 transition-all active:scale-[0.98]"
               >
                 <GraduationCap size={16} className="text-sky-400" />
                 <span>Select Goal & City</span>
-                <ChevronDown size={14} className="ml-auto opacity-60" />
               </button>
 
-              {/* Quick CTAs Grid from Secondary Navbar */}
+              {/* Secondary Navigation Tools */}
               <div className="grid grid-cols-2 gap-3">
                 <a
                   href="/cutoffs"
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-center gap-2 py-3 bg-amber-50 hover:bg-amber-100/50 border border-amber-200 rounded-xl text-xs font-bold text-amber-800 transition-colors shadow-sm"
+                  className="flex items-center justify-center gap-2 py-3 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 active:bg-slate-50 transition-colors shadow-sm"
                 >
                   <BarChart3 size={14} className="text-amber-500" /> Cutoffs
                 </a>
                 <a
                   href="/abroad"
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-center gap-2 py-3 bg-sky-50 hover:bg-sky-100/50 border border-sky-200 rounded-xl text-xs font-bold text-sky-800 transition-colors shadow-sm"
+                  className="flex items-center justify-center gap-2 py-3 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 active:bg-slate-50 transition-colors shadow-sm"
                 >
                   <Globe size={14} className="text-sky-500" /> Study Abroad
                 </a>
-              </div>
-
-              {/* Main Menu with Explore Accordion */}
-              <div className="space-y-3">
-                <p className="text-[10px] uppercase font-black text-slate-400 tracking-widest pl-1">Main Menu</p>
-                <div className="grid gap-2">
-                  {navItems.map(item => {
-                    if (item.label === 'Explore') {
-                      return (
-                        <div key={item.label} className="space-y-2">
-                          <button
-                            onClick={() => setExploreMobileOpen(!exploreMobileOpen)}
-                            className="w-full flex items-center justify-between p-4 min-h-[52px] bg-slate-50 rounded-2xl text-sm font-bold text-slate-900 active:bg-sky-50 transition-colors"
-                          >
-                            <span className="flex items-center gap-2">
-                              <Compass size={16} className="text-sky-500" />
-                              {item.label}
-                            </span>
-                            <ChevronDown size={16} className={cn("transition-transform duration-300", exploreMobileOpen ? "rotate-180" : "-rotate-90 opacity-40")} />
-                          </button>
-                          
-                          {exploreMobileOpen && (
-                            <div className="pl-4 pr-1 py-1 space-y-6 border-l-2 border-slate-100 animate-in slide-in-from-top-2 duration-300">
-                              {exploreGroups.map(group => (
-                                <div key={group.title} className="space-y-2.5">
-                                  <div className="flex items-center gap-2 mb-1">
-                                    <div className="w-1 h-3.5 bg-sky-500 rounded-full" />
-                                    <h5 className="text-[10px] uppercase font-black text-slate-900 tracking-widest">{group.title}</h5>
-                                  </div>
-                                  <div className="grid gap-2">
-                                    {group.items.map(subItem => {
-                                      const Icon = IconMap[subItem.icon]
-                                      return (
-                                        <a
-                                          key={subItem.label}
-                                          href={subItem.href}
-                                          onClick={() => setMobileOpen(false)}
-                                          className="flex items-center justify-between p-3.5 rounded-xl bg-white border border-slate-100 active:bg-slate-50 transition-all shadow-sm"
-                                        >
-                                          <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center text-sky-500 border border-sky-100 shrink-0">
-                                              {Icon && <Icon size={14} />}
-                                            </div>
-                                            <div className="flex flex-col">
-                                              <span className="text-[12px] font-bold text-slate-700 leading-tight">{subItem.label}</span>
-                                              {subItem.badge && <span className="text-[8px] text-sky-600 font-bold mt-0.5 uppercase tracking-tighter opacity-70">{subItem.badge}</span>}
-                                            </div>
-                                          </div>
-                                          {subItem.status && (
-                                            <span className="text-[8px] bg-sky-50 text-sky-600 px-2 py-0.5 rounded-full font-black uppercase tracking-tighter border border-sky-100/50 shrink-0">
-                                              {subItem.status}
-                                            </span>
-                                          )}
-                                        </a>
-                                      )
-                                    })}
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      )
-                    }
-
-                    return (
-                      <a
-                        key={item.label}
-                        href={item.href}
-                        onClick={() => setMobileOpen(false)}
-                        className="flex items-center justify-between p-4 min-h-[52px] bg-slate-50 rounded-2xl text-sm font-bold text-slate-900 active:bg-sky-50 transition-colors"
-                      >
-                        {item.label}
-                        <ChevronDown size={16} className="-rotate-90 opacity-20" />
-                      </a>
-                    )
-                  })}
-                </div>
-              </div>
-
-              {/* Explore Categories Scroll */}
-              <div className="space-y-3">
-                <p className="text-[10px] uppercase font-black text-slate-400 tracking-widest pl-1">Course Streams</p>
-                <div className="flex flex-wrap gap-2">
-                  {topCategories.map(cat => (
-                    <a
-                      key={cat.label}
-                      href={cat.href}
-                      onClick={() => setMobileOpen(false)}
-                      className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-bold text-slate-600 active:bg-sky-600 active:text-white transition-all"
-                    >
-                      {cat.label}
-                    </a>
-                  ))}
-                </div>
-              </div>
-
-              {/* Extra Secondary Action: Write a Review */}
-              <button
-                onClick={() => { setMobileOpen(false); setAuthVisible(true); }}
-                className="w-full flex items-center justify-center gap-2 py-3.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-2xl text-xs font-bold text-slate-700 transition-colors"
-              >
-                <FileEdit size={14} className="text-slate-500" /> Write a Review
-              </button>
-
-              {/* Time display indicator */}
-              <div className="flex items-center justify-center gap-2 py-2.5 bg-slate-50 border border-slate-100 rounded-2xl">
-                <Clock size={14} className="text-sky-500" />
-                <span className="text-xs font-extrabold text-slate-500 tabular-nums">
-                  CLOCK: {currentTime || '--:--:-- --'}
-                </span>
               </div>
 
             </div>
           </div>
         )}
       </header>
-
       <CounsellingModal
         isOpen={counsellingVisible}
         onClose={() => setCounsellingVisible(false)}
