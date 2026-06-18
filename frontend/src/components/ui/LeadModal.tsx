@@ -4,7 +4,6 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { X, CheckCircle2, Loader2, User, Mail, Phone, MapPin, GraduationCap, Building2, Lock, Eye, EyeOff, ArrowRight, Shield, Check } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
-import AuthModal from './AuthModal'
 
 interface LeadModalProps {
   isOpen: boolean
@@ -37,9 +36,6 @@ const inputCls = "w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 r
 
 export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, stream, collegeId }: LeadModalProps) {
   const router = useRouter()
-  const [user, setUser] = useState<any>(null)
-  const [showAuthModal, setShowAuthModal] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
   
   const [formData, setFormData] = useState({
     name: '',
@@ -49,8 +45,7 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
     city: '',
     course: stream || '',
     college: collegeName || '',
-    message: '',
-    password: ''
+    message: ''
   })
   
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -63,33 +58,7 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
     }
   }, [collegeName])
 
-  useEffect(() => {
-    async function checkUser() {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
-      if (user) {
-        setFormData(prev => ({
-          ...prev,
-          name: user.user_metadata?.full_name || '',
-          email: user.email || ''
-        }))
-      }
-    }
-    if (isOpen) checkUser()
-    
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-      if (session?.user) {
-        setFormData(prev => ({
-          ...prev,
-          name: session.user.user_metadata?.full_name || prev.name,
-          email: session.user.email || prev.email
-        }))
-      }
-    })
 
-    return () => { subscription.unsubscribe() }
-  }, [isOpen])
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -108,17 +77,7 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
     setIsSubmitting(true)
 
     try {
-      if (!user) {
-        const { data: authData, error: authError } = await supabase.auth.signUp({
-          email: formData.email,
-          password: formData.password || Math.random().toString(36).slice(-10),
-          options: {
-            data: { full_name: formData.name, phone: formData.phone, city: formData.city },
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
-          }
-        })
-        if (authError) throw authError
-      }
+
 
       const { error } = await supabase.from('leads').insert([{
         full_name: formData.name,
@@ -309,17 +268,7 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
                       value={formData.college} onChange={(e) => setFormData({...formData, college: e.target.value})} />
                   </InputField>
 
-                  {!user && (
-                    <InputField icon={Lock} label="Create Password (to check admission status)">
-                      <input required type={showPassword ? "text" : "password"} placeholder="Choose Password*"
-                        className={inputCls + " pr-12"}
-                        value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} />
-                      <button type="button" onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
-                        {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
-                      </button>
-                    </InputField>
-                  )}
+
 
                   <div className="space-y-1.5">
                     <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Any Questions?</label>
@@ -352,24 +301,13 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
                     <span>Your information is secure. <a href="/privacy-policy" className="text-[#38b6ff] hover:underline">Privacy Policy</a></span>
                   </div>
 
-                  {!user && (
-                    <div className="text-center">
-                      <p className="text-xs text-slate-400">
-                        Already Registered?{' '}
-                        <button type="button" onClick={() => setShowAuthModal(true)} className="text-[#38b6ff] font-bold hover:underline">
-                          Login Now
-                        </button>
-                      </p>
-                    </div>
-                  )}
+
                 </form>
               </div>
             </>
           )}
         </div>
       </div>
-
-      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
     </>
   )
 }

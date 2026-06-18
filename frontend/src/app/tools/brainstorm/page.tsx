@@ -173,10 +173,9 @@ export default function BrainstormPage() {
 
   // Create a Supabase session row as soon as the test starts
   const createSession = async () => {
-    const { data: { user } } = await supabase.auth.getUser()
     const { data, error } = await supabase
       .from('brainstorm_sessions')
-      .insert({ user_id: user?.id ?? null, status: 'in_progress' })
+      .insert({ user_id: null, status: 'in_progress' })
       .select('id')
       .single()
     if (!error && data) setSessionId(data.id)
@@ -217,10 +216,9 @@ export default function BrainstormPage() {
     try {
       let activeSessionId = sessionId
       if (!activeSessionId) {
-        const { data: { user } } = await supabase.auth.getUser()
         const { data } = await supabase
           .from('brainstorm_sessions')
-          .insert({ user_id: user?.id ?? null, status: 'in_progress' })
+          .insert({ user_id: null, status: 'in_progress' })
           .select('id')
           .single()
         activeSessionId = data?.id ?? null

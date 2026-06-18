@@ -114,7 +114,14 @@ export default function NewsSection() {
             slug: item.slug
           }
         })
-        setArticles(mapped)
+        
+        // Ensure at least 6 items are shown by backfilling with mock data
+        if (mapped.length < 6) {
+          const needed = 6 - mapped.length
+          setArticles([...mapped, ...newsItems.slice(0, needed)])
+        } else {
+          setArticles(mapped.slice(0, Math.max(6, mapped.length)))
+        }
       }
     }
     fetchNews()

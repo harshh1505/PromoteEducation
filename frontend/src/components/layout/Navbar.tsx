@@ -7,11 +7,11 @@ import {
   Target, FileText, Coins, Globe, ClipboardList,
   BookOpen, Newspaper, IndianRupee, HelpCircle,
   CheckSquare, Search, FileEdit, BarChart3,
-  Compass, Users, ShieldCheck, Video, Clock
+  Compass, Users, ShieldCheck, Video, Clock,
+  Briefcase, LayoutGrid, Headset
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
-import AuthModal from '@/components/ui/AuthModal'
 import CounsellingModal from '@/components/ui/CounsellingModal'
 import GoalModal from '@/components/ui/GoalModal'
 
@@ -36,12 +36,20 @@ interface ExploreItem {
 
 interface ExploreGroup {
   title: string
+  subtitle: string
+  headerIcon: string
+  headerColor: string
+  headerBg: string
   items: ExploreItem[]
 }
 
 const exploreGroups: ExploreGroup[] = [
   {
     title: 'Professional Services',
+    subtitle: 'Expert guidance for every step',
+    headerIcon: 'Briefcase',
+    headerColor: 'text-sky-500',
+    headerBg: 'bg-sky-500/10',
     items: [
       { label: 'Admission Support', href: '/admission-support', icon: 'ShieldCheck', badge: 'High Priority' },
       { label: 'Career Mentorship', href: '/mentorship', icon: 'Users' },
@@ -53,17 +61,25 @@ const exploreGroups: ExploreGroup[] = [
   },
   {
     title: 'Academic Hubs',
+    subtitle: 'Stay informed. Stay ahead.',
+    headerIcon: 'GraduationCap',
+    headerColor: 'text-emerald-500',
+    headerBg: 'bg-emerald-500/10',
     items: [
       { label: 'NIRF Rankings', href: '/rankings', icon: 'Trophy' },
       { label: 'Entrance Exams', href: '/exams', icon: 'BookOpen' },
       { label: 'Course Directory', href: '/courses', icon: 'GraduationCap' },
-      { label: 'Study Abroad', href: '/abroad', icon: 'Globe', status: 'Popular' },
+      { label: 'Study Abroad', href: '/study-abroad', icon: 'Globe', status: 'Popular' },
       { label: 'Education News', href: '/news', icon: 'Newspaper' },
       { label: 'Review Hub', href: '/#reviews', icon: 'MessageSquare' },
     ]
   },
   {
     title: 'Platform Tools',
+    subtitle: 'Smart tools to plan better',
+    headerIcon: 'LayoutGrid',
+    headerColor: 'text-purple-500',
+    headerBg: 'bg-purple-500/10',
     items: [
       { label: 'College Predictor', href: '/colleges', icon: 'Search', badge: 'AI Tool' },
       { label: 'Loan Calculator', href: '/#loan-calculator-section', icon: 'IndianRupee' },
@@ -88,12 +104,9 @@ export default function Navbar() {
     return () => document.body.classList.remove('body-modal-open')
   }, [mobileOpen])
   const [activeItem, setActiveItem] = useState('Home')
-  const [authVisible, setAuthVisible] = useState(false)
   const [counsellingVisible, setCounsellingVisible] = useState(false)
   const [goalVisible, setGoalVisible] = useState(false)
   const [exploreMobileOpen, setExploreMobileOpen] = useState(false)
-  const [user, setUser] = useState<any>(null)
-  const [userDropdown, setUserDropdown] = useState(false)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState<any[]>([])
@@ -110,21 +123,12 @@ export default function Navbar() {
     Target, FileText, Coins, Globe, ClipboardList,
     BookOpen, Newspaper, IndianRupee, HelpCircle,
     CheckSquare, Search, FileEdit, Compass, Users, 
-    ShieldCheck, Video
+    ShieldCheck, Video, Briefcase, LayoutGrid, Headset
   }
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', handleScroll)
-
-    // Listen for auth changes
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null)
-    })
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-    })
 
     // Running Clock Logic
     const clockTimer = setInterval(() => {
@@ -144,7 +148,6 @@ export default function Navbar() {
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
-      subscription.unsubscribe()
       clearInterval(clockTimer)
     }
   }, [])
@@ -175,11 +178,6 @@ export default function Navbar() {
     const timer = setTimeout(fetchResults, 300)
     return () => clearTimeout(timer)
   }, [searchQuery])
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    setUserDropdown(false)
-  }
 
   const handleMouseEnter = () => {
     if (hoverTimeout) clearTimeout(hoverTimeout)
@@ -348,42 +346,7 @@ export default function Navbar() {
                 <span className="absolute top-2 right-2 w-2 h-2 bg-sky-500 rounded-full border-2 border-slate-900" />
               </button>
 
-              {user ? (
-                <div className="relative">
-                  <button
-                    onClick={() => setUserDropdown(!userDropdown)}
-                    className="flex items-center gap-2 p-1 pl-2 rounded-full border border-white/10 hover:bg-white/5 transition-all"
-                  >
-                    <div className="w-7 h-7 rounded-full bg-sky-500 flex items-center justify-center text-white text-[10px] font-bold">
-                      {user.email?.[0].toUpperCase()}
-                    </div>
-                    <ChevronDown size={14} className="text-white/40 mr-1" />
-                  </button>
-
-                  {userDropdown && (
-                    <div className="absolute top-full right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-slate-100 py-2 z-[60] animate-in slide-in-from-top-2">
-                      <div className="px-4 py-3 border-b border-slate-50 mb-1">
-                        <p className="text-[10px] uppercase font-black text-slate-400 tracking-widest">Signed in as</p>
-                        <p className="text-xs font-bold text-slate-900 truncate">{user.email}</p>
-                      </div>
-                      <a href="/dashboard" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50">
-                        <User size={16} /> My Dashboard
-                      </a>
-                      <button onClick={handleSignOut} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50">
-                        <LogOut size={16} /> Sign out
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <button
-                  onClick={() => setAuthVisible(true)}
-                  className="w-8 h-8 md:w-auto md:px-4 md:py-2 rounded-full border border-white/20 text-white text-xs font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-2"
-                >
-                  <User size={14} className="md:hidden" />
-                  <span className="hidden md:inline text-white">Sign in</span>
-                </button>
-              )}
+              {/* Removed Auth Buttons */}
 
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
@@ -451,7 +414,7 @@ export default function Navbar() {
               <a href="/cutoffs" className="flex items-center gap-1.5 text-xs font-bold text-amber-700 hover:text-amber-800 transition-colors whitespace-nowrap bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200/60 shadow-sm ring-4 ring-amber-500/5 animate-pulse-slow">
                 <BarChart3 size={13} className="text-amber-500" /> Cutoffs
               </a>
-              <a href="/abroad" className="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-sky-600 transition-colors whitespace-nowrap">
+              <a href="/study-abroad" className="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-sky-600 transition-colors whitespace-nowrap">
                 <Globe size={13} className="text-sky-500" /> Study Abroad
               </a>
             </div>
@@ -461,7 +424,7 @@ export default function Navbar() {
         {/* Mega Menu Overlay */}
         {megaMenuOpen && (
           <div
-            className="absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-2xl animate-in slide-in-from-top-2 duration-300 z-50 max-h-[85vh] overflow-y-auto lg:max-h-none lg:overflow-visible"
+            className="absolute top-[calc(100%+16px)] left-4 right-4 max-w-[1400px] mx-auto bg-white rounded-[2rem] border border-slate-100 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] animate-in slide-in-from-top-2 duration-300 z-50 max-h-[85vh] overflow-y-auto lg:max-h-none lg:overflow-visible"
             onMouseEnter={() => {
               if (typeof window !== 'undefined' && window.innerWidth >= 1024) handleMouseEnter();
             }}
@@ -469,80 +432,106 @@ export default function Navbar() {
               if (typeof window !== 'undefined' && window.innerWidth >= 1024) handleMouseLeave();
             }}
           >
-              <button 
-                onClick={() => setMegaMenuOpen(false)}
-                className="absolute top-4 right-4 sm:right-6 p-2 text-slate-400 hover:text-slate-900 transition-colors lg:hidden"
-              >
-                <X size={20} />
-              </button>
-            <div className="max-w-[1440px] mx-auto px-4 sm:px-6 py-8 lg:py-12 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10">
+            <button 
+              onClick={() => setMegaMenuOpen(false)}
+              className="absolute top-6 right-6 p-2 text-slate-400 hover:text-slate-900 transition-colors bg-slate-50 hover:bg-slate-100 rounded-full z-10 lg:hidden"
+            >
+              <X size={20} />
+            </button>
+
+            <div className="p-8 lg:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 relative">
               {/* Groups Section */}
-              <div className="lg:col-span-9 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 lg:gap-10">
-                {exploreGroups.map(group => (
-                  <div key={group.title} className="flex flex-col">
-                    <div className="flex items-center gap-2 mb-6">
-                      <div className="w-1.5 h-4 bg-sky-500 rounded-full" />
-                      <h5 className="text-[10px] uppercase font-black text-slate-900 tracking-[0.2em]">{group.title}</h5>
-                    </div>
-                    <div className="flex flex-col gap-1.5">
-                      {group.items.map(subItem => {
-                        const Icon = IconMap[subItem.icon]
-                        return (
-                          <a
-                            key={subItem.label}
-                            href={subItem.href}
-                            className="group flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-slate-400 group-hover:bg-sky-500 group-hover:text-white transition-all shadow-sm border border-slate-100">
-                                {Icon && <Icon size={14} />}
+              <div className="lg:col-span-9 grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+                {exploreGroups.map((group, index) => {
+                  const HeaderIcon = IconMap[group.headerIcon]
+                  return (
+                    <div key={group.title} className={cn("flex flex-col relative", index !== 2 ? "md:after:content-[''] md:after:absolute md:after:right-[-1.5rem] lg:after:right-[-2.5rem] md:after:top-0 md:after:bottom-0 md:after:w-px md:after:bg-slate-100" : "")}>
+                      
+                      <div className="flex items-center gap-4 mb-8">
+                        <div className={cn("w-12 h-12 rounded-full flex items-center justify-center shrink-0", group.headerBg, group.headerColor)}>
+                          {HeaderIcon && <HeaderIcon size={20} className="stroke-[2.5]" />}
+                        </div>
+                        <div className="flex flex-col">
+                          <h5 className="text-[13px] uppercase font-black text-slate-900 tracking-wider leading-tight">{group.title}</h5>
+                          <p className="text-[11px] text-slate-500 font-medium mt-0.5">{group.subtitle}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col gap-1">
+                        {group.items.map((subItem) => {
+                          const Icon = IconMap[subItem.icon]
+                          return (
+                            <a
+                              key={subItem.label}
+                              href={subItem.href}
+                              className="group flex items-center justify-between py-3.5 px-2 rounded-xl hover:bg-slate-50 transition-all border-b border-slate-50 last:border-0"
+                            >
+                              <div className="flex items-center gap-4">
+                                <div className="text-slate-400 group-hover:text-sky-500 transition-colors">
+                                  {Icon && <Icon size={18} className="stroke-[1.5]" />}
+                                </div>
+                                <div className="flex flex-col">
+                                  <span className="text-[14px] font-bold text-slate-800 group-hover:text-sky-600 transition-colors leading-tight">{subItem.label}</span>
+                                  {subItem.badge && <span className="text-[9px] text-sky-600 font-black mt-1 uppercase tracking-widest">{subItem.badge}</span>}
+                                </div>
                               </div>
-                              <div className="flex flex-col">
-                                <span className="text-[13px] font-bold text-slate-700 group-hover:text-sky-600 transition-colors leading-none">{subItem.label}</span>
-                                {subItem.badge && <span className="text-[8px] text-sky-600 font-bold mt-1.5 uppercase tracking-tighter opacity-70">{subItem.badge}</span>}
+                              <div className="flex items-center gap-3">
+                                {subItem.status && (
+                                  <span className="text-[9px] bg-sky-50 text-sky-600 px-2.5 py-1 rounded-full font-black uppercase tracking-wider">
+                                    {subItem.status}
+                                  </span>
+                                )}
+                                <ChevronRight size={14} className="text-slate-300 group-hover:text-sky-500 transition-transform group-hover:translate-x-0.5" />
                               </div>
-                            </div>
-                            {subItem.status && (
-                              <span className="text-[8px] bg-sky-50 text-sky-600 px-2 py-0.5 rounded-full font-black uppercase tracking-tighter border border-sky-100/50">
-                                {subItem.status}
-                              </span>
-                            )}
-                          </a>
-                        )
-                      })}
+                            </a>
+                          )
+                        })}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
 
               {/* Sidebar Feature */}
-              <div className="lg:col-span-3 flex flex-col gap-4">
-                <div className="flex-1 bg-slate-900 rounded-[2rem] p-6 lg:p-8 text-white relative overflow-hidden flex flex-col justify-end border border-white/5 shadow-2xl">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-sky-500/10 blur-[80px] -mr-16 -mt-16" />
-                  <div className="relative z-10">
-                    <div className="w-10 h-10 rounded-2xl bg-sky-500 flex items-center justify-center mb-6 shadow-lg shadow-sky-500/40">
-                      <Compass size={20} className="text-white" />
+              <div className="lg:col-span-3 flex flex-col gap-5 lg:pl-4">
+                <div className="flex-1 bg-[#0b48a3] rounded-[1.5rem] p-8 text-white relative overflow-hidden flex flex-col border border-[#165bc0] shadow-xl">
+                  {/* Subtle map/path background pattern */}
+                  <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 100% 0%, #ffffff 0%, transparent 50%), radial-gradient(circle at 0% 100%, #1e3a8a 0%, transparent 50%)' }} />
+                  
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center mb-auto shadow-inner">
+                      <Compass size={24} className="text-white" />
                     </div>
-                    <h6 className="text-xl font-black mb-3 leading-tight tracking-tight">Personalized Roadmap 2026</h6>
-                    <p className="text-white/50 text-xs mb-6 leading-relaxed font-medium">Get a step-by-step admission plan tailored to your exam scores and goal.</p>
-                    <button className="w-full py-4 bg-white text-slate-900 font-black rounded-2xl hover:bg-sky-50 transition-all active:scale-[0.98] text-[10px] uppercase tracking-widest">
-                      Start Planning
-                    </button>
+                    
+                    <div className="mt-8">
+                      <h6 className="text-[22px] font-black mb-3 leading-[1.1] tracking-tight">Personalized<br/>Roadmap 2026</h6>
+                      <p className="text-white/80 text-[13px] mb-8 leading-relaxed font-medium">Get a step-by-step admission plan tailored to your exam scores and goal.</p>
+                      <button className="w-full py-4 bg-white text-[#0b48a3] font-black rounded-[1rem] hover:bg-sky-50 transition-all active:scale-[0.98] text-[12px] uppercase tracking-widest shadow-lg shadow-black/10 flex items-center justify-center gap-2">
+                        Start Planning <ArrowRight size={16} />
+                      </button>
+                    </div>
                   </div>
                 </div>
                 
-                <div className="p-5 bg-sky-50 border border-sky-100 rounded-3xl flex items-center gap-4 group cursor-pointer hover:bg-sky-100 transition-all">
-                  <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-sky-500 shadow-sm border border-sky-100">
-                    <MessageSquare size={18} />
+                <div className="p-5 bg-[#f0f6ff] border border-blue-100 rounded-[1.5rem] flex items-center gap-4 group cursor-pointer hover:bg-blue-50 transition-all shadow-sm">
+                  <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-blue-500 shadow-sm border border-blue-100 shrink-0">
+                    <Headset size={20} className="stroke-[2]" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black text-sky-600 uppercase tracking-widest mb-0.5">24/7 Helpdesk</p>
-                    <p className="text-xs font-bold text-slate-900">Talk to Expert Now</p>
+                    <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-0.5">24/7 Helpdesk</p>
+                    <p className="text-[14px] font-bold text-slate-800 leading-tight">Talk to Expert Now</p>
                   </div>
-                  <ChevronRight size={14} className="ml-auto text-sky-300 group-hover:text-sky-500 transition-transform group-hover:translate-x-1" />
+                  <ChevronRight size={16} className="ml-auto text-blue-300 group-hover:text-blue-500 transition-transform group-hover:translate-x-1" />
                 </div>
               </div>
             </div>
+            {/* Desktop Close Icon (Matches reference) */}
+            <button 
+              onClick={() => setMegaMenuOpen(false)}
+              className="hidden lg:flex absolute top-6 right-6 p-2 text-slate-400 hover:text-slate-900 transition-colors z-10"
+            >
+              <X size={20} className="stroke-[1.5]" />
+            </button>
           </div>
         )}
 
@@ -653,7 +642,7 @@ export default function Navbar() {
                   <BarChart3 size={14} className="text-amber-500" /> Cutoffs
                 </a>
                 <a
-                  href="/abroad"
+                  href="/study-abroad"
                   onClick={() => setMobileOpen(false)}
                   className="flex items-center justify-center gap-2 py-3 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 active:bg-slate-50 transition-colors shadow-sm"
                 >
@@ -674,7 +663,6 @@ export default function Navbar() {
         isOpen={goalVisible}
         onClose={() => setGoalVisible(false)}
       />
-      <AuthModal isOpen={authVisible} onClose={() => setAuthVisible(false)} />
     </>
   )
 }

@@ -193,15 +193,15 @@ export default function MoreFromUsSection() {
             </p>
           </div>
 
-          {/* Video Slider */}
-          <div className="relative group/slider">
-            <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 no-scrollbar -mx-6 px-6">
+          {/* Video Grid */}
+          <div className="relative">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10 pb-8">
               {YOUTUBE_VIDEOS.map((video) => (
                 <div
                   key={video.id}
-                  className="flex-shrink-0 w-[85vw] md:w-[750px] snap-center"
+                  className="w-full"
                 >
-                  <div className="relative aspect-video rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-200 bg-black">
+                  <div className="relative aspect-video rounded-[1.5rem] md:rounded-[2rem] overflow-hidden shadow-xl border border-slate-200 bg-black group-hover:shadow-2xl transition-all">
                     <iframe
                       className="absolute inset-0 w-full h-full"
                       src={`${video.url}?rel=0&modestbranding=1`}
@@ -210,21 +210,15 @@ export default function MoreFromUsSection() {
                       allowFullScreen
                     ></iframe>
                   </div>
-                  <div className="mt-6 px-4">
-                    <h4 className="text-xl font-medium text-slate-900 tracking-tight">{video.title}</h4>
+                  <div className="mt-6 px-2">
+                    <h4 className="text-xl font-bold text-slate-900 tracking-tight">{video.title}</h4>
                     <div className="mt-1 flex items-center gap-2">
                        <div className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />
-                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Featured Feature</span>
+                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Featured Video</span>
                     </div>
                   </div>
                 </div>
               ))}
-            </div>
-
-            {/* Swipe Indicator (Visible on Mobile) */}
-            <div className="flex justify-center gap-2 mt-4 md:hidden">
-              <div className="w-8 h-1 rounded-full bg-sky-500" />
-              <div className="w-2 h-1 rounded-full bg-slate-200" />
             </div>
           </div>
         </div>

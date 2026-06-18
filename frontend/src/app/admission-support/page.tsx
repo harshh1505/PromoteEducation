@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import { 
+import {
   ClipboardCheck, 
   FileText, 
   Calendar, 
@@ -14,7 +14,16 @@ import {
   CheckSquare,
   FileSearch,
   Bell,
-  HeartHandshake
+  HeartHandshake,
+  GraduationCap,
+  Building2,
+  Headset,
+  ArrowRight,
+  Check,
+  Shield,
+  FileCheck,
+  BarChart,
+  User
 } from 'lucide-react'
 
 // ─────────────────────────────────────────────
@@ -222,7 +231,7 @@ export default function AdmissionSupportPage() {
         <Navbar />
 
         {/* ── HERO ── */}
-        <header className="pt-32 pb-20 border-b border-slate-100 bg-slate-50">
+        <header className="pt-32 pb-20 border-b border-slate-100 bg-white">
           <div className="max-w-7xl mx-auto px-6">
             
             {/* Breadcrumb */}
@@ -234,64 +243,214 @@ export default function AdmissionSupportPage() {
               </ol>
             </nav>
 
-            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12">
-              <div className="flex-1 max-w-3xl">
-                <div className="inline-flex items-center gap-2 bg-sky-50 border border-sky-100 text-sky-700 text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-sm mb-6">
-                  <ShieldCheck size={12} className="text-sky-500" />
-                  Admission Cycle 2026-27 · Enrolment Open
+            <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
+              {/* Left Column: Content */}
+              <div className="flex-1 max-w-2xl w-full">
+                <div className="inline-flex items-center gap-2 bg-[#f0f9ff] border border-[#e0f2fe] text-[#0369a1] text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full mb-8">
+                  <ShieldCheck size={12} className="text-[#0ea5e9]" />
+                  ADMISSION CYCLE 2026-27 • ENROLMENT OPEN
                 </div>
 
-                <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-[1] mb-6">
+                <h1 className="text-5xl md:text-[3.5rem] font-black text-slate-900 tracking-tight leading-[1.1] mb-6">
                   Secure Your<br />
-                  <span className="text-sky-500 italic">Future Seat</span><br />
+                  <span className="text-[#0ea5e9] italic font-display">Future Seat</span><br />
                   Expert Aid 2026
                 </h1>
 
-                <p className="text-lg text-slate-500 leading-relaxed max-w-2xl font-medium">
+                <p className="text-lg text-slate-500 leading-relaxed font-medium mb-10 max-w-xl">
                   Don't let complex paperwork or missed deadlines stand between you and your dream university. Our admission support team manages every step of your application journey — from form filling to final campus reporting.
                 </p>
+
+                {/* 4 Features Grid */}
+                <div className="grid grid-cols-2 sm:flex sm:flex-row gap-6 sm:gap-8 mb-10">
+                  <div className="flex flex-col gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#f0f9ff] flex items-center justify-center text-[#0ea5e9]">
+                      <Shield size={18} />
+                    </div>
+                    <span className="text-[11px] font-black text-slate-700 uppercase tracking-wide leading-tight">No Missed<br/>Deadlines</span>
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#f0f9ff] flex items-center justify-center text-[#0ea5e9]">
+                      <FileCheck size={18} />
+                    </div>
+                    <span className="text-[11px] font-black text-slate-700 uppercase tracking-wide leading-tight">Error-Free<br/>Applications</span>
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#f0f9ff] flex items-center justify-center text-[#0ea5e9]">
+                      <BarChart size={18} />
+                    </div>
+                    <span className="text-[11px] font-black text-slate-700 uppercase tracking-wide leading-tight">Best Choice<br/>Filling Strategy</span>
+                  </div>
+                  <div className="flex flex-col gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#f0f9ff] flex items-center justify-center text-[#0ea5e9]">
+                      <Headset size={18} />
+                    </div>
+                    <span className="text-[11px] font-black text-slate-700 uppercase tracking-wide leading-tight">Expert<br/>Guidance</span>
+                  </div>
+                </div>
+
+                {/* CTAs */}
+                <div className="flex flex-col sm:flex-row gap-4 mb-10">
+                  <Link href="/contact" className="px-8 py-4 bg-[#0ea5e9] text-white font-black text-sm rounded-xl hover:bg-[#0284c7] transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#0ea5e9]/20">
+                    <PhoneCall size={18} /> Book Free Strategy Call
+                  </Link>
+                  <a href="https://wa.me/919900116101" className="px-8 py-4 bg-white border border-emerald-500 text-emerald-600 font-black text-sm rounded-xl hover:bg-emerald-50 transition-all flex items-center justify-center gap-2">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" className="w-5 h-5" />
+                    WhatsApp Us
+                  </a>
+                </div>
+
+                {/* Social Proof */}
+                <div className="flex items-center gap-4">
+                  <div className="flex -space-x-3">
+                    <img src="https://ui-avatars.com/api/?name=Student+1&background=random" className="w-8 h-8 rounded-full border-2 border-white relative z-10" alt="avatar" />
+                    <img src="https://ui-avatars.com/api/?name=Parent+2&background=random" className="w-8 h-8 rounded-full border-2 border-white relative z-20" alt="avatar" />
+                    <img src="https://ui-avatars.com/api/?name=Student+3&background=random" className="w-8 h-8 rounded-full border-2 border-white relative z-30" alt="avatar" />
+                    <img src="https://ui-avatars.com/api/?name=Parent+4&background=random" className="w-8 h-8 rounded-full border-2 border-white relative z-40" alt="avatar" />
+                    <div className="w-8 h-8 rounded-full border-2 border-white bg-[#0ea5e9] text-white flex items-center justify-center text-[9px] font-black relative z-50">
+                      15K+
+                    </div>
+                  </div>
+                  <span className="text-xs font-bold text-slate-500">Trusted by 15,000+ students & parents</span>
+                </div>
               </div>
 
-              {/* Quick-jump box */}
-              <aside className="lg:w-72 bg-white border border-slate-200 rounded-2xl p-6 shadow-sm self-start">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Jump to section</p>
-                <nav className="space-y-1">
-                  {[
-                    ['#services', 'Core Services'],
-                    ['#roadmap', 'Admission Roadmap'],
-                    ['#process', 'Our Support Process'],
-                    ['#why-us', 'Why Choose Us'],
-                    ['#faq', 'Admission FAQs'],
-                    ['#contact', 'Talk to Expert'],
-                  ].map(([href, label]) => (
-                    <a
-                      key={href}
-                      href={href}
-                      className="flex justify-between items-center py-2 text-sm text-slate-600 hover:text-sky-500 font-medium border-b border-slate-50 last:border-0 transition-colors"
-                    >
-                      {label}
-                      <span className="text-slate-300 text-xs">→</span>
-                    </a>
-                  ))}
-                </nav>
-              </aside>
+              {/* Right Column: Image and Overlays */}
+              <div className="flex-1 w-full relative pt-8 lg:pt-0">
+                <div className="relative rounded-[32px] overflow-hidden shadow-2xl aspect-[4/3] lg:aspect-[3/2]">
+                  <img 
+                    src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200&auto=format&fit=crop&q=80" 
+                    alt="University Campus" 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-slate-900/60 to-transparent"></div>
+                </div>
+
+                {/* Left Overlay Card: Why Families Trust Us */}
+                <div className="absolute -left-4 sm:-left-8 top-12 bottom-12 w-64 sm:w-72 bg-[#0f172a] rounded-[24px] p-6 sm:p-8 text-white shadow-2xl flex flex-col z-10">
+                  <h3 className="text-sm font-bold text-slate-200 mb-8">Why Families Trust Us</h3>
+                  <div className="space-y-6 flex-1">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-[#0ea5e9]">
+                        <GraduationCap size={20} />
+                      </div>
+                      <div>
+                        <p className="text-sm font-black">15,000+</p>
+                        <p className="text-[10px] text-slate-400 font-medium">Students Assisted</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-[#0ea5e9]">
+                        <Building2 size={20} />
+                      </div>
+                      <div>
+                        <p className="text-sm font-black">500+</p>
+                        <p className="text-[10px] text-slate-400 font-medium">Partner Institutions</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-[#0ea5e9]">
+                        <FileCheck size={20} />
+                      </div>
+                      <div>
+                        <p className="text-sm font-black">50+</p>
+                        <p className="text-[10px] text-slate-400 font-medium">Exams Covered</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-[#0ea5e9]">
+                        <Headset size={20} />
+                      </div>
+                      <div>
+                        <p className="text-sm font-black">24/7</p>
+                        <p className="text-[10px] text-slate-400 font-medium">Counselling Support</p>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Bottom nested white card */}
+                  <div className="bg-white rounded-xl p-4 flex items-center gap-3 mt-6">
+                    <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
+                      <Check size={16} strokeWidth={3} />
+                    </div>
+                    <div>
+                      <p className="text-lg font-black text-emerald-600 leading-none">98.4%</p>
+                      <p className="text-[10px] text-slate-600 font-bold">Successful Allotments</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Top Right Overlay Card: Countdown */}
+                <div className="absolute top-4 right-4 sm:-right-8 bg-white rounded-2xl p-5 shadow-2xl w-64 z-10 border border-slate-100">
+                  <p className="text-[10px] font-black text-[#0ea5e9] uppercase tracking-widest mb-1">ADMISSION SEASON</p>
+                  <p className="text-xs font-bold text-slate-600 mb-4">JOSAA Round 1 starts in</p>
+                  <div className="flex justify-between items-end mb-4">
+                    <div className="text-center">
+                      <span className="text-2xl font-black text-slate-900 leading-none">03</span>
+                      <span className="text-[8px] text-slate-400 uppercase tracking-widest block mt-1">DAYS</span>
+                    </div>
+                    <span className="text-xl font-black text-slate-300 mx-1 mb-3">:</span>
+                    <div className="text-center">
+                      <span className="text-2xl font-black text-slate-900 leading-none">14</span>
+                      <span className="text-[8px] text-slate-400 uppercase tracking-widest block mt-1">HRS</span>
+                    </div>
+                    <span className="text-xl font-black text-slate-300 mx-1 mb-3">:</span>
+                    <div className="text-center">
+                      <span className="text-2xl font-black text-slate-900 leading-none">22</span>
+                      <span className="text-[8px] text-slate-400 uppercase tracking-widest block mt-1">MINS</span>
+                    </div>
+                    <span className="text-xl font-black text-slate-300 mx-1 mb-3">:</span>
+                    <div className="text-center">
+                      <span className="text-2xl font-black text-slate-900 leading-none">10</span>
+                      <span className="text-[8px] text-slate-400 uppercase tracking-widest block mt-1">SECS</span>
+                    </div>
+                  </div>
+                  <Link href="/exams/jee-main" className="text-xs font-bold text-[#0ea5e9] hover:underline flex items-center gap-1">
+                    View Important Dates <ArrowRight size={12} />
+                  </Link>
+                </div>
+              </div>
             </div>
 
-            {/* Stats row */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-14 pt-14 border-t border-slate-200">
-              {[
-                { val: '15k+', label: 'Applications', sub: 'Processed Yearly' },
-                { val: '500+', label: 'Institutions', sub: 'Direct Partnerships' },
-                { val: '100%', label: 'Success Rate', sub: 'Deadline Compliance' },
-                { val: '0%', label: 'Error Rate', sub: 'Documentation Audits' },
-              ].map((s, i) => (
-                <div key={i}>
-                  <p className="text-3xl font-black text-slate-900">{s.val}</p>
-                  <p className="text-[10px] font-black text-sky-500 uppercase tracking-widest mt-1">{s.label}</p>
-                  <p className="text-xs text-slate-400 mt-0.5 font-medium">{s.sub}</p>
+            {/* Floating Stats Banner */}
+            <div className="mt-12 sm:mt-16 lg:mt-16 relative z-20">
+              <div className="bg-white rounded-2xl p-8 shadow-xl shadow-slate-200/50 border border-slate-100">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+                  <div className="flex flex-col sm:px-6 first:pl-0 pt-4 sm:pt-0 first:pt-0">
+                    <div className="w-12 h-12 rounded-2xl bg-[#e0f2fe] flex items-center justify-center text-[#0ea5e9] mb-4">
+                      <FileText size={24} />
+                    </div>
+                    <p className="text-3xl font-black text-slate-900 mb-1">15K+</p>
+                    <p className="text-xs text-slate-600 font-bold">Applications</p>
+                    <p className="text-[10px] text-slate-400 font-medium">Processed Yearly</p>
+                  </div>
+                  <div className="flex flex-col sm:px-6 pt-4 sm:pt-0">
+                    <div className="w-12 h-12 rounded-2xl bg-[#dcfce7] flex items-center justify-center text-[#22c55e] mb-4">
+                      <HeartHandshake size={24} />
+                    </div>
+                    <p className="text-3xl font-black text-slate-900 mb-1">500+</p>
+                    <p className="text-xs text-slate-600 font-bold">Institutions</p>
+                    <p className="text-[10px] text-slate-400 font-medium">Direct Partnerships</p>
+                  </div>
+                  <div className="flex flex-col sm:px-6 pt-4 sm:pt-0">
+                    <div className="w-12 h-12 rounded-2xl bg-[#f3e8ff] flex items-center justify-center text-[#a855f7] mb-4">
+                      <CheckCircle2 size={24} />
+                    </div>
+                    <p className="text-3xl font-black text-slate-900 mb-1">100%</p>
+                    <p className="text-xs text-slate-600 font-bold">Success Rate</p>
+                    <p className="text-[10px] text-slate-400 font-medium">Deadline Compliance</p>
+                  </div>
+                  <div className="flex flex-col sm:px-6 pt-4 sm:pt-0 last:pr-0">
+                    <div className="w-12 h-12 rounded-2xl bg-[#ffedd5] flex items-center justify-center text-[#f97316] mb-4">
+                      <ClipboardCheck size={24} />
+                    </div>
+                    <p className="text-3xl font-black text-slate-900 mb-1">0%</p>
+                    <p className="text-xs text-slate-600 font-bold">Error Rate</p>
+                    <p className="text-[10px] text-slate-400 font-medium">Documentation Audits</p>
+                  </div>
                 </div>
-              ))}
+              </div>
             </div>
+
           </div>
         </header>
 
