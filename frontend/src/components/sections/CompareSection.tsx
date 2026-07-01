@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { GitCompare, Check, Search, ChevronDown, Lock, ShieldCheck, ArrowRight, Sparkles } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import LeadModal from '@/components/ui/LeadModal'
+import { getAllMasterCourses } from '@/lib/data/masterCourses'
 
 interface CollegeCompareInfo {
   name: string
@@ -238,11 +239,9 @@ export default function CompareSection() {
                   <select required value={course} onChange={(e) => setCourse(e.target.value)}
                     className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-base md:text-xs font-semibold outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/5 transition-all appearance-none cursor-pointer text-slate-500">
                     <option value="">Preferred Course*</option>
-                    <option value="B.Tech">B.Tech (Engineering)</option>
-                    <option value="MBA">MBA (Management)</option>
-                    <option value="MBBS">MBBS (Medical)</option>
-                    <option value="BDS">BDS (Dental)</option>
-                    <option value="B.Sc Nursing">B.Sc Nursing</option>
+                    {getAllMasterCourses().map(c => (
+                      <option key={c.slug} value={c.shortName}>{c.shortName} ({c.stream})</option>
+                    ))}
                     <option value="Other">Other</option>
                   </select>
 

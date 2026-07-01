@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Mail, Phone, User, GraduationCap, Loader2, Send } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { getAllMasterCourses } from '@/lib/data/masterCourses'
 
 export default function NewsletterSection() {
   const [formData, setFormData] = useState({
@@ -102,11 +103,9 @@ export default function NewsletterSection() {
                   onChange={(e) => setFormData({...formData, course: e.target.value})}
                 >
                   <option value="">Choose your course*</option>
-                  <option value="B.Tech">B.Tech</option>
-                  <option value="MBA">MBA</option>
-                  <option value="MBBS">MBBS</option>
-                  <option value="BDS">BDS</option>
-                  <option value="Law">Law</option>
+                  {getAllMasterCourses().map(c => (
+                    <option key={c.slug} value={c.shortName}>{c.shortName} ({c.stream})</option>
+                  ))}
                   <option value="Other">Other</option>
                 </select>
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-20">

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { X, CheckCircle2, Loader2, User, Mail, Phone, MapPin, GraduationCap, Building2, Lock, Eye, EyeOff, ArrowRight, Shield, Check } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import { getAllMasterCourses } from '@/lib/data/masterCourses'
 
 interface LeadModalProps {
   isOpen: boolean
@@ -58,7 +59,16 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
     }
   }, [collegeName])
 
+  const [collegesList, setCollegesList] = useState<{name: string, slug: string}[]>([])
+  useEffect(() => {
+    if (isOpen && collegesList.length === 0) {
+      supabase.from('colleges').select('name, slug').order('name').then(({data}) => {
+        if (data) setCollegesList(data)
+      })
+    }
+  }, [isOpen])
 
+  const masterCourses = getAllMasterCourses()
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -236,7 +246,7 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
                       <select required className={inputCls + " appearance-none cursor-pointer"}
                         value={formData.state} onChange={(e) => setFormData({...formData, state: e.target.value})}>
                         <option value="">Select State*</option>
-                        {['West Bengal','Karnataka','Delhi','Maharashtra','Tamil Nadu','Uttar Pradesh','Gujarat','Haryana','Telangana','Rajasthan','Other'].map(st => (
+                        {['Andaman and Nicobar Islands', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chandigarh', 'Chhattisgarh', 'Dadra and Nagar Haveli and Daman and Diu', 'Delhi', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand', 'Karnataka', 'Kerala', 'Ladakh', 'Lakshadweep', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Puducherry', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'].map(st => (
                           <option key={st} value={st}>{st}</option>
                         ))}
                       </select>
@@ -252,20 +262,25 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
                       <select required className={inputCls + " appearance-none cursor-pointer"}
                         value={formData.course} onChange={(e) => setFormData({...formData, course: e.target.value})}>
                         <option value="">Choose Course*</option>
-                        <option value="B.Tech">B.Tech (Engineering)</option>
-                        <option value="MBA">MBA (Management)</option>
-                        <option value="MBBS">MBBS (Medical)</option>
-                        <option value="BDS">BDS (Dental)</option>
-                        <option value="B.Sc Nursing">B.Sc Nursing</option>
-                        <option value="Law">Law (LLB/BALLB)</option>
+                        {masterCourses.map(c => (
+                          <option key={c.slug} value={c.shortName}>{c.shortName} ({c.stream})</option>
+                        ))}
                         <option value="Other">Other Course</option>
                       </select>
                     </InputField>
                   </div>
 
                   <InputField icon={Building2} label="Interested College">
-                    <input required type="text" placeholder="College Name*" className={inputCls}
-                      value={formData.college} onChange={(e) => setFormData({...formData, college: e.target.value})} />
+                    <select required className={inputCls + " appearance-none cursor-pointer"}
+                      value={formData.college} onChange={(e) => setFormData({...formData, college: e.target.value})}>
+                      <option value="">Select College*</option>
+                      {collegeName && !collegesList.find(c => c.name === collegeName) && (
+                        <option value={collegeName}>{collegeName}</option>
+                      )}
+                      {collegesList.map(c => (
+                        <option key={c.slug} value={c.name}>{c.name}</option>
+                      ))}
+                    </select>
                   </InputField>
 
 
