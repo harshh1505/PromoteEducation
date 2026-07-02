@@ -169,8 +169,8 @@ function formatFees(inr: number): string {
 // ===============================
 // SEO METADATA
 // ===============================
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const { slug } = params
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
   if (slug.includes('-in-')) {
     const query = parseSlug(slug)
     if (query) return {
@@ -322,10 +322,11 @@ async function ListingPage({ slug, type }: { slug: string; type: string }) {
 // MAIN COLLEGE PAGE
 // ===============================
 export default async function CollegePage({ params }: any) {
-  const pageInfo = parsePageType(params.slug)
-  if (pageInfo.type !== 'college') return <ListingPage slug={params.slug} type={pageInfo.type} />
+  const resolvedParams = await params
+  const pageInfo = parsePageType(resolvedParams.slug)
+  if (pageInfo.type !== 'college') return <ListingPage slug={resolvedParams.slug} type={pageInfo.type} />
 
-  const data = await getCollegeData(params.slug)
+  const data = await getCollegeData(resolvedParams.slug)
   if (!data) return notFound()
 
   const { college, faqs: dbFaqs } = data
@@ -604,7 +605,7 @@ export default async function CollegePage({ params }: any) {
               </h2>
               <div className="prose prose-slate prose-lg max-w-none text-slate-600 leading-relaxed space-y-6">
                 <p>{overviewText}</p>
-
+          
                 {/* Facilities pills */}
                 {college.facilities && college.facilities.length > 0 && (
                   <div className="not-prose mt-8">

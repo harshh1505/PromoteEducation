@@ -3,65 +3,6 @@
 import React from 'react'
 import { ArrowRight, MessageSquare, Share2, Eye, ChevronRight } from 'lucide-react'
 
-export const newsItems = [
-  {
-    isLive: true,
-    title: 'JEE Mains 2026 Result (Today) LIVE: Final Answer Key OUT; NTA Session 2 Scorecard Link Soon @...',
-    excerpt: 'JEE Mains 2026 session 2 final answer key is out. JEE Mains 2026 result for the session 2 exam will be out anytime soon, TODAY, Ap...',
-    author: 'Mamona Majumder',
-    date: 'Apr 20, 2026',
-    comments: '1',
-    shares: '7',
-    image: 'https://images.unsplash.com/photo-1523050335102-c89b1811b128?w=400&auto=format&fit=crop&q=80'
-  },
-  {
-    isLive: false,
-    title: 'XLRI Results 2026 Soon at xlri.ac.in: XAT Qualifiers wait for Final Admission Calls',
-    excerpt: 'XLRI will soon release final merit lists for admission to Jamshedpur and Delhi campuses. In the last admission cycle, XLRI released th...',
-    author: 'Abhishek Dhawan',
-    date: 'Apr 20, 2026',
-    views: '1.2k',
-    image: 'https://images.unsplash.com/photo-1560523160-754a9e25c68f?w=400&auto=format&fit=crop&q=80'
-  },
-  {
-    isLive: true,
-    title: 'ICSE, ISC Results 2026 @results.cisce.org Live Updates: Check Expected CISCE Results Date & Time',
-    excerpt: 'ISC, ICSE results 2026 will be announced soon at cisce.org and results.cisce.org. Students can check results by logging with the...',
-    author: 'Anangsha Patra',
-    date: 'Apr 20, 2026',
-    comments: '4',
-    shares: '113',
-    image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&auto=format&fit=crop&q=80'
-  },
-  {
-    isLive: true,
-    title: 'NCHMCT JEE 2026 Admit Card Live: Steps to Download Hall Ticket, Link at nchmjee.nta.nic.in; Check...',
-    excerpt: 'NCHMCT JEE admit card expected to be out by tomorrow morning. Candidates can download their hall tickets from the official websit...',
-    author: 'Porishmita Paul',
-    date: 'Apr 20, 2026',
-    views: '840',
-    image: 'https://images.unsplash.com/photo-1510074377623-8cf13fb86c08?w=400&auto=format&fit=crop&q=80'
-  },
-  {
-    isLive: false,
-    title: 'Chef Salary in India 2025: Average Pay, Growth, and Top Hotel Packages',
-    excerpt: 'The food and hospitality industry in India has seen big growth in recent years. Starting from luxury bars, family restaurants, to smal...',
-    author: 'Porishmita Paul',
-    date: 'Apr 20, 2026',
-    views: '940',
-    image: 'https://images.unsplash.com/photo-1581299894007-aaa50297cf16?w=400&auto=format&fit=crop&q=80'
-  },
-  {
-    isLive: true,
-    title: 'KEA PGCET 2026 Application Last Date (TODAY) LIVE; Register at cetonline.karnataka.gov.in',
-    excerpt: 'Karnataka Examinations Authority will close PGCET 2026 registration window today, April 20. Candidates who are yet to fill...',
-    author: 'Abhishek Dhawan',
-    date: 'Apr 20, 2026',
-    views: '2.1k',
-    image: 'https://images.unsplash.com/photo-1576491192842-73def8850656?w=400&auto=format&fit=crop&q=80'
-  }
-]
-
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
@@ -81,28 +22,28 @@ function stripMarkdown(text: string): string {
 }
 
 export default function NewsSection() {
-  const [articles, setArticles] = useState<any[]>(newsItems)
+  const [articles, setArticles] = useState<any[]>([])
 
   useEffect(() => {
     async function fetchNews() {
       const { data, error } = await supabase
         .from('news_articles')
         .select('*')
-        .order('date', { ascending: false })
+        .order('published_at', { ascending: false, nullsFirst: false })
         .order('created_at', { ascending: false })
       
       if (error) {
         console.error('Error fetching news from Supabase:', error)
-      } else if (data && data.length > 0) {
+      } else if (data) {
         // Map database fields to the UI format
         const mapped = data.map((item: any) => {
-          const cleanedContent = stripMarkdown(item.content || '')
+          const cleanedContent = stripMarkdown(item.synopsis || '')
           return {
             isLive: item.is_live,
             title: item.heading,
             excerpt: cleanedContent ? (cleanedContent.length > 140 ? cleanedContent.slice(0, 137) + '...' : cleanedContent) : '',
             author: item.editor,
-            date: new Date(item.date).toLocaleDateString('en-US', {
+            date: new Date(item.published_at || item.created_at).toLocaleDateString('en-US', {
               month: 'short',
               day: 'numeric',
               year: 'numeric'
@@ -110,18 +51,12 @@ export default function NewsSection() {
             comments: item.comments_count > 0 ? String(item.comments_count) : undefined,
             shares: item.shares_count > 0 ? String(item.shares_count) : undefined,
             views: item.views >= 1000 ? `${(item.views / 1000).toFixed(1)}K` : String(item.views),
-            image: item.image_link || 'https://images.unsplash.com/photo-1510074377623-8cf13fb86c08?w=400',
+            image: item.featured_image || 'https://images.unsplash.com/photo-1510074377623-8cf13fb86c08?w=400',
             slug: item.slug
           }
         })
         
-        // Ensure at least 6 items are shown by backfilling with mock data
-        if (mapped.length < 6) {
-          const needed = 6 - mapped.length
-          setArticles([...mapped, ...newsItems.slice(0, needed)])
-        } else {
-          setArticles(mapped.slice(0, Math.max(6, mapped.length)))
-        }
+        setArticles(mapped)
       }
     }
     fetchNews()

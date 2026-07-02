@@ -51,8 +51,8 @@ export default function BlogsPageContent() {
     ? blogs
     : blogs.filter(blog => blog.category === selectedCategory)
 
-  // Find the featured blog (the latest one with an image)
-  const featuredBlog = blogs.find(blog => blog.image_url)
+  // Find the featured blog (the latest one with featured = true or has featured_image)
+  const featuredBlog = blogs.find(blog => blog.featured) || blogs.find(blog => blog.featured_image)
   // Other blogs excluding the featured one
   const secondaryBlogs = blogs.filter(blog => blog.id !== featuredBlog?.id)
   
@@ -191,7 +191,7 @@ export default function BlogsPageContent() {
                 <div className="lg:col-span-7 relative aspect-[16/10] w-full rounded-[32px] overflow-hidden group/featured shadow-xl border border-slate-100">
                   <Link href={`/blogs/${featuredBlog.slug}`}>
                     <img
-                      src={resolveImageUrl(featuredBlog.image_url) || 'https://images.unsplash.com/photo-1523050335192-ce67a276b42a?w=800'}
+                      src={resolveImageUrl(featuredBlog.featured_image) || 'https://images.unsplash.com/photo-1523050335192-ce67a276b42a?w=800'}
                       alt={featuredBlog.title}
                       className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/featured:scale-[1.03]"
                     />
@@ -269,7 +269,7 @@ export default function BlogsPageContent() {
                   <div className="w-full aspect-[16/10] overflow-hidden rounded-[24px] bg-slate-50 mb-5 relative">
                     <Link href={`/blogs/${blog.slug}`}>
                       <img
-                        src={resolveImageUrl(blog.image_url) || 'https://images.unsplash.com/photo-1523050335102-c89b1811b128?w=800'}
+                        src={resolveImageUrl(blog.featured_image) || 'https://images.unsplash.com/photo-1523050335102-c89b1811b128?w=800'}
                         className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
                         alt={blog.title}
                         onError={(e) => {

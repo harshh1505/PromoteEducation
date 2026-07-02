@@ -15,8 +15,22 @@ import {
 import CollegeCard from '@/components/ui/CollegeCard'
 import { College } from '@/types'
 import { featuredColleges } from '@/components/sections/CollegesSection'
-import { newsItems } from '@/components/sections/NewsSection'
+import { supabase } from '@/lib/supabase'
 import { cn } from '@/lib/utils'
+
+function stripMarkdown(text: string): string {
+  if (!text) return ''
+  return text
+    .replace(/<[^>]*>/g, '')
+    .replace(/^#+\s+/gm, '')
+    .replace(/([*_~`]{1,3})(\s*(?:(?!\1).)+?\s*)\1/g, '$2')
+    .replace(/[*_~`]/g, '')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/^\s*[-*_]{3,}\s*$/gm, '')
+    .replace(/^\s*>\s+/gm, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
 import { useRouter } from 'next/navigation'
 import { useLeadCapture } from '@/hooks/useLeadCapture'
 import LeadModal from '@/components/ui/LeadModal'
@@ -477,16 +491,51 @@ export default function AboutPage() {
         return () => clearInterval(interval)
     }, [totalMiniPages])
 
+    const [aboutNews, setAboutNews] = useState<any[]>([])
     const [newsPage, setNewsPage] = useState(0)
     const itemsPerNewsPage = 3
-    const totalNewsPages = Math.ceil(newsItems.length / itemsPerNewsPage)
+    const totalNewsPages = Math.max(1, Math.ceil(aboutNews.length / itemsPerNewsPage))
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setNewsPage((prev) => (prev + 1) % totalNewsPages)
+            if (totalNewsPages > 1) {
+                setNewsPage((prev) => (prev + 1) % totalNewsPages)
+            }
         }, 8000)
         return () => clearInterval(interval)
     }, [totalNewsPages])
+
+    useEffect(() => {
+        async function fetchAboutNews() {
+            const { data, error } = await supabase
+                .from('news_articles')
+                .select('*')
+                .order('date', { ascending: false })
+                .order('created_at', { ascending: false })
+            if (error) {
+                console.error('Error fetching news on about page:', error)
+            } else if (data) {
+                const mapped = data.map((item: any) => {
+                    const cleanedContent = stripMarkdown(item.content || '')
+                    return {
+                        isLive: item.is_live,
+                        title: item.heading,
+                        excerpt: cleanedContent ? (cleanedContent.length > 100 ? cleanedContent.slice(0, 97) + '...' : cleanedContent) : '',
+                        author: item.editor,
+                        date: new Date(item.date).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                        }),
+                        image: item.image_link || 'https://images.unsplash.com/photo-1510074377623-8cf13fb86c08?w=400',
+                        slug: item.slug
+                    }
+                })
+                setAboutNews(mapped)
+            }
+        }
+        fetchAboutNews()
+    }, [])
 
     return (
         <main className="min-h-screen bg-slate-50/50 selection:bg-sky-500 selection:text-white font-sans">
@@ -607,31 +656,37 @@ export default function AboutPage() {
                                 </div>
 
                                 <div className="space-y-6 min-h-[360px]">
-                                    {newsItems.slice(newsPage * itemsPerNewsPage, (newsPage + 1) * itemsPerNewsPage).map((it, i) => (
-                                        <div key={i} className="flex gap-4 group cursor-pointer border-b border-slate-50 pb-5 last:border-0 last:pb-0 animate-in fade-in duration-500">
-                                            <div className="flex-1">
-                                                <div className="flex items-start gap-1.5 mb-1.5">
-                                                    {it.isLive && (
-                                                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-rose-500 text-white text-[7px] font-black uppercase rounded-full animate-pulse shrink-0">
-                                                            LIVE
-                                                        </span>
-                                                    )}
-                                                    <h4 className="text-slate-900 text-xs md:text-sm font-bold leading-snug group-hover:text-sky-600 transition-colors line-clamp-2">
-                                                        {it.title}
-                                                    </h4>
+                                    {aboutNews.length > 0 ? (
+                                        aboutNews.slice(newsPage * itemsPerNewsPage, (newsPage + 1) * itemsPerNewsPage).map((it, i) => (
+                                            <Link href={it.slug ? `/news/${it.slug}` : '#'} key={i} className="flex gap-4 group cursor-pointer border-b border-slate-50 pb-5 last:border-0 last:pb-0 animate-in fade-in duration-500 block">
+                                                <div className="flex-1">
+                                                    <div className="flex items-start gap-1.5 mb-1.5">
+                                                        {it.isLive && (
+                                                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-rose-500 text-white text-[7px] font-black uppercase rounded-full animate-pulse shrink-0">
+                                                                LIVE
+                                                            </span>
+                                                        )}
+                                                        <h4 className="text-slate-900 text-xs md:text-sm font-bold leading-snug group-hover:text-sky-600 transition-colors line-clamp-2">
+                                                            {it.title}
+                                                        </h4>
+                                                    </div>
+                                                    <p className="text-slate-450 text-[11px] leading-relaxed line-clamp-2 mb-2">{it.excerpt}</p>
+                                                    <div className="flex items-center gap-2 text-[9px] text-slate-400 font-bold">
+                                                        <span>{it.author}</span>
+                                                        <span>•</span>
+                                                        <span>{it.date}</span>
+                                                    </div>
                                                 </div>
-                                                <p className="text-slate-450 text-[11px] leading-relaxed line-clamp-2 mb-2">{it.excerpt}</p>
-                                                <div className="flex items-center gap-2 text-[9px] text-slate-400 font-bold">
-                                                    <span>{it.author}</span>
-                                                    <span>•</span>
-                                                    <span>{it.date}</span>
+                                                <div className="w-16 h-16 rounded-xl overflow-hidden shadow-sm shrink-0 self-start group-hover:scale-103 transition-transform">
+                                                    <img src={it.image} alt="" className="w-full h-full object-cover" />
                                                 </div>
-                                            </div>
-                                            <div className="w-16 h-16 rounded-xl overflow-hidden shadow-sm shrink-0 self-start group-hover:scale-103 transition-transform">
-                                                <img src={it.image} alt="" className="w-full h-full object-cover" />
-                                            </div>
-                                        </div>
-                                    ))}
+                                            </Link>
+                                        ))
+                                    ) : (
+                                        [...Array(3)].map((_, i) => (
+                                            <div key={i} className="h-[100px] rounded-xl bg-slate-100 animate-pulse border border-slate-150" />
+                                        ))
+                                    )}
                                 </div>
                             </div>
 

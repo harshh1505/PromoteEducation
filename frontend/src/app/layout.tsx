@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { AuthProvider } from '@/components/auth/AuthProvider'
+
 
 export const metadata: Metadata = {
   title: {
@@ -115,7 +117,9 @@ export default function RootLayout({
         />
       </head>
       <body className="overflow-x-hidden font-sans antialiased text-slate-900" style={{ fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif' }}>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )

@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import rehypeRaw from 'rehype-raw'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Link from 'next/link'
@@ -20,16 +21,16 @@ import {
   AlertTriangle
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
-import { resolveImageUrl } from '@/lib/utils'
+import { resolveImageUrl, fixMarkdownBold } from '@/lib/utils'
 
-export default function NewsArticleDetailsPage({ params }: { params: { slug: string } }) {
+export default function NewsArticleDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
   const [article, setArticle] = useState<any>(null)
   const [trending, setTrending] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
 
-  const { slug } = params
+  const { slug } = use(params)
 
   useEffect(() => {
     async function loadData() {
@@ -59,8 +60,18 @@ export default function NewsArticleDetailsPage({ params }: { params: { slug: str
           return
         }
 
+        // Fetch sections
+        const { data: sectionsData } = await supabase
+          .from('news_sections')
+          .select('*')
+          .eq('article_id', currentArticle.id)
+          .order('section_order', { ascending: true })
+
+        currentArticle.sections = sectionsData || []
+
         // Calculate reading time (approx 200 words per minute)
-        const wordCount = currentArticle.content?.split(/\s+/).length || 0
+        const totalContent = (sectionsData || []).map(s => s.content || '').join(' ')
+        const wordCount = totalContent.split(/\s+/).length || 0
         const readTimeVal = Math.max(1, Math.ceil(wordCount / 200))
         currentArticle.readTime = `${readTimeVal} min read`
 
@@ -69,7 +80,7 @@ export default function NewsArticleDetailsPage({ params }: { params: { slug: str
         // 3. Fetch trending/other news (excluding current one)
         const { data: otherArticles } = await supabase
           .from('news_articles')
-          .select('slug, heading, date, image_link, views')
+          .select('slug, heading, published_at, created_at, featured_image, views')
           .neq('slug', slug)
           .limit(3)
 
@@ -192,7 +203,7 @@ export default function NewsArticleDetailsPage({ params }: { params: { slug: str
                 <div className="flex items-center gap-4 text-slate-400 text-[11px] font-medium">
                   <span className="flex items-center gap-1">
                     <Calendar size={12} /> 
-                    {new Date(article.date).toLocaleDateString('en-US', {
+                    {new Date(article.published_at || article.created_at).toLocaleDateString('en-US', {
                       month: 'long',
                       day: 'numeric',
                       year: 'numeric'
@@ -249,10 +260,10 @@ export default function NewsArticleDetailsPage({ params }: { params: { slug: str
               </div>
 
               {/* Featured Image */}
-              {article.image_link && (
+              {article.featured_image && (
                 <div className="w-full aspect-video md:h-[400px] rounded-3xl overflow-hidden shadow-sm border border-slate-100 mb-10">
                   <img 
-                    src={resolveImageUrl(article.image_link) || ''} 
+                    src={resolveImageUrl(article.featured_image) || ''} 
                     alt={article.heading} 
                     className="w-full h-full object-cover"
                     onError={(e) => {
@@ -264,27 +275,32 @@ export default function NewsArticleDetailsPage({ params }: { params: { slug: str
               )}
 
               {/* Article Content Body */}
-              <article className="prose prose-slate prose-lg max-w-none
-                prose-headings:font-black prose-headings:tracking-tight prose-headings:text-slate-900
-                prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
-                prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
-                prose-p:text-slate-600 prose-p:leading-relaxed
-                prose-a:text-[#38b6ff] prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
-                prose-strong:text-slate-800 prose-strong:font-bold
-                prose-ul:text-slate-600 prose-ol:text-slate-600
-                prose-li:my-1
-                prose-blockquote:border-l-[#38b6ff] prose-blockquote:text-slate-500 prose-blockquote:italic
-                prose-code:text-[#38b6ff] prose-code:bg-slate-100 prose-code:rounded prose-code:px-1 prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
-                prose-pre:bg-slate-900 prose-pre:text-slate-100 prose-pre:rounded-2xl
-                prose-img:rounded-2xl prose-img:shadow-md
-                prose-hr:border-slate-200
-                prose-table:w-full prose-table:border-collapse prose-table:my-8
-                prose-th:bg-slate-50 prose-th:text-left prose-th:font-black prose-th:text-slate-900 prose-th:p-4 prose-th:border prose-th:border-slate-200 prose-th:uppercase prose-th:tracking-wider prose-th:text-xs
-                prose-td:p-4 prose-td:border prose-td:border-slate-200 prose-td:text-slate-600 prose-td:text-sm">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {article.content}
-                </ReactMarkdown>
-              </article>
+              {/* Synopsis */}
+              {article.synopsis && (
+                <div className="text-slate-650 text-lg leading-relaxed font-semibold mb-10 pb-8 border-b border-slate-100 prose-p:text-slate-800">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{fixMarkdownBold(article.synopsis)}</ReactMarkdown>
+                </div>
+              )}
+
+              {/* Sections List */}
+              {(article.sections || []).map((section: any) => (
+                <div key={section.id || section.section_order} className="my-8 first:mt-0 last:mb-0">
+                  {section.image_url && (
+                    <div className="w-full aspect-[16/9] overflow-hidden rounded-2xl border border-slate-100 my-6 shadow-sm">
+                      <img 
+                        src={resolveImageUrl(section.image_url) || undefined} 
+                        alt="Section image" 
+                        className="w-full h-full object-cover" 
+                      />
+                    </div>
+                  )}
+                  {section.content && (
+                    <div className="text-slate-650 text-base leading-relaxed mt-4 prose prose-slate max-w-none">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{fixMarkdownBold(section.content)}</ReactMarkdown>
+                    </div>
+                  )}
+                </div>
+              ))}
 
               {/* Side note / Advice block */}
               <div className="my-12 p-8 bg-sky-50/50 border border-sky-100 rounded-3xl text-sky-950 relative overflow-hidden">
@@ -321,10 +337,10 @@ export default function NewsArticleDetailsPage({ params }: { params: { slug: str
                         className="group block"
                       >
                         <div className="flex gap-4">
-                          {tArticle.image_link && (
+                          {tArticle.featured_image && (
                             <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-slate-200">
                               <img 
-                                src={resolveImageUrl(tArticle.image_link) || ''} 
+                                src={resolveImageUrl(tArticle.featured_image) || ''} 
                                 alt="" 
                                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                               />
@@ -336,7 +352,7 @@ export default function NewsArticleDetailsPage({ params }: { params: { slug: str
                             </h4>
                             <div className="flex items-center gap-2 text-[10px] text-slate-400">
                               <span>
-                                {new Date(tArticle.date).toLocaleDateString('en-US', {
+                                {new Date(tArticle.published_at || tArticle.created_at).toLocaleDateString('en-US', {
                                   month: 'short',
                                   day: 'numeric'
                                 })}

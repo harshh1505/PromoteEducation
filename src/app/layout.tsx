@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   authors: [{ name: 'Promote Education Team' }],
   creator: 'Promote Education',
   publisher: 'Promote Education Technologies',
-  metadataBase: new URL('https://promoteducation.com'), // Replace with your actual domain
+  metadataBase: new URL('https://promoteducation.com'), 
   alternates: {
     canonical: '/',
   },

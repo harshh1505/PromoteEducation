@@ -30,16 +30,17 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: any) {
+  const resolvedParams = await params
   const { data: masterCourse } = await supabase
     .from('master_courses')
     .select('*')
-    .eq('slug', params.degreeSlug)
+    .eq('slug', resolvedParams.degreeSlug)
     .single()
 
   const { data: spec } = await supabase
     .from('course_specializations')
     .select('*')
-    .eq('slug', params.specSlug)
+    .eq('slug', resolvedParams.specSlug)
     .eq('master_course_id', masterCourse?.id || '')
     .single()
 
@@ -52,11 +53,12 @@ export async function generateMetadata({ params }: any) {
 }
 
 export default async function SpecialisationPage({ params }: any) {
+  const resolvedParams = await params
   // 1. Fetch the master course
   const { data: masterCourse } = await supabase
     .from('master_courses')
     .select('*')
-    .eq('slug', params.degreeSlug)
+    .eq('slug', resolvedParams.degreeSlug)
     .single()
 
   if (!masterCourse) {
@@ -67,7 +69,7 @@ export default async function SpecialisationPage({ params }: any) {
   const { data: spec } = await supabase
     .from('course_specializations')
     .select('*')
-    .eq('slug', params.specSlug)
+    .eq('slug', resolvedParams.specSlug)
     .eq('master_course_id', masterCourse.id)
     .single()
 

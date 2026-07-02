@@ -4,11 +4,12 @@ import ExamBlogPage from '@/components/pages/exams/ExamBlogPage'
 import { notFound } from 'next/navigation'
 
 interface Props {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const exam = examDatabase[params.slug]
+  const { slug } = await params
+  const exam = examDatabase[slug]
   if (!exam) return { title: 'Exam Not Found' }
 
   return {
@@ -22,8 +23,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default function Page({ params }: Props) {
-  const exam = examDatabase[params.slug]
+export default async function Page({ params }: Props) {
+  const { slug } = await params
+  const exam = examDatabase[slug]
   
   if (!exam) {
     notFound()

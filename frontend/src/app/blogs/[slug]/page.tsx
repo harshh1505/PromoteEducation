@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import rehypeRaw from 'rehype-raw'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Link from 'next/link'
@@ -20,10 +21,10 @@ import {
   ArrowRight
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
-import { resolveImageUrl } from '@/lib/utils'
+import { resolveImageUrl, fixMarkdownBold } from '@/lib/utils'
 import LeadModal from '@/components/ui/LeadModal'
 
-export default function BlogDetailsPage({ params }: { params: { slug: string } }) {
+export default function BlogDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
   const [blog, setBlog] = useState<any>(null)
   const [trending, setTrending] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -32,7 +33,7 @@ export default function BlogDetailsPage({ params }: { params: { slug: string } }
   const [showLeadModal, setShowLeadModal] = useState(false)
   const [scrollProgress, setScrollProgress] = useState(0)
 
-  const { slug } = params
+  const { slug } = use(params)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -73,7 +74,27 @@ export default function BlogDetailsPage({ params }: { params: { slug: string } }
           return
         }
 
-        setBlog(currentBlog)
+        // Fetch sections
+        const { data: sectionsData } = await supabase
+          .from('blog_sections')
+          .select('*')
+          .eq('blog_id', currentBlog.id)
+          .order('section_order', { ascending: true })
+
+        // Fetch FAQs
+        const { data: faqsData } = await supabase
+          .from('blog_faqs')
+          .select('*')
+          .eq('blog_id', currentBlog.id)
+          .order('faq_order', { ascending: true })
+
+        const enrichedBlog = {
+          ...currentBlog,
+          sections: sectionsData || [],
+          faqs: faqsData || []
+        }
+
+        setBlog(enrichedBlog)
         
         // Dynamically update page title for browser
         if (typeof document !== 'undefined') {
@@ -83,7 +104,7 @@ export default function BlogDetailsPage({ params }: { params: { slug: string } }
         // 3. Fetch trending/other blogs (excluding current one)
         const { data: otherBlogs } = await supabase
           .from('blogs')
-          .select('slug, title, published_at, image_url, views')
+          .select('slug, title, published_at, featured_image, views')
           .neq('slug', slug)
           .eq('is_live', true)
           .limit(3)
@@ -263,10 +284,10 @@ export default function BlogDetailsPage({ params }: { params: { slug: string } }
               </div>
 
               {/* Cover Image */}
-              {blog.image_url && (
+              {blog.featured_image && (
                 <div className="w-full h-[280px] md:h-[450px] rounded-[32px] overflow-hidden border border-slate-100 mb-12">
                   <img 
-                    src={resolveImageUrl(blog.image_url) || ''} 
+                    src={resolveImageUrl(blog.featured_image || undefined) || ''} 
                     alt={blog.title} 
                     className="w-full h-full object-cover"
                     onError={(e) => {
@@ -295,9 +316,65 @@ export default function BlogDetailsPage({ params }: { params: { slug: string } }
                 prose-table:w-full prose-table:border-collapse prose-table:my-8
                 prose-th:bg-slate-50 prose-th:text-left prose-th:font-black prose-th:text-slate-900 prose-th:p-4 prose-th:border prose-th:border-slate-200 prose-th:uppercase prose-th:tracking-wider prose-th:text-xs
                 prose-td:p-4 prose-td:border prose-td:border-slate-200 prose-td:text-slate-600 prose-td:text-sm">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {blog.content}
-                </ReactMarkdown>
+                
+                {/* Executive Summary */}
+                {blog.summary && (
+                  <div className="text-slate-650 text-lg leading-relaxed font-semibold mb-10 pb-8 border-b border-slate-100 prose-p:text-slate-800">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{fixMarkdownBold(blog.summary)}</ReactMarkdown>
+                  </div>
+                )}
+
+                {/* Sections List */}
+                {(blog.sections || []).map((section: any) => (
+                  <div key={section.id || section.section_order} className="my-10 first:mt-0 last:mb-0">
+                    {section.heading && (
+                      <h2 className="text-2xl font-black tracking-tight text-slate-900 mt-8 mb-2">
+                        {section.heading}
+                      </h2>
+                    )}
+                    {section.subheading && (
+                      <p className="text-slate-500 font-semibold text-sm -mt-1 mb-4 italic">
+                        {section.subheading}
+                      </p>
+                    )}
+                    {section.image_url && (
+                      <div className="w-full aspect-[16/9] overflow-hidden rounded-[24px] border border-slate-100 my-6 shadow-sm">
+                        <img 
+                          src={resolveImageUrl(section.image_url) || undefined} 
+                          alt={section.heading || 'Section image'} 
+                          className="w-full h-full object-cover" 
+                        />
+                      </div>
+                    )}
+                    {section.content && (
+                      <div className="text-slate-650 text-base leading-relaxed mt-4">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{fixMarkdownBold(section.content)}</ReactMarkdown>
+                      </div>
+                    )}
+                  </div>
+                ))}
+
+                {/* FAQs Section */}
+                {(blog.faqs || []).length > 0 && (
+                  <div className="mt-14 pt-10 border-t border-slate-100">
+                    <h3 className="text-xl font-black text-slate-900 mb-6 flex items-center gap-2">
+                      Frequently Asked Questions
+                    </h3>
+                    <div className="space-y-4">
+                      {blog.faqs.map((faq: any) => (
+                        <div key={faq.id || faq.faq_order} className="bg-slate-50 p-5 rounded-[24px] border border-slate-100">
+                          <h4 className="font-bold text-slate-800 text-sm md:text-base flex gap-2">
+                            <span className="text-emerald-500 font-black">Q.</span>
+                            {faq.question}
+                          </h4>
+                          <p className="mt-2 text-slate-600 text-sm leading-relaxed pl-6">
+                            {faq.answer}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </article>
 
               {/* CTA callout */}
@@ -339,7 +416,7 @@ export default function BlogDetailsPage({ params }: { params: { slug: string } }
                       >
                         <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-slate-200">
                            <img 
-                              src={resolveImageUrl(tBlog.image_url) || ''} 
+                              src={resolveImageUrl(tBlog.featured_image || undefined) || ''} 
                               alt="" 
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
                            />

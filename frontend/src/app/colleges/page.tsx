@@ -29,6 +29,7 @@ interface DbCollege {
   ownership?: string | null
   type?: string | null
   established?: number | null
+  cover_image?: string | null
 }
 
 // ── CONSTANTS ─────────────────────────────────────────────────────────────────
@@ -811,11 +812,14 @@ function CollegeCard({
     <div className="bg-white border border-slate-200 rounded-xl overflow-hidden group hover:shadow-md transition-all duration-200">
       {/* Image */}
       <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
-        <Image
-          src="/images/campus-placeholder.png"
+        <img
+          src={college.cover_image || "/images/campus-placeholder.png"}
           alt={college.name}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-500"
+          className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = "/images/campus-placeholder.png";
+          }}
         />
 
         {/* Save Button */}

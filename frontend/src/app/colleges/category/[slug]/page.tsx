@@ -28,8 +28,9 @@ function parseSlug(slug: string) {
   }
 }
 
-export default async function CategoryPage({ params }: { params: { slug: string } }) {
-  const query = parseSlug(params.slug)
+export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await params
+  const query = parseSlug(resolvedParams.slug)
   if (!query) return notFound()
 
   // Fetch colleges matching stream AND location/state

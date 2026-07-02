@@ -18,10 +18,11 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: any) {
+  const resolvedParams = await params
   const { data: masterCourse } = await supabase
     .from('master_courses')
     .select('*')
-    .eq('slug', params.degreeSlug)
+    .eq('slug', resolvedParams.degreeSlug)
     .single()
 
   if (!masterCourse) return { title: 'Degree Not Found' }
@@ -33,11 +34,12 @@ export async function generateMetadata({ params }: any) {
 }
 
 export default async function DegreeHubPage({ params }: any) {
+  const resolvedParams = await params
   // 1. Fetch the master course details
   const { data: masterCourse } = await supabase
     .from('master_courses')
     .select('*')
-    .eq('slug', params.degreeSlug)
+    .eq('slug', resolvedParams.degreeSlug)
     .single()
 
   if (!masterCourse) {
