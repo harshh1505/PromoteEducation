@@ -1,7 +1,5 @@
 'use client'
 
-export const runtime = 'edge'
-
 import { useState, useEffect, use } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'

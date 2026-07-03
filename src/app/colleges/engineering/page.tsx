@@ -1,7 +1,8 @@
 import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 
-export const revalidate = 86400
+// Render at request time so Supabase env vars are available
+export const dynamic = 'force-dynamic'
 
 export const metadata = {
   title: 'Top Engineering Colleges in India 2026: NIRF Rankings & Fees',

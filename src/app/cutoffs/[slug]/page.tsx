@@ -1,7 +1,5 @@
 'use client'
 
-export const runtime = 'edge'
-
 import { useState, useEffect, useCallback, useMemo, use } from 'react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
