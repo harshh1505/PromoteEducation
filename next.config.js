@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  turbopack: {},
   serverExternalPackages: ['@google/generative-ai'],
   images: {
     remotePatterns: [
@@ -11,17 +10,17 @@ const nextConfig = {
       },
     ],
   },
-  webpack: (config, { dev }) => {
-    if (dev) {
-      // Fallback to polling in development to avoid EMFILE watcher limits on macOS.
-      config.watchOptions = {
-        poll: 1000,
-        aggregateTimeout: 300,
-        ignored: /node_modules/,
-      }
+}
+
+if (process.env.NODE_ENV === 'development') {
+  nextConfig.webpack = (config) => {
+    config.watchOptions = {
+      poll: 1000,
+      aggregateTimeout: 300,
+      ignored: /node_modules/,
     }
     return config
-  },
+  }
 }
 
 module.exports = nextConfig
