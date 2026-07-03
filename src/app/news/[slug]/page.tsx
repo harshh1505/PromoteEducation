@@ -1,6 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+export const runtime = 'edge'
+
+import { useState, useEffect, use } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import Navbar from '@/components/layout/Navbar'
@@ -22,14 +24,14 @@ import {
 import { supabase } from '@/lib/supabase'
 import { resolveImageUrl } from '@/lib/utils'
 
-export default function NewsArticleDetailsPage({ params }: { params: { slug: string } }) {
+export default function NewsArticleDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
   const [article, setArticle] = useState<any>(null)
   const [trending, setTrending] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
 
-  const { slug } = params
+  const { slug } = use(params)
 
   useEffect(() => {
     async function loadData() {

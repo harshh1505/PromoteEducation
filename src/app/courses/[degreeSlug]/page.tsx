@@ -8,20 +8,14 @@ import {
   ArrowRight, MapPin, CheckCircle2, Check, Star, Award, ShieldCheck, Globe, HelpCircle 
 } from 'lucide-react'
 
-export const revalidate = 86400
+export const runtime = 'edge'
 
-export async function generateStaticParams() {
-  const { data: masterCourses } = await supabase.from('master_courses').select('slug')
-  return (masterCourses || []).map((c) => ({
-    degreeSlug: c.slug,
-  }))
-}
-
-export async function generateMetadata({ params }: any) {
+export async function generateMetadata({ params }: { params: Promise<{ degreeSlug: string }> }) {
+  const { degreeSlug } = await params
   const { data: masterCourse } = await supabase
     .from('master_courses')
     .select('*')
-    .eq('slug', params.degreeSlug)
+    .eq('slug', degreeSlug)
     .single()
 
   if (!masterCourse) return { title: 'Degree Not Found' }
@@ -32,12 +26,13 @@ export async function generateMetadata({ params }: any) {
   }
 }
 
-export default async function DegreeHubPage({ params }: any) {
+export default async function DegreeHubPage({ params }: { params: Promise<{ degreeSlug: string }> }) {
+  const { degreeSlug } = await params
   // 1. Fetch the master course details
   const { data: masterCourse } = await supabase
     .from('master_courses')
     .select('*')
-    .eq('slug', params.degreeSlug)
+    .eq('slug', degreeSlug)
     .single()
 
   if (!masterCourse) {

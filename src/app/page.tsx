@@ -1,18 +1,20 @@
+import dynamic from 'next/dynamic'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import HeroSection from '@/components/sections/HeroSection'
-import CompareSection from '@/components/sections/CompareSection'
-import CollegesSection from '@/components/sections/CollegesSection'
-import LoanSection from '@/components/sections/LoanSection'
-import StatsBar from '@/components/sections/StatsBar'
-import TestimonialsSection from '@/components/sections/TestimonialsSection'
-import MoreFromUsSection from '@/components/sections/MoreFromUsSection'
-import NewsSection from '@/components/sections/NewsSection'
-import FAQSection from '@/components/sections/FAQSection'
 
-import NewsletterSection from '@/components/sections/NewsletterSection'
-import StickyCROElements from '@/components/ui/StickyCROElements'
-import ExitIntentPopup from '@/components/ui/ExitIntentPopup'
+// Dynamic imports for below-the-fold heavy sections — code-split into separate chunks
+const CompareSection = dynamic(() => import('@/components/sections/CompareSection'))
+const CollegesSection = dynamic(() => import('@/components/sections/CollegesSection'))
+const LoanSection = dynamic(() => import('@/components/sections/LoanSection'))
+const StatsBar = dynamic(() => import('@/components/sections/StatsBar'))
+const TestimonialsSection = dynamic(() => import('@/components/sections/TestimonialsSection'))
+const MoreFromUsSection = dynamic(() => import('@/components/sections/MoreFromUsSection'))
+const NewsSection = dynamic(() => import('@/components/sections/NewsSection'))
+const FAQSection = dynamic(() => import('@/components/sections/FAQSection'))
+const NewsletterSection = dynamic(() => import('@/components/sections/NewsletterSection'))
+const StickyCROElements = dynamic(() => import('@/components/ui/StickyCROElements'))
+const ExitIntentPopup = dynamic(() => import('@/components/ui/ExitIntentPopup'))
 
 export default function HomePage() {
   return (

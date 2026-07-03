@@ -1,6 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+export const runtime = 'edge'
+
+import { useState, useEffect, use } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import Navbar from '@/components/layout/Navbar'
@@ -23,7 +25,7 @@ import { supabase } from '@/lib/supabase'
 import { resolveImageUrl } from '@/lib/utils'
 import LeadModal from '@/components/ui/LeadModal'
 
-export default function BlogDetailsPage({ params }: { params: { slug: string } }) {
+export default function BlogDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
   const [blog, setBlog] = useState<any>(null)
   const [trending, setTrending] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -32,7 +34,7 @@ export default function BlogDetailsPage({ params }: { params: { slug: string } }
   const [showLeadModal, setShowLeadModal] = useState(false)
   const [scrollProgress, setScrollProgress] = useState(0)
 
-  const { slug } = params
+  const { slug } = use(params)
 
   useEffect(() => {
     const handleScroll = () => {

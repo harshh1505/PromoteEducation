@@ -11,7 +11,7 @@ import {
 import BrochureModal from '@/components/ui/BrochureModal'
 import { useLeadCapture } from '@/hooks/useLeadCapture'
 import { cn } from '@/lib/utils'
-import { featuredColleges } from '@/components/sections/CollegesSection'
+import { featuredColleges } from '@/lib/data/featuredColleges'
 import Link from 'next/link'
 
 export default function AIIMSKalyaniContent() {

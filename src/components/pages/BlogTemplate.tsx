@@ -5,7 +5,6 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Link from 'next/link'
 import { Calendar, Clock, ArrowLeft, ChevronRight, Share2, Bookmark, MessageCircle } from 'lucide-react'
-import Script from 'next/script'
 
 export interface BlogProps {
   title: string
@@ -54,7 +53,7 @@ export default function BlogTemplate({
 
   return (
     <div className="min-h-screen flex flex-col bg-[#f9fbff]">
-      <Script
+      <script
         id="blog-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
@@ -98,14 +97,7 @@ export default function BlogTemplate({
           </header>
 
           {/* Main Content Area */}
-          <div className="prose prose-slate prose-lg max-w-none 
-            prose-headings:text-[#0b57d0] prose-headings:font-bold prose-headings:tracking-tight
-            prose-p:text-slate-700 prose-p:leading-[1.8]
-            prose-li:text-slate-700
-            prose-a:text-[#0b57d0] prose-a:no-underline hover:prose-a:underline
-            prose-img:rounded-2xl prose-img:shadow-xl
-            article-content"
-          >
+          <div className="prose prose-slate prose-lg max-w-none prose-headings:text-[#0b57d0] prose-headings:font-bold prose-headings:tracking-tight prose-p:text-slate-700 prose-p:leading-[1.8] prose-li:text-slate-700 prose-a:text-[#0b57d0] prose-a:no-underline hover:prose-a:underline prose-img:rounded-2xl prose-img:shadow-xl article-content">
             {content}
           </div>
 
@@ -143,37 +135,7 @@ export default function BlogTemplate({
 
       <Footer />
 
-      <style jsx global>{`
-        .article-content h2 {
-          font-size: 1.8rem;
-          margin-top: 2.5rem;
-          margin-bottom: 1.25rem;
-          border-left: 4px solid #0b57d0;
-          padding-left: 1rem;
-        }
-        .article-content p {
-          margin-bottom: 1.5rem;
-        }
-        .article-content ul {
-          margin-bottom: 1.5rem;
-          list-style-type: none;
-          padding-left: 0;
-        }
-        .article-content li {
-          position: relative;
-          padding-left: 1.5rem;
-          margin-bottom: 0.75rem;
-        }
-        .article-content li::before {
-          content: "•";
-          color: #0b57d0;
-          font-weight: bold;
-          position: absolute;
-          left: 0;
-          font-size: 1.2rem;
-          line-height: 1.2;
-        }
-      `}</style>
+
     </div>
   )
 }

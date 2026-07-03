@@ -1,6 +1,8 @@
 'use client'
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
+export const runtime = 'edge'
+
+import { useState, useEffect, useCallback, useMemo, use } from 'react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Navbar from '@/components/layout/Navbar'
@@ -126,8 +128,9 @@ async function fetchDistinctValues(
 
 // ── Page Component ────────────────────────────────────────────────────────────
 
-export default function CutoffSlugPage({ params }: { params: { slug: string } }) {
-  const slug = params.slug as StreamKey
+export default function CutoffSlugPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug: rawSlug } = use(params)
+  const slug = rawSlug as StreamKey
   const config = STREAM_CONFIG[slug]
   if (!config) return notFound()
 

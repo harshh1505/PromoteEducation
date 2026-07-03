@@ -370,3 +370,34 @@ input[type="range"]::-moz-range-thumb {
 main, section, article {
   overflow-x: hidden;
 }
+
+/* Article content styles (BlogTemplate) */
+.article-content h2 {
+  font-size: 1.8rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1.25rem;
+  border-left: 4px solid #0b57d0;
+  padding-left: 1rem;
+}
+.article-content p {
+  margin-bottom: 1.5rem;
+}
+.article-content ul {
+  margin-bottom: 1.5rem;
+  list-style-type: none;
+  padding-left: 0;
+}
+.article-content li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+.article-content li::before {
+  content: "•";
+  color: #0b57d0;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+  font-size: 1.2rem;
+  line-height: 1.2;
+}

@@ -12,28 +12,7 @@ import {
 // ===============================
 // SETTINGS
 // ===============================
-export const dynamicParams = true
-export const revalidate = 86400
-
-export async function generateStaticParams() {
-  const streams = ['engineering', 'medical', 'management', 'law']
-  const cities = ['delhi', 'mumbai', 'bangalore', 'pune', 'hyderabad', 'chennai', 'kolkata']
-  const fees = [500000, 1000000, 2000000]
-  const packages = [5, 10, 20]
-  const pages: { slug: string }[] = []
-
-  streams.forEach(s => pages.push({ slug: s }))
-  streams.forEach(s => cities.forEach(c => pages.push({ slug: `${s}-in-${c}` })))
-  streams.forEach(s => fees.forEach(f => pages.push({ slug: `${s}-under-${f}` })))
-  streams.forEach(s => packages.forEach(p => pages.push({ slug: `${s}-with-${p}-lpa` })))
-
-  const { data: colleges } = await supabase.from('colleges').select('slug')
-  colleges?.forEach(c => {
-    if (c.slug && typeof c.slug === 'string') pages.push({ slug: c.slug })
-  })
-
-  return pages
-}
+export const runtime = 'edge'
 
 function parsePageType(slug: string) {
   const s = slug.toLowerCase()
@@ -169,8 +148,8 @@ function formatFees(inr: number): string {
 // ===============================
 // SEO METADATA
 // ===============================
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const { slug } = params
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
   if (slug.includes('-in-')) {
     const query = parseSlug(slug)
     if (query) return {
@@ -321,11 +300,12 @@ async function ListingPage({ slug, type }: { slug: string; type: string }) {
 // ===============================
 // MAIN COLLEGE PAGE
 // ===============================
-export default async function CollegePage({ params }: any) {
-  const pageInfo = parsePageType(params.slug)
-  if (pageInfo.type !== 'college') return <ListingPage slug={params.slug} type={pageInfo.type} />
+export default async function CollegePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const pageInfo = parsePageType(slug)
+  if (pageInfo.type !== 'college') return <ListingPage slug={slug} type={pageInfo.type} />
 
-  const data = await getCollegeData(params.slug)
+  const data = await getCollegeData(slug)
   if (!data) return notFound()
 
   const { college, faqs: dbFaqs } = data

@@ -1,4 +1,6 @@
 import ReactMarkdown from 'react-markdown'
+
+export const runtime = 'edge'
 import remarkGfm from 'remark-gfm'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
@@ -8,34 +10,36 @@ import { ArrowLeft, Share2, Clock, Calendar, Bookmark, ChevronRight, CheckCircle
 import { articleDatabase } from '@/data/articleDatabase'
 import { examDatabase } from '@/data/examDatabase'
 
-export async function generateStaticParams() { return [] }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const dbArticle = articleDatabase[params.slug]
-  const examKey = Object.keys(examDatabase).find(key => params.slug.startsWith(key))
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const dbArticle = articleDatabase[slug]
+  const examKey = Object.keys(examDatabase).find(key => slug.startsWith(key))
   const exam = examKey ? examDatabase[examKey] : null
   
-  const title = dbArticle?.title || params.slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+  const title = dbArticle?.title || slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
   const examTitle = exam?.title || 'Entrance Exams'
 
   return {
     title: `${title} | ${examTitle} Guide 2026`,
     description: `Complete guide to ${title} for 2026. Get expert tips, eligibility criteria, and preparation strategies for ${examTitle} aspirants.`,
-    keywords: [examTitle, params.slug, 'admission 2026', 'exam preparation', 'syllabus'],
+    keywords: [examTitle, slug, 'admission 2026', 'exam preparation', 'syllabus'],
   }
 }
 
-export default function ArticlePage({ params }: { params: { slug: string } }) {
-  const dbArticle = articleDatabase[params.slug]
+export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const dbArticle = articleDatabase[slug]
   
   // Try to find the associated exam by matching the slug prefix
   // e.g. "jee-main-eligibility" matches "jee-main"
-  const examKey = Object.keys(examDatabase).find(key => params.slug.startsWith(key))
+  const examKey = Object.keys(examDatabase).find(key => slug.startsWith(key))
   const exam = examKey ? examDatabase[examKey] : null
 
   // Fallback for non-existent DB entries
-  const title = dbArticle?.title || params.slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
-  const category = dbArticle?.category || (params.slug.includes('eligibility') ? 'Eligibility' : params.slug.includes('syllabus') ? 'Syllabus' : params.slug.includes('pattern') ? 'Exam Pattern' : 'Guide')
+  const title = dbArticle?.title || slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+  const category = dbArticle?.category || (slug.includes('eligibility') ? 'Eligibility' : slug.includes('syllabus') ? 'Syllabus' : slug.includes('pattern') ? 'Exam Pattern' : 'Guide')
   const readTime = dbArticle?.readTime || '8 min read'
   const summary = dbArticle?.summary || (exam ? `A detailed deep-dive into ${title} for the 2026 academic session. Verified by our editorial team for ${exam.title} aspirants.` : `This comprehensive guide covers everything you need to know about ${title}. Our experts have analyzed the latest notification to provide you with the most accurate information.`)
 
@@ -124,7 +128,8 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
             ) : exam ? (
               <>
                 {/* Smart Template Logic based on Slug */}
-                {params.slug.includes('eligibility') && (
+                {/* Smart Template Logic based on Slug */}
+                {slug.includes('eligibility') && (
                     <div className="mb-12">
                         <h2 className="text-2xl font-black text-slate-900 mt-12 mb-6">Detailed Eligibility Requirements</h2>
                         <div className="space-y-4">
@@ -138,7 +143,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
                     </div>
                 )}
 
-                {params.slug.includes('syllabus') && (
+                {slug.includes('syllabus') && (
                     <div className="mb-12">
                         <h2 className="text-2xl font-black text-slate-900 mt-12 mb-6">Full Subject-wise Syllabus</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -160,7 +165,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
                     </div>
                 )}
 
-                {params.slug.includes('pattern') && (
+                {slug.includes('pattern') && (
                     <div className="mb-12">
                         <h2 className="text-2xl font-black text-slate-900 mt-12 mb-6">Exam Pattern Analysis</h2>
                         <div className="grid grid-cols-2 gap-4">
@@ -180,7 +185,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
                     </div>
                 )}
 
-                {params.slug.includes('books') && (
+                {slug.includes('books') && (
                     <div className="mb-12">
                         <h2 className="text-2xl font-black text-slate-900 mt-12 mb-6">Recommended Resources</h2>
                         <p className="text-slate-600 mb-6">Our academic council recommends the following standard textbooks for {exam.title} preparation:</p>

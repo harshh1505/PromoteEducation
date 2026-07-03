@@ -1,14 +1,68 @@
-import { GoogleGenerativeAI } from "@google/generative-ai"
 import { NextResponse } from "next/server"
-import { createClient } from "@supabase/supabase-js"
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "")
+export const runtime = 'edge'
 
-// Service-role client for server-side DB writes (storing ai_interpretation)
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+// ── Supabase REST helper ────────────────────────────────────────────────────
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!
+
+async function supabaseRpc(fnName: string, args: Record<string, unknown>) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fnName}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_SERVICE_KEY,
+      'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+    },
+    body: JSON.stringify(args),
+  })
+  if (!res.ok) {
+    const text = await res.text()
+    throw new Error(`Supabase RPC ${fnName} failed: ${res.status} ${text}`)
+  }
+  return res.json()
+}
+
+async function supabaseUpdate(table: string, data: Record<string, unknown>, matchColumn: string, matchValue: string) {
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/${table}?${matchColumn}=eq.${encodeURIComponent(matchValue)}`,
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_SERVICE_KEY,
+        'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+        'Prefer': 'return=minimal',
+      },
+      body: JSON.stringify(data),
+    }
+  )
+  if (!res.ok) {
+    const text = await res.text()
+    throw new Error(`Supabase PATCH ${table} failed: ${res.status} ${text}`)
+  }
+}
+
+// ── Gemini REST helper ──────────────────────────────────────────────────────
+async function callGemini(prompt: string): Promise<string> {
+  const apiKey = process.env.GEMINI_API_KEY || ""
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+      }),
+    }
+  )
+  if (!res.ok) {
+    const text = await res.text()
+    throw new Error(`Gemini API failed: ${res.status} ${text}`)
+  }
+  const data = await res.json()
+  return data?.candidates?.[0]?.content?.parts?.[0]?.text || ""
+}
 
 export async function POST(req: Request) {
   try {
@@ -21,29 +75,27 @@ export async function POST(req: Request) {
     // ── STEP 1: Call finalize_brainstorm_session RPC ──────────────────────────
     // This single RPC: scores responses, builds profile JSON, resolves career
     // recommendations, marks session complete, and upserts a profile row.
-    const { data: finalizeData, error: rpcError } = await supabaseAdmin
-      .rpc("finalize_brainstorm_session", { p_session_id: sessionId })
-
     let profile: any = null
     let recommendations: any[] = []
 
-    if (rpcError) {
+    try {
+      const finalizeData = await supabaseRpc("finalize_brainstorm_session", { p_session_id: sessionId })
+      profile         = finalizeData?.profile
+      recommendations = finalizeData?.recommendations || []
+    } catch (rpcError) {
       console.error("finalize_brainstorm_session error:", rpcError)
       profile = { 
         interest_profile: { realistic: 0, investigative: 0, artistic: 0, social: 0, enterprising: 0, conventional: 0 },
         dominant_traits: ["analytical"] 
       }
       recommendations = []
-    } else {
-      profile         = finalizeData?.profile
-      recommendations = finalizeData?.recommendations || []
     }
 
     // ── STEP 1.5: Get College Recommendations ────────────────────────────────
-    const { data: colleges, error: collegeError } = await supabaseAdmin
-      .rpc("get_college_recommendations", { p_session_id: sessionId })
-
-    if (collegeError) {
+    let colleges: any[] = []
+    try {
+      colleges = await supabaseRpc("get_college_recommendations", { p_session_id: sessionId })
+    } catch (collegeError) {
       console.error("get_college_recommendations error:", collegeError)
       // Non-fatal, proceed with profile and career recs
     }
@@ -82,9 +134,7 @@ Output in clean readable paragraphs (not JSON)`
     // ── STEP 3: Call Gemini ───────────────────────────────────────────────────
     let interpretation = ""
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" })
-      const result = await model.generateContent(prompt)
-      interpretation = result.response.text()
+      interpretation = await callGemini(prompt)
     } catch (aiError) {
       console.error("Gemini failed, using fallback interpretation:", aiError)
       const traits = profile.dominant_traits || ["analytical", "investigative"]
@@ -101,12 +151,9 @@ Suggested Next Steps:
     }
 
     // ── STEP 4: Persist ai_interpretation to brainstorm_profiles ─────────────
-    const { error: updateError } = await supabaseAdmin
-      .from("brainstorm_profiles")
-      .update({ ai_interpretation: interpretation })
-      .eq("session_id", sessionId)
-
-    if (updateError) {
+    try {
+      await supabaseUpdate("brainstorm_profiles", { ai_interpretation: interpretation }, "session_id", sessionId)
+    } catch (updateError) {
       console.error("Failed to persist ai_interpretation:", updateError)
     }
 
@@ -127,4 +174,3 @@ Suggested Next Steps:
     }, { status: 500 })
   }
 }
-

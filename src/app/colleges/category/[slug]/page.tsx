@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabase'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
+export const runtime = 'edge'
 export const revalidate = 86400
 
 interface College {
@@ -28,8 +29,9 @@ function parseSlug(slug: string) {
   }
 }
 
-export default async function CategoryPage({ params }: { params: { slug: string } }) {
-  const query = parseSlug(params.slug)
+export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const query = parseSlug(slug)
   if (!query) return notFound()
 
   // Fetch colleges matching stream AND location/state

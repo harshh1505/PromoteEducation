@@ -8,38 +8,20 @@ import {
   ArrowRight, MapPin, Check, Star, Award, ShieldCheck, Globe, HelpCircle, Briefcase, TrendingUp
 } from 'lucide-react'
 
-export const revalidate = 86400
+export const runtime = 'edge'
 
-export async function generateStaticParams() {
-  const { data: specs } = await supabase
-    .from('course_specializations')
-    .select('slug, master_courses(slug)')
-
-  return (specs || [])
-    .filter(s => {
-      const mc = Array.isArray(s.master_courses) ? s.master_courses[0] : s.master_courses;
-      return s.slug && mc?.slug;
-    })
-    .map((s) => {
-      const mc = Array.isArray(s.master_courses) ? s.master_courses[0] : s.master_courses;
-      return {
-        degreeSlug: mc.slug,
-        specSlug: s.slug,
-      };
-    })
-}
-
-export async function generateMetadata({ params }: any) {
+export async function generateMetadata({ params }: { params: Promise<{ degreeSlug: string; specSlug: string }> }) {
+  const { degreeSlug, specSlug } = await params
   const { data: masterCourse } = await supabase
     .from('master_courses')
     .select('*')
-    .eq('slug', params.degreeSlug)
+    .eq('slug', degreeSlug)
     .single()
 
   const { data: spec } = await supabase
     .from('course_specializations')
     .select('*')
-    .eq('slug', params.specSlug)
+    .eq('slug', specSlug)
     .eq('master_course_id', masterCourse?.id || '')
     .single()
 
@@ -51,12 +33,13 @@ export async function generateMetadata({ params }: any) {
   }
 }
 
-export default async function SpecialisationPage({ params }: any) {
+export default async function SpecialisationPage({ params }: { params: Promise<{ degreeSlug: string; specSlug: string }> }) {
+  const { degreeSlug, specSlug } = await params
   // 1. Fetch the master course
   const { data: masterCourse } = await supabase
     .from('master_courses')
     .select('*')
-    .eq('slug', params.degreeSlug)
+    .eq('slug', degreeSlug)
     .single()
 
   if (!masterCourse) {
@@ -67,7 +50,7 @@ export default async function SpecialisationPage({ params }: any) {
   const { data: spec } = await supabase
     .from('course_specializations')
     .select('*')
-    .eq('slug', params.specSlug)
+    .eq('slug', specSlug)
     .eq('master_course_id', masterCourse.id)
     .single()
 

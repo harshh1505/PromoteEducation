@@ -14,9 +14,9 @@ import {
 } from 'lucide-react'
 import CollegeCard from '@/components/ui/CollegeCard'
 import { College } from '@/types'
-import { featuredColleges } from '@/components/sections/CollegesSection'
-import { newsItems } from '@/components/sections/NewsSection'
+import { featuredColleges } from '@/lib/data/featuredColleges'
 import { cn } from '@/lib/utils'
+import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { useLeadCapture } from '@/hooks/useLeadCapture'
 import LeadModal from '@/components/ui/LeadModal'
@@ -477,11 +477,60 @@ export default function AboutPage() {
         return () => clearInterval(interval)
     }, [totalMiniPages])
 
+    const [newsItems, setNewsItems] = useState<any[]>([])
     const [newsPage, setNewsPage] = useState(0)
     const itemsPerNewsPage = 3
-    const totalNewsPages = Math.ceil(newsItems.length / itemsPerNewsPage)
+    const totalNewsPages = newsItems.length > 0 ? Math.ceil(newsItems.length / itemsPerNewsPage) : 1
 
     useEffect(() => {
+        async function fetchNews() {
+            const { data, error } = await supabase
+                .from('news_articles')
+                .select('*')
+                .order('date', { ascending: false })
+                .order('created_at', { ascending: false })
+            
+            if (error) {
+                console.error('Error fetching news from Supabase:', error)
+            } else if (data) {
+                const stripMarkdown = (text: string): string => {
+                    if (!text) return ''
+                    return text
+                        .replace(/<[^>]*>/g, '')
+                        .replace(/^#+\s+/gm, '')
+                        .replace(/([*_~`]{1,3})(\s*(?:(?!\1).)+?\s*)\1/g, '$2')
+                        .replace(/[*_~`]/g, '')
+                        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+                        .replace(/^\s*[-*_]{3,}\s*$/gm, '')
+                        .replace(/^\s*>\s+/gm, '')
+                        .replace(/\s+/g, ' ')
+                        .trim()
+                }
+
+                const mapped = data.map((item: any) => {
+                    const cleanedContent = stripMarkdown(item.content || '')
+                    return {
+                        isLive: item.is_live,
+                        title: item.heading,
+                        excerpt: cleanedContent ? (cleanedContent.length > 140 ? cleanedContent.slice(0, 137) + '...' : cleanedContent) : '',
+                        author: item.editor,
+                        date: new Date(item.date).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                        }),
+                        image: item.image_link || 'https://images.unsplash.com/photo-1510074377623-8cf13fb86c08?w=400',
+                        slug: item.slug
+                    }
+                })
+                setNewsItems(mapped)
+            }
+        }
+        fetchNews()
+    }, [])
+
+    useEffect(() => {
+        if (totalNewsPages <= 1) return
         const interval = setInterval(() => {
             setNewsPage((prev) => (prev + 1) % totalNewsPages)
         }, 8000)

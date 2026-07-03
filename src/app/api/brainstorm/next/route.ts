@@ -1,26 +1,29 @@
-import { createClient } from "@supabase/supabase-js"
 import { NextResponse } from "next/server"
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
 export const dynamic = "force-dynamic"
+export const runtime = "edge"
+
+// ── Supabase REST helpers ────────────────────────────────────────────────────
+
+async function supabaseSelect(table: string, query: string) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}`, {
+    headers: {
+      'apikey': SUPABASE_SERVICE_KEY,
+      'Authorization': `Bearer ${SUPABASE_SERVICE_KEY}`,
+    },
+  })
+  if (!res.ok) {
+    const text = await res.text()
+    throw new Error(`Supabase SELECT ${table} failed: ${res.status} ${text}`)
+  }
+  return res.json()
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Adaptive Question Engine
-// ─────────────────────────────────────────────────────────────────────────────
-// Flow:
-//   Session → responses stored → backend calculates scores
-//           ↓
-//   Weakest trait detected
-//           ↓
-//   Find candidate questions (via option weights)
-//           ↓
-//   Random pick (avoid bias)
-//           ↓
-//   Return next question
 // ─────────────────────────────────────────────────────────────────────────────
 
 function getNextQuestion(
@@ -28,21 +31,17 @@ function getNextQuestion(
   answeredIds: string[],
   scores: Record<string, number>
 ) {
-  // 1. Filter out already-asked questions
   const remaining = questions.filter(q => !answeredIds.includes(q.id))
   if (remaining.length === 0) return null
 
-  // 2. Find weakest trait
   const scoreEntries = Object.entries(scores)
   if (scoreEntries.length === 0) {
-    // No scores yet (first question) → random pick
     return remaining[Math.floor(Math.random() * remaining.length)]
   }
 
   const weakestTrait = scoreEntries
     .sort((a, b) => (a[1] as number) - (b[1] as number))[0][0]
 
-  // 3. Find ALL candidate questions targeting the weakest trait
   const candidates = remaining.filter(q =>
     q.brainstorm_options?.some((o: any) => {
       const weights = o.trait_weights || {}
@@ -50,22 +49,13 @@ function getNextQuestion(
     })
   )
 
-  // 4. Random pick from candidates (avoid bias)
   if (candidates.length > 0) {
     return candidates[Math.floor(Math.random() * candidates.length)]
   }
 
-  // 5. Fallback → random from all remaining
   return remaining[Math.floor(Math.random() * remaining.length)]
 }
 
-/**
- * POST /api/brainstorm/next
- * Body: { sessionId: string }
- *
- * Returns the next adaptive question for this session.
- * Scores are calculated from stored responses — no client trust needed.
- */
 export async function POST(req: Request) {
   try {
     const { sessionId } = await req.json()
@@ -74,15 +64,10 @@ export async function POST(req: Request) {
     }
 
     // ── 1. Get already-answered question IDs ─────────────────────────────────
-    const { data: responses, error: respErr } = await supabaseAdmin
-      .from("brainstorm_responses")
-      .select("question_id, trait_weights")
-      .eq("session_id", sessionId)
-
-    if (respErr) {
-      console.error("Error fetching responses:", respErr)
-      return NextResponse.json({ error: "Failed to fetch responses" }, { status: 500 })
-    }
+    const responses = await supabaseSelect(
+      "brainstorm_responses",
+      `select=question_id,trait_weights&session_id=eq.${encodeURIComponent(sessionId)}`
+    )
 
     const answeredIds = (responses || []).map((r: any) => r.question_id)
 
@@ -96,25 +81,10 @@ export async function POST(req: Request) {
     }
 
     // ── 3. Get ALL questions with options ─────────────────────────────────────
-    const { data: questions, error: qErr } = await supabaseAdmin
-      .from("brainstorm_questions")
-      .select(`
-        id,
-        category,
-        question_text,
-        brainstorm_options!brainstorm_options_question_id_fkey (
-          id,
-          option_text,
-          trait_weights,
-          next_question_id
-        )
-      `)
-      .order("sort_order", { ascending: true })
-
-    if (qErr) {
-      console.error("Error fetching questions:", qErr)
-      return NextResponse.json({ error: "Failed to fetch questions" }, { status: 500 })
-    }
+    const questions = await supabaseSelect(
+      "brainstorm_questions",
+      `select=id,category,question_text,brainstorm_options!brainstorm_options_question_id_fkey(id,option_text,trait_weights,next_question_id)&order=sort_order.asc`
+    )
 
     if (!questions || questions.length === 0) {
       return NextResponse.json({ error: "No questions in database" }, { status: 404 })

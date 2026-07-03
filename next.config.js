@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
+  turbopack: {},
+  serverExternalPackages: ['@google/generative-ai'],
   images: {
     remotePatterns: [
       {
