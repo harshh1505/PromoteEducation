@@ -1,7 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
-  serverExternalPackages: ['@google/generative-ai'],
+  // Note: 'output: standalone' must NOT be set when deploying to Vercel.
+  // Vercel manages its own output format. standalone is for Docker/self-hosted only.
+
+  // Tell Turbopack exactly where the workspace root is to avoid "multiple lockfiles" warnings.
+  turbopack: {
+    root: __dirname,
+  },
+
   images: {
     remotePatterns: [
       {
@@ -10,17 +16,6 @@ const nextConfig = {
       },
     ],
   },
-}
-
-if (process.env.NODE_ENV === 'development') {
-  nextConfig.webpack = (config) => {
-    config.watchOptions = {
-      poll: 1000,
-      aggregateTimeout: 300,
-      ignored: /node_modules/,
-    }
-    return config
-  }
 }
 
 module.exports = nextConfig
