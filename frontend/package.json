@@ -5,11 +5,9 @@
   "scripts": {
     "dev": "WATCHPACK_POLLING=true next dev --webpack",
     "build": "next build",
-    "build:worker": "opennextjs-cloudflare build",
     "start": "next start",
     "lint": "next lint",
-    "preview": "npm run build:worker && wrangler dev",
-    "deploy": "npm run build:worker && wrangler deploy"
+    "deploy": "next build && wrangler pages deploy out --project-name=promote-education"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.103.3",
@@ -33,7 +31,6 @@
     "tailwind-merge": "^2.4.0"
   },
   "devDependencies": {
-    "@opennextjs/cloudflare": "^1.20.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

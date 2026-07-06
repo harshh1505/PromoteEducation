@@ -8,7 +8,8 @@ import {
   ArrowRight, MapPin, CheckCircle2, Check, Star, Award, ShieldCheck, Globe, HelpCircle 
 } from 'lucide-react'
 
-export const revalidate = 86400
+export const dynamic = 'force-static'
+export const dynamicParams = false
 
 export async function generateStaticParams() {
   const { data: masterCourses } = await supabase.from('master_courses').select('slug')

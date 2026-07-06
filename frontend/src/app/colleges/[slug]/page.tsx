@@ -12,8 +12,8 @@ import {
 // ===============================
 // SETTINGS
 // ===============================
-export const dynamicParams = true
-export const revalidate = 86400
+export const dynamic = 'force-static'
+export const dynamicParams = false
 
 export async function generateStaticParams() {
   const streams = ['engineering', 'medical', 'management', 'law']
