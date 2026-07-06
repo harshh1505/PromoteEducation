@@ -9,7 +9,10 @@ const nextConfig = {
       },
     ],
   },
-  webpack: (config, { dev }) => {
+}
+
+if (process.env.NODE_ENV === 'development') {
+  nextConfig.webpack = (config, { dev }) => {
     if (dev) {
       // Fallback to polling in development to avoid EMFILE watcher limits on macOS.
       config.watchOptions = {
@@ -19,7 +22,7 @@ const nextConfig = {
       }
     }
     return config
-  },
+  }
 }
 
 module.exports = nextConfig
