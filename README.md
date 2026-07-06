@@ -47,15 +47,14 @@ PromoteEducation/
 │   ├── generateContent.js    # Gemini AI integration script to seed descriptions
 │   └── check_*.js            # Validation and health check utility scripts
 │
-├── frontend/                 # Next.js web application
-│   ├── src/
-│   │   ├── app/              # Next.js App Router (pages & api routes)
-│   │   ├── components/       # Reusable React UI components
-│   │   ├── hooks/            # Custom React hooks
-│   │   ├── lib/              # Utility configurations (e.g., Supabase client)
-│   │   └── types/            # TypeScript type definitions
-│   └── tailwind.config.ts    # Tailwind CSS styling configuration
-│
+├── src/                      # Next.js web application source code
+│   ├── app/                  # Next.js App Router (pages & api routes)
+│   ├── components/           # Reusable React UI components
+│   ├── hooks/                # Custom React hooks
+│   ├── lib/                  # Utility configurations (e.g., Supabase client)
+│   └── types/                # TypeScript type definitions
+├── public/                   # Static assets
+├── tailwind.config.ts        # Tailwind CSS styling configuration
 └── README.md                 # Project documentation
 ```
 
@@ -63,7 +62,7 @@ PromoteEducation/
 
 ## ⚙️ Environment Variables Setup
 
-Create a `.env` file in the root directory (and optional `.env.local` inside `frontend/`) with the following environment variables:
+Create a `.env` file in the root directory (and optional `.env.local`) with the following environment variables:
 
 ```env
 # Frontend (Next.js)
@@ -81,15 +80,14 @@ GEMINI_API_KEY=<your-google-gemini-api-key>
 ## 📦 Getting Started
 
 ### 1. Clone & Install Dependencies
-First, navigate to each directory to install the required packages:
+First, install the required packages for the frontend (at the root) and backend:
 
 ```bash
-# Clone the repository and install Backend dependencies
-cd backend
+# Install root (Frontend) dependencies
 npm install
 
-# Navigate to Frontend and install dependencies
-cd ../frontend
+# Navigate to Backend and install dependencies
+cd backend
 npm install
 ```
 
@@ -99,10 +97,9 @@ You can run the schema and seed scripts against your Supabase PostgreSQL instanc
 2. Apply SQL seed files (e.g., `backend/seed_data.sql`, `backend/seed_courses.sql`) via the Supabase SQL Editor.
 
 ### 3. Run the Development Server
-Navigate to the `frontend` directory and start the Next.js application:
+From the root directory, start the Next.js application:
 
 ```bash
-cd frontend
 npm run dev
 ```
 
