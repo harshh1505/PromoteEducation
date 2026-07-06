@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
 import CounsellingModal from '@/components/ui/CounsellingModal'
 import GoalModal from '@/components/ui/GoalModal'
+import AuthModal from '@/components/ui/AuthModal'
 
 const navItems = [
   { label: 'Home', href: '/', hasMegaMenu: false },
@@ -108,6 +109,9 @@ export default function Navbar() {
   const [goalVisible, setGoalVisible] = useState(false)
   const [exploreMobileOpen, setExploreMobileOpen] = useState(false)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
+  const [authVisible, setAuthVisible] = useState(false)
+  const [user, setUser] = useState<any>(null)
+  const [userDropdown, setUserDropdown] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState<any[]>([])
   const [searchFocused, setSearchFocused] = useState(false)
@@ -151,6 +155,25 @@ export default function Navbar() {
       clearInterval(clockTimer)
     }
   }, [])
+
+  // Auth session tracking
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null)
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+    setUserDropdown(false)
+    window.location.href = '/'
+  }
 
   // Navbar live search logic
   useEffect(() => {
@@ -346,7 +369,42 @@ export default function Navbar() {
                 <span className="absolute top-2 right-2 w-2 h-2 bg-sky-500 rounded-full border-2 border-slate-900" />
               </button>
 
-              {/* Removed Auth Buttons */}
+              {user ? (
+                <div className="relative">
+                  <button
+                    onClick={() => setUserDropdown(!userDropdown)}
+                    className="flex items-center gap-2 p-1 pl-2 rounded-full border border-white/10 hover:bg-white/5 transition-all"
+                  >
+                    <div className="w-7 h-7 rounded-full bg-sky-500 flex items-center justify-center text-white text-[10px] font-bold">
+                      {user.email?.[0].toUpperCase()}
+                    </div>
+                    <ChevronDown size={14} className="text-white/40 mr-1 hidden sm:block" />
+                  </button>
+
+                  {userDropdown && (
+                    <div className="absolute top-full right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-slate-100 py-2 z-[60] animate-in slide-in-from-top-2">
+                      <div className="px-4 py-3 border-b border-slate-50 mb-1">
+                        <p className="text-[10px] uppercase font-black text-slate-400 tracking-widest">Signed in as</p>
+                        <p className="text-xs font-bold text-slate-900 truncate">{user.email}</p>
+                      </div>
+                      <a href="/dashboard" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50">
+                        <User size={16} /> My Dashboard
+                      </a>
+                      <button onClick={handleSignOut} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50">
+                        <LogOut size={16} /> Sign out
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <button
+                  onClick={() => setAuthVisible(true)}
+                  className="w-8 h-8 md:w-auto md:px-4 md:py-2 rounded-full border border-white/20 text-white text-xs font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-2"
+                >
+                  <User size={14} className="md:hidden" />
+                  <span className="hidden md:inline text-white">Sign in</span>
+                </button>
+              )}
 
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
@@ -662,6 +720,11 @@ export default function Navbar() {
       <GoalModal
         isOpen={goalVisible}
         onClose={() => setGoalVisible(false)}
+      />
+
+      <AuthModal
+        isOpen={authVisible}
+        onClose={() => setAuthVisible(false)}
       />
     </>
   )
