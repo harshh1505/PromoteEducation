@@ -1,7 +1,7 @@
-import ReactMarkdown from 'react-markdown'
+import dynamic from 'next/dynamic'
 
 export const runtime = 'edge'
-import remarkGfm from 'remark-gfm'
+
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Link from 'next/link'
@@ -9,6 +9,9 @@ import { Metadata } from 'next'
 import { ArrowLeft, Share2, Clock, Calendar, Bookmark, ChevronRight, CheckCircle2, Target, BookOpen, ScrollText, Zap } from 'lucide-react'
 import { articleDatabase } from '@/data/articleDatabase'
 import { examDatabase } from '@/data/examDatabase'
+import MarkdownViewer from '@/components/ui/MarkdownViewer'
+
+
 
 
 
@@ -118,7 +121,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                     prose-th:bg-slate-50 prose-th:text-left prose-th:font-black prose-th:text-slate-900 prose-th:p-4 prose-th:border prose-th:border-slate-200 prose-th:uppercase prose-th:tracking-wider prose-th:text-xs
                     prose-td:p-4 prose-td:border prose-td:border-slate-200 prose-td:text-slate-600 prose-td:text-sm">
                     {typeof section.content === 'string' ? (
-                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{section.content}</ReactMarkdown>
+                      <MarkdownViewer content={section.content} />
                     ) : (
                       section.content
                     )}

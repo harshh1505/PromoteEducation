@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 
-const baseUrl = 'https://promoteeducation.in'
+export const runtime = 'edge'
+const baseUrl = 'https://promoteducation.com'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
 
