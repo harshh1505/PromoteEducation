@@ -22,7 +22,7 @@ export default function BlogsPageContent() {
       try {
         const { data, error } = await supabase
           .from('blogs')
-          .select('*')
+          .select('id, slug, title, summary, category, published_at, read_time, views, image_url, author')
           .eq('is_live', true)
           .order('published_at', { ascending: false })
 

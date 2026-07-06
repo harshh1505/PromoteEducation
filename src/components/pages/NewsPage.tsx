@@ -15,7 +15,7 @@ export default function NewsPageContent() {
     async function fetchNews() {
       const { data, error } = await supabase
         .from('news_articles')
-        .select('*')
+        .select('id, slug, heading, editor, date, created_at, comments_count, shares_count, views, image_link, is_live')
         .order('date', { ascending: false })
         .order('created_at', { ascending: false })
       
@@ -44,7 +44,7 @@ export default function NewsPageContent() {
     async function fetchEduArticles() {
       const { data, error } = await supabase
         .from('articles')
-        .select('*')
+        .select('id, title, excerpt, image, category, created_at')
         .order('created_at', { ascending: false })
         .limit(3)
       

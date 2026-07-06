@@ -88,7 +88,7 @@ export default function CollegesPage() {
         setIsLoading(true)
         const { data, error } = await supabase
           .from('colleges')
-          .select('*')
+          .select('id, slug, name, short_name, location, state, stream, ranking, total_fee, avg_ctc, ownership, type')
           .eq('is_active', true)
           .order('ranking', { ascending: true })
 
