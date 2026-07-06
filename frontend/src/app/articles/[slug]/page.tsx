@@ -1,3 +1,10 @@
+export const dynamicParams = false
+
+export async function generateStaticParams() {
+  const { articleDatabase } = await import('@/data/articleDatabase')
+  return Object.keys(articleDatabase).map(slug => ({ slug }))
+}
+
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
@@ -9,8 +16,6 @@ import { ArrowLeft, Share2, Clock, Calendar, Bookmark, ChevronRight, CheckCircle
 import { articleDatabase } from '@/data/articleDatabase'
 import { examDatabase } from '@/data/examDatabase'
 import { fixMarkdownBold } from '@/lib/utils'
-
-export async function generateStaticParams() { return [] }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params

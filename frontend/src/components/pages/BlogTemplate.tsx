@@ -143,7 +143,7 @@ export default function BlogTemplate({
 
       <Footer />
 
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         .article-content h2 {
           font-size: 1.8rem;
           margin-top: 2.5rem;
@@ -173,7 +173,7 @@ export default function BlogTemplate({
           font-size: 1.2rem;
           line-height: 1.2;
         }
-      `}</style>
+      `}} />
     </div>
   )
 }

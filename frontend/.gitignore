@@ -65,5 +65,10 @@ Desktop.ini
 scratch/
 .eslintcache
 
+# Cloudflare
+.open-next/
+.wrangler/
+functions/
+
 node_modules
 .next
