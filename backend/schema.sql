@@ -243,7 +243,6 @@ create table colleges (
   type                  college_type default 'private', -- New type field
   avg_ctc               text,                 -- New CTC field (Text)
   total_fee             text,                 -- New Fee field (Text)
-  cover_image           text,                 -- College cover image URL
   verified              boolean default false, -- New verified field
   ownership             text not null,
   affiliation           text,
@@ -705,115 +704,6 @@ GRANT EXECUTE ON FUNCTION get_cutoff_distinct TO anon, authenticated;
 -- DROP EXISTING TABLES
 -- ============================================
 
-DROP TABLE IF EXISTS news_sections CASCADE;
-DROP TABLE IF EXISTS news_articles CASCADE;
-
--- ============================================
--- NEWS ARTICLES
--- ============================================
-
-CREATE TABLE news_articles (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-
-    slug TEXT NOT NULL UNIQUE,
-
-    heading TEXT NOT NULL,
-
-    synopsis TEXT,
-
-    featured_image TEXT NOT NULL,
-
-    editor TEXT DEFAULT 'Promote Education Editorial',
-
-    seo_title TEXT,
-    seo_description TEXT,
-    seo_keywords TEXT[],
-
-    views INTEGER DEFAULT 0,
-    comments_count INTEGER DEFAULT 0,
-    shares_count INTEGER DEFAULT 0,
-
-    is_live BOOLEAN DEFAULT FALSE,
-
-    published_at TIMESTAMPTZ,
-
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- ============================================
--- NEWS CONTENT SECTIONS
--- ============================================
-
-CREATE TABLE news_sections (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-
-    article_id UUID NOT NULL
-        REFERENCES news_articles(id)
-        ON DELETE CASCADE,
-
-    section_order INTEGER NOT NULL,
-
-    content TEXT,
-
-    image_url TEXT,
-
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-
-    UNIQUE(article_id, section_order)
-);
-
--- ============================================
--- INDEXES
--- ============================================
-
-CREATE INDEX idx_news_slug
-ON news_articles(slug);
-
-CREATE INDEX idx_news_live
-ON news_articles(is_live);
-
-CREATE INDEX idx_news_published
-ON news_articles(published_at DESC);
-
-CREATE INDEX idx_news_sections_article
-ON news_sections(article_id);
-
--- ============================================
--- ROW LEVEL SECURITY
--- ============================================
-
-ALTER TABLE news_articles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE news_sections ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Allow public read access to news_articles"
-ON news_articles
-FOR SELECT
-USING (true);
-
-CREATE POLICY "Allow public read access to news_sections"
-ON news_sections
-FOR SELECT
-USING (true);
-
--- ============================================
--- RPC FUNCTION
--- ============================================
-
-CREATE OR REPLACE FUNCTION increment_news_views(article_slug TEXT)
-RETURNS VOID AS $$
-BEGIN
-    UPDATE news_articles
-    SET views = views + 1
-    WHERE slug = article_slug;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- ====================================================================
--- Consolidated normalized Blogs, Sections, and FAQs Migration Script
--- Run this complete script in your Supabase SQL Editor.
--- ====================================================================
-
 -- 1. Drop existing tables if they exist
 DROP TABLE IF EXISTS blog_faqs CASCADE;
 DROP TABLE IF EXISTS blog_sections CASCADE;
@@ -1120,3 +1010,155 @@ ALTER TABLE course_specializations ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "public read course specializations" ON course_specializations FOR SELECT USING (true);
 
 -- End of migration script
+
+
+ALTER TABLE colleges
+ADD COLUMN IF NOT EXISTS cover_image TEXT;
+
+-- ============================================
+-- DROP EXISTING TABLES
+-- ============================================
+
+DROP TABLE IF EXISTS news_sections CASCADE;
+DROP TABLE IF EXISTS news_articles CASCADE;
+
+-- ============================================
+-- NEWS ARTICLES
+-- ============================================
+
+CREATE TABLE news_articles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    slug TEXT NOT NULL UNIQUE,
+
+    heading TEXT NOT NULL,
+
+    synopsis TEXT,
+
+    featured_image TEXT NOT NULL,
+
+    editor TEXT DEFAULT 'Promote Education Editorial',
+
+    seo_title TEXT,
+    seo_description TEXT,
+    seo_keywords TEXT[],
+
+    views INTEGER DEFAULT 0,
+    comments_count INTEGER DEFAULT 0,
+    shares_count INTEGER DEFAULT 0,
+
+    is_live BOOLEAN DEFAULT FALSE,
+
+    published_at TIMESTAMPTZ,
+
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ============================================
+-- NEWS CONTENT SECTIONS
+-- ============================================
+
+CREATE TABLE news_sections (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    article_id UUID NOT NULL
+        REFERENCES news_articles(id)
+        ON DELETE CASCADE,
+
+    section_order INTEGER NOT NULL,
+
+    content TEXT,
+
+    image_url TEXT,
+
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+
+    UNIQUE(article_id, section_order)
+);
+
+-- ============================================
+-- INDEXES
+-- ============================================
+
+CREATE INDEX idx_news_slug
+ON news_articles(slug);
+
+CREATE INDEX idx_news_live
+ON news_articles(is_live);
+
+CREATE INDEX idx_news_published
+ON news_articles(published_at DESC);
+
+CREATE INDEX idx_news_sections_article
+ON news_sections(article_id);
+
+-- ============================================
+-- ROW LEVEL SECURITY
+-- ============================================
+
+ALTER TABLE news_articles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE news_sections ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public read access to news_articles"
+ON news_articles
+FOR SELECT
+USING (true);
+
+CREATE POLICY "Allow public read access to news_sections"
+ON news_sections
+FOR SELECT
+USING (true);
+
+-- ============================================
+-- RLS Write Policies for News
+-- ============================================
+
+CREATE POLICY "Allow admin write access to news_articles" ON news_articles 
+    FOR ALL 
+    TO authenticated
+    USING (
+        EXISTS (
+            SELECT 1 FROM public.profiles
+            WHERE public.profiles.id = auth.uid()
+            AND public.profiles.role = 'admin'
+        )
+    )
+    WITH CHECK (
+        EXISTS (
+            SELECT 1 FROM public.profiles
+            WHERE public.profiles.id = auth.uid()
+            AND public.profiles.role = 'admin'
+        )
+    );
+
+CREATE POLICY "Allow admin write access to news_sections" ON news_sections 
+    FOR ALL 
+    TO authenticated
+    USING (
+        EXISTS (
+            SELECT 1 FROM public.profiles
+            WHERE public.profiles.id = auth.uid()
+            AND public.profiles.role = 'admin'
+        )
+    )
+    WITH CHECK (
+        EXISTS (
+            SELECT 1 FROM public.profiles
+            WHERE public.profiles.id = auth.uid()
+            AND public.profiles.role = 'admin'
+        )
+    );
+
+-- ============================================
+-- RPC FUNCTION
+-- ============================================
+
+CREATE OR REPLACE FUNCTION increment_news_views(article_slug TEXT)
+RETURNS VOID AS $$
+BEGIN
+    UPDATE news_articles
+    SET views = views + 1
+    WHERE slug = article_slug;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
