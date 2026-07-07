@@ -43,8 +43,8 @@ export default function NewsPageContent() {
 
     async function fetchEduArticles() {
       const { data, error } = await supabase
-        .from('articles')
-        .select('id, title, excerpt, image, category, created_at')
+        .from('blogs')
+        .select('id, slug, title, summary, image_url, category, created_at')
         .order('created_at', { ascending: false })
         .limit(3)
       
@@ -177,12 +177,12 @@ export default function NewsPageContent() {
                
                return (
                  <div key={article.id} className="p-6 rounded-3xl border border-slate-100 bg-white group hover:border-sky-200 hover:shadow-xl shadow-slate-900/5 transition-all flex flex-col justify-between">
-                    <div>
+                     <div>
                        <div className="w-full aspect-video rounded-2xl bg-slate-50 mb-6 overflow-hidden shadow-sm">
-                          <img src={article.image || 'https://images.unsplash.com/photo-1541339907198-e08759dfc3ef?w=400'} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={article.title} />
+                          <img src={article.image_url || 'https://images.unsplash.com/photo-1541339907198-e08759dfc3ef?w=400'} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={article.title} />
                        </div>
                        <h4 className="font-bold text-slate-900 mb-4 leading-tight group-hover:text-sky-600 transition-colors line-clamp-2">{article.title}</h4>
-                       {article.excerpt && <p className="text-xs text-slate-500 line-clamp-2 mb-4 font-light leading-relaxed">{article.excerpt}</p>}
+                       {article.summary && <p className="text-xs text-slate-500 line-clamp-2 mb-4 font-light leading-relaxed">{article.summary}</p>}
                     </div>
                     <Link href={link} className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-sky-500 group-hover:gap-3 transition-all mt-4 self-start">
                        Read Full Story <ArrowRight size={14} />
