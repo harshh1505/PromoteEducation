@@ -6,6 +6,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { Calendar, ArrowRight, TrendingUp, Bell, MessageSquare, Share2, Eye } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { resolveImageUrl } from '@/lib/utils'
 
 export default function NewsPageContent() {
   const [articles, setArticles] = useState<any[]>([])
@@ -43,15 +44,29 @@ export default function NewsPageContent() {
 
     async function fetchEduArticles() {
       const { data, error } = await supabase
-        .from('articles')
-        .select('*')
+        .from('blogs')
+        .select('id, title, summary, featured_image, category, created_at, published_at')
+        .eq('is_live', true)
+        .order('published_at', { ascending: false, nullsFirst: false })
         .order('created_at', { ascending: false })
         .limit(3)
       
       if (error) {
-        console.error('Error fetching articles from Supabase:', error)
+        console.error('Error fetching articles from Supabase:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        })
       } else if (data) {
-        setEduArticles(data)
+        const mapped = data.map((item: any) => ({
+          id: item.id,
+          title: item.title,
+          excerpt: item.summary,
+          image: resolveImageUrl(item.featured_image),
+          category: item.category
+        }))
+        setEduArticles(mapped)
       }
     }
 
