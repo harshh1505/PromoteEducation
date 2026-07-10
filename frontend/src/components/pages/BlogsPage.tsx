@@ -188,12 +188,12 @@ export default function BlogsPageContent() {
             {selectedCategory === 'All' && featuredBlog && (
               <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-center py-4 mb-20 border-b border-slate-100 pb-16">
                 {/* Left Column: Asymmetric Image Container */}
-                <div className="lg:col-span-7 relative aspect-[16/10] w-full rounded-[32px] overflow-hidden group/featured shadow-xl border border-slate-100">
-                  <Link href={`/blogs/${featuredBlog.slug}`}>
+                <div className="lg:col-span-7 relative aspect-[16/10] w-full rounded-[32px] overflow-hidden group/featured shadow-xl border border-slate-100 bg-slate-50 flex items-center justify-center">
+                  <Link href={`/blogs/${featuredBlog.slug}`} className="w-full h-full flex items-center justify-center">
                     <img
                       src={resolveImageUrl(featuredBlog.featured_image) || 'https://images.unsplash.com/photo-1523050335192-ce67a276b42a?w=800'}
                       alt={featuredBlog.title}
-                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/featured:scale-[1.03]"
+                      className="w-full h-full object-contain transition-transform duration-700 ease-out group-hover/featured:scale-[1.03]"
                     />
                     <div className="absolute top-6 left-6">
                       <span className="px-4 py-2 bg-white/90 backdrop-blur-md text-slate-900 text-[10px] font-black uppercase tracking-[0.2em] rounded-xl shadow-sm border border-slate-100 flex items-center gap-2">
@@ -266,11 +266,11 @@ export default function BlogsPageContent() {
                   className="flex flex-col group bg-white rounded-[32px] p-3 border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 hover:border-slate-200 transition-all duration-300"
                 >
                   {/* Blog Image Container */}
-                  <div className="w-full aspect-[16/10] overflow-hidden rounded-[24px] bg-slate-50 mb-5 relative">
-                    <Link href={`/blogs/${blog.slug}`}>
+                  <div className="w-full aspect-[16/10] overflow-hidden rounded-[24px] bg-slate-50 mb-5 relative flex items-center justify-center">
+                    <Link href={`/blogs/${blog.slug}`} className="w-full h-full flex items-center justify-center">
                       <img
                         src={resolveImageUrl(blog.featured_image) || 'https://images.unsplash.com/photo-1523050335102-c89b1811b128?w=800'}
-                        className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+                        className="w-full h-full object-contain group-hover:scale-[1.03] transition-transform duration-700 ease-out"
                         alt={blog.title}
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;

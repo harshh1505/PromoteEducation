@@ -286,11 +286,11 @@ export default function BlogDetailsPage({ params }: { params: Promise<{ slug: st
 
               {/* Cover Image */}
               {blog.featured_image && (
-                <div className="w-full h-[280px] md:h-[450px] rounded-[32px] overflow-hidden border border-slate-100 mb-12">
+                <div className="w-full h-[280px] md:h-[450px] rounded-[32px] overflow-hidden border border-slate-100 mb-12 bg-slate-50 flex items-center justify-center">
                   <img 
                     src={resolveImageUrl(blog.featured_image || undefined) || ''} 
                     alt={blog.title} 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.src = 'https://images.unsplash.com/photo-1523050335102-c89b1811b128?w=800';

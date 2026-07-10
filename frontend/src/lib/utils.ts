@@ -56,8 +56,8 @@ export function fixMarkdownBold(text: string | null | undefined): string {
   if (!text) return '';
   
   // Resolve spacing issues around double asterisks.
-  // Match bold tags within a line, correcting inside spacing and ensuring outside spacing to letters/numbers.
-  return text.replace(/(\w)?\*\*([^*\r\n]+)\*\*(\w)?/g, (match, before, content, after) => {
+  // Match bold tags within a line, correcting inside spacing and ensuring outside spacing to letters, numbers, and symbols like HTML tags.
+  return text.replace(/([^\s([{\x22\x27])?\*\*([^*\r\n]+)\*\*([^\s)\]}.,;:!?\x22\x27])?/g, (match, before, content, after) => {
     const trimmedContent = content.trim();
     if (!trimmedContent) {
       return before || after ? `${before || ''} ${after || ''}` : ' ';

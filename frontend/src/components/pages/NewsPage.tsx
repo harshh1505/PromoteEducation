@@ -6,7 +6,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { Calendar, ArrowRight, TrendingUp, Bell, MessageSquare, Share2, Eye } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
-import { resolveImageUrl } from '@/lib/utils'
+import { resolveImageUrl, stripMarkdown } from '@/lib/utils'
 
 export default function NewsPageContent() {
   const [articles, setArticles] = useState<any[]>([])
@@ -45,7 +45,7 @@ export default function NewsPageContent() {
     async function fetchEduArticles() {
       const { data, error } = await supabase
         .from('blogs')
-        .select('id, title, summary, featured_image, category, created_at, published_at')
+        .select('id, slug, title, summary, featured_image, category, created_at, published_at')
         .eq('is_live', true)
         .order('published_at', { ascending: false, nullsFirst: false })
         .order('created_at', { ascending: false })
@@ -61,8 +61,9 @@ export default function NewsPageContent() {
       } else if (data) {
         const mapped = data.map((item: any) => ({
           id: item.id,
+          slug: item.slug,
           title: item.title,
-          excerpt: item.summary,
+          excerpt: stripMarkdown(item.summary),
           image: resolveImageUrl(item.featured_image),
           category: item.category
         }))
@@ -187,14 +188,13 @@ export default function NewsPageContent() {
         <div className="grid md:grid-cols-3 gap-8">
            {eduArticles.length > 0 ? (
              eduArticles.map((article) => {
-               const categorySlug = (article.category || '').toLowerCase().trim().replace(/\s+/g, '-').replace(/\./g, '')
-               const link = `/courses/${categorySlug}`
+               const link = `/blogs/${article.slug}`
                
                return (
                  <div key={article.id} className="p-6 rounded-3xl border border-slate-100 bg-white group hover:border-sky-200 hover:shadow-xl shadow-slate-900/5 transition-all flex flex-col justify-between">
                     <div>
-                       <div className="w-full aspect-video rounded-2xl bg-slate-50 mb-6 overflow-hidden shadow-sm">
-                          <img src={article.image || 'https://images.unsplash.com/photo-1541339907198-e08759dfc3ef?w=400'} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={article.title} />
+                       <div className="w-full aspect-video rounded-2xl bg-slate-50 mb-6 overflow-hidden shadow-sm flex items-center justify-center">
+                          <img src={article.image || 'https://images.unsplash.com/photo-1541339907198-e08759dfc3ef?w=400'} className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-700" alt={article.title} />
                        </div>
                        <h4 className="font-bold text-slate-900 mb-4 leading-tight group-hover:text-sky-600 transition-colors line-clamp-2">{article.title}</h4>
                        {article.excerpt && <p className="text-xs text-slate-500 line-clamp-2 mb-4 font-light leading-relaxed">{article.excerpt}</p>}

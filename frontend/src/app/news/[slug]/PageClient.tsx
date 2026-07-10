@@ -261,11 +261,11 @@ export default function NewsArticleDetailsPage({ params }: { params: Promise<{ s
 
               {/* Featured Image */}
               {article.featured_image && (
-                <div className="w-full aspect-video md:h-[400px] rounded-3xl overflow-hidden shadow-sm border border-slate-100 mb-10">
+                <div className="w-full aspect-video md:h-[400px] rounded-3xl overflow-hidden shadow-sm border border-slate-100 mb-10 bg-slate-50 flex items-center justify-center">
                   <img 
                     src={resolveImageUrl(article.featured_image) || ''} 
                     alt={article.heading} 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.src = 'https://images.unsplash.com/photo-1523050335102-c89b1811b128?w=800';
