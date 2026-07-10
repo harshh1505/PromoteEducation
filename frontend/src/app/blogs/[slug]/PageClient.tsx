@@ -5,6 +5,7 @@ import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
+import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { 
   ArrowLeft, 
@@ -32,7 +33,8 @@ export default function BlogDetailsPage({ params }: { params: Promise<{ slug: st
   const [showLeadModal, setShowLeadModal] = useState(false)
   const [scrollProgress, setScrollProgress] = useState(0)
 
-  const { slug } = use(params)
+  const paramsObj = useParams()
+  const slug = paramsObj?.slug as string
 
   useEffect(() => {
     const handleScroll = () => {
@@ -229,7 +231,7 @@ export default function BlogDetailsPage({ params }: { params: Promise<{ slug: st
                 </span>
                 <span className="text-slate-200 text-xs">•</span>
                 <span className="text-[10px] text-slate-450 font-bold uppercase tracking-wider flex items-center gap-1">
-                  {new Date(blog.published_at).toLocaleDateString('en-US', {
+                  {new Date(blog.published_at || blog.created_at).toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
                     year: 'numeric'
@@ -426,7 +428,7 @@ export default function BlogDetailsPage({ params }: { params: Promise<{ slug: st
                           </h4>
                           <div className="flex items-center gap-2 text-[10px] text-slate-400">
                             <span>
-                              {new Date(tBlog.published_at).toLocaleDateString('en-US', {
+                              {new Date(tBlog.published_at || tBlog.created_at).toLocaleDateString('en-US', {
                                 month: 'short',
                                 day: 'numeric'
                               })}

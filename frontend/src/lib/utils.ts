@@ -65,3 +65,14 @@ export function fixMarkdownBold(text: string | null | undefined): string {
   });
 }
 
+export function stripMarkdown(text: string | null | undefined): string {
+  if (!text) return '';
+  // Remove markdown headings, bold/italic, links, blockquotes, code blocks, lists, etc.
+  return text
+    .replace(/[#_*~`]/g, '')           // Basic symbols
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Links
+    .replace(/^\s*>\s+/gm, '')         // Blockquotes
+    .replace(/^\s*[-+*]\s+/gm, '')     // Unordered lists
+    .replace(/^\s*\d+\.\s+/gm, '')     // Ordered lists
+    .trim();
+}

@@ -6,7 +6,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { Calendar, ArrowRight, BookOpen, Clock, User, Eye, Sparkles } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
-import { resolveImageUrl } from '@/lib/utils'
+import { resolveImageUrl, stripMarkdown } from '@/lib/utils'
 import LeadModal from '@/components/ui/LeadModal'
 
 export default function BlogsPageContent() {
@@ -222,7 +222,7 @@ export default function BlogsPageContent() {
                   </Link>
 
                   <p className="text-slate-500 text-xs leading-relaxed mb-6 font-medium line-clamp-3">
-                    {featuredBlog.summary}
+                    {stripMarkdown(featuredBlog.summary)}
                   </p>
 
                   <div className="flex items-center justify-between pt-6 border-t border-slate-100">
@@ -233,7 +233,7 @@ export default function BlogsPageContent() {
                       <div>
                         <div className="text-xs font-bold text-slate-800">{featuredBlog.author}</div>
                         <div className="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">
-                          {new Date(featuredBlog.published_at).toLocaleDateString('en-US', {
+                          {new Date(featuredBlog.published_at || featuredBlog.created_at).toLocaleDateString('en-US', {
                             month: 'short', day: 'numeric', year: 'numeric'
                           })}
                         </div>
@@ -289,7 +289,7 @@ export default function BlogsPageContent() {
                   <div className="flex-1 flex flex-col justify-between px-3 pb-3">
                     <div>
                       <div className="flex items-center gap-3 text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-4">
-                        <span>{new Date(blog.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                        <span>{new Date(blog.published_at || blog.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                         <span className="text-slate-200">•</span>
                         <span className="flex items-center gap-1"><Clock size={12} /> {blog.read_time}</span>
                         <span className="text-slate-200">•</span>
@@ -303,7 +303,7 @@ export default function BlogsPageContent() {
                       </Link>
 
                       <p className="text-slate-500 text-xs leading-relaxed font-medium line-clamp-3 mb-6">
-                        {blog.summary}
+                        {stripMarkdown(blog.summary)}
                       </p>
                     </div>
 
