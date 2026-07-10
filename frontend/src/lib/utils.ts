@@ -55,9 +55,12 @@ export function resolveImageUrl(url: string | null | undefined): string | null {
 export function fixMarkdownBold(text: string | null | undefined): string {
   if (!text) return '';
   
+  // Collapse any sequence of 3 or more asterisks down to standard double asterisks '**'
+  let cleaned = text.replace(/\*{3,}/g, '**');
+  
   // Resolve spacing issues around double asterisks.
   // Match bold tags within a line, correcting inside spacing and ensuring outside spacing to letters, numbers, and symbols like HTML tags.
-  return text.replace(/([^\s([{\x22\x27])?\*\*([^*\r\n]+)\*\*([^\s)\]}.,;:!?\x22\x27])?/g, (match, before, content, after) => {
+  return cleaned.replace(/([^\s([{\x22\x27])?\*\*([^*\r\n]+)\*\*([^\s)\]}.,;:!?\x22\x27])?/g, (match, before, content, after) => {
     const trimmedContent = content.trim();
     if (!trimmedContent) {
       return before || after ? `${before || ''} ${after || ''}` : ' ';
