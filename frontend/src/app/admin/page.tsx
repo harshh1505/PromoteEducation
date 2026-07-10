@@ -9,7 +9,7 @@ import {
   FileText, Newspaper, BookOpen, Plus, Search, Edit2, Trash2,
   LogOut, LogIn, Lock, AlertCircle, CheckCircle, RefreshCw,
   Eye, Calendar, User, LayoutDashboard, ExternalLink, ChevronRight,
-  Bold, Italic, Underline, List, Link2
+  Bold, Italic, Underline, List, Link2, Table as TableIcon
 } from 'lucide-react'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
@@ -18,6 +18,7 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import UnderlineExtension from '@tiptap/extension-underline'
 import LinkExtension from '@tiptap/extension-link'
+import { Table, TableRow, TableCell, TableHeader } from '@tiptap/extension-table'
 
 type TabKey = 'blogs' | 'news' | 'articles'
 
@@ -51,13 +52,59 @@ function markdownToHtml(markdown: string): string {
     // Links
     .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: #0284c7; text-decoration: underline;">$1</a>')
 
-  // Lists
+  // Lists and Tables
   const lines = html.split('\n')
   let inList = false
+  let inTable = false
+  let tableHeaderParsed = false
   let result = []
 
   for (let line of lines) {
     const trimmed = line.trim()
+    
+    // Check if line is part of a table
+    if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+      if (inList) {
+        result.push('</ul>')
+        inList = false
+      }
+      
+      if (!inTable) {
+        result.push('<table style="width:100%; border-collapse:collapse; margin:1rem 0; border:1px solid #e2e8f0;">')
+        inTable = true
+        tableHeaderParsed = false
+      }
+      
+      const cells = trimmed.split('|').slice(1, -1).map(c => c.trim())
+      const isSeparator = cells.every(cell => /^:?-+:?$/.test(cell))
+      
+      if (isSeparator) {
+        tableHeaderParsed = true
+        continue
+      }
+      
+      if (!tableHeaderParsed) {
+        result.push('<thead style="background-color:#f8fafc; border-bottom:2px solid #e2e8f0;"><tr>')
+        cells.forEach(cell => {
+          result.push(`<th style="padding:0.75rem; text-align:left; font-weight:bold; border:1px solid #e2e8f0;">${cell}</th>`)
+        })
+        result.push('</tr></thead><tbody>')
+        tableHeaderParsed = true
+      } else {
+        result.push('<tr>')
+        cells.forEach(cell => {
+          result.push(`<td style="padding:0.75rem; border:1px solid #e2e8f0;">${cell}</td>`)
+        })
+        result.push('</tr>')
+      }
+      continue
+    } else {
+      if (inTable) {
+        result.push('</tbody></table>')
+        inTable = false
+      }
+    }
+
     if (trimmed.startsWith('- ')) {
       if (!inList) {
         result.push('<ul>')
@@ -76,6 +123,10 @@ function markdownToHtml(markdown: string): string {
       }
     }
   }
+  
+  if (inTable) {
+    result.push('</tbody></table>')
+  }
   if (inList) {
     result.push('</ul>')
   }
@@ -86,7 +137,51 @@ function markdownToHtml(markdown: string): string {
 function htmlToMarkdown(html: string): string {
   if (!html || html === '<p><br></p>' || html === '<br>' || html === '<p></p>') return ''
   
-  let markdown = html
+  // Extract and convert tables first
+  let tempHtml = html
+  const tableRegex = /<table[^>]*>([\s\S]*?)<\/table>/gi
+  tempHtml = tempHtml.replace(tableRegex, (tableHtml) => {
+    const rows: string[] = []
+    const trRegex = /<tr[^>]*>([\s\S]*?)<\/tr>/gi
+    let match
+    let isFirstRow = true
+    let columnsCount = 0
+    
+    while ((match = trRegex.exec(tableHtml)) !== null) {
+      const rowContent = match[1]
+      const cells: string[] = []
+      const cellRegex = /<(td|th)[^>]*>([\s\S]*?)<\/\1>/gi
+      let cellMatch
+      while ((cellMatch = cellRegex.exec(rowContent)) !== null) {
+        let cellText = cellMatch[2]
+          .replace(/<span[^>]*style="[^"]*text-decoration:\s*underline;?[^"]*"[^>]*>(.*?)<\/span>/gi, '<u>$1</u>')
+          .replace(/<(strong|b)[^>]*>(.*?)<\/\1>/gi, '**$2**')
+          .replace(/<(em|i)[^>]*>(.*?)<\/\1>/gi, '*$2*')
+          .replace(/<u[^>]*>(.*?)<\/u>/gi, '<u>$1</u>')
+          .replace(/<a[^>]*href="([^"]*)"[^>]*>(.*?)<\/a>/gi, '[$2]($1)')
+          .replace(/<[^>]+>/g, '') // Strip remaining tags
+          .replace(/&nbsp;/g, ' ')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&amp;/g, '&')
+          .trim()
+        cells.push(cellText)
+      }
+      
+      if (cells.length > 0) {
+        rows.push(`| ${cells.join(' | ')} |`)
+        if (isFirstRow) {
+          columnsCount = cells.length
+          const separator = Array(columnsCount).fill('---').join(' | ')
+          rows.push(`| ${separator} |`)
+          isFirstRow = false
+        }
+      }
+    }
+    return '\n\n' + rows.join('\n') + '\n\n'
+  })
+
+  let markdown = tempHtml
     // Handle inline tags
     .replace(/<span[^>]*style="[^"]*text-decoration:\s*underline;?[^"]*"[^>]*>(.*?)<\/span>/gi, '<u>$1</u>')
     .replace(/<(strong|b)[^>]*>(.*?)<\/\1>/gi, '**$2**')
@@ -134,7 +229,13 @@ function RichTextarea({
       HTMLAttributes: {
         style: 'color: #0284c7; text-decoration: underline; cursor: pointer;'
       }
-    })
+    }),
+    Table.configure({
+      resizable: true,
+    }),
+    TableRow,
+    TableHeader,
+    TableCell,
   ], [])
 
   const editor = useEditor({
@@ -200,6 +301,43 @@ function RichTextarea({
         .ProseMirror a {
           color: #0284c7 !important;
           text-decoration: underline !important;
+        }
+        .ProseMirror table {
+          border-collapse: collapse;
+          table-layout: fixed;
+          width: 100%;
+          margin: 1rem 0;
+          overflow: hidden;
+        }
+        .ProseMirror td,
+        .ProseMirror th {
+          min-width: 1em;
+          border: 1px solid #cbd5e1;
+          padding: 8px 12px;
+          vertical-align: top;
+          box-sizing: border-box;
+          position: relative;
+        }
+        .ProseMirror th {
+          font-weight: bold;
+          text-align: left;
+          background-color: #f8fafc;
+        }
+        .ProseMirror .selectedCell:after {
+          z-index: 2;
+          position: absolute;
+          content: "";
+          left: 0; right: 0; top: 0; bottom: 0;
+          background: rgba(200, 200, 255, 0.4);
+          pointer-events: none;
+        }
+        .ProseMirror .column-resize-handle {
+          position: absolute;
+          right: -2px; top: 0; bottom: -2px;
+          width: 4px;
+          background-color: #a1a1aa;
+          cursor: col-resize;
+          z-index: 10;
         }
         /* Custom placeholder when empty */
         .ProseMirror p.is-editor-empty:first-child::before {
@@ -292,6 +430,63 @@ function RichTextarea({
             >
               <Link2 size={13} />
             </button>
+            <button
+              type="button"
+              onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}
+              className={`p-1.5 rounded-lg transition-all ${
+                editor.isActive('table') 
+                  ? 'bg-slate-800 text-white border border-slate-700' 
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-850'
+              }`}
+              title="Insert Table"
+            >
+              <TableIcon size={13} />
+            </button>
+            {editor.isActive('table') && (
+              <>
+                <div className="w-[1px] h-4 bg-slate-800 mx-1" />
+                <button
+                  type="button"
+                  onClick={() => editor.chain().focus().addRowAfter().run()}
+                  className="px-2 py-1 rounded-lg transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-850 text-[10px] font-bold border border-slate-800"
+                  title="Add Row Below"
+                >
+                  Row+
+                </button>
+                <button
+                  type="button"
+                  onClick={() => editor.chain().focus().addColumnAfter().run()}
+                  className="px-2 py-1 rounded-lg transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-850 text-[10px] font-bold border border-slate-800"
+                  title="Add Column After"
+                >
+                  Col+
+                </button>
+                <button
+                  type="button"
+                  onClick={() => editor.chain().focus().deleteRow().run()}
+                  className="px-2 py-1 rounded-lg transition-all text-red-400 hover:text-red-300 hover:bg-slate-850 text-[10px] font-bold border border-slate-800"
+                  title="Delete Row"
+                >
+                  Row-
+                </button>
+                <button
+                  type="button"
+                  onClick={() => editor.chain().focus().deleteColumn().run()}
+                  className="px-2 py-1 rounded-lg transition-all text-red-400 hover:text-red-300 hover:bg-slate-850 text-[10px] font-bold border border-slate-800"
+                  title="Delete Column"
+                >
+                  Col-
+                </button>
+                <button
+                  type="button"
+                  onClick={() => editor.chain().focus().deleteTable().run()}
+                  className="px-2 py-1 rounded-lg transition-all text-red-400 hover:text-red-300 hover:bg-slate-850 text-[10px] font-bold border border-slate-800"
+                  title="Delete Table"
+                >
+                  Table-
+                </button>
+              </>
+            )}
           </div>
         )}
 
