@@ -59,6 +59,9 @@ export function fixMarkdownBold(text: string | null | undefined): string {
   // Match bold tags within a line, correcting inside spacing and ensuring outside spacing to letters/numbers.
   return text.replace(/(\w)?\*\*([^*\r\n]+)\*\*(\w)?/g, (match, before, content, after) => {
     const trimmedContent = content.trim();
+    if (!trimmedContent) {
+      return before || after ? `${before || ''} ${after || ''}` : ' ';
+    }
     const prefix = before ? `${before} ` : '';
     const suffix = after ? ` ${after}` : '';
     return `${prefix}**${trimmedContent}**${suffix}`;
