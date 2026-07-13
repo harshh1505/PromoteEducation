@@ -93,10 +93,9 @@ export default function LeadModal({ isOpen, onClose, collegeName, collegeLogo, s
         full_name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        city: formData.city,
         stream: formData.course || stream,
         college_name: formData.college || collegeName,
-        source: `lead_form_message: ${formData.message} | State: ${formData.state}`,
+        source: `lead_form_message: ${formData.message} | State: ${formData.state} | City: ${formData.city}`,
         status: 'new'
       }])
 

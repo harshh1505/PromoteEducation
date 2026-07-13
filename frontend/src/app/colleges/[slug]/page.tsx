@@ -35,6 +35,18 @@ export async function generateStaticParams() {
   return pages
 }
 
+function formatBgText(text: string) {
+  if (!text) return '—'
+  let clean = text
+    .replace(/State Quota:/i, '')
+    .replace(/Management Quota:/i, '')
+    .trim()
+  if (clean.startsWith(',')) {
+    clean = clean.substring(1).trim()
+  }
+  return clean.replace(/\([^)]*(sem|semester|fee)[^)]*\)/gi, '').trim()
+}
+
 function parsePageType(slug: string) {
   const s = slug.toLowerCase()
   if (s.includes('-in-')) return { type: 'location' }
@@ -59,9 +71,13 @@ type College = {
   affiliation: string; entrance_exam: string; rating: number; review_count: number
   video_url?: string; facilities?: string[]; official_website?: string
   contact_email?: string; meta_title?: string; meta_description?: string
+  bank_guarantee?: string | null;
+  cover_image?: string | null;
+  image_url?: string | null;
   content?: {
     overview: string; why_choose: string; placement_insights: string
     campus_life: string; admission: string
+    fee_structure?: { state_quota: string; management_quota: string; hostel_fees: string };
     faqs?: { question: string; answer: string }[]
     placements?: Placement | null; rankings?: Ranking[]; reviews?: Review[]
     courses?: Course[]; cutoffs?: Cutoff[]; gallery?: GalleryItem[]
@@ -100,7 +116,7 @@ async function getCollegeData(slug: string) {
   if (error || !college) return null
 
   const [courses, placements, cutoffs, rankings, faqs, reviews, gallery, scholarships, important_dates] = await Promise.all([
-    supabase.from('courses').select('*').eq('college_id', college.id).order('is_popular', { ascending: false }).order('fees', { ascending: false }),
+    supabase.from('courses').select('*, course_catalog(name)').eq('college_id', college.id).order('is_popular', { ascending: false }).order('fees', { ascending: false }),
     supabase.from('placements').select('*').eq('college_id', college.id).order('year', { ascending: false }).limit(1),
     supabase.from('cutoffs').select('*').eq('college_id', college.id).order('year', { ascending: false }).order('closing_rank', { ascending: true }),
     supabase.from('rankings').select('*').eq('college_id', college.id).order('year', { ascending: false }),
@@ -119,7 +135,10 @@ async function getCollegeData(slug: string) {
       placements: (placements.data?.[0] || null) as Placement | null,
       rankings: (rankings.data || []) as Ranking[],
       reviews: (reviews.data || []) as Review[],
-      courses: (courses.data || []) as Course[],
+      courses: ((courses.data || []) as any[]).map(c => ({
+        ...c,
+        name: c.course_catalog?.name || 'Course'
+      })) as Course[],
       cutoffs: (cutoffs.data || []) as Cutoff[],
       gallery: (gallery.data || []) as GalleryItem[],
       scholarships: (scholarships.data || []) as Scholarship[],
@@ -161,7 +180,8 @@ function formatPackage(lpa: number): string {
   return `₹${lpa} LPA`
 }
 
-function formatFees(inr: number): string {
+function formatFees(inr: number | null | undefined): string {
+  if (inr === null || inr === undefined || isNaN(inr)) return '—'
   if (inr >= 100000) return `₹${(inr / 100000).toFixed(2)}L`
   return `₹${inr.toLocaleString('en-IN')}`
 }
@@ -342,6 +362,7 @@ export default async function CollegePage({ params }: any) {
   // Build navigation sections dynamically — only show tabs that have content
   const sections = [
     { id: 'overview', label: 'Overview' },
+    ...(college.content?.fee_structure ? [{ id: 'fee-structure', label: 'Fee Structure' }] : []),
     ...(college.content?.why_choose ? [{ id: 'why-choose', label: `Why Choose` }] : []),
     { id: 'admission', label: 'Admission Process' },
     ...(college.content?.selection_steps && college.content.selection_steps.length > 0 ? [{ id: 'selection', label: 'Selection Steps' }] : []),
@@ -421,18 +442,36 @@ export default async function CollegePage({ params }: any) {
       )}
 
       {/* ── EDITORIAL HEADER ── */}
-      <header className="pt-32 pb-16 bg-slate-50 border-b border-slate-100">
-        <div className="max-w-5xl mx-auto px-6">
+      <header 
+        className={`pt-32 pb-16 border-b border-slate-100 relative overflow-hidden ${
+          college.cover_image ? "text-white bg-slate-955 bg-slate-950" : "bg-slate-50"
+        }`}
+      >
+        {college.cover_image && (
+          <>
+            <img 
+              src={college.cover_image} 
+              alt={college.name} 
+              className="absolute inset-0 w-full h-full object-cover opacity-25"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-955 via-slate-950/85 to-transparent" />
+          </>
+        )}
+        <div className="max-w-5xl mx-auto px-6 relative z-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
             <div className="flex-1">
 
               {/* Badge row */}
               <div className="flex items-center gap-3 mb-6">
-                <span className="px-3 py-1 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-sm">
+                <span className="px-3 py-1 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-sm border border-slate-800">
                   {badgeLabel}
                 </span>
                 {college.naac_grade && college.nirf_rank && (
-                  <span className="px-3 py-1 bg-sky-50 text-sky-600 border border-sky-100 text-[10px] font-black uppercase tracking-widest rounded-sm">
+                  <span className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-sm border ${
+                    college.cover_image 
+                      ? "bg-slate-800/80 text-sky-400 border-slate-700" 
+                      : "bg-sky-50 text-sky-600 border-sky-100"
+                  }`}>
                     NAAC {college.naac_grade}
                   </span>
                 )}
@@ -442,19 +481,23 @@ export default async function CollegePage({ params }: any) {
               </div>
 
               {/* College name — large editorial */}
-              <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tight leading-[0.95] mb-8">
+              <h1 className={`text-5xl md:text-7xl font-black tracking-tight leading-[0.95] mb-8 ${
+                college.cover_image ? "text-white" : "text-slate-900"
+              }`}>
                 {college.name.split(' ').length > 2 ? (
                   <>
                     {college.name.split(' ').slice(0, -1).join(' ')}{' '}
-                    <span className="text-sky-500 italic">{college.name.split(' ').slice(-1)}</span>
+                    <span className="text-sky-400 italic">{college.name.split(' ').slice(-1)}</span>
                   </>
                 ) : (
-                  <><span className="text-sky-500 italic">{college.name}</span></>
+                  <><span className="text-sky-400 italic">{college.name}</span></>
                 )}
               </h1>
 
               {/* Subtitle */}
-              <p className="text-xl text-slate-500 font-medium leading-relaxed max-w-2xl">
+              <p className={`text-xl font-medium leading-relaxed max-w-2xl ${
+                college.cover_image ? "text-slate-300" : "text-slate-500"
+              }`}>
                 {college.description
                   ? college.description.split('.').slice(0, 2).join('.') + '.'
                   : `The comprehensive 2026 guide to admissions, courses, and academic excellence at ${college.name}.`
@@ -470,13 +513,19 @@ export default async function CollegePage({ params }: any) {
                     NIRF #{college.nirf_rank}
                   </p>
                 )}
-                <p className="text-sm font-bold text-slate-900">
+                <p className={`text-sm font-bold ${
+                  college.cover_image ? "text-slate-200" : "text-slate-900"
+                }`}>
                   Estb. {college.established || '—'} · {college.state}
                 </p>
               </div>
               <a
                 href="#admission"
-                className="px-8 py-4 bg-slate-900 text-white font-bold text-sm rounded-full hover:bg-sky-500 transition-all shadow-xl shadow-slate-900/10 active:scale-95"
+                className={`px-8 py-4 font-bold text-sm rounded-full transition-all shadow-xl active:scale-95 ${
+                  college.cover_image 
+                    ? "bg-sky-500 text-white hover:bg-sky-600 shadow-sky-500/20" 
+                    : "bg-slate-900 text-white hover:bg-sky-500 shadow-slate-900/10"
+                }`}
               >
                 Apply for 2026
               </a>
@@ -540,6 +589,9 @@ export default async function CollegePage({ params }: any) {
                       ...(college.campus_size ? [{ label: 'Campus', value: college.campus_size, icon: MapPin }] : []),
                       ...(college.total_students ? [{ label: 'Students', value: college.total_students.toLocaleString('en-IN'), icon: Users }] : []),
                       ...(college.entrance_exam ? [{ label: 'Entrance', value: college.entrance_exam, icon: BookOpen }] : []),
+                      ...(college.bank_guarantee || (college as any).content?.bank_guarantee 
+                        ? [{ label: 'Bank Guarantee', value: formatBgText(college.bank_guarantee || (college as any).content?.bank_guarantee), icon: ShieldCheck }] 
+                        : []),
                     ].map((item, i) => (
                       <div key={i} className="flex items-center gap-4">
                         <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100 flex-shrink-0">
@@ -639,6 +691,98 @@ export default async function CollegePage({ params }: any) {
               </div>
             </section>
 
+            {/* FEE STRUCTURE */}
+            {college.content?.fee_structure && (
+              <ScrollReveal>
+                <section id="fee-structure" className="scroll-mt-32 pt-16 border-t border-slate-100">
+                  <div className="flex flex-wrap items-center gap-3 mb-8">
+                    <h2 className="text-3xl font-black text-slate-900 tracking-tight mb-0">Fee Structure & Security Matrix</h2>
+                    <span className="px-3 py-1 bg-sky-50 text-sky-700 text-[10px] font-black uppercase tracking-widest rounded-full border border-sky-100">
+                      MBBS Course
+                    </span>
+                  </div>
+                  <div className="not-prose mt-8 space-y-6">
+                    <div className="bg-gradient-to-r from-slate-900 to-indigo-950 text-white p-6 rounded-2xl shadow-xl relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-650/20 rounded-full blur-3xl" />
+                      <h3 className="text-xl font-black mb-2 tracking-tight">MBBS Course Fee & Security Matrix</h3>
+                      <p className="text-xs text-indigo-200/80 leading-relaxed max-w-xl">
+                        Official approved fee structure under State & Management quotas. All fees are subject to government counselling regulations.
+                      </p>
+                    </div>
+
+                    <div className="overflow-hidden border border-slate-100 rounded-2xl bg-white shadow-sm">
+                      <table className="w-full border-collapse text-left">
+                        <thead>
+                          <tr className="bg-slate-50 border-b border-slate-100">
+                            <th className="px-6 py-4 text-xs font-black text-slate-400 uppercase tracking-widest">Fees Category</th>
+                            <th className="px-6 py-4 text-xs font-black text-emerald-600 uppercase tracking-widest bg-emerald-50/30">State Quota</th>
+                            <th className="px-6 py-4 text-xs font-black text-indigo-600 uppercase tracking-widest bg-indigo-50/30">Management Quota</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 text-sm">
+                          <tr>
+                            <td className="px-6 py-4 font-bold text-slate-900">Semester Tuition Fee</td>
+                            <td className="px-6 py-4 text-slate-750 bg-emerald-50/10 font-medium">
+                              {college.content.fee_structure.state_quota.split('(')[0].trim() || '—'}
+                            </td>
+                            <td className="px-6 py-4 text-slate-750 bg-indigo-50/10 font-medium">
+                              {college.content.fee_structure.management_quota.split('(')[0].trim() || '—'}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="px-6 py-4 font-bold text-slate-900">Total Course Fee</td>
+                            <td className="px-6 py-4 text-slate-750 bg-emerald-50/10 font-medium">
+                              {college.content.fee_structure.state_quota.includes('(') 
+                                ? college.content.fee_structure.state_quota.split('(')[1].replace(')', '').trim() 
+                                : college.content.fee_structure.state_quota}
+                            </td>
+                            <td className="px-6 py-4 text-slate-750 bg-indigo-50/10 font-medium">
+                              {college.content.fee_structure.management_quota.includes('(') 
+                                ? college.content.fee_structure.management_quota.split('(')[1].replace(')', '').trim() 
+                                : college.content.fee_structure.management_quota}
+                            </td>
+                          </tr>
+                            <tr>
+                              <td className="px-6 py-4 font-bold text-slate-900">Bank Guarantee (BG)</td>
+                              <td className="px-6 py-4 text-slate-750 bg-emerald-50/10 font-medium">
+                                {college.bank_guarantee ? (
+                                  college.bank_guarantee.includes('|')
+                                    ? formatBgText(college.bank_guarantee.split('|')[0])
+                                    : formatBgText(college.bank_guarantee)
+                                ) : 'None required'}
+                              </td>
+                              <td className="px-6 py-4 text-slate-750 bg-indigo-50/10 font-medium">
+                                {college.bank_guarantee ? (
+                                  college.bank_guarantee.includes('|')
+                                    ? formatBgText(college.bank_guarantee.split('|')[1])
+                                    : 'None required'
+                                ) : 'None required'}
+                              </td>
+                            </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Hostel Fee Highlight Card */}
+                    <div className="p-5 rounded-2xl border border-sky-100 bg-sky-50/30 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-sky-500 text-white flex items-center justify-center">
+                          <Building2 size={20} />
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-black text-sky-600 uppercase tracking-widest leading-none mb-1">Boarding & Mess Charges</p>
+                          <h4 className="text-base font-black text-slate-900 leading-tight">Hostel Accommodation Fee</h4>
+                        </div>
+                      </div>
+                      <p className="text-sm font-bold text-slate-800 bg-white border border-sky-100/50 px-4 py-2 rounded-xl shadow-sm">
+                        {college.content.fee_structure.hostel_fees || '—'}
+                      </p>
+                    </div>
+                  </div>
+                </section>
+              </ScrollReveal>
+            )}
+
             {/* WHY CHOOSE */}
             {college.content?.why_choose && (
               <ScrollReveal>
@@ -656,7 +800,11 @@ export default async function CollegePage({ params }: any) {
                 <h2 className="text-3xl font-black mb-8 text-slate-900 tracking-tight">Admission Protocol 2026</h2>
                 <div className="prose prose-slate prose-lg max-w-none text-slate-600 leading-relaxed space-y-8">
                   <p>
-                    {college.content?.admission || `Admission to ${college.name} is highly competitive, governed by merit and national-level entrance examinations. The selection process is rigorous and merit-based.`}
+                    {college.content?.admission ? (
+                      college.content.admission.includes('###') 
+                        ? college.content.admission.split('###')[0].trim() 
+                        : college.content.admission
+                    ) : `Admission to ${college.name} is highly competitive, governed by merit and national-level entrance examinations. The selection process is rigorous and merit-based.`}
                   </p>
 
                   {college.entrance_exam && (
@@ -751,6 +899,51 @@ export default async function CollegePage({ params }: any) {
                       </div>
                     )}
                   </div>
+
+                  {/* Quota & Hostel Fee Breakdown Panel */}
+                  {college.content?.fee_structure && (
+                    <div className="mt-8 p-6 bg-slate-50 rounded-2xl border border-slate-100 relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50/50 rounded-full blur-2xl -z-10" />
+                      <h4 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-6 flex items-center gap-2">
+                        <span className="w-1.5 h-3 bg-sky-500 rounded-full"></span>
+                        Quota & Hostel Fee Breakdown
+                      </h4>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {/* State Quota */}
+                        <div className="bg-white p-5 rounded-xl border border-slate-100/80 shadow-sm hover:shadow-md transition-shadow group">
+                          <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <CheckCircle2 size={20} />
+                          </div>
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">State Quota Fee</p>
+                          <p className="text-xs font-bold text-slate-850 leading-relaxed">
+                            {college.content.fee_structure.state_quota || '—'}
+                          </p>
+                        </div>
+                        
+                        {/* Management Quota */}
+                        <div className="bg-white p-5 rounded-xl border border-slate-100/80 shadow-sm hover:shadow-md transition-shadow group">
+                          <div className="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <Building2 size={20} />
+                          </div>
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Management Quota Fee</p>
+                          <p className="text-xs font-bold text-slate-850 leading-relaxed">
+                            {college.content.fee_structure.management_quota || '—'}
+                          </p>
+                        </div>
+                        
+                        {/* Hostel Fees */}
+                        <div className="bg-white p-5 rounded-xl border border-slate-100/80 shadow-sm hover:shadow-md transition-shadow group">
+                          <div className="w-10 h-10 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <Globe size={20} />
+                          </div>
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Hostel & Mess Charges</p>
+                          <p className="text-xs font-bold text-slate-850 leading-relaxed">
+                            {college.content.fee_structure.hostel_fees || '—'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </section>
               </ScrollReveal>
             )}

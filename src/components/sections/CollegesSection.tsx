@@ -10,11 +10,10 @@ import { cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
 import type { College, Stream } from '@/types'
 import { useRouter } from 'next/navigation'
-import { featuredColleges } from '@/lib/data/featuredColleges'
-
 export default function CollegesSection() {
   const router = useRouter()
-  const [activeStream, setActiveStream] = useState<string>('All')
+  const [collegesList, setCollegesList] = useState<College[]>([])
+  const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(0)
   const [itemsPerPage, setItemsPerPage] = useState(4)
   
@@ -34,27 +33,51 @@ export default function CollegesSection() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const filters = [
-    { label: 'All', value: 'All' },
-    { label: 'Engineering', value: 'Engineering' },
-    { label: 'Medical', value: 'Medical' },
-    { label: 'Management', value: 'Management' },
-  ]
+  useEffect(() => {
+    async function loadColleges() {
+      try {
+        const { data, error } = await supabase
+          .from('colleges')
+          .select('*')
+          .eq('stream', 'Medical')
+          .eq('type', 'private')
+          .order('name', { ascending: true })
 
-  const filteredColleges = featuredColleges.filter(c => 
-    activeStream === 'All' || c.stream === activeStream
-  )
+        if (error) throw error
 
-  const totalPages = Math.ceil(filteredColleges.length / itemsPerPage)
-  const currentColleges = filteredColleges.slice(page * itemsPerPage, (page + 1) * itemsPerPage)
+        const updated = (data || []).filter(c => c.content && (c.content as any).fee_structure)
+        
+        const mapped: College[] = updated.map(c => ({
+          id: c.slug || c.id,
+          name: c.name,
+          location: c.location,
+          state: c.state,
+          stream: c.stream as Stream,
+          type: c.type || 'private',
+          avgCTC: c.avg_ctc || 'N/A',
+          totalFee: c.total_fee || '—',
+          verified: c.verified || false,
+          image: c.image_url || c.cover_image || 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2053&auto=format&fit=crop',
+          logo: c.logo || `https://ui-avatars.com/api/?name=${encodeURIComponent(c.name)}&background=0D9488&color=fff`,
+          numCourses: c.num_courses || 2,
+          establishmentYear: c.established || 2024,
+          rating: c.rating || 4.2
+        }))
+        setCollegesList(mapped)
+      } catch (err) {
+        console.error('Error fetching colleges:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadColleges()
+  }, [])
+
+  const totalPages = Math.ceil(collegesList.length / itemsPerPage)
+  const currentColleges = collegesList.slice(page * itemsPerPage, (page + 1) * itemsPerPage)
 
   const nextPage = () => setPage((prev) => (prev + 1) % totalPages)
   const prevPage = () => setPage((prev) => (prev - 1 + totalPages) % totalPages)
-
-  // Reset page when filter changes
-  useEffect(() => {
-    setPage(0)
-  }, [activeStream])
 
   // Auto-slide logic
   useEffect(() => {
@@ -65,16 +88,14 @@ export default function CollegesSection() {
     }, 5000) // Slide every 5 seconds
 
     return () => clearInterval(interval)
-  }, [totalPages, activeStream])
+  }, [totalPages])
 
   const { isAuthorized } = useLeadCapture()
 
   const handleOpenLead = async (college: College) => {
     if (isAuthorized) {
-      // If authorized (via localStorage or session), redirect directly
       router.push(`/colleges/${college.id}`)
     } else {
-      // If not authorized, open lead modal
       setLeadCollege(college)
     }
   }
@@ -93,24 +114,14 @@ export default function CollegesSection() {
         </div>
 
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-6">
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2">
-            {filters.map((f) => (
-              <button
-                key={f.value}
-                onClick={() => setActiveStream(f.value)}
-                className={cn(
-                  "px-6 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 shrink-0",
-                  activeStream === f.value 
-                    ? "bg-sky-500 text-white shadow-lg shadow-sky-500/20" 
-                    : "bg-slate-50 border border-slate-200 text-slate-600 hover:border-sky-300 hover:text-sky-600"
-                )}
-              >
-                {f.label}
-              </button>
-            ))}
+          <div>
+            <h3 className="text-xl font-black text-slate-900 flex items-center gap-2">
+              <span className="w-1.5 h-3 bg-sky-500 rounded-full"></span>
+              West Bengal Medical Quota & Fees Updated
+            </h3>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2 shrink-0 self-end">
              <button 
                 onClick={prevPage}
                 className="p-2.5 rounded-xl bg-white border border-slate-200 text-slate-400 hover:bg-sky-50 hover:text-sky-500 hover:border-sky-200 transition-all active:scale-90"
@@ -129,10 +140,14 @@ export default function CollegesSection() {
         <div className="relative overflow-hidden">
            <div 
              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 transition-all duration-700 ease-in-out"
-             key={`${activeStream}-${page}`}
+             key={page}
              style={{ animation: 'slideRight 0.6s cubic-bezier(0.23, 1, 0.32, 1)' }}
            >
-              {currentColleges.length > 0 ? (
+              {loading ? (
+                <div className="col-span-full py-24 text-center">
+                  <p className="text-slate-400 font-medium animate-pulse">Loading colleges...</p>
+                </div>
+              ) : currentColleges.length > 0 ? (
                 currentColleges.map((college) => (
                   <div key={college.id} className="transform transition-transform hover:-translate-y-2 duration-300">
                     <CollegeCard 

@@ -107,7 +107,7 @@ export default function CompareSection() {
     try {
       const { error } = await supabase.from('leads').insert([{
         full_name: name, email, phone,
-        city: 'Unknown (Compare Tool)', stream: course,
+        stream: course,
         college_name: `${collegeA.name} vs ${collegeB.name}`,
         source: 'College Comparison Tool Unlock Form', status: 'new'
       }])

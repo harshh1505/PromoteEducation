@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS colleges (
   type college_type DEFAULT 'private',
   avg_ctc TEXT,
   total_fee TEXT,
-  verified BOOLEAN DEFAULT false
+  verified BOOLEAN DEFAULT false,
+  bank_guarantee TEXT
 );
 
 -- 3. Exams Table

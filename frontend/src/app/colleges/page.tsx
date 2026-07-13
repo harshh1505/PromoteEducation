@@ -30,6 +30,7 @@ interface DbCollege {
   type?: string | null
   established?: number | null
   cover_image?: string | null
+  image_url?: string | null
 }
 
 // ── CONSTANTS ─────────────────────────────────────────────────────────────────
@@ -813,7 +814,7 @@ function CollegeCard({
       {/* Image */}
       <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
         <img
-          src={college.cover_image || "/images/campus-placeholder.png"}
+          src={college.image_url || "/images/campus-placeholder.png"}
           alt={college.name}
           className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           onError={(e) => {

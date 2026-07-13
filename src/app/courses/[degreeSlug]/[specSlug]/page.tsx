@@ -10,64 +10,113 @@ import {
 
 export const runtime = 'edge'
 
+const degreeMap: Record<string, string> = {
+  'btech': 'B.Tech',
+  'mtech': 'M.Tech',
+  'mba': 'MBA',
+  'mbbs': 'MBBS',
+  'bds': 'BDS',
+  'bsc-nursing': 'B.Sc.',
+  'ba-llb': 'B.A. LL.B.',
+  'llm': 'LL.M.',
+  'bpharm': 'B.Pharm',
+  'mpharm': 'M.Pharm',
+  'march': 'M.Arch',
+  'be': 'B.E.',
+  'msc': 'M.Sc.',
+  'phd': 'Ph.D.'
+};
+
+function getCourseDuration(degree: string): number {
+  const deg = (degree || '').toLowerCase();
+  if (deg.includes('mbbs')) return 5.5;
+  if (deg.includes('bds')) return 5;
+  if (deg.includes('b.a. ll.b') || deg.includes('ll.b') && deg.includes('b.a')) return 5;
+  if (deg.includes('b.tech') || deg.includes('b.e') || deg.includes('b.pharm') || deg.includes('b.arch') || deg.includes('bsc') || deg.includes('b.sc')) return 4;
+  if (deg.includes('m.tech') || deg.includes('mba') || deg.includes('m.sc') || deg.includes('ll.m') || deg.includes('m.pharm') || deg.includes('m.arch') || deg.includes('md') || deg.includes('ms')) return 2;
+  if (deg.includes('ph.d') || deg.includes('doctor')) return 3;
+  return 3;
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ degreeSlug: string; specSlug: string }> }) {
   const { degreeSlug, specSlug } = await params
-  const { data: masterCourse } = await supabase
-    .from('master_courses')
-    .select('*')
-    .eq('slug', degreeSlug)
-    .single()
+  const degreeSlugLower = degreeSlug.toLowerCase();
+  const degreeName = degreeMap[degreeSlugLower] || degreeSlug.toUpperCase();
+  const searchSlug = specSlug.includes('-') ? specSlug : `${degreeSlug}-${specSlug}`;
 
-  const { data: spec } = await supabase
-    .from('course_specializations')
+  const { data: specItem } = await supabase
+    .from('course_catalog')
     .select('*')
-    .eq('slug', specSlug)
-    .eq('master_course_id', masterCourse?.id || '')
-    .single()
+    .or(`slug.eq.${specSlug},slug.eq.${searchSlug}`)
+    .limit(1)
+    .single();
 
-  if (!masterCourse || !spec) return { title: 'Specialisation Not Found' }
+  if (!specItem) return { title: 'Specialisation Not Found' }
 
   return {
-    title: `${masterCourse.slug.toUpperCase()} in ${spec.name} 2026: Details, Scope & Colleges | Promote Education`,
-    description: `Explore ${masterCourse.slug.toUpperCase()} in ${spec.name} — duration, eligibility, average salary, career scope, and top colleges in India.`,
+    title: `${degreeSlug.toUpperCase()} in ${specItem.name} 2026: Details, Scope & Colleges | Promote Education`,
+    description: `Explore ${degreeSlug.toUpperCase()} in ${specItem.name} — duration, eligibility, average salary, career scope, and top colleges in India.`,
   }
 }
 
 export default async function SpecialisationPage({ params }: { params: Promise<{ degreeSlug: string; specSlug: string }> }) {
   const { degreeSlug, specSlug } = await params
-  // 1. Fetch the master course
-  const { data: masterCourse } = await supabase
-    .from('master_courses')
-    .select('*')
-    .eq('slug', degreeSlug)
-    .single()
+  const degreeSlugLower = degreeSlug.toLowerCase();
+  const degreeName = degreeMap[degreeSlugLower] || degreeSlug.toUpperCase();
+  const searchSlug = specSlug.includes('-') ? specSlug : `${degreeSlug}-${specSlug}`;
 
-  if (!masterCourse) {
+  // 1. Fetch the specialization detail from catalog
+  const { data: specItem, error } = await supabase
+    .from('course_catalog')
+    .select('*')
+    .or(`slug.eq.${specSlug},slug.eq.${searchSlug}`)
+    .limit(1)
+    .single();
+
+  if (error || !specItem) {
     return notFound()
   }
 
-  // 2. Fetch the specialization detail
-  const { data: spec } = await supabase
-    .from('course_specializations')
-    .select('*')
-    .eq('slug', specSlug)
-    .eq('master_course_id', masterCourse.id)
-    .single()
+  // Create virtual masterCourse details
+  const displayTitle = degreeName === 'MBBS' 
+    ? 'Bachelor of Medicine and Bachelor of Surgery' 
+    : degreeName === 'BDS'
+      ? 'Bachelor of Dental Surgery'
+      : `${degreeName} Degree Programs`;
 
-  if (!spec) {
-    return notFound()
-  }
+  const durationYears = getCourseDuration(degreeName);
+  const durationText = `${durationYears} Years`;
+
+  const masterCourse = {
+    id: degreeSlugLower,
+    name: displayTitle,
+    slug: degreeSlugLower,
+    level: specItem.level || 'UG',
+    duration_years: durationYears,
+    description: `Explore admissions, core tracks, eligibility requirements, and professional scope for ${degreeName} courses in India.`
+  };
+
+  const spec = {
+    id: specItem.id,
+    name: specItem.name,
+    slug: specItem.slug,
+    career_domain: specItem.career_domain
+  };
 
   // Map stream for college match
   let streamMatch = 'Engineering'
-  if (masterCourse.slug === 'mba' || masterCourse.slug === 'bba') {
+  if (degreeSlugLower === 'mba' || degreeSlugLower === 'bba') {
     streamMatch = 'Management'
-  } else if (masterCourse.slug === 'mbbs' || masterCourse.slug === 'medical-pg') {
+  } else if (degreeSlugLower === 'mbbs' || degreeSlugLower === 'bds' || degreeSlugLower === 'medical-pg') {
     streamMatch = 'Medical'
-  } else if (masterCourse.slug === 'bca' || masterCourse.slug === 'mca') {
+  } else if (degreeSlugLower === 'bca' || degreeSlugLower === 'mca') {
     streamMatch = 'Computer Applications'
-  } else if (masterCourse.slug === 'llb' || masterCourse.slug === 'llm') {
+  } else if (degreeSlugLower === 'llb' || degreeSlugLower === 'llm' || degreeSlugLower === 'ba-llb') {
     streamMatch = 'Law'
+  } else if (degreeSlugLower === 'bpharm' || degreeSlugLower === 'mpharm') {
+    streamMatch = 'Pharmacy'
+  } else if (degreeSlugLower === 'march' || degreeSlugLower === 'barch') {
+    streamMatch = 'Architecture'
   }
 
   // 3. Fetch matching colleges
@@ -85,7 +134,7 @@ export default async function SpecialisationPage({ params }: { params: Promise<{
     ? spec.career_domain.split(',').map((c: string) => c.trim()) 
     : ['Academic Researcher', 'Professional Consultant', 'Domain Expert']
 
-  const durationText = masterCourse.duration_years ? `${masterCourse.duration_years} Years` : '3-4 Years'
+  const durationTextMapped = durationText
 
   const sections = [
     { id: 'overview', label: 'Overview' },

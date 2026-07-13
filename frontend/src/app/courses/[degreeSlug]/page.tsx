@@ -11,63 +11,106 @@ import {
 export const dynamic = 'force-static'
 export const dynamicParams = false
 
+const degreeMap: Record<string, string> = {
+  'btech': 'B.Tech',
+  'mtech': 'M.Tech',
+  'mba': 'MBA',
+  'mbbs': 'MBBS',
+  'bds': 'BDS',
+  'bsc-nursing': 'B.Sc.',
+  'ba-llb': 'B.A. LL.B.',
+  'llm': 'LL.M.',
+  'bpharm': 'B.Pharm',
+  'mpharm': 'M.Pharm',
+  'march': 'M.Arch',
+  'be': 'B.E.',
+  'msc': 'M.Sc.',
+  'phd': 'Ph.D.'
+};
+
+function getCourseDuration(degree: string): number {
+  const deg = (degree || '').toLowerCase();
+  if (deg.includes('mbbs')) return 5.5;
+  if (deg.includes('bds')) return 5;
+  if (deg.includes('b.a. ll.b') || deg.includes('ll.b') && deg.includes('b.a')) return 5;
+  if (deg.includes('b.tech') || deg.includes('b.e') || deg.includes('b.pharm') || deg.includes('b.arch') || deg.includes('bsc') || deg.includes('b.sc')) return 4;
+  if (deg.includes('m.tech') || deg.includes('mba') || deg.includes('m.sc') || deg.includes('ll.m') || deg.includes('m.pharm') || deg.includes('m.arch') || deg.includes('md') || deg.includes('ms')) return 2;
+  if (deg.includes('ph.d') || deg.includes('doctor')) return 3;
+  return 3;
+}
+
 export async function generateStaticParams() {
-  const { data: masterCourses } = await supabase.from('master_courses').select('slug')
-  return (masterCourses || []).map((c) => ({
-    degreeSlug: c.slug,
-  }))
+  return [
+    { degreeSlug: 'btech' },
+    { degreeSlug: 'mtech' },
+    { degreeSlug: 'mba' },
+    { degreeSlug: 'mbbs' },
+    { degreeSlug: 'bds' },
+    { degreeSlug: 'bsc-nursing' },
+    { degreeSlug: 'ba-llb' },
+    { degreeSlug: 'llm' },
+    { degreeSlug: 'bpharm' },
+    { degreeSlug: 'mpharm' },
+    { degreeSlug: 'march' },
+    { degreeSlug: 'be' },
+    { degreeSlug: 'msc' },
+    { degreeSlug: 'phd' }
+  ];
 }
 
 export async function generateMetadata({ params }: any) {
   const resolvedParams = await params
-  const { data: masterCourse } = await supabase
-    .from('master_courses')
-    .select('*')
-    .eq('slug', resolvedParams.degreeSlug)
-    .single()
+  const degreeSlugLower = resolvedParams.degreeSlug.toLowerCase();
+  const degreeName = degreeMap[degreeSlugLower] || resolvedParams.degreeSlug.toUpperCase();
 
-  if (!masterCourse) return { title: 'Degree Not Found' }
+  const { data: catalogCourses } = await supabase
+    .from('course_catalog')
+    .select('id')
+    .eq('degree', degreeName)
+    .limit(1);
+
+  if (!catalogCourses || catalogCourses.length === 0) {
+    return { title: 'Degree Not Found' }
+  }
 
   return {
-    title: `${masterCourse.name} (${masterCourse.slug.toUpperCase()}) Courses, Colleges & Scope 2026 | Promote Education`,
-    description: `Explore the ${masterCourse.name} degree program. Find all specialisations, eligibility criteria, duration, and top colleges offering ${masterCourse.slug.toUpperCase()} in India.`,
+    title: `${degreeName} Courses, Colleges & Scope 2026 | Promote Education`,
+    description: `Explore the ${degreeName} degree program. Find all specialisations, eligibility criteria, duration, and top colleges offering ${degreeName} in India.`,
   }
 }
 
 export default async function DegreeHubPage({ params }: any) {
   const resolvedParams = await params
-  // 1. Fetch the master course details
-  const { data: masterCourse } = await supabase
-    .from('master_courses')
-    .select('*')
-    .eq('slug', resolvedParams.degreeSlug)
-    .single()
+  const degreeSlugLower = resolvedParams.degreeSlug.toLowerCase();
+  const degreeName = degreeMap[degreeSlugLower] || resolvedParams.degreeSlug.toUpperCase();
 
-  if (!masterCourse) {
+  // 1. Fetch the master course details from catalog
+  const { data: catalogCourses, error } = await supabase
+    .from('course_catalog')
+    .select('*')
+    .eq('degree', degreeName);
+
+  if (error || !catalogCourses || catalogCourses.length === 0) {
     return notFound()
   }
 
-  // 2. Fetch the specializations for this master course
-  const { data: specializations } = await supabase
-    .from('course_specializations')
-    .select('*')
-    .eq('master_course_id', masterCourse.id)
-
-  const matchingSpecs = specializations || []
-
   // Map category stream for college matching
   let streamMatch = 'Engineering'
-  if (masterCourse.slug === 'mba' || masterCourse.slug === 'bba') {
+  if (degreeSlugLower === 'mba' || degreeSlugLower === 'bba') {
     streamMatch = 'Management'
-  } else if (masterCourse.slug === 'mbbs' || masterCourse.slug === 'medical-pg') {
+  } else if (degreeSlugLower === 'mbbs' || degreeSlugLower === 'bds' || degreeSlugLower === 'medical-pg') {
     streamMatch = 'Medical'
-  } else if (masterCourse.slug === 'bca' || masterCourse.slug === 'mca') {
+  } else if (degreeSlugLower === 'bca' || degreeSlugLower === 'mca') {
     streamMatch = 'Computer Applications'
-  } else if (masterCourse.slug === 'llb' || masterCourse.slug === 'llm') {
+  } else if (degreeSlugLower === 'llb' || degreeSlugLower === 'llm' || degreeSlugLower === 'ba-llb') {
     streamMatch = 'Law'
+  } else if (degreeSlugLower === 'bpharm' || degreeSlugLower === 'mpharm') {
+    streamMatch = 'Pharmacy'
+  } else if (degreeSlugLower === 'march' || degreeSlugLower === 'barch') {
+    streamMatch = 'Architecture'
   }
 
-  // 3. Fetch top colleges for this stream
+  // 2. Fetch top colleges for this stream
   const { data: colleges } = await supabase
     .from('colleges')
     .select('*')
@@ -77,8 +120,31 @@ export default async function DegreeHubPage({ params }: any) {
 
   const matchingColleges = colleges || []
 
-  const displayTitle = masterCourse.name
-  const durationText = masterCourse.duration_years ? `${masterCourse.duration_years} Years` : '3-4 Years'
+  // Create virtual masterCourse
+  const displayTitle = degreeName === 'MBBS' 
+    ? 'Bachelor of Medicine and Bachelor of Surgery' 
+    : degreeName === 'BDS'
+      ? 'Bachelor of Dental Surgery'
+      : `${degreeName} Degree Programs`;
+
+  const durationYears = getCourseDuration(degreeName);
+  const durationText = `${durationYears} Years`;
+
+  const masterCourse = {
+    id: degreeSlugLower,
+    name: displayTitle,
+    slug: degreeSlugLower,
+    level: catalogCourses[0].level || 'UG',
+    duration_years: durationYears,
+    description: `Explore admissions, core tracks, eligibility requirements, and professional scope for ${degreeName} courses in India.`
+  };
+
+  const matchingSpecs = catalogCourses.map(c => ({
+    id: c.id,
+    name: c.name,
+    slug: c.slug,
+    career_domain: c.career_domain
+  }));
 
   const sections = [
     { id: 'overview', label: 'Overview' },
@@ -90,17 +156,17 @@ export default async function DegreeHubPage({ params }: any) {
 
   const faqs = [
     {
-      q: `What is the duration of a standard ${masterCourse.slug.toUpperCase()} course?`,
-      a: `A standard ${masterCourse.name} (${masterCourse.slug.toUpperCase()}) program is typically completed over ${durationText} of full-time academic study.`
+      q: `What is the duration of a standard ${degreeName} course?`,
+      a: `A standard ${displayTitle} (${degreeName}) program is typically completed over ${durationText} of full-time academic study.`
     },
     {
-      q: `What are the popular specialisations in ${masterCourse.slug.toUpperCase()}?`,
+      q: `What are the popular specialisations in ${degreeName}?`,
       a: matchingSpecs.length > 0 
         ? `Popular paths include ${matchingSpecs.slice(0, 3).map(s => s.name).join(', ')}, and more.` 
         : `Various specialization tracks are available depending on the university and domain interests.`
     },
     {
-      q: `How do I secure admission to top ${masterCourse.slug.toUpperCase()} colleges?`,
+      q: `How do I secure admission to top ${degreeName} colleges?`,
       a: `Admission is primarily based on national or state-level entrance examinations (e.g. JEE for B.Tech, CAT for MBA, NEET for MBBS) followed by centralized counselling sessions.`
     }
   ]

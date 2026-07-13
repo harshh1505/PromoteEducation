@@ -147,7 +147,7 @@ export default function Navbar() {
       { label: 'B.Tech', href: '/courses/btech' },
       { label: 'MBBS', href: '/courses/mbbs' },
       { label: 'MBA', href: '/courses/mba' },
-      { label: 'BDS', href: '/courses/mbbs/bds' }
+      { label: 'BDS', href: '/courses/bds' }
     ])
 
     return () => {

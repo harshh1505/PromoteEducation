@@ -37,17 +37,49 @@ function CoursesPageContent() {
   const [selectedLevel, setSelectedLevel] = useState('All')
   const [sortBy, setSortBy] = useState('name')
 
+  function getCourseCategory(degree: string): string {
+    const deg = (degree || '').toLowerCase();
+    if (deg.includes('mbbs')) return 'Medical';
+    if (deg.includes('bds')) return 'Medical';
+    if (deg.includes('md') || deg.includes('ms') || deg.includes('dm') || deg.includes('m.ch')) return 'Medical';
+    if (deg.includes('b.tech') || deg.includes('b.e') || deg.includes('m.tech')) return 'Engineering & Technology';
+    if (deg.includes('mba') || deg.includes('pgp') || deg.includes('fpm')) return 'Management';
+    if (deg.includes('ll.b') || deg.includes('ll.m') || deg.includes('law')) return 'Law';
+    if (deg.includes('pharm')) return 'Pharmacy';
+    if (deg.includes('arch')) return 'Architecture & Planning';
+    if (deg.includes('nursing') || deg.includes('allied') || deg.includes('health')) return 'Allied Health Sciences';
+    if (deg.includes('b.sc') || deg.includes('m.sc') || deg.includes('ph.d')) return 'Science';
+    return 'Management';
+  }
+
+  function getCourseDuration(degree: string): number {
+    const deg = (degree || '').toLowerCase();
+    if (deg.includes('mbbs')) return 5.5;
+    if (deg.includes('bds')) return 5;
+    if (deg.includes('b.a. ll.b') || deg.includes('ll.b') && deg.includes('b.a')) return 5;
+    if (deg.includes('b.tech') || deg.includes('b.e') || deg.includes('b.pharm') || deg.includes('b.arch') || deg.includes('bsc') || deg.includes('b.sc')) return 4;
+    if (deg.includes('m.tech') || deg.includes('mba') || deg.includes('m.sc') || deg.includes('ll.m') || deg.includes('m.pharm') || deg.includes('m.arch') || deg.includes('md') || deg.includes('ms')) return 2;
+    if (deg.includes('ph.d') || deg.includes('doctor')) return 3;
+    return 3;
+  }
+
   useEffect(() => {
     async function fetchCourses() {
       setLoading(true)
       try {
         const { data, error } = await supabase
-          .from('courses')
+          .from('course_catalog')
           .select('*')
         
         if (error) throw error
         if (data) {
-          setCourses(data)
+          const enriched = data.map(c => ({
+            ...c,
+            course_name: c.name,
+            category: getCourseCategory(c.degree),
+            duration_years: getCourseDuration(c.degree)
+          }));
+          setCourses(enriched)
         }
       } catch (err) {
         console.error('Error fetching courses:', err)
@@ -219,11 +251,13 @@ function CoursesPageContent() {
                 </thead>
                 <tbody className="divide-y divide-slate-100/60">
                   {filteredCourses.map(course => {
-                    const degreeLower = (course.degree || '').toLowerCase();
+                    const degreeLower = (course.degree || '').replace(/\./g, '').toLowerCase();
                     const specSlug = course.slug && course.slug.startsWith(`${degreeLower}-`)
                       ? course.slug.slice(degreeLower.length + 1)
                       : course.slug;
-                    const courseLink = course.slug ? `/courses/${degreeLower}/${specSlug}` : `/courses/${course.id}`;
+                    const courseLink = (specSlug === degreeLower || !specSlug) 
+                      ? `/courses/${degreeLower}` 
+                      : `/courses/${degreeLower}/${specSlug}`;
 
                     return (
                       <tr key={course.id} className="hover:bg-slate-50/50 transition-colors group">

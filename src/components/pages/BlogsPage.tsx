@@ -1,58 +1,75 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
+import Image from 'next/image'
+import dynamic from 'next/dynamic'
 import { Calendar, ArrowRight, BookOpen, Clock, User, Eye, Sparkles } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { resolveImageUrl } from '@/lib/utils'
-import LeadModal from '@/components/ui/LeadModal'
 
-export default function BlogsPageContent() {
-  const [blogs, setBlogs] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
+// Lazy-load heavy LeadModal component to optimize initial JS bundle size
+const LeadModal = dynamic(() => import('@/components/ui/LeadModal'), {
+  ssr: false,
+})
+
+const ITEMS_PER_PAGE = 12
+
+export default function BlogsPageContent({ initialBlogs }: { initialBlogs: any[] }) {
+  const [blogs, setBlogs] = useState<any[]>(initialBlogs)
   const [selectedCategory, setSelectedCategory] = useState('All')
-  const [categories, setCategories] = useState<string[]>(['All'])
   const [showLeadModal, setShowLeadModal] = useState(false)
+  const [page, setPage] = useState(1)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [hasMore, setHasMore] = useState(initialBlogs.length >= ITEMS_PER_PAGE)
 
-  useEffect(() => {
-    async function fetchBlogs() {
-      setLoading(true)
-      try {
-        const { data, error } = await supabase
-          .from('blogs')
-          .select('id, slug, title, summary, category, published_at, read_time, views, image_url, author')
-          .eq('is_live', true)
-          .order('published_at', { ascending: false })
+  // Dynamically extract unique categories based on all loaded blogs
+  const categories = ['All', ...Array.from(new Set(blogs.map((item: any) => item.category).filter(Boolean)))] as string[]
 
-        if (error) {
-          throw error
+  // Fetch next page of blogs (Client-side pagination)
+  async function loadMoreBlogs() {
+    if (loadingMore) return
+    setLoadingMore(true)
+    try {
+      const nextPage = page + 1
+      const start = (nextPage - 1) * ITEMS_PER_PAGE
+      const end = start + ITEMS_PER_PAGE - 1
+
+      const { data, error } = await supabase
+        .from('blogs')
+        .select('id, slug, title, summary, category, published_at, read_time, views, featured_image, author, featured')
+        .eq('is_live', true)
+        .order('published_at', { ascending: false, nullsFirst: false })
+        .order('created_at', { ascending: false })
+        .range(start, end)
+
+      if (error) throw error
+
+      if (data && data.length > 0) {
+        setBlogs((prev) => [...prev, ...data])
+        setPage(nextPage)
+        if (data.length < ITEMS_PER_PAGE) {
+          setHasMore(false)
         }
-
-        if (data) {
-          setBlogs(data)
-          
-          // Dynamically extract unique categories
-          const cats = ['All', ...Array.from(new Set(data.map((item: any) => item.category).filter(Boolean)))] as string[]
-          setCategories(cats)
-        }
-      } catch (error) {
-        console.error('Error fetching blogs from Supabase:', error)
-      } finally {
-        setLoading(false)
+      } else {
+        setHasMore(false)
       }
+    } catch (err) {
+      console.error('Error paginating blogs:', err)
+    } finally {
+      setLoadingMore(false)
     }
-    fetchBlogs()
-  }, [])
+  }
 
   // Filtered blogs
   const filteredBlogs = selectedCategory === 'All'
     ? blogs
     : blogs.filter(blog => blog.category === selectedCategory)
 
-  // Find the featured blog (the latest one with an image)
-  const featuredBlog = blogs.find(blog => blog.image_url)
+  // Find the featured blog (the latest one with featured = true or has featured_image)
+  const featuredBlog = blogs.find(blog => blog.featured) || blogs.find(blog => blog.featured_image)
   // Other blogs excluding the featured one
   const secondaryBlogs = blogs.filter(blog => blog.id !== featuredBlog?.id)
   
@@ -151,29 +168,7 @@ export default function BlogsPageContent() {
           </div>
         )}
 
-        {loading ? (
-          /* Loading Skeleton state */
-          <div className="space-y-12 animate-pulse">
-            <div className="grid lg:grid-cols-12 gap-8 lg:gap-16">
-              <div className="lg:col-span-7 aspect-[16/10] bg-slate-50 rounded-[32px]" />
-              <div className="lg:col-span-5 space-y-6 flex flex-col justify-center">
-                <div className="h-4 w-24 bg-slate-100 rounded" />
-                <div className="h-10 w-full bg-slate-100 rounded" />
-                <div className="h-10 w-5/6 bg-slate-100 rounded" />
-                <div className="h-16 w-full bg-slate-100 rounded" />
-              </div>
-            </div>
-            <div className="grid md:grid-cols-3 gap-8">
-              {[1, 2, 3].map(i => (
-                <div key={i} className="space-y-4">
-                  <div className="aspect-[16/10] bg-slate-50 rounded-[24px]" />
-                  <div className="h-4 w-1/3 bg-slate-100 rounded" />
-                  <div className="h-6 w-3/4 bg-slate-100 rounded" />
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : blogs.length === 0 ? (
+        {blogs.length === 0 ? (
           /* Empty state */
           <div className="text-center py-20 bg-slate-50 rounded-[2.5rem] border border-dashed border-slate-200">
             <BookOpen size={48} className="mx-auto text-slate-300 mb-4 animate-bounce" />
@@ -190,10 +185,13 @@ export default function BlogsPageContent() {
                 {/* Left Column: Asymmetric Image Container */}
                 <div className="lg:col-span-7 relative aspect-[16/10] w-full rounded-[32px] overflow-hidden group/featured shadow-xl border border-slate-100">
                   <Link href={`/blogs/${featuredBlog.slug}`}>
-                    <img
-                      src={resolveImageUrl(featuredBlog.image_url) || 'https://images.unsplash.com/photo-1523050335192-ce67a276b42a?w=800'}
+                    <Image
+                      src={resolveImageUrl(featuredBlog.featured_image) || 'https://images.unsplash.com/photo-1523050335192-ce67a276b42a?w=800'}
                       alt={featuredBlog.title}
-                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover/featured:scale-[1.03]"
+                      fill
+                      sizes="(max-width: 1200px) 100vw, 1200px"
+                      priority
+                      className="object-cover transition-transform duration-700 ease-out group-hover/featured:scale-[1.03]"
                     />
                     <div className="absolute top-6 left-6">
                       <span className="px-4 py-2 bg-white/90 backdrop-blur-md text-slate-900 text-[10px] font-black uppercase tracking-[0.2em] rounded-xl shadow-sm border border-slate-100 flex items-center gap-2">
@@ -211,7 +209,7 @@ export default function BlogsPageContent() {
                     </span>
                     <span className="text-slate-200 text-xs">•</span>
                     <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider flex items-center gap-1">
-                      <Clock size={12} /> {featuredBlog.read_time}
+                      <Clock size={12} /> {featuredBlog.read_time} min read
                     </span>
                   </div>
 
@@ -233,9 +231,9 @@ export default function BlogsPageContent() {
                       <div>
                         <div className="text-xs font-bold text-slate-800">{featuredBlog.author}</div>
                         <div className="text-[9px] text-slate-400 font-semibold uppercase tracking-wider">
-                          {new Date(featuredBlog.published_at).toLocaleDateString('en-US', {
+                          {featuredBlog.published_at ? new Date(featuredBlog.published_at).toLocaleDateString('en-US', {
                             month: 'short', day: 'numeric', year: 'numeric'
-                          })}
+                          }) : 'Recent'}
                         </div>
                       </div>
                     </div>
@@ -268,14 +266,12 @@ export default function BlogsPageContent() {
                   {/* Blog Image Container */}
                   <div className="w-full aspect-[16/10] overflow-hidden rounded-[24px] bg-slate-50 mb-5 relative">
                     <Link href={`/blogs/${blog.slug}`}>
-                      <img
-                        src={resolveImageUrl(blog.image_url) || 'https://images.unsplash.com/photo-1523050335102-c89b1811b128?w=800'}
-                        className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+                      <Image
+                        src={resolveImageUrl(blog.featured_image) || 'https://images.unsplash.com/photo-1523050335102-c89b1811b128?w=800'}
+                        className="object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
                         alt={blog.title}
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = 'https://images.unsplash.com/photo-1523050335102-c89b1811b128?w=800';
-                        }}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                     </Link>
                     <div className="absolute top-4 left-4">
@@ -289,9 +285,9 @@ export default function BlogsPageContent() {
                   <div className="flex-1 flex flex-col justify-between px-3 pb-3">
                     <div>
                       <div className="flex items-center gap-3 text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-4">
-                        <span>{new Date(blog.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                        <span>{blog.published_at ? new Date(blog.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent'}</span>
                         <span className="text-slate-200">•</span>
-                        <span className="flex items-center gap-1"><Clock size={12} /> {blog.read_time}</span>
+                        <span className="flex items-center gap-1"><Clock size={12} /> {blog.read_time} min read</span>
                         <span className="text-slate-200">•</span>
                         <span className="flex items-center gap-1"><Eye size={12} /> {blog.views >= 1000 ? `${(blog.views / 1000).toFixed(1)}K` : blog.views}</span>
                       </div>
@@ -326,18 +322,34 @@ export default function BlogsPageContent() {
                 </div>
               ))}
             </div>
+
+            {/* Pagination Controls */}
+            {hasMore && (
+              <div className="flex justify-center pt-8">
+                <button
+                  onClick={loadMoreBlogs}
+                  disabled={loadingMore}
+                  className="px-8 py-4 bg-white border border-slate-200 hover:border-slate-300 hover:shadow-md text-slate-800 font-bold text-xs uppercase tracking-widest rounded-xl transition-all duration-250 flex items-center gap-2"
+                >
+                  {loadingMore ? 'Loading...' : 'Load More Articles'}
+                  <ArrowRight size={14} className={loadingMore ? 'animate-pulse' : ''} />
+                </button>
+              </div>
+            )}
           </div>
         )}
       </main>
 
       <Footer />
-      <LeadModal
-        isOpen={showLeadModal}
-        onClose={() => setShowLeadModal(false)}
-        collegeName="Top Indian Universities"
-        collegeLogo="https://ui-avatars.com/api/?name=Promote+Education&background=3B2EA8&color=fff"
-        stream="All Streams"
-      />
+      {showLeadModal && (
+        <LeadModal
+          isOpen={showLeadModal}
+          onClose={() => setShowLeadModal(false)}
+          collegeName="Top Indian Universities"
+          collegeLogo="https://ui-avatars.com/api/?name=Promote+Education&background=3B2EA8&color=fff"
+          stream="All Streams"
+        />
+      )}
     </div>
   )
 }

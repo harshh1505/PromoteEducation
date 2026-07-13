@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS colleges (
   type college_type DEFAULT 'private',
   avg_ctc TEXT,
   total_fee TEXT,
-  verified BOOLEAN DEFAULT false
+  verified BOOLEAN DEFAULT false,
+  bank_guarantee TEXT
 );
 
 -- 3. Exams Table
@@ -700,63 +701,148 @@ $$;
 GRANT EXECUTE ON FUNCTION get_cutoff_distinct TO anon, authenticated;
 
 
---news articles schema
--- Drop existing news_articles table if it exists
-DROP TABLE IF EXISTS news_articles;
+-- ============================================
+-- DROP EXISTING TABLES
+-- ============================================
 
--- Create news_articles table
-CREATE TABLE news_articles (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    slug TEXT NOT NULL UNIQUE,
-    heading TEXT NOT NULL,
-    content TEXT NOT NULL,
-    image_link TEXT,
-    views INTEGER DEFAULT 0,
-    editor TEXT,
-    date DATE DEFAULT CURRENT_DATE,
-    is_live BOOLEAN DEFAULT false,
-    comments_count INTEGER DEFAULT 0,
-    shares_count INTEGER DEFAULT 0,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
+-- 1. Drop existing tables if they exist
+DROP TABLE IF EXISTS blog_faqs CASCADE;
+DROP TABLE IF EXISTS blog_sections CASCADE;
+DROP TABLE IF EXISTS blogs CASCADE;
 
--- Enable Row Level Security (RLS)
-ALTER TABLE news_articles ENABLE ROW LEVEL SECURITY;
-
--- Create public read policy
-CREATE POLICY "Allow public read access to news_articles" ON news_articles
-    FOR SELECT USING (true);
-
--- Create RPC function to increment views securely
-CREATE OR REPLACE FUNCTION increment_news_views(article_slug TEXT)
-RETURNS VOID AS $$
-BEGIN
-    UPDATE news_articles
-    SET views = views + 1
-    WHERE slug = article_slug;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- 1. Drop existing blogs table if it exists
-DROP TABLE IF EXISTS blogs;
-
--- 2. Create blogs table
+-- 2. Create Blogs table
 CREATE TABLE blogs (
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     slug TEXT NOT NULL UNIQUE,
     title TEXT NOT NULL,
     summary TEXT,
-    content TEXT NOT NULL,
-    image_url TEXT,
+    featured_image TEXT NOT NULL,
     category TEXT DEFAULT 'Education',
-    read_time TEXT DEFAULT '5 min read',
     author TEXT DEFAULT 'Promote Education Editorial',
-    is_live BOOLEAN DEFAULT true,
+    read_time INTEGER DEFAULT 5,
+    seo_title TEXT,
+    seo_description TEXT,
+    seo_keywords TEXT[],
+    featured BOOLEAN DEFAULT FALSE,
+    is_live BOOLEAN DEFAULT FALSE,
     views INTEGER DEFAULT 0,
-    published_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    published_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- 3. Create Blog Sections table (for normalized post layout content blocks)
+CREATE TABLE blog_sections (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    blog_id UUID NOT NULL REFERENCES blogs(id) ON DELETE CASCADE,
+    section_order INTEGER NOT NULL,
+    heading TEXT,
+    subheading TEXT,
+    content TEXT,
+    image_url TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(blog_id, section_order)
+);
+
+-- 4. Create Blog FAQs table
+CREATE TABLE blog_faqs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    blog_id UUID NOT NULL REFERENCES blogs(id) ON DELETE CASCADE,
+    faq_order INTEGER NOT NULL,
+    question TEXT NOT NULL,
+    answer TEXT NOT NULL,
+    UNIQUE(blog_id, faq_order)
+);
+
+-- 5. Create Performance Indexes
+CREATE INDEX idx_blog_slug ON blogs(slug);
+CREATE INDEX idx_blog_category ON blogs(category);
+CREATE INDEX idx_blog_live ON blogs(is_live);
+CREATE INDEX idx_blog_featured ON blogs(featured);
+CREATE INDEX idx_blog_published ON blogs(published_at DESC);
+CREATE INDEX idx_blog_sections_blog ON blog_sections(blog_id);
+CREATE INDEX idx_blog_faq_blog ON blog_faqs(blog_id);
+
+-- ====================================================================
+-- Enable Row Level Security (RLS)
+-- ====================================================================
+ALTER TABLE public.blogs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.blog_sections ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.blog_faqs ENABLE ROW LEVEL SECURITY;
+
+-- ====================================================================
+-- RLS Read Policies (Allow everyone to browse published blogs, sections, & FAQs)
+-- ====================================================================
+CREATE POLICY "Allow public read access to blogs" ON public.blogs 
+    FOR SELECT USING (true);
+
+CREATE POLICY "Allow public read access to blog_sections" ON public.blog_sections 
+    FOR SELECT USING (true);
+
+CREATE POLICY "Allow public read access to blog_faqs" ON public.blog_faqs 
+    FOR SELECT USING (true);
+
+-- ====================================================================
+-- RLS Write Policies (Allow CRUD access exclusively for administrators)
+-- ====================================================================
+
+-- Blogs table CRUD Policy
+CREATE POLICY "Allow admin write access to blogs" ON public.blogs 
+    FOR ALL 
+    TO authenticated
+    USING (
+        EXISTS (
+            SELECT 1 FROM public.profiles
+            WHERE public.profiles.id = auth.uid()
+            AND public.profiles.role = 'admin'
+        )
+    )
+    WITH CHECK (
+        EXISTS (
+            SELECT 1 FROM public.profiles
+            WHERE public.profiles.id = auth.uid()
+            AND public.profiles.role = 'admin'
+        )
+    );
+
+-- Blog Sections table CRUD Policy
+CREATE POLICY "Allow admin write access to blog_sections" ON public.blog_sections 
+    FOR ALL 
+    TO authenticated
+    USING (
+        EXISTS (
+            SELECT 1 FROM public.profiles
+            WHERE public.profiles.id = auth.uid()
+            AND public.profiles.role = 'admin'
+        )
+    )
+    WITH CHECK (
+        EXISTS (
+            SELECT 1 FROM public.profiles
+            WHERE public.profiles.id = auth.uid()
+            AND public.profiles.role = 'admin'
+        )
+    );
+
+-- Blog FAQs table CRUD Policy
+CREATE POLICY "Allow admin write access to blog_faqs" ON public.blog_faqs 
+    FOR ALL 
+    TO authenticated
+    USING (
+        EXISTS (
+            SELECT 1 FROM public.profiles
+            WHERE public.profiles.id = auth.uid()
+            AND public.profiles.role = 'admin'
+        )
+    )
+    WITH CHECK (
+        EXISTS (
+            SELECT 1 FROM public.profiles
+            WHERE public.profiles.id = auth.uid()
+            AND public.profiles.role = 'admin'
+        )
+    );
+
 
 -- 3. Enable Row Level Security (RLS)
 ALTER TABLE blogs ENABLE ROW LEVEL SECURITY;
@@ -837,9 +923,13 @@ Lastly, financial investment and ROI (Return on Investment). Weigh the total exp
     980
 );
 
+-- Drop existing tables if they exist (order matters due to FK constraints)
+DROP TABLE IF EXISTS course_specializations CASCADE;
+DROP TABLE IF EXISTS master_courses CASCADE;
 DROP TABLE IF EXISTS courses CASCADE;
 
-CREATE TABLE courses (
+-- Re‑create tables (you can skip these CREATE statements if the tables already exist and you only need the indexes/constraints)
+CREATE TABLE IF NOT EXISTS courses (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     level TEXT NOT NULL,
     category TEXT NOT NULL,
@@ -848,5 +938,355 @@ CREATE TABLE courses (
     duration_years NUMERIC(3,1),
     career_domain TEXT,
     slug TEXT UNIQUE,
-    created_at TIMESTAMPTZ DEFAULT NOW()
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+CREATE TABLE IF NOT EXISTS master_courses (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL UNIQUE,
+    slug TEXT NOT NULL UNIQUE,
+    level TEXT NOT NULL,
+    duration_years NUMERIC(3,1),
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS course_specializations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    master_course_id UUID NOT NULL
+        REFERENCES master_courses(id) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    slug TEXT NOT NULL,
+    career_domain TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    CONSTRAINT uq_specializations_master_slug UNIQUE (master_course_id, slug)
+);
+
+-- 1️⃣ Indexes for fast slug look‑ups
+CREATE INDEX IF NOT EXISTS idx_courses_slug          ON courses(slug);
+CREATE INDEX IF NOT EXISTS idx_master_courses_slug   ON master_courses(slug);
+CREATE INDEX IF NOT EXISTS idx_specializations_master ON course_specializations(master_course_id);
+
+-- 2️⃣ Composite unique constraint already added in table definition above (uq_specializations_master_slug)
+
+-- 4️⃣ Updated‑at trigger (shared for all three tables)
+CREATE OR REPLACE FUNCTION set_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at := NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'courses_updated_at') THEN
+        CREATE TRIGGER courses_updated_at
+            BEFORE UPDATE ON courses
+            FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'master_courses_updated_at') THEN
+        CREATE TRIGGER master_courses_updated_at
+            BEFORE UPDATE ON master_courses
+            FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'specializations_updated_at') THEN
+        CREATE TRIGGER specializations_updated_at
+            BEFORE UPDATE ON course_specializations
+            FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+    END IF;
+END $$;
+
+-- Optional: Enable Row‑Level Security and public‑read policy (if not already present)
+ALTER TABLE courses ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "public read courses" ON courses FOR SELECT USING (true);
+
+ALTER TABLE master_courses ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "public read master courses" ON master_courses FOR SELECT USING (true);
+
+ALTER TABLE course_specializations ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "public read course specializations" ON course_specializations FOR SELECT USING (true);
+
+-- End of migration script
+
+
+ALTER TABLE colleges
+ADD COLUMN IF NOT EXISTS cover_image TEXT;
+
+-- ============================================
+-- DROP EXISTING TABLES
+-- ============================================
+
+DROP TABLE IF EXISTS news_sections CASCADE;
+DROP TABLE IF EXISTS news_articles CASCADE;
+
+-- ============================================
+-- NEWS ARTICLES
+-- ============================================
+
+CREATE TABLE news_articles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    slug TEXT NOT NULL UNIQUE,
+
+    heading TEXT NOT NULL,
+
+    synopsis TEXT,
+
+    featured_image TEXT NOT NULL,
+
+    editor TEXT DEFAULT 'Promote Education Editorial',
+
+    seo_title TEXT,
+    seo_description TEXT,
+    seo_keywords TEXT[],
+
+    views INTEGER DEFAULT 0,
+    comments_count INTEGER DEFAULT 0,
+    shares_count INTEGER DEFAULT 0,
+
+    is_live BOOLEAN DEFAULT FALSE,
+
+    published_at TIMESTAMPTZ,
+
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ============================================
+-- NEWS CONTENT SECTIONS
+-- ============================================
+
+CREATE TABLE news_sections (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+    article_id UUID NOT NULL
+        REFERENCES news_articles(id)
+        ON DELETE CASCADE,
+
+    section_order INTEGER NOT NULL,
+
+    content TEXT,
+
+    image_url TEXT,
+
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+
+    UNIQUE(article_id, section_order)
+);
+
+-- ============================================
+-- INDEXES
+-- ============================================
+
+CREATE INDEX idx_news_slug
+ON news_articles(slug);
+
+CREATE INDEX idx_news_live
+ON news_articles(is_live);
+
+CREATE INDEX idx_news_published
+ON news_articles(published_at DESC);
+
+CREATE INDEX idx_news_sections_article
+ON news_sections(article_id);
+
+-- ============================================
+-- ROW LEVEL SECURITY
+-- ============================================
+
+ALTER TABLE news_articles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE news_sections ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public read access to news_articles"
+ON news_articles
+FOR SELECT
+USING (true);
+
+CREATE POLICY "Allow public read access to news_sections"
+ON news_sections
+FOR SELECT
+USING (true);
+
+-- ============================================
+-- RPC FUNCTION
+-- ============================================
+
+CREATE OR REPLACE FUNCTION increment_news_views(article_slug TEXT)
+RETURNS VOID AS $$
+BEGIN
+    UPDATE news_articles
+    SET views = views + 1
+    WHERE slug = article_slug;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+
+-- ============================================
+-- RLS Write Policies for News
+-- ============================================
+
+CREATE POLICY "Allow admin write access to news_articles" ON news_articles 
+    FOR ALL 
+    TO authenticated
+    USING (
+        EXISTS (
+            SELECT 1 FROM public.profiles
+            WHERE public.profiles.id = auth.uid()
+            AND public.profiles.role = 'admin'
+        )
+    )
+    WITH CHECK (
+        EXISTS (
+            SELECT 1 FROM public.profiles
+            WHERE public.profiles.id = auth.uid()
+            AND public.profiles.role = 'admin'
+        )
+    );
+
+CREATE POLICY "Allow admin write access to news_sections" ON news_sections 
+    FOR ALL 
+    TO authenticated
+    USING (
+        EXISTS (
+            SELECT 1 FROM public.profiles
+            WHERE public.profiles.id = auth.uid()
+            AND public.profiles.role = 'admin'
+        )
+    )
+    WITH CHECK (
+        EXISTS (
+            SELECT 1 FROM public.profiles
+            WHERE public.profiles.id = auth.uid()
+            AND public.profiles.role = 'admin'
+        )
+    );
+
+
+
+    -- 1. Ensure RLS is enabled
+-- 1. Ensure RLS is enabled
+ALTER TABLE news_sections ENABLE ROW LEVEL SECURITY;
+
+-- 2. Allow public to read the news sections
+DROP POLICY IF EXISTS "Allow public read access to news_sections" ON news_sections;
+CREATE POLICY "Allow public read access to news_sections" ON news_sections 
+    FOR SELECT USING (true);
+
+-- 3. Allow admins to insert/update/delete news sections
+DROP POLICY IF EXISTS "Allow admin write access to news_sections" ON news_sections;
+CREATE POLICY "Allow admin write access to news_sections" ON news_sections 
+    FOR ALL TO authenticated
+    USING (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'))
+    WITH CHECK (EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'admin'));
+
+
+
+
+-- ============================================================
+-- COURSE CATALOG + PER-COLLEGE COURSE OFFERINGS
+-- Canonical course names live in course_catalog (no drift).
+-- Per-college fees/exam/seats live in courses, one row per
+-- college+course. Same course, many colleges, different terms.
+-- ============================================================
+
+-- 1. Clear out the old, disconnected/unused structures
+DROP TABLE IF EXISTS course_specializations CASCADE;
+DROP TABLE IF EXISTS master_courses CASCADE;
+DROP TABLE IF EXISTS courses CASCADE;
+
+-- 2. Canonical course catalog
+CREATE TABLE course_catalog (
+  id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name           TEXT NOT NULL UNIQUE,     -- e.g. 'B.Tech Computer Science'
+  slug           TEXT NOT NULL UNIQUE,
+  degree         TEXT NOT NULL,            -- e.g. 'B.Tech', 'MBBS', 'MBA'
+  level          TEXT NOT NULL DEFAULT 'UG', -- 'UG' | 'PG' | 'Diploma'
+  career_domain  TEXT,
+  created_at     TIMESTAMPTZ DEFAULT NOW(),
+  updated_at     TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_course_catalog_slug  ON course_catalog(slug);
+CREATE INDEX idx_course_catalog_level ON course_catalog(level);
+
+-- 3. Per-college course offerings
+CREATE TABLE courses (
+  id                UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  college_id        UUID NOT NULL REFERENCES colleges(id) ON DELETE CASCADE,
+  course_catalog_id UUID NOT NULL REFERENCES course_catalog(id) ON DELETE RESTRICT,
+
+  duration          TEXT,                  -- e.g. '4 years'
+  fees              NUMERIC(10,2),          -- total fee at THIS college
+  entrance_exam     TEXT,                   -- admission route at THIS college
+  eligibility       TEXT,
+  seats             INT,
+  avg_salary        TEXT,
+
+  is_popular        BOOLEAN DEFAULT false,
+  created_at        TIMESTAMPTZ DEFAULT NOW(),
+  updated_at        TIMESTAMPTZ DEFAULT NOW(),
+
+  UNIQUE (college_id, course_catalog_id)   -- one row per college+course
+);
+
+CREATE INDEX idx_courses_college        ON courses(college_id);
+CREATE INDEX idx_courses_catalog        ON courses(course_catalog_id);
+CREATE INDEX idx_courses_entrance_exam  ON courses(entrance_exam);
+
+-- 4. updated_at triggers (reuses the shared function already in your schema)
+DROP TRIGGER IF EXISTS course_catalog_updated_at ON course_catalog;
+CREATE TRIGGER course_catalog_updated_at
+  BEFORE UPDATE ON course_catalog
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+DROP TRIGGER IF EXISTS courses_updated_at ON courses;
+CREATE TRIGGER courses_updated_at
+  BEFORE UPDATE ON courses
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+-- 5. RLS — public read, admin write (matches your existing pattern)
+ALTER TABLE course_catalog ENABLE ROW LEVEL SECURITY;
+ALTER TABLE courses        ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Public read: Course catalog" ON course_catalog;
+CREATE POLICY "Public read: Course catalog" ON course_catalog FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Admin write: Course catalog" ON course_catalog;
+CREATE POLICY "Admin write: Course catalog" ON course_catalog
+  FOR ALL TO authenticated
+  USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'))
+  WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+
+DROP POLICY IF EXISTS "Public read: Courses" ON courses;
+CREATE POLICY "Public read: Courses" ON courses FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Admin write: Courses" ON courses;
+CREATE POLICY "Admin write: Courses" ON courses
+  FOR ALL TO authenticated
+  USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'))
+  WITH CHECK (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+
+-- ============================================================
+-- Example usage
+-- ============================================================
+-- 1. Add a course to the catalog once:
+-- INSERT INTO course_catalog (name, slug, degree, level, career_domain)
+-- VALUES ('B.Tech Computer Science', 'btech-cse', 'B.Tech', 'UG', 'Software Engineering');
+
+-- 2. Offer it at multiple colleges, each with its own fees/exam:
+-- INSERT INTO courses (college_id, course_catalog_id, duration, fees, entrance_exam, seats)
+-- VALUES
+--   ('<college-A-uuid>', (SELECT id FROM course_catalog WHERE slug = 'btech-cse'), '4 years', 850000, 'JEE Main', 120),
+--   ('<college-B-uuid>', (SELECT id FROM course_catalog WHERE slug = 'btech-cse'), '4 years', 620000, 'WBJEE',    90);
+
+-- 3. Compare the same course across colleges:
+-- SELECT col.name AS college, cc.name AS course, c.fees, c.entrance_exam
+-- FROM courses c
+-- JOIN colleges col ON col.id = c.college_id
+-- JOIN course_catalog cc ON cc.id = c.course_catalog_id
+-- WHERE cc.slug = 'btech-cse'
+-- ORDER BY c.fees;

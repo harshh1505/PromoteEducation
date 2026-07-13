@@ -28,6 +28,8 @@ interface DbCollege {
   avg_ctc?: string | null
   ownership?: string | null
   type?: string | null
+  cover_image?: string | null
+  image_url?: string | null
   established?: number | null
 }
 
@@ -88,7 +90,7 @@ export default function CollegesPage() {
         setIsLoading(true)
         const { data, error } = await supabase
           .from('colleges')
-          .select('id, slug, name, short_name, location, state, stream, ranking, total_fee, avg_ctc, ownership, type')
+          .select('id, slug, name, short_name, location, state, stream, ranking, total_fee, avg_ctc, ownership, type, cover_image, image_url')
           .eq('is_active', true)
           .order('ranking', { ascending: true })
 
@@ -811,11 +813,14 @@ function CollegeCard({
     <div className="bg-white border border-slate-200 rounded-xl overflow-hidden group hover:shadow-md transition-all duration-200">
       {/* Image */}
       <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
-        <Image
-          src="/images/campus-placeholder.png"
+        <img
+          src={college.image_url || "/images/campus-placeholder.png"}
           alt={college.name}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-500"
+          className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = "/images/campus-placeholder.png";
+          }}
         />
 
         {/* Save Button */}

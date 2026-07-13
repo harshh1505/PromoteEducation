@@ -1,63 +1,79 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { Calendar, ArrowRight, TrendingUp, Bell, MessageSquare, Share2, Eye } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import { resolveImageUrl } from '@/lib/utils'
 
-export default function NewsPageContent() {
-  const [articles, setArticles] = useState<any[]>([])
-  const [eduArticles, setEduArticles] = useState<any[]>([])
+const ITEMS_PER_PAGE = 12
 
-  useEffect(() => {
-    async function fetchNews() {
+export default function NewsPageContent({ 
+  initialArticles, 
+  initialEduArticles 
+}: { 
+  initialArticles: any[]
+  initialEduArticles: any[]
+}) {
+  const mapArticle = (item: any) => ({
+    isLive: item.is_live,
+    title: item.heading,
+    author: item.editor,
+    date: item.published_at ? new Date(item.published_at).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    }) : 'Recent',
+    comments: item.comments_count > 0 ? String(item.comments_count) : undefined,
+    shares: item.shares_count > 0 ? String(item.shares_count) : undefined,
+    views: item.views >= 1000 ? `${(item.views / 1000).toFixed(1)}K` : String(item.views),
+    image: item.featured_image || 'https://images.unsplash.com/photo-1510074377623-8cf13fb86c08?w=800',
+    slug: item.slug
+  })
+
+  const [articles, setArticles] = useState<any[]>(initialArticles.map(mapArticle))
+  const [eduArticles] = useState<any[]>(initialEduArticles)
+  const [page, setPage] = useState(1)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [hasMore, setHasMore] = useState(initialArticles.length >= ITEMS_PER_PAGE)
+
+  // Client-side pagination to fetch subsequent pages
+  async function loadMoreNews() {
+    if (loadingMore) return
+    setLoadingMore(true)
+    try {
+      const nextPage = page + 1
+      const start = (nextPage - 1) * ITEMS_PER_PAGE
+      const end = start + ITEMS_PER_PAGE - 1
+
       const { data, error } = await supabase
         .from('news_articles')
-        .select('id, slug, heading, editor, date, created_at, comments_count, shares_count, views, image_link, is_live')
-        .order('date', { ascending: false })
+        .select('id, slug, heading, synopsis, editor, published_at, created_at, comments_count, shares_count, views, featured_image, is_live')
+        .eq('is_live', true)
+        .order('published_at', { ascending: false, nullsFirst: false })
         .order('created_at', { ascending: false })
-      
-      if (error) {
-        console.error('Error fetching news from Supabase on news page:', error)
-      } else if (data) {
-        const mapped = data.map((item: any) => ({
-          isLive: item.is_live,
-          title: item.heading,
-          author: item.editor,
-          date: new Date(item.date).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric'
-          }),
-          comments: item.comments_count > 0 ? String(item.comments_count) : undefined,
-          shares: item.shares_count > 0 ? String(item.shares_count) : undefined,
-          views: item.views >= 1000 ? `${(item.views / 1000).toFixed(1)}K` : String(item.views),
-          image: item.image_link || 'https://images.unsplash.com/photo-1510074377623-8cf13fb86c08?w=800',
-          slug: item.slug
-        }))
-        setArticles(mapped)
-      }
-    }
+        .range(start, end)
 
-    async function fetchEduArticles() {
-      const { data, error } = await supabase
-        .from('blogs')
-        .select('id, slug, title, summary, image_url, category, created_at')
-        .order('created_at', { ascending: false })
-        .limit(3)
-      
-      if (error) {
-        console.error('Error fetching articles from Supabase:', error)
-      } else if (data) {
-        setEduArticles(data)
-      }
-    }
+      if (error) throw error
 
-    fetchNews()
-    fetchEduArticles()
-  }, [])
+      if (data && data.length > 0) {
+        setArticles((prev) => [...prev, ...data.map(mapArticle)])
+        setPage(nextPage)
+        if (data.length < ITEMS_PER_PAGE) {
+          setHasMore(false)
+        }
+      } else {
+        setHasMore(false)
+      }
+    } catch (err) {
+      console.error('Error fetching more news:', err)
+    } finally {
+      setLoadingMore(false)
+    }
+  }
 
   const featuredArticle = articles[0]
   const subArticles = articles.slice(1)
@@ -92,12 +108,15 @@ export default function NewsPageContent() {
            {featuredArticle ? (
              <Link 
                href={featuredArticle.slug ? `/news/${featuredArticle.slug}` : '#'}
-               className="relative h-[500px] rounded-[40px] overflow-hidden shadow-2xl border border-slate-100 group block cursor-pointer"
+               className="relative h-[500px] rounded-[40px] overflow-hidden shadow-2xl border border-slate-100 group block cursor-pointer animate-in fade-in duration-500"
              >
-                <img 
+                <Image 
                   src={featuredArticle.image} 
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                   alt={featuredArticle.title}
+                  fill
+                  sizes="(max-width: 1200px) 100vw, 800px"
+                  priority
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent" />
                 <div className="absolute bottom-0 left-0 p-10 z-10">
@@ -134,7 +153,13 @@ export default function NewsPageContent() {
                             <span className="w-1.5 h-1.5 bg-white rounded-full" /> LIVE
                           </span>
                         )}
-                        <img src={article.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="News" />
+                        <Image 
+                          src={article.image} 
+                          className="object-cover group-hover:scale-110 transition-transform duration-500" 
+                          alt={article.title}
+                          fill
+                          sizes="128px"
+                        />
                      </div>
                      <div className="flex flex-col justify-center flex-1">
                         <h3 className="text-lg font-bold text-slate-900 mb-2 leading-snug group-hover:text-sky-600 transition-colors line-clamp-2">
@@ -162,31 +187,52 @@ export default function NewsPageContent() {
                   </Link>
                 ))
               ) : (
-                [...Array(3)].map((_, i) => (
-                  <div key={i} className="h-32 rounded-3xl bg-slate-100 animate-pulse border border-slate-150" />
-                ))
+                <div className="p-8 text-center text-slate-400 italic bg-slate-50 rounded-2xl border border-dashed">
+                  No other news available at the moment.
+                </div>
               )}
            </div>
         </div>
 
+        {/* Pagination controls for main list */}
+        {hasMore && (
+          <div className="flex justify-center mb-16">
+            <button
+              onClick={loadMoreNews}
+              disabled={loadingMore}
+              className="px-8 py-4 bg-slate-900 text-white hover:bg-sky-500 transition-all font-bold text-xs uppercase tracking-widest rounded-full shadow-lg shadow-slate-900/10 flex items-center gap-2"
+            >
+              {loadingMore ? 'Loading...' : 'Load More News'}
+              <ArrowRight size={14} className={loadingMore ? 'animate-pulse' : ''} />
+            </button>
+          </div>
+        )}
+
+        {/* Dynamic Edu Articles Grid */}
         <div className="grid md:grid-cols-3 gap-8">
            {eduArticles.length > 0 ? (
              eduArticles.map((article) => {
                const categorySlug = (article.category || '').toLowerCase().trim().replace(/\s+/g, '-').replace(/\./g, '')
-               const link = `/courses/${categorySlug}`
+               const link = `/blogs/${article.slug}`
                
                return (
                  <div key={article.id} className="p-6 rounded-3xl border border-slate-100 bg-white group hover:border-sky-200 hover:shadow-xl shadow-slate-900/5 transition-all flex flex-col justify-between">
                      <div>
-                       <div className="w-full aspect-video rounded-2xl bg-slate-50 mb-6 overflow-hidden shadow-sm">
-                          <img src={article.image_url || 'https://images.unsplash.com/photo-1541339907198-e08759dfc3ef?w=400'} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt={article.title} />
+                       <div className="w-full aspect-video rounded-2xl bg-slate-50 mb-6 overflow-hidden shadow-sm relative">
+                          <Image 
+                            src={resolveImageUrl(article.featured_image) || 'https://images.unsplash.com/photo-1541339907198-e08759dfc3ef?w=400'} 
+                            className="object-cover group-hover:scale-105 transition-transform duration-700" 
+                            alt={article.title}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 350px"
+                          />
                        </div>
                        <h4 className="font-bold text-slate-900 mb-4 leading-tight group-hover:text-sky-600 transition-colors line-clamp-2">{article.title}</h4>
                        {article.summary && <p className="text-xs text-slate-500 line-clamp-2 mb-4 font-light leading-relaxed">{article.summary}</p>}
-                    </div>
-                    <Link href={link} className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-sky-500 group-hover:gap-3 transition-all mt-4 self-start">
-                       Read Full Story <ArrowRight size={14} />
-                    </Link>
+                     </div>
+                     <Link href={link} className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-sky-500 group-hover:gap-3 transition-all mt-4 self-start">
+                        Read Full Story <ArrowRight size={14} />
+                     </Link>
                  </div>
                )
              })

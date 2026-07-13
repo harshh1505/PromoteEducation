@@ -66,10 +66,10 @@ export default function LoanSection() {
       const { error } = await supabase.from('leads').insert([{
         full_name: name,
         email: 'loan-lead@promoteeducation.org',
-        phone, city,
+        phone,
         stream: 'Finance / Loan Enquiry',
         college_name: 'Education Loan Assistance',
-        source: `Loan Calculator Lead Form | Income: ${incomeRange} | Fees: ${fees} | Loan: ${amount}`,
+        source: `Loan Calculator Lead Form | City: ${city} | Income: ${incomeRange} | Fees: ${fees} | Loan: ${amount}`,
         status: 'new'
       }])
       if (error) throw error
