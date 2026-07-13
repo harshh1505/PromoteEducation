@@ -94,9 +94,52 @@ export default function CompareSection() {
   const [phone, setPhone] = useState('')
   const [course, setCourse] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [collegesList, setCollegesList] = useState<CollegeCompareInfo[]>([])
 
   useEffect(() => {
     if (localStorage.getItem('comparison_unlocked') === 'true') setIsUnlocked(true)
+
+    async function loadColleges() {
+      try {
+        const { data, error } = await supabase
+          .from('colleges')
+          .select('name, slug, avg_package, highest_package, placement_rate, campus_size, nirf_rank, stream')
+          .order('name', { ascending: true })
+        
+        if (data) {
+          const mapped = data.map((c: any) => ({
+            name: c.name,
+            slug: c.slug,
+            fees: c.stream?.toLowerCase() === 'medical' ? '₹15L - ₹22L / yr' : '₹1.5L - ₹2.5L / yr',
+            avgPackage: c.avg_package ? `₹${c.avg_package} LPA` : '—',
+            highestPackage: c.highest_package ? `₹${c.highest_package} LPA` : '—',
+            placementRate: c.placement_rate ? `${c.placement_rate}%` : '—',
+            hostelFees: '₹80k - ₹1.2L / yr',
+            roi: c.avg_package ? `${(c.avg_package / 2).toFixed(1)}x` : '—',
+            scholarships: 'Merit & Need-based',
+            campusSize: c.campus_size || '—',
+            rankings: c.nirf_rank ? `#${c.nirf_rank} NIRF` : '—'
+          }))
+          
+          // Merge static defaults with dynamic ones to make sure the defaults are present
+          const uniqueSlugs = new Set(mapped.map(m => m.slug))
+          const merged = [...mapped]
+          Object.values(defaultColleges).forEach(def => {
+            if (!uniqueSlugs.has(def.slug)) {
+              merged.push(def)
+            }
+          })
+          
+          setCollegesList(merged.sort((a, b) => a.name.localeCompare(b.name)))
+        } else {
+          setCollegesList(Object.values(defaultColleges))
+        }
+      } catch (err) {
+        console.error(err)
+        setCollegesList(Object.values(defaultColleges))
+      }
+    }
+    loadColleges()
   }, [])
 
   const handleUnlock = async (e: React.FormEvent) => {
@@ -134,7 +177,7 @@ export default function CompareSection() {
     { label: 'NIRF Ranking', key: 'rankings' as keyof CollegeCompareInfo, lock: true },
   ]
 
-  const collegesList = Object.values(defaultColleges)
+
 
   return (
     <section id="compare-section" className="py-12 bg-gradient-to-b from-slate-50 to-slate-100 relative overflow-hidden">

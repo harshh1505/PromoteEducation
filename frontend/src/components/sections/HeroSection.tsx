@@ -75,11 +75,17 @@ export default function HeroSection() {
   const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({})
   const [imagesLoaded, setImagesLoaded] = useState<Record<number, boolean>>({})
 
-  // Trigger auto pop up when page loads
+  // Trigger auto pop up when page loads (90 seconds delay, only if not already captured)
   useEffect(() => {
+    const hasCaptured = localStorage.getItem('lead_captured') === 'true'
+    if (hasCaptured) return
+
     const timer = setTimeout(() => {
-      setShowLeadModal(true)
-    }, 1500)
+      const stillHasCaptured = localStorage.getItem('lead_captured') === 'true'
+      if (!stillHasCaptured) {
+        setShowLeadModal(true)
+      }
+    }, 90000) // 90 seconds
     return () => clearTimeout(timer)
   }, [])
 
