@@ -4,6 +4,7 @@ import Link from 'next/link'
 import ReviewForm from '@/components/sections/ReviewForm'
 import QuestionForm from '@/components/sections/QuestionForm'
 import ScrollReveal from '@/components/ui/ScrollReveal'
+import DynamicCoverImage from '@/components/ui/DynamicCoverImage'
 import {
   Globe, CheckCircle2, Star, Award, ShieldCheck,
   FileText, Info, MapPin, BookOpen, Users, Building2
@@ -447,16 +448,11 @@ export default async function CollegePage({ params }: any) {
           college.cover_image ? "text-white bg-slate-955 bg-slate-950" : "bg-slate-50"
         }`}
       >
-        {college.cover_image && (
-          <>
-            <img 
-              src={college.cover_image} 
-              alt={college.name} 
-              className="absolute inset-0 w-full h-full object-cover opacity-25"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-955 via-slate-950/85 to-transparent" />
-          </>
-        )}
+        <DynamicCoverImage 
+          collegeId={college.id} 
+          initialSrc={college.cover_image} 
+          alt={college.name} 
+        />
         <div className="max-w-5xl mx-auto px-6 relative z-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
             <div className="flex-1">

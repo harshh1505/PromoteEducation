@@ -402,6 +402,7 @@ export default function CollegesPage() {
                     src="/images/campus-placeholder.png"
                     alt={cat.label}
                     fill
+                    priority
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className={cn("absolute inset-0 bg-gradient-to-t", cat.color)} />
