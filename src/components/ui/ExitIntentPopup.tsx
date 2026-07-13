@@ -58,10 +58,9 @@ export default function ExitIntentPopup() {
         full_name: name,
         email: email,
         phone: phone,
-        city: 'Downloaded PDF Guide',
         stream: 'General Inquiry / PDF Guide',
         college_name: '2026 Admission Guide PDF',
-        source: 'Exit Intent Guide Download Form',
+        source: 'Exit Intent Guide Download Form | Action: Downloaded PDF Guide',
         status: 'new'
       }])
 
