@@ -18,14 +18,17 @@ export default function CollegeCard({ college, onOpenLead, onOpenReview }: Colle
       <div className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full border-b-4 border-b-slate-100 hover:border-b-sky-500">
         
         {/* Visual Header - Collegedunia style */}
-        <div className="aspect-[16/8] relative overflow-hidden">
+        <div className="aspect-[16/8] relative overflow-hidden bg-slate-100">
           <img 
-            src={college.image || 'https://images.unsplash.com/photo-1562774053-701939374585?w=800'} 
+            src={college.image || '/images/campus-placeholder.png'} 
             alt={college.name} 
             className="w-full h-full object-cover transition-opacity duration-500"
+            loading="lazy"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
-              target.src = 'https://images.unsplash.com/photo-1562774053-701939374585?w=800'; // Reliable Unsplash Fallback
+              if (target.src !== window.location.origin + '/images/campus-placeholder.png') {
+                target.src = '/images/campus-placeholder.png';
+              }
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent" />

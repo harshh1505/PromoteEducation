@@ -57,7 +57,7 @@ export default function CollegesSection() {
           avgCTC: c.avg_ctc || 'N/A',
           totalFee: c.total_fee || '—',
           verified: c.verified || false,
-          image: c.image_url || c.cover_image || 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2053&auto=format&fit=crop',
+          image: c.image_url || c.cover_image || '/images/campus-placeholder.png',
           logo: c.logo || `https://ui-avatars.com/api/?name=${encodeURIComponent(c.name)}&background=0D9488&color=fff`,
           numCourses: c.num_courses || 2,
           establishmentYear: c.established || 2024,

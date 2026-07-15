@@ -104,8 +104,19 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
-# Promote Education
+## 🤖 Gemini AI Content Generators
 
-# Gemini AI - Blog & News Content Generator (`backend/gemini_blog_seeding.js`)
+The platform includes several Node.js utility scripts located under the `backend/` directory to generate rich educational content automatically using the Google Gemini API.
 
-  
+### Available Generator Scripts
+- **SEO Meta Generator** (`backend/generateMetaSEO.js`): Generates SEO-optimized titles, keywords, and meta descriptions for colleges.
+- **Academic Metrics Generator** (`backend/generateAcademicMetrics.js`): Compiles college academic details, highlights, and insights.
+- **Stats & Placement Generators** (`backend/generateAvgPackage.js`, `backend/generateHighestPackage.js`, `backend/generateTotalFee.js`): Auto-populates missing financial and placement metrics.
+- **Facilities & Info** (`backend/generateFacilities.js`, `backend/generateEstablished.js`): Fills in campus facility details and founding years.
+
+### How to Run Seeding Scripts
+Ensure your `.env` file in the `backend/` directory has `GEMINI_API_KEY` and `SUPABASE_URL` properly configured, then execute any script using Node:
+```bash
+cd backend
+node generateContent.js
+```

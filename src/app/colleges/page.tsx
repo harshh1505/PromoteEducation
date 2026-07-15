@@ -818,9 +818,12 @@ function CollegeCard({
           src={college.image_url || "/images/campus-placeholder.png"}
           alt={college.name}
           className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          loading="lazy"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
-            target.src = "/images/campus-placeholder.png";
+            if (!target.src.endsWith('/images/campus-placeholder.png')) {
+              target.src = "/images/campus-placeholder.png";
+            }
           }}
         />
 
