@@ -120,3 +120,15 @@ Ensure your `.env` file in the `backend/` directory has `GEMINI_API_KEY` and `SU
 cd backend
 node generateContent.js
 ```
+
+---
+
+## 🌐 Deployment
+
+The platform is designed to be easily deployed on **Vercel** or other Next.js hosting environments.
+
+### Steps to Deploy:
+1. Push changes to your repository.
+2. Link the repository to your Vercel account.
+3. Add the required Environment Variables in Vercel settings.
+4. Deploy the application.
