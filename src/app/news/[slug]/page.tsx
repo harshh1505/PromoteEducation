@@ -86,8 +86,27 @@ export default async function NewsArticleDetailsPage({ params }: { params: Promi
   const sections = sectionsRes.data || []
   const trending = trendingRes.data || []
 
-  // Calculate dynamic reading time based on sections text
-  const totalText = sections.map((s) => s.content || '').join(' ')
+  // Split synopsis into highlighted intro and body if it contains the full article
+  let displaySynopsis = article.synopsis || '';
+  let remainingBody = '';
+
+  const isLongSynopsis = (article.synopsis || '').length > 600;
+  const hasNoSections = sections.length === 0;
+  
+  if (article.synopsis && (hasNoSections || isLongSynopsis)) {
+    const paragraphs = article.synopsis.split(/\n\s*\n/);
+    if (paragraphs.length > 1) {
+      displaySynopsis = paragraphs[0];
+      remainingBody = paragraphs.slice(1).join('\n\n');
+    }
+  }
+
+  // Calculate dynamic reading time based on sections and synopsis content
+  const totalText = [
+    displaySynopsis,
+    remainingBody,
+    ...sections.map((s) => s.content || '')
+  ].join(' ')
   const wordCount = totalText.split(/\s+/).length || 0
   const readTimeVal = Math.max(1, Math.ceil(wordCount / 200))
   const readTime = `${readTimeVal} min read`
@@ -174,6 +193,21 @@ export default async function NewsArticleDetailsPage({ params }: { params: Promi
                     priority
                     className="object-cover"
                   />
+                </div>
+              )}
+
+              {/* Article Content Body */}
+              {/* Synopsis */}
+              {displaySynopsis && (
+                <div className="text-slate-650 text-lg leading-relaxed font-semibold mb-10 pb-8 border-b border-slate-100 prose-p:text-slate-800">
+                  <MarkdownViewer content={displaySynopsis} />
+                </div>
+              )}
+
+              {/* Remaining Body (if synopsis was split) */}
+              {remainingBody && (
+                <div className="text-slate-650 text-base leading-relaxed prose prose-slate max-w-none mb-10">
+                  <MarkdownViewer content={remainingBody} />
                 </div>
               )}
 

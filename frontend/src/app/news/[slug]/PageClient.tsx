@@ -170,6 +170,23 @@ export default function NewsArticleDetailsPage({ params }: { params: Promise<{ s
     )
   }
 
+  // Split synopsis into highlighted intro and body if it contains the full article
+  let displaySynopsis = article?.synopsis || '';
+  let remainingBody = '';
+
+  if (article?.synopsis) {
+    const isLongSynopsis = article.synopsis.length > 600;
+    const hasNoSections = (article.sections || []).length === 0;
+    
+    if (hasNoSections || isLongSynopsis) {
+      const paragraphs = article.synopsis.split(/\n\s*\n/);
+      if (paragraphs.length > 1) {
+        displaySynopsis = paragraphs[0];
+        remainingBody = paragraphs.slice(1).join('\n\n');
+      }
+    }
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-white font-body selection:bg-sky-500 selection:text-white">
       <Navbar />
@@ -276,9 +293,16 @@ export default function NewsArticleDetailsPage({ params }: { params: Promise<{ s
 
               {/* Article Content Body */}
               {/* Synopsis */}
-              {article.synopsis && (
+              {displaySynopsis && (
                 <div className="text-slate-650 text-lg leading-relaxed font-semibold mb-10 pb-8 border-b border-slate-100 prose-p:text-slate-800">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{fixMarkdownBold(article.synopsis)}</ReactMarkdown>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{fixMarkdownBold(displaySynopsis)}</ReactMarkdown>
+                </div>
+              )}
+
+              {/* Remaining Body (if synopsis was split) */}
+              {remainingBody && (
+                <div className="text-slate-650 text-base leading-relaxed prose prose-slate max-w-none mb-10">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{fixMarkdownBold(remainingBody)}</ReactMarkdown>
                 </div>
               )}
 
