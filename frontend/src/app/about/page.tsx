@@ -314,7 +314,7 @@ const SnakeLadderGame: React.FC = () => {
                                 const perpOffset = (h.cx > t.cx ? 1 : -1) * 12
                                 const cpX = midX + perpOffset
                                 const cpY = midY
-                                const angle = Math.atan2(cpY - h.cy, cpX - h.cx) * (180 / Math.PI)
+                                const angle = Number((Math.atan2(cpY - h.cy, cpX - h.cx) * (180 / Math.PI)).toFixed(2))
 
                                 return (
                                     <g key={`snake-${head}`} opacity="0.9">
@@ -331,13 +331,13 @@ const SnakeLadderGame: React.FC = () => {
                                             stroke="#fecdd3" strokeWidth="1" fill="none" strokeLinecap="round"
                                             strokeDasharray="2 3"
                                         />
-                                        <g transform={`translate(${h.cx}, ${h.cy}) rotate(${angle + 90})`}>
+                                        <g transform={`translate(${h.cx}, ${h.cy}) rotate(${(angle + 90).toFixed(2)})`}>
                                             <path d="M 0 0 L -0.8 -4 M 0 0 L 0.8 -4" stroke="#f43f5e" strokeWidth="0.5" fill="none" />
                                             <path d="M 0 -2.5 L 2.5 0 L 0 3.5 L -2.5 0 Z" fill="#e11d48" />
                                             <circle cx="-0.8" cy="-0.5" r="0.5" fill="white" />
                                             <circle cx="0.8" cy="-0.5" r="0.5" fill="white" />
                                         </g>
-                                        <g transform={`translate(${t.cx}, ${t.cy}) rotate(${Math.atan2(t.cy - cpY, t.cx - cpX) * (180 / Math.PI)})`}>
+                                        <g transform={`translate(${t.cx}, ${t.cy}) rotate(${(Math.atan2(t.cy - cpY, t.cx - cpX) * (180 / Math.PI)).toFixed(2)})`}>
                                             <path d="M 0 0 L -2.5 -1.5 L -2.5 1.5 Z" fill="#be123c" />
                                         </g>
                                     </g>
