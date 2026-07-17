@@ -15,7 +15,7 @@ import {
 import CollegeCard from '@/components/ui/CollegeCard'
 import { College } from '@/types'
 import { featuredColleges } from '@/lib/data/featuredColleges'
-import { cn } from '@/lib/utils'
+import { cn, resolveImageUrl } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import { useLeadCapture } from '@/hooks/useLeadCapture'
@@ -487,7 +487,7 @@ export default function AboutPage() {
             const { data, error } = await supabase
                 .from('news_articles')
                 .select('*')
-                .order('date', { ascending: false })
+                .order('published_at', { ascending: false, nullsFirst: false })
                 .order('created_at', { ascending: false })
             
             if (error) {
@@ -508,18 +508,18 @@ export default function AboutPage() {
                 }
 
                 const mapped = data.map((item: any) => {
-                    const cleanedContent = stripMarkdown(item.content || '')
+                    const cleanedContent = stripMarkdown(item.synopsis || '')
                     return {
                         isLive: item.is_live,
                         title: item.heading,
                         excerpt: cleanedContent ? (cleanedContent.length > 140 ? cleanedContent.slice(0, 137) + '...' : cleanedContent) : '',
                         author: item.editor,
-                        date: new Date(item.date).toLocaleDateString('en-US', {
+                        date: new Date(item.published_at || item.created_at).toLocaleDateString('en-US', {
                             month: 'short',
                             day: 'numeric',
                             year: 'numeric'
                         }),
-                        image: item.image_link || 'https://images.unsplash.com/photo-1510074377623-8cf13fb86c08?w=400',
+                        image: resolveImageUrl(item.featured_image) || 'https://images.unsplash.com/photo-1510074377623-8cf13fb86c08?w=400',
                         slug: item.slug
                     }
                 })
