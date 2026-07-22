@@ -351,7 +351,7 @@ export default function CollegesPage() {
           <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-0">
 
             {/* Left — Headline */}
-            <div className="w-full lg:w-[28%] lg:pr-8">
+            <div className="w-full lg:w-[25%] lg:pr-6">
               <h1
                 className="text-2xl lg:text-[28px] font-bold text-[#071A44] leading-snug tracking-tight mb-2"
                 style={{ fontFamily: 'var(--font-display)' }}
@@ -364,7 +364,7 @@ export default function CollegesPage() {
             </div>
 
             {/* Center — Search */}
-            <div className="w-full lg:w-[42%] lg:px-4">
+            <div className="w-full lg:w-[38%] lg:px-4">
               <div className="relative group">
                 <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors" />
                 <input
@@ -390,14 +390,14 @@ export default function CollegesPage() {
             </div>
 
             {/* Right — Illustration */}
-            <div className="hidden lg:flex w-[30%] items-center justify-end">
+            <div className="hidden lg:flex w-[37%] items-center justify-end">
               <Image
                 src="/illustrations/colleges-hero.png"
                 alt="Campus Illustration"
-                width={360}
-                height={160}
+                width={420}
+                height={220}
                 priority
-                className="w-full max-h-[140px] object-contain object-right opacity-85"
+                className="w-full max-h-[190px] object-contain object-right opacity-90 transition-all duration-300"
               />
             </div>
           </div>
