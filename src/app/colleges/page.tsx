@@ -65,6 +65,8 @@ export default function CollegesPage() {
   const [selectedCity, setSelectedCity] = useState('All')
   const [selectedOwnerships, setSelectedOwnerships] = useState<string[]>([])
   const [sortBy, setSortBy] = useState('popular')
+  const [bdsCollegeIds, setBdsCollegeIds] = useState<Set<string>>(new Set())
+  const [mbbsCollegeIds, setMbbsCollegeIds] = useState<Set<string>>(new Set())
 
   // UI state
   const [compareList, setCompareList] = useState<string[]>([])
@@ -88,14 +90,31 @@ export default function CollegesPage() {
     async function loadColleges() {
       try {
         setIsLoading(true)
-        const { data, error } = await supabase
-          .from('colleges')
-          .select('id, slug, name, short_name, location, state, stream, ranking, total_fee, avg_ctc, ownership, type, cover_image, image_url')
-          .eq('is_active', true)
-          .order('ranking', { ascending: true })
+        const [collegesRes, bdsRes, mbbsRes] = await Promise.all([
+          supabase
+            .from('colleges')
+            .select('id, slug, name, short_name, location, state, stream, ranking, total_fee, avg_ctc, ownership, type, cover_image, image_url')
+            .eq('is_active', true)
+            .order('ranking', { ascending: true }),
+          supabase
+            .from('courses')
+            .select('college_id')
+            .eq('course_catalog_id', '9de59697-8f3b-48b0-9032-37b077cc9fe3'),
+          supabase
+            .from('courses')
+            .select('college_id')
+            .eq('course_catalog_id', 'f35ba06c-bd5c-42f8-be1d-376833eaeb08')
+        ])
 
-        if (error) throw error
-        if (data) setColleges(data)
+        if (collegesRes.error) throw collegesRes.error
+
+        if (collegesRes.data) setColleges(collegesRes.data)
+        if (bdsRes.data) {
+          setBdsCollegeIds(new Set(bdsRes.data.map((c: any) => c.college_id)))
+        }
+        if (mbbsRes.data) {
+          setMbbsCollegeIds(new Set(mbbsRes.data.map((c: any) => c.college_id)))
+        }
       } catch (err) {
         console.error('Error loading colleges:', err)
       } finally {
@@ -107,9 +126,23 @@ export default function CollegesPage() {
 
   // ── DERIVED DATA ──────────────────────────────────────────────────────────
 
-  const uniqueStreams = useMemo(() =>
-    Array.from(new Set(colleges.map(c => c.stream))).filter(Boolean).sort()
-  , [colleges])
+  const uniqueStreams = useMemo(() => {
+    const list = Array.from(new Set(colleges.map(c => c.stream))).filter(Boolean)
+    
+    // Replace "Medical" with separate "MBBS" and "BDS" filters
+    const medIdx = list.indexOf('Medical')
+    if (medIdx !== -1) {
+      list.splice(medIdx, 1)
+    }
+    
+    if (mbbsCollegeIds.size > 0 && !list.includes('MBBS')) {
+      list.push('MBBS')
+    }
+    if (bdsCollegeIds.size > 0 && !list.includes('BDS')) {
+      list.push('BDS')
+    }
+    return list.sort()
+  }, [colleges, bdsCollegeIds, mbbsCollegeIds])
 
   const uniqueStates = useMemo(() =>
     Array.from(new Set(colleges.map(c => c.state))).filter(Boolean).sort()
@@ -125,10 +158,18 @@ export default function CollegesPage() {
   const streamCounts = useMemo(() => {
     const counts: Record<string, number> = {}
     colleges.forEach(c => {
-      if (c.stream) counts[c.stream] = (counts[c.stream] || 0) + 1
+      if (c.stream && c.stream !== 'Medical') {
+        counts[c.stream] = (counts[c.stream] || 0) + 1
+      }
     })
+    if (mbbsCollegeIds.size > 0) {
+      counts['MBBS'] = mbbsCollegeIds.size
+    }
+    if (bdsCollegeIds.size > 0) {
+      counts['BDS'] = bdsCollegeIds.size
+    }
     return counts
-  }, [colleges])
+  }, [colleges, bdsCollegeIds, mbbsCollegeIds])
 
   const ownershipCounts = useMemo(() => {
     const counts: Record<string, number> = {}
@@ -188,7 +229,16 @@ export default function CollegesPage() {
 
       // Stream filter
       if (selectedStreams.length > 0) {
-        if (!selectedStreams.includes(college.stream)) return false
+        const matchesStream = selectedStreams.some(stream => {
+          if (stream === 'MBBS') {
+            return mbbsCollegeIds.has(college.id)
+          }
+          if (stream === 'BDS') {
+            return bdsCollegeIds.has(college.id)
+          }
+          return college.stream === stream
+        })
+        if (!matchesStream) return false
       }
 
       // State filter
@@ -476,7 +526,7 @@ export default function CollegesPage() {
                 onToggle={() => toggleSection('stream')}
               >
                 <div className="space-y-2">
-                  {uniqueStreams.slice(0, 6).map(stream => (
+                  {uniqueStreams.slice(0, 10).map(stream => (
                     <FilterCheckbox
                       key={stream}
                       label={stream}
@@ -485,11 +535,6 @@ export default function CollegesPage() {
                       onChange={() => toggleStream(stream)}
                     />
                   ))}
-                  {uniqueStreams.length > 6 && (
-                    <button className="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors mt-1">
-                      + View More
-                    </button>
-                  )}
                 </div>
               </FilterSection>
 
