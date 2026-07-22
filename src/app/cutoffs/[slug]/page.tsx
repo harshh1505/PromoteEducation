@@ -1,7 +1,12 @@
-import ClientPage from './ClientPage'
+export const dynamic = 'force-static'
+export const dynamicParams = false
 
-export const runtime = 'edge'
+export async function generateStaticParams() {
+  return [{ slug: 'engineering' }, { slug: 'medical' }]
+}
 
-export default function CutoffsPage({ params }: { params: Promise<{ slug: string }> }) {
-  return <ClientPage params={params} />
+import PageClient from './PageClient'
+
+export default function Page({ params }: { params: Promise<{ slug: string }> }) {
+  return <PageClient params={params} />
 }

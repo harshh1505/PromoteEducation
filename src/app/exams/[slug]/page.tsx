@@ -1,6 +1,11 @@
-import { Metadata } from 'next'
+export const dynamicParams = false
 
-export const runtime = 'edge'
+export async function generateStaticParams() {
+  const { examDatabase } = await import('@/data/examDatabase')
+  return Object.keys(examDatabase).map(slug => ({ slug }))
+}
+
+import { Metadata } from 'next'
 import { examDatabase } from '@/data/examDatabase'
 import ExamBlogPage from '@/components/pages/exams/ExamBlogPage'
 import { notFound } from 'next/navigation'

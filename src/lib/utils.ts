@@ -51,3 +51,34 @@ export function resolveImageUrl(url: string | null | undefined): string | null {
 
   return url;
 }
+
+export function fixMarkdownBold(text: string | null | undefined): string {
+  if (!text) return '';
+  
+  // Collapse any sequence of 3 or more asterisks down to standard double asterisks '**'
+  let cleaned = text.replace(/\*{3,}/g, '**');
+  
+  // Resolve spacing issues around double asterisks.
+  // Match bold tags within a line, correcting inside spacing and ensuring outside spacing to letters, numbers, and symbols like HTML tags.
+  return cleaned.replace(/([^\s([{\x22\x27])?\*\*([^*\r\n]+)\*\*([^\s)\]}.,;:!?\x22\x27])?/g, (match, before, content, after) => {
+    const trimmedContent = content.trim();
+    if (!trimmedContent) {
+      return before || after ? `${before || ''} ${after || ''}` : ' ';
+    }
+    const prefix = before ? `${before} ` : '';
+    const suffix = after ? ` ${after}` : '';
+    return `${prefix}**${trimmedContent}**${suffix}`;
+  });
+}
+
+export function stripMarkdown(text: string | null | undefined): string {
+  if (!text) return '';
+  // Remove markdown headings, bold/italic, links, blockquotes, code blocks, lists, etc.
+  return text
+    .replace(/[#_*~`]/g, '')           // Basic symbols
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Links
+    .replace(/^\s*>\s+/gm, '')         // Blockquotes
+    .replace(/^\s*[-+*]\s+/gm, '')     // Unordered lists
+    .replace(/^\s*\d+\.\s+/gm, '')     // Ordered lists
+    .trim();
+}

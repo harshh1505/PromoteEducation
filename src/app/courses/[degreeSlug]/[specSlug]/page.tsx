@@ -8,7 +8,8 @@ import {
   ArrowRight, MapPin, Check, Star, Award, ShieldCheck, Globe, HelpCircle, Briefcase, TrendingUp
 } from 'lucide-react'
 
-export const runtime = 'edge'
+export const dynamic = 'force-static'
+export const dynamicParams = false
 
 const degreeMap: Record<string, string> = {
   'btech': 'B.Tech',
@@ -38,38 +39,50 @@ function getCourseDuration(degree: string): number {
   return 3;
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ degreeSlug: string; specSlug: string }> }) {
-  const { degreeSlug, specSlug } = await params
-  const degreeSlugLower = degreeSlug.toLowerCase();
-  const degreeName = degreeMap[degreeSlugLower] || degreeSlug.toUpperCase();
-  const searchSlug = specSlug.includes('-') ? specSlug : `${degreeSlug}-${specSlug}`;
+export async function generateStaticParams() {
+  const { data } = await supabase.from('course_catalog').select('slug, degree')
+  return (data || []).map((c) => {
+    const degreeSlug = (c.degree || '').replace(/\./g, '').toLowerCase();
+    const specSlug = c.slug;
+    return {
+      degreeSlug,
+      specSlug
+    };
+  })
+}
+
+export async function generateMetadata({ params }: any) {
+  const resolvedParams = await params
+  const degreeSlugLower = resolvedParams.degreeSlug.toLowerCase();
+  const degreeName = degreeMap[degreeSlugLower] || resolvedParams.degreeSlug.toUpperCase();
+  const searchSlug = resolvedParams.specSlug.includes('-') ? resolvedParams.specSlug : `${resolvedParams.degreeSlug}-${resolvedParams.specSlug}`;
 
   const { data: specItem } = await supabase
     .from('course_catalog')
     .select('*')
-    .or(`slug.eq.${specSlug},slug.eq.${searchSlug}`)
+    .or(`slug.eq.${resolvedParams.specSlug},slug.eq.${searchSlug}`)
     .limit(1)
     .single();
 
   if (!specItem) return { title: 'Specialisation Not Found' }
 
   return {
-    title: `${degreeSlug.toUpperCase()} in ${specItem.name} 2026: Details, Scope & Colleges | Promote Education`,
-    description: `Explore ${degreeSlug.toUpperCase()} in ${specItem.name} — duration, eligibility, average salary, career scope, and top colleges in India.`,
+    title: `${resolvedParams.degreeSlug.toUpperCase()} in ${specItem.name} 2026: Details, Scope & Colleges | Promote Education`,
+    description: `Explore ${resolvedParams.degreeSlug.toUpperCase()} in ${specItem.name} — duration, eligibility, average salary, career scope, and top colleges in India.`,
   }
 }
 
-export default async function SpecialisationPage({ params }: { params: Promise<{ degreeSlug: string; specSlug: string }> }) {
-  const { degreeSlug, specSlug } = await params
-  const degreeSlugLower = degreeSlug.toLowerCase();
-  const degreeName = degreeMap[degreeSlugLower] || degreeSlug.toUpperCase();
-  const searchSlug = specSlug.includes('-') ? specSlug : `${degreeSlug}-${specSlug}`;
+export default async function SpecialisationPage({ params }: any) {
+  const resolvedParams = await params
+  const degreeSlugLower = resolvedParams.degreeSlug.toLowerCase();
+  const degreeName = degreeMap[degreeSlugLower] || resolvedParams.degreeSlug.toUpperCase();
+  const searchSlug = resolvedParams.specSlug.includes('-') ? resolvedParams.specSlug : `${resolvedParams.degreeSlug}-${resolvedParams.specSlug}`;
 
   // 1. Fetch the specialization detail from catalog
   const { data: specItem, error } = await supabase
     .from('course_catalog')
     .select('*')
-    .or(`slug.eq.${specSlug},slug.eq.${searchSlug}`)
+    .or(`slug.eq.${resolvedParams.specSlug},slug.eq.${searchSlug}`)
     .limit(1)
     .single();
 
@@ -134,7 +147,7 @@ export default async function SpecialisationPage({ params }: { params: Promise<{
     ? spec.career_domain.split(',').map((c: string) => c.trim()) 
     : ['Academic Researcher', 'Professional Consultant', 'Domain Expert']
 
-  const durationTextMapped = durationText
+
 
   const sections = [
     { id: 'overview', label: 'Overview' },

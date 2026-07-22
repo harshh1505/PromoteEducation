@@ -13,7 +13,28 @@ import {
 // ===============================
 // SETTINGS
 // ===============================
-export const runtime = 'edge'
+export const dynamic = 'force-static'
+export const dynamicParams = false
+
+export async function generateStaticParams() {
+  const streams = ['engineering', 'medical', 'management', 'law']
+  const cities = ['delhi', 'mumbai', 'bangalore', 'pune', 'hyderabad', 'chennai', 'kolkata']
+  const fees = [500000, 1000000, 2000000]
+  const packages = [5, 10, 20]
+  const pages: { slug: string }[] = []
+
+  streams.forEach(s => pages.push({ slug: s }))
+  streams.forEach(s => cities.forEach(c => pages.push({ slug: `${s}-in-${c}` })))
+  streams.forEach(s => fees.forEach(f => pages.push({ slug: `${s}-under-${f}` })))
+  streams.forEach(s => packages.forEach(p => pages.push({ slug: `${s}-with-${p}-lpa` })))
+
+  const { data: colleges } = await supabase.from('colleges').select('slug')
+  colleges?.forEach(c => {
+    if (c.slug && typeof c.slug === 'string') pages.push({ slug: c.slug })
+  })
+
+  return pages
+}
 
 function formatBgText(text: string) {
   if (!text) return '—'
@@ -321,12 +342,12 @@ async function ListingPage({ slug, type }: { slug: string; type: string }) {
 // ===============================
 // MAIN COLLEGE PAGE
 // ===============================
-export default async function CollegePage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  const pageInfo = parsePageType(slug)
-  if (pageInfo.type !== 'college') return <ListingPage slug={slug} type={pageInfo.type} />
+export default async function CollegePage({ params }: any) {
+  const resolvedParams = await params
+  const pageInfo = parsePageType(resolvedParams.slug)
+  if (pageInfo.type !== 'college') return <ListingPage slug={resolvedParams.slug} type={pageInfo.type} />
 
-  const data = await getCollegeData(slug)
+  const data = await getCollegeData(resolvedParams.slug)
   if (!data) return notFound()
 
   const { college, faqs: dbFaqs } = data
@@ -424,7 +445,7 @@ export default async function CollegePage({ params }: { params: Promise<{ slug: 
       {/* ── EDITORIAL HEADER ── */}
       <header 
         className={`pt-32 pb-16 border-b border-slate-100 relative overflow-hidden ${
-          college.cover_image ? "text-white bg-slate-950" : "bg-slate-50"
+          college.cover_image ? "text-white bg-slate-955 bg-slate-950" : "bg-slate-50"
         }`}
       >
         <DynamicCoverImage 
@@ -632,7 +653,7 @@ export default async function CollegePage({ params }: { params: Promise<{ slug: 
               </h2>
               <div className="prose prose-slate prose-lg max-w-none text-slate-600 leading-relaxed space-y-6">
                 <p>{overviewText}</p>
-
+          
                 {/* Facilities pills */}
                 {college.facilities && college.facilities.length > 0 && (
                   <div className="not-prose mt-8">
@@ -717,23 +738,23 @@ export default async function CollegePage({ params }: { params: Promise<{ slug: 
                                 : college.content.fee_structure.management_quota}
                             </td>
                           </tr>
-                          <tr>
-                            <td className="px-6 py-4 font-bold text-slate-900">Bank Guarantee (BG)</td>
-                            <td className="px-6 py-4 text-slate-750 bg-emerald-50/10 font-medium">
-                              {college.bank_guarantee ? (
-                                college.bank_guarantee.includes('|')
-                                  ? formatBgText(college.bank_guarantee.split('|')[0])
-                                  : formatBgText(college.bank_guarantee)
-                              ) : 'None required'}
-                            </td>
-                            <td className="px-6 py-4 text-slate-750 bg-indigo-50/10 font-medium">
-                              {college.bank_guarantee ? (
-                                college.bank_guarantee.includes('|')
-                                  ? formatBgText(college.bank_guarantee.split('|')[1])
-                                  : 'None required'
-                              ) : 'None required'}
-                            </td>
-                          </tr>
+                            <tr>
+                              <td className="px-6 py-4 font-bold text-slate-900">Bank Guarantee (BG)</td>
+                              <td className="px-6 py-4 text-slate-750 bg-emerald-50/10 font-medium">
+                                {college.bank_guarantee ? (
+                                  college.bank_guarantee.includes('|')
+                                    ? formatBgText(college.bank_guarantee.split('|')[0])
+                                    : formatBgText(college.bank_guarantee)
+                                ) : 'None required'}
+                              </td>
+                              <td className="px-6 py-4 text-slate-750 bg-indigo-50/10 font-medium">
+                                {college.bank_guarantee ? (
+                                  college.bank_guarantee.includes('|')
+                                    ? formatBgText(college.bank_guarantee.split('|')[1])
+                                    : 'None required'
+                                ) : 'None required'}
+                              </td>
+                            </tr>
                         </tbody>
                       </table>
                     </div>

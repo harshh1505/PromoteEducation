@@ -1,7 +1,12 @@
-import ClientPage from './ClientPage'
+export const dynamic = 'force-static'
+export const dynamicParams = false
 
-export const runtime = 'edge'
+export async function generateStaticParams() {
+  return [{ slug: 'colleges' }]
+}
 
-export default function CompareSlugRedirectPage() {
-  return <ClientPage />
+import PageClient from './PageClient'
+
+export default function Page() {
+  return <PageClient />
 }

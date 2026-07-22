@@ -8,7 +8,8 @@ import {
   ArrowRight, MapPin, CheckCircle2, Check, Star, Award, ShieldCheck, Globe, HelpCircle 
 } from 'lucide-react'
 
-export const runtime = 'edge'
+export const dynamic = 'force-static'
+export const dynamicParams = false
 
 const degreeMap: Record<string, string> = {
   'btech': 'B.Tech',
@@ -38,10 +39,29 @@ function getCourseDuration(degree: string): number {
   return 3;
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ degreeSlug: string }> }) {
-  const { degreeSlug } = await params
-  const degreeSlugLower = degreeSlug.toLowerCase();
-  const degreeName = degreeMap[degreeSlugLower] || degreeSlug.toUpperCase();
+export async function generateStaticParams() {
+  return [
+    { degreeSlug: 'btech' },
+    { degreeSlug: 'mtech' },
+    { degreeSlug: 'mba' },
+    { degreeSlug: 'mbbs' },
+    { degreeSlug: 'bds' },
+    { degreeSlug: 'bsc-nursing' },
+    { degreeSlug: 'ba-llb' },
+    { degreeSlug: 'llm' },
+    { degreeSlug: 'bpharm' },
+    { degreeSlug: 'mpharm' },
+    { degreeSlug: 'march' },
+    { degreeSlug: 'be' },
+    { degreeSlug: 'msc' },
+    { degreeSlug: 'phd' }
+  ];
+}
+
+export async function generateMetadata({ params }: any) {
+  const resolvedParams = await params
+  const degreeSlugLower = resolvedParams.degreeSlug.toLowerCase();
+  const degreeName = degreeMap[degreeSlugLower] || resolvedParams.degreeSlug.toUpperCase();
 
   const { data: catalogCourses } = await supabase
     .from('course_catalog')
@@ -59,10 +79,10 @@ export async function generateMetadata({ params }: { params: Promise<{ degreeSlu
   }
 }
 
-export default async function DegreeHubPage({ params }: { params: Promise<{ degreeSlug: string }> }) {
-  const { degreeSlug } = await params
-  const degreeSlugLower = degreeSlug.toLowerCase();
-  const degreeName = degreeMap[degreeSlugLower] || degreeSlug.toUpperCase();
+export default async function DegreeHubPage({ params }: any) {
+  const resolvedParams = await params
+  const degreeSlugLower = resolvedParams.degreeSlug.toLowerCase();
+  const degreeName = degreeMap[degreeSlugLower] || resolvedParams.degreeSlug.toUpperCase();
 
   // 1. Fetch the master course details from catalog
   const { data: catalogCourses, error } = await supabase

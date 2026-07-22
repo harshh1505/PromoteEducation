@@ -1,13 +1,15 @@
-import dynamic from 'next/dynamic'
-
-export const runtime = 'edge'
-
 import Navbar from '@/components/layout/Navbar'
+import { articleDatabase } from '@/data/articleDatabase'
+
+export const dynamicParams = false
+
+export async function generateStaticParams() {
+  return Object.keys(articleDatabase).map(slug => ({ slug }))
+}
 import Footer from '@/components/layout/Footer'
 import Link from 'next/link'
 import { Metadata } from 'next'
 import { ArrowLeft, Share2, Clock, Calendar, Bookmark, ChevronRight, CheckCircle2, Target, BookOpen, ScrollText, Zap } from 'lucide-react'
-import { articleDatabase } from '@/data/articleDatabase'
 import { examDatabase } from '@/data/examDatabase'
 import MarkdownViewer from '@/components/ui/MarkdownViewer'
 
