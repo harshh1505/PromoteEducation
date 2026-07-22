@@ -56,7 +56,8 @@ export function fixMarkdownBold(text: string | null | undefined): string {
   if (!text) return '';
   
   // Collapse any sequence of 3 or more asterisks down to standard double asterisks '**'
-  let cleaned = text.replace(/\*{3,}/g, '**');
+  // and dynamically strip HTML <u> tags to prevent unwanted underlines
+  let cleaned = text.replace(/\*{3,}/g, '**').replace(/<\/?u>/gi, '');
   
   // Resolve spacing issues around double asterisks.
   // Match bold tags within a line, correcting inside spacing and ensuring outside spacing to letters, numbers, and symbols like HTML tags.
