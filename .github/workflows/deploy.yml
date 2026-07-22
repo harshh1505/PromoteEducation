@@ -17,7 +17,7 @@ jobs:
           cache: npm
           cache-dependency-path: package-lock.json
 
-      - run: npm ci
+      - run: npm install --legacy-peer-deps
 
       - name: Remove API routes for static export
         run: rm -rf src/app/api
