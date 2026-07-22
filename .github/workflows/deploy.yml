@@ -19,8 +19,8 @@ jobs:
 
       - run: npm install --legacy-peer-deps
 
-      - name: Remove API routes for static export
-        run: rm -rf src/app/api
+      - name: Remove API and Auth routes for static export
+        run: rm -rf src/app/api src/app/auth
 
       - run: npx next build
         env:
