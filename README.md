@@ -5,6 +5,7 @@ PromoteEducation is a comprehensive educational platform designed to help studen
 The platform integrates a modern Next.js frontend with Tailwind CSS, Framer Motion for premium animations, and a Supabase backend for robust data management, paired with Google Gemini AI for automated content generation and comparisons.
 
 ----
+----
 
 ## 🚀 Key Features
 
