@@ -49,6 +49,11 @@ export function resolveImageUrl(url: string | null | undefined): string | null {
     return `https://lh3.googleusercontent.com/d/${driveIdMatch[1]}=w1000`;
   }
 
+  // Convert Supabase storage signed URLs to public URLs since we made the bucket public
+  if (url.includes('/storage/v1/object/sign/')) {
+    return url.replace('/storage/v1/object/sign/', '/storage/v1/object/public/').split('?')[0];
+  }
+
   return url;
 }
 

@@ -286,7 +286,7 @@ export default function BlogDetailsPage({ params }: { params: Promise<{ slug: st
 
               {/* Cover Image */}
               {blog.featured_image && (
-                <div className="w-full h-[280px] md:h-[450px] rounded-[32px] overflow-hidden border border-slate-100 mb-12 bg-slate-50 flex items-center justify-center">
+                <div className="w-full aspect-[16/10] max-h-[1000px] rounded-[32px] overflow-hidden border border-slate-100 mb-12 bg-slate-50 flex items-center justify-center">
                   <img 
                     src={resolveImageUrl(blog.featured_image || undefined) || ''} 
                     alt={blog.title} 

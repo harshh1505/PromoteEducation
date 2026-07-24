@@ -108,11 +108,11 @@ export default function NewsPageContent({
            {featuredArticle ? (
              <Link 
                href={featuredArticle.slug ? `/news/${featuredArticle.slug}` : '#'}
-               className="relative h-[500px] rounded-[40px] overflow-hidden shadow-2xl border border-slate-100 group block cursor-pointer animate-in fade-in duration-500"
+               className="relative aspect-[16/10] w-full rounded-[40px] overflow-hidden shadow-2xl border border-slate-100 bg-slate-50 flex items-center justify-center group block cursor-pointer animate-in fade-in duration-500"
              >
                 <Image 
                   src={featuredArticle.image} 
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="object-contain transition-transform duration-700 group-hover:scale-103"
                   alt={featuredArticle.title}
                   fill
                   sizes="(max-width: 1200px) 100vw, 800px"
@@ -135,7 +135,7 @@ export default function NewsPageContent({
                 </div>
              </Link>
            ) : (
-             <div className="relative h-[500px] rounded-[40px] bg-slate-100 animate-pulse border border-slate-100" />
+             <div className="relative aspect-[16/10] w-full rounded-[40px] bg-slate-100 animate-pulse border border-slate-100" />
            )}
 
            {/* List of sub news */}
@@ -147,7 +147,7 @@ export default function NewsPageContent({
                     key={idx} 
                     className="group flex gap-6 p-4 rounded-3xl bg-white border border-slate-100 hover:shadow-xl shadow-slate-900/5 transition-all cursor-pointer"
                   >
-                     <div className="w-32 h-32 rounded-2xl overflow-hidden flex-shrink-0 relative shadow-sm">
+                     <div className="w-32 aspect-[16/10] rounded-2xl overflow-hidden flex-shrink-0 relative shadow-sm bg-slate-50 flex items-center justify-center">
                         {article.isLive && (
                           <span className="absolute top-2 left-2 z-10 flex items-center gap-1 bg-red-500 text-white text-[9px] font-black px-2 py-0.5 rounded-md animate-pulse shadow-md">
                             <span className="w-1.5 h-1.5 bg-white rounded-full" /> LIVE
@@ -155,7 +155,7 @@ export default function NewsPageContent({
                         )}
                         <Image 
                           src={article.image} 
-                          className="object-cover group-hover:scale-110 transition-transform duration-500" 
+                          className="object-contain group-hover:scale-105 transition-transform duration-500" 
                           alt={article.title}
                           fill
                           sizes="128px"
@@ -218,15 +218,15 @@ export default function NewsPageContent({
                return (
                  <div key={article.id} className="p-6 rounded-3xl border border-slate-100 bg-white group hover:border-sky-200 hover:shadow-xl shadow-slate-900/5 transition-all flex flex-col justify-between">
                      <div>
-                       <div className="w-full aspect-video rounded-2xl bg-slate-50 mb-6 overflow-hidden shadow-sm relative">
-                          <Image 
-                            src={resolveImageUrl(article.featured_image) || 'https://images.unsplash.com/photo-1541339907198-e08759dfc3ef?w=400'} 
-                            className="object-cover group-hover:scale-105 transition-transform duration-700" 
-                            alt={article.title}
-                            fill
-                            sizes="(max-width: 768px) 100vw, 350px"
-                          />
-                       </div>
+                        <div className="w-full aspect-[16/10] rounded-2xl bg-slate-50 mb-6 overflow-hidden shadow-sm relative flex items-center justify-center">
+                           <Image 
+                             src={resolveImageUrl(article.featured_image) || 'https://images.unsplash.com/photo-1541339907198-e08759dfc3ef?w=400'} 
+                             className="object-contain group-hover:scale-103 transition-transform duration-700" 
+                             alt={article.title}
+                             fill
+                             sizes="(max-width: 768px) 100vw, 350px"
+                           />
+                        </div>
                        <h4 className="font-bold text-slate-900 mb-4 leading-tight group-hover:text-sky-600 transition-colors line-clamp-2">{article.title}</h4>
                        {article.summary && <p className="text-xs text-slate-500 line-clamp-2 mb-4 font-light leading-relaxed">{article.summary}</p>}
                      </div>

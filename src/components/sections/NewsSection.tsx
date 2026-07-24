@@ -6,6 +6,7 @@ import { ArrowRight, MessageSquare, Share2, Eye, ChevronRight } from 'lucide-rea
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
+import { resolveImageUrl } from '@/lib/utils'
 
 function stripMarkdown(text: string): string {
   if (!text) return ''
@@ -31,11 +32,11 @@ export default function NewsSection() {
         .select('*')
         .order('published_at', { ascending: false, nullsFirst: false })
         .order('created_at', { ascending: false })
+        .limit(6)
       
       if (error) {
         console.error('Error fetching news from Supabase:', error)
       } else if (data) {
-        const { resolveImageUrl } = await import('@/lib/utils')
         // Map database fields to the UI format
         const mapped = data.map((item: any) => {
           const cleanedContent = stripMarkdown(item.synopsis || '')
@@ -119,11 +120,11 @@ export default function NewsSection() {
                  </div>
               </div>
 
-              <div className="flex-shrink-0 w-20 h-20 md:w-28 md:h-20 rounded-xl overflow-hidden shadow-sm">
+              <div className="flex-shrink-0 w-24 aspect-[16/10] md:w-32 rounded-xl overflow-hidden shadow-sm bg-slate-50 flex items-center justify-center">
                 <img 
                   src={item.image} 
                   alt="" 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.src = 'https://images.unsplash.com/photo-1510074377623-8cf13fb86c08?w=400'; // News Fallback

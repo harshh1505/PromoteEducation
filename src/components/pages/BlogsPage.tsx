@@ -183,7 +183,7 @@ export default function BlogsPageContent({ initialBlogs }: { initialBlogs: any[]
             {selectedCategory === 'All' && featuredBlog && (
               <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-center py-4 mb-20 border-b border-slate-100 pb-16">
                 {/* Left Column: Asymmetric Image Container */}
-                <div className="lg:col-span-7 relative aspect-[16/10] w-full rounded-[32px] overflow-hidden group/featured shadow-xl border border-slate-100">
+                <div className="lg:col-span-7 relative aspect-[16/10] w-full rounded-[32px] overflow-hidden group/featured shadow-xl border border-slate-100 bg-slate-50 flex items-center justify-center">
                   <Link href={`/blogs/${featuredBlog.slug}`}>
                     <Image
                       src={resolveImageUrl(featuredBlog.featured_image) || 'https://images.unsplash.com/photo-1523050335192-ce67a276b42a?w=800'}
@@ -191,7 +191,7 @@ export default function BlogsPageContent({ initialBlogs }: { initialBlogs: any[]
                       fill
                       sizes="(max-width: 1200px) 100vw, 1200px"
                       priority
-                      className="object-cover transition-transform duration-700 ease-out group-hover/featured:scale-[1.03]"
+                      className="object-contain transition-transform duration-700 ease-out group-hover/featured:scale-[1.03]"
                     />
                     <div className="absolute top-6 left-6">
                       <span className="px-4 py-2 bg-white/90 backdrop-blur-md text-slate-900 text-[10px] font-black uppercase tracking-[0.2em] rounded-xl shadow-sm border border-slate-100 flex items-center gap-2">
@@ -268,7 +268,7 @@ export default function BlogsPageContent({ initialBlogs }: { initialBlogs: any[]
                     <Link href={`/blogs/${blog.slug}`}>
                       <Image
                         src={resolveImageUrl(blog.featured_image) || 'https://images.unsplash.com/photo-1523050335102-c89b1811b128?w=800'}
-                        className="object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+                        className="object-contain group-hover:scale-[1.03] transition-transform duration-700 ease-out"
                         alt={blog.title}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
