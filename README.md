@@ -18,6 +18,7 @@ The platform integrates a modern Next.js frontend with Tailwind CSS, Framer Moti
   - Admission Support Forms
 - **Content Engine**: Automatically generates rich course overviews and comparisons using Google Gemini AI.
 - **Sitemap & SEO Optimization**: Auto-generated dynamic sitemaps and robots settings for search engine discovery.
+- **Study Abroad Section**: Coming soon.
 
 ---
 
