@@ -57,11 +57,17 @@ const SORT_OPTIONS = [
 export default function CollegesClient({
   initialColleges,
   initialBdsCollegeIds,
-  initialMbbsCollegeIds
+  initialMbbsCollegeIds,
+  initialBtechCollegeIds = [],
+  initialMtechCollegeIds = [],
+  initialMbaCollegeIds = []
 }: {
   initialColleges: DbCollege[]
   initialBdsCollegeIds: string[]
   initialMbbsCollegeIds: string[]
+  initialBtechCollegeIds?: string[]
+  initialMtechCollegeIds?: string[]
+  initialMbaCollegeIds?: string[]
 }) {
   const [colleges, setColleges] = useState<DbCollege[]>(initialColleges)
   const [isLoading, setIsLoading] = useState(false)
@@ -75,6 +81,9 @@ export default function CollegesClient({
   const [sortBy, setSortBy] = useState('popular')
   const [bdsCollegeIds] = useState<Set<string>>(new Set(initialBdsCollegeIds))
   const [mbbsCollegeIds] = useState<Set<string>>(new Set(initialMbbsCollegeIds))
+  const [btechCollegeIds] = useState<Set<string>>(new Set(initialBtechCollegeIds))
+  const [mtechCollegeIds] = useState<Set<string>>(new Set(initialMtechCollegeIds))
+  const [mbaCollegeIds] = useState<Set<string>>(new Set(initialMbaCollegeIds))
 
   // UI state
   const [compareList, setCompareList] = useState<string[]>([])
@@ -102,15 +111,36 @@ export default function CollegesClient({
     if (medIdx !== -1) {
       list.splice(medIdx, 1)
     }
-    
     if (mbbsCollegeIds.size > 0 && !list.includes('MBBS')) {
       list.push('MBBS')
     }
     if (bdsCollegeIds.size > 0 && !list.includes('BDS')) {
       list.push('BDS')
     }
+
+    // Replace "Engineering" with separate "B.Tech" and "M.Tech" filters
+    const engIdx = list.indexOf('Engineering')
+    if (engIdx !== -1) {
+      list.splice(engIdx, 1)
+    }
+    if (btechCollegeIds.size > 0 && !list.includes('B.Tech')) {
+      list.push('B.Tech')
+    }
+    if (mtechCollegeIds.size > 0 && !list.includes('M.Tech')) {
+      list.push('M.Tech')
+    }
+
+    // Replace "Management" with "MBA" filter
+    const mgmtIdx = list.indexOf('Management')
+    if (mgmtIdx !== -1) {
+      list.splice(mgmtIdx, 1)
+    }
+    if (mbaCollegeIds.size > 0 && !list.includes('MBA')) {
+      list.push('MBA')
+    }
+
     return list.sort()
-  }, [colleges, bdsCollegeIds, mbbsCollegeIds])
+  }, [colleges, bdsCollegeIds, mbbsCollegeIds, btechCollegeIds, mtechCollegeIds, mbaCollegeIds])
 
   const uniqueStates = useMemo(() =>
     Array.from(new Set(colleges.map(c => c.state))).filter(Boolean).sort()
@@ -126,7 +156,7 @@ export default function CollegesClient({
   const streamCounts = useMemo(() => {
     const counts: Record<string, number> = {}
     colleges.forEach(c => {
-      if (c.stream && c.stream !== 'Medical') {
+      if (c.stream && c.stream !== 'Medical' && c.stream !== 'Engineering' && c.stream !== 'Management') {
         counts[c.stream] = (counts[c.stream] || 0) + 1
       }
     })
@@ -136,8 +166,17 @@ export default function CollegesClient({
     if (bdsCollegeIds.size > 0) {
       counts['BDS'] = bdsCollegeIds.size
     }
+    if (btechCollegeIds.size > 0) {
+      counts['B.Tech'] = btechCollegeIds.size
+    }
+    if (mtechCollegeIds.size > 0) {
+      counts['M.Tech'] = mtechCollegeIds.size
+    }
+    if (mbaCollegeIds.size > 0) {
+      counts['MBA'] = mbaCollegeIds.size
+    }
     return counts
-  }, [colleges, bdsCollegeIds, mbbsCollegeIds])
+  }, [colleges, bdsCollegeIds, mbbsCollegeIds, btechCollegeIds, mtechCollegeIds, mbaCollegeIds])
 
   const ownershipCounts = useMemo(() => {
     const counts: Record<string, number> = {}
@@ -204,6 +243,15 @@ export default function CollegesClient({
           if (stream === 'BDS') {
             return bdsCollegeIds.has(college.id)
           }
+          if (stream === 'B.Tech') {
+            return btechCollegeIds.has(college.id)
+          }
+          if (stream === 'M.Tech') {
+            return mtechCollegeIds.has(college.id)
+          }
+          if (stream === 'MBA') {
+            return mbaCollegeIds.has(college.id)
+          }
           return college.stream === stream
         })
         if (!matchesStream) return false
@@ -223,7 +271,7 @@ export default function CollegesClient({
 
       return true
     })
-  }, [colleges, searchQuery, selectedStreams, selectedState, selectedCity, selectedOwnerships])
+  }, [colleges, searchQuery, selectedStreams, selectedState, selectedCity, selectedOwnerships, bdsCollegeIds, mbbsCollegeIds, btechCollegeIds, mtechCollegeIds, mbaCollegeIds])
 
   const sortedColleges = useMemo(() => {
     return [...filteredColleges].sort((a, b) => {

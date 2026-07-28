@@ -8,7 +8,7 @@ import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import { Calendar, ArrowRight, BookOpen, Clock, User, Eye, Sparkles } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
-import { resolveImageUrl } from '@/lib/utils'
+import { resolveImageUrl, stripMarkdown } from '@/lib/utils'
 
 // Lazy-load heavy LeadModal component to optimize initial JS bundle size
 const LeadModal = dynamic(() => import('@/components/ui/LeadModal'), {
@@ -220,7 +220,7 @@ export default function BlogsPageContent({ initialBlogs }: { initialBlogs: any[]
                   </Link>
 
                   <p className="text-slate-500 text-xs leading-relaxed mb-6 font-medium line-clamp-3">
-                    {featuredBlog.summary}
+                    {stripMarkdown(featuredBlog.summary)}
                   </p>
 
                   <div className="flex items-center justify-between pt-6 border-t border-slate-100">
@@ -299,7 +299,7 @@ export default function BlogsPageContent({ initialBlogs }: { initialBlogs: any[]
                       </Link>
 
                       <p className="text-slate-500 text-xs leading-relaxed font-medium line-clamp-3 mb-6">
-                        {blog.summary}
+                        {stripMarkdown(blog.summary)}
                       </p>
                     </div>
 

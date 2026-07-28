@@ -4,7 +4,7 @@ import CollegesClient from './CollegesClient'
 export const revalidate = 86400 // Revalidate daily
 
 export default async function CollegesPage() {
-  const [collegesRes, bdsRes, mbbsRes] = await Promise.all([
+  const [collegesRes, coursesRes] = await Promise.all([
     supabase
       .from('colleges')
       .select('id, slug, name, short_name, location, state, stream, ranking, total_fee, avg_ctc, ownership, type, cover_image, image_url')
@@ -12,23 +12,54 @@ export default async function CollegesPage() {
       .order('ranking', { ascending: true }),
     supabase
       .from('courses')
-      .select('college_id')
-      .eq('course_catalog_id', '9de59697-8f3b-48b0-9032-37b077cc9fe3'),
-    supabase
-      .from('courses')
-      .select('college_id')
-      .eq('course_catalog_id', 'f35ba06c-bd5c-42f8-be1d-376833eaeb08')
+      .select('college_id, course_catalog(degree, slug)')
   ])
 
   const colleges = collegesRes.data || []
-  const bdsCollegeIds = (bdsRes.data || []).map((c: any) => c.college_id)
-  const mbbsCollegeIds = (mbbsRes.data || []).map((c: any) => c.college_id)
+  const courses = coursesRes.data || []
+
+  // Extract unique college IDs for each course category
+  const bdsCollegeIds = Array.from(new Set(
+    courses
+      .filter((c: any) => c.course_catalog?.slug === 'bds')
+      .map((c: any) => c.college_id)
+  )) as string[]
+
+  const mbbsCollegeIds = Array.from(new Set(
+    courses
+      .filter((c: any) => c.course_catalog?.slug === 'mbbs')
+      .map((c: any) => c.college_id)
+  )) as string[]
+
+  const btechCollegeIds = Array.from(new Set(
+    courses
+      .filter((c: any) => {
+        const degree = c.course_catalog?.degree
+        return degree === 'B.Tech' || degree === 'B.E.'
+      })
+      .map((c: any) => c.college_id)
+  )) as string[]
+
+  const mtechCollegeIds = Array.from(new Set(
+    courses
+      .filter((c: any) => c.course_catalog?.degree === 'M.Tech')
+      .map((c: any) => c.college_id)
+  )) as string[]
+
+  const mbaCollegeIds = Array.from(new Set(
+    courses
+      .filter((c: any) => c.course_catalog?.degree === 'MBA')
+      .map((c: any) => c.college_id)
+  )) as string[]
 
   return (
     <CollegesClient
       initialColleges={colleges}
       initialBdsCollegeIds={bdsCollegeIds}
       initialMbbsCollegeIds={mbbsCollegeIds}
+      initialBtechCollegeIds={btechCollegeIds}
+      initialMtechCollegeIds={mtechCollegeIds}
+      initialMbaCollegeIds={mbaCollegeIds}
     />
   )
 }

@@ -120,11 +120,11 @@ export default function NewsSection() {
                  </div>
               </div>
 
-              <div className="flex-shrink-0 w-24 aspect-[16/10] md:w-32 rounded-xl overflow-hidden shadow-sm bg-slate-50 flex items-center justify-center">
+              <div className="flex-shrink-0 w-24 md:w-32 rounded-xl overflow-hidden">
                 <img 
                   src={item.image} 
                   alt="" 
-                  className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                  className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-105"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.src = 'https://images.unsplash.com/photo-1510074377623-8cf13fb86c08?w=400'; // News Fallback
