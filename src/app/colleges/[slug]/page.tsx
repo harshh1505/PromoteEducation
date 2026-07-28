@@ -9,6 +9,7 @@ import {
   Globe, CheckCircle2, Star, Award, ShieldCheck,
   FileText, Info, MapPin, BookOpen, Users, Building2
 } from 'lucide-react'
+import HighlightsModal from '@/components/ui/HighlightsModal'
 
 // ===============================
 // SETTINGS
@@ -75,6 +76,7 @@ type College = {
   bank_guarantee?: string | null;
   cover_image?: string | null;
   image_url?: string | null;
+  total_fee?: string | number | null;
   content?: {
     overview: string; why_choose: string; placement_insights: string
     campus_life: string; admission: string
@@ -442,58 +444,69 @@ export default async function CollegePage({ params }: any) {
         }} />
       )}
 
-      {/* ── EDITORIAL HEADER ── */}
-      <header 
-        className={`pt-32 pb-16 border-b border-slate-100 relative overflow-hidden ${
-          college.cover_image ? "text-white bg-slate-955 bg-slate-950" : "bg-slate-50"
-        }`}
-      >
-        <DynamicCoverImage 
-          collegeId={college.id} 
-          initialSrc={college.cover_image} 
-          alt={college.name} 
+      {/* ── HERO HEADER ── */}
+      <header className="relative overflow-hidden pt-28 pb-0 border-b border-slate-900/20">
+        {/* Cover Image Layer */}
+        <DynamicCoverImage
+          collegeId={college.id}
+          initialSrc={college.cover_image}
+          alt={college.name}
         />
-        <div className="max-w-5xl mx-auto px-6 relative z-10">
+
+        {/* Gradient overlay — always navy-dark for readability */}
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(160deg, rgba(15,23,42,0.92) 0%, rgba(30,58,138,0.85) 50%, rgba(15,23,42,0.96) 100%)' }}
+        />
+
+        {/* Decorative blobs */}
+        <div className="absolute top-0 left-0 w-96 h-96 rounded-full opacity-20 blur-3xl pointer-events-none" style={{ background: 'radial-gradient(circle, #6366f1, transparent 70%)' }} />
+        <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full opacity-15 blur-3xl pointer-events-none" style={{ background: 'radial-gradient(circle, #0ea5e9, transparent 70%)' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[200px] opacity-10 blur-3xl pointer-events-none" style={{ background: 'radial-gradient(ellipse, #7c3aed, transparent 70%)' }} />
+
+        <div className="relative z-10 max-w-6xl mx-auto px-6 pb-12">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
             <div className="flex-1">
 
               {/* Badge row */}
-              <div className="flex items-center gap-3 mb-6">
-                <span className="px-3 py-1 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-sm border border-slate-800">
-                  {badgeLabel}
-                </span>
-                {college.naac_grade && college.nirf_rank && (
-                  <span className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-sm border ${
-                    college.cover_image 
-                      ? "bg-slate-800/80 text-sky-400 border-slate-700" 
-                      : "bg-sky-50 text-sky-600 border-sky-100"
-                  }`}>
-                    NAAC {college.naac_grade}
+              <div className="flex flex-wrap items-center gap-2.5 mb-6">
+                {college.nirf_rank && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider text-white border border-white/20"
+                    style={{ background: 'linear-gradient(135deg,#1e3a8a,#2563eb)' }}>
+                    <Star size={10} fill="currentColor" className="text-amber-300" />
+                    NIRF #{college.nirf_rank}
                   </span>
                 )}
-                <span className="text-slate-400 text-xs font-medium">
+                {college.naac_grade && (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider text-white border border-white/20"
+                    style={{ background: 'linear-gradient(135deg,#065f46,#059669)' }}>
+                    <Award size={10} />
+                    NAAC {college.naac_grade}
+                    {college.naac_cgpa ? ` (${college.naac_cgpa})` : ''}
+                  </span>
+                )}
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider text-white/80 border border-white/15 bg-white/10 backdrop-blur-sm">
+                  {college.stream}
+                </span>
+                <span className="text-white/40 text-xs font-medium">
                   Updated: {new Date().toLocaleDateString('en-IN', { month: 'long', day: 'numeric', year: 'numeric' })}
                 </span>
               </div>
 
-              {/* College name — large editorial */}
-              <h1 className={`text-5xl md:text-7xl font-black tracking-tight leading-[0.95] mb-8 ${
-                college.cover_image ? "text-white" : "text-slate-900"
-              }`}>
+              {/* College name */}
+              <h1 className="text-4xl md:text-6xl font-black tracking-tight leading-[0.95] mb-6 text-white">
                 {college.name.split(' ').length > 2 ? (
                   <>
                     {college.name.split(' ').slice(0, -1).join(' ')}{' '}
                     <span className="text-sky-400 italic">{college.name.split(' ').slice(-1)}</span>
                   </>
                 ) : (
-                  <><span className="text-sky-400 italic">{college.name}</span></>
+                  <span className="text-sky-400 italic">{college.name}</span>
                 )}
               </h1>
 
               {/* Subtitle */}
-              <p className={`text-xl font-medium leading-relaxed max-w-2xl ${
-                college.cover_image ? "text-slate-300" : "text-slate-500"
-              }`}>
+              <p className="text-lg font-medium leading-relaxed max-w-2xl text-slate-300">
                 {college.description
                   ? college.description.split('.').slice(0, 2).join('.') + '.'
                   : `The comprehensive 2026 guide to admissions, courses, and academic excellence at ${college.name}.`
@@ -501,100 +514,108 @@ export default async function CollegePage({ params }: any) {
               </p>
             </div>
 
-            {/* Right: quick meta + CTA */}
+            {/* Right: CTA */}
             <div className="flex items-center gap-4 pb-2">
-              <div className="text-right hidden md:block">
-                {college.nirf_rank && (
-                  <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">
-                    NIRF #{college.nirf_rank}
-                  </p>
-                )}
-                <p className={`text-sm font-bold ${
-                  college.cover_image ? "text-slate-200" : "text-slate-900"
-                }`}>
-                  Estb. {college.established || '—'} · {college.state}
-                </p>
-              </div>
               <a
                 href="#admission"
-                className={`px-8 py-4 font-bold text-sm rounded-full transition-all shadow-xl active:scale-95 ${
-                  college.cover_image 
-                    ? "bg-sky-500 text-white hover:bg-sky-600 shadow-sky-500/20" 
-                    : "bg-slate-900 text-white hover:bg-sky-500 shadow-slate-900/10"
-                }`}
+                className="group relative overflow-hidden inline-flex items-center gap-2 px-8 py-4 font-black text-sm rounded-2xl text-white transition-all duration-300 shadow-2xl hover:shadow-blue-500/30 hover:-translate-y-1 active:translate-y-0"
+                style={{ background: 'linear-gradient(135deg, #1d4ed8 0%, #7c3aed 100%)' }}
               >
-                Apply for 2026
+                <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ background: 'linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%)' }} />
+                <span className="relative">Apply for 2026</span>
+                <Info size={15} className="relative group-hover:rotate-12 transition-transform duration-200" />
               </a>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Quick stats strip ── */}
+        <div className="relative z-10 border-t border-white/10" style={{ background: 'rgba(15,23,42,0.85)', backdropFilter: 'blur(12px)' }}>
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="flex flex-wrap divide-x divide-white/10">
+              {[
+                { label: 'Founded', value: college.established ? `${college.established}` : '—', color: 'text-sky-400' },
+                { label: 'Location', value: `${college.location}, ${college.state}`, color: 'text-emerald-400' },
+                ...(college.affiliation ? [{ label: 'Affiliation', value: college.affiliation, color: 'text-violet-400' }] : []),
+                ...(college.total_students ? [{ label: 'Students', value: college.total_students.toLocaleString('en-IN'), color: 'text-amber-400' }] : []),
+                ...(college.placement_rate ? [{ label: 'Placement Rate', value: `${college.placement_rate}%`, color: 'text-rose-400' }] : []),
+              ].map((item, i) => (
+                <div key={i} className="flex-1 min-w-[120px] px-5 py-4">
+                  <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">{item.label}</p>
+                  <p className={`text-sm font-black truncate ${item.color}`}>{item.value}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </header>
 
       {/* ── CONTENT LAYOUT ── */}
-      <div className="max-w-7xl mx-auto px-6 py-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
           {/* ── LEFT SIDEBAR ── */}
           <aside className="hidden lg:block lg:col-span-3">
-            <div className="sticky top-32 space-y-12">
+            <div className="sticky top-28 space-y-8">
 
               {/* Section nav */}
-              <nav className="space-y-1">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 px-4">In this guide</p>
+              <nav className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden" style={{ boxShadow: '0 2px 16px -4px rgba(15,23,42,0.07)' }}>
+                <div className="px-5 py-4 border-b border-slate-100" style={{ background: 'linear-gradient(135deg,#0f172a,#1e3a8a)' }}>
+                  <p className="text-[10px] font-black text-sky-300 uppercase tracking-[0.2em]">In this guide</p>
+                </div>
                 {sections.map(s => (
                   <a
                     key={s.id}
                     href={`#${s.id}`}
-                    className="block px-4 py-2.5 text-[13px] font-bold text-slate-400 hover:text-sky-500 hover:translate-x-1 transition-all border-l-2 border-transparent hover:border-sky-500"
+                    className="flex items-center gap-3 px-4 py-3 text-[12.5px] font-bold text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-all duration-150 border-b border-slate-50 last:border-b-0 group"
                   >
+                    <span className="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-blue-500 transition-colors duration-150 flex-shrink-0" />
                     {s.label}
                   </a>
                 ))}
               </nav>
 
-              <div className="space-y-10 px-4 pt-10 border-t border-slate-100">
+              <div className="space-y-8">
 
                 {/* Institution badge */}
                 {(college.ownership || college.established) && (
-                  <div className="p-4 bg-indigo-50 rounded-2xl border border-indigo-100 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-indigo-600 shadow-sm">
-                      <ShieldCheck size={20} />
+                  <div className="p-4 rounded-2xl flex items-center gap-3 text-white" style={{ background: 'linear-gradient(135deg,#4f46e5,#7c3aed)' }}>
+                    <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                      <ShieldCheck size={18} className="text-white" />
                     </div>
                     <div>
-                      <p className="text-[10px] font-black text-indigo-900 uppercase tracking-widest">
-                        {college.ownership || 'Institution'}
-                      </p>
+                      <p className="text-[10px] font-black text-white/70 uppercase tracking-widest">{college.ownership || 'Institution'}</p>
                       {college.established && (
-                        <p className="text-[11px] text-indigo-700 font-medium leading-tight italic">
-                          Established in {college.established}
-                        </p>
+                        <p className="text-sm font-black text-white">Est. {college.established}</p>
                       )}
                     </div>
                   </div>
                 )}
 
                 {/* Fact Sheet */}
-                <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Institutional Fact Sheet</p>
-                  <div className="space-y-5">
+                <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden" style={{ boxShadow: '0 2px 12px -4px rgba(15,23,42,0.06)' }}>
+                  <div className="px-5 py-3 border-b border-slate-100 bg-slate-50">
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Fact Sheet</p>
+                  </div>
+                  <div className="p-4 space-y-4">
                     {[
-                      { label: 'Founded', value: college.established ? `${college.established}` : '—', icon: Globe },
-                      { label: 'Affiliation', value: college.affiliation || college.ownership || '—', icon: CheckCircle2 },
-                      ...(college.nirf_rank ? [{ label: 'NIRF Rank', value: `#${college.nirf_rank} (India)`, icon: Star }] : []),
-                      ...(college.naac_grade ? [{ label: 'NAAC Grade', value: `${college.naac_grade}${college.naac_cgpa ? ` (${college.naac_cgpa})` : ''}`, icon: Award }] : []),
-                      ...(college.campus_size ? [{ label: 'Campus', value: college.campus_size, icon: MapPin }] : []),
-                      ...(college.total_students ? [{ label: 'Students', value: college.total_students.toLocaleString('en-IN'), icon: Users }] : []),
-                      ...(college.entrance_exam ? [{ label: 'Entrance', value: college.entrance_exam, icon: BookOpen }] : []),
-                      ...(college.bank_guarantee || (college as any).content?.bank_guarantee 
-                        ? [{ label: 'Bank Guarantee', value: formatBgText(college.bank_guarantee || (college as any).content?.bank_guarantee), icon: ShieldCheck }] 
+                      { label: 'Founded', value: college.established ? `${college.established}` : '—', icon: Globe, color: 'bg-sky-100 text-sky-600' },
+                      { label: 'Affiliation', value: college.affiliation || college.ownership || '—', icon: CheckCircle2, color: 'bg-emerald-100 text-emerald-600' },
+                      ...(college.nirf_rank ? [{ label: 'NIRF Rank', value: `#${college.nirf_rank} (India)`, icon: Star, color: 'bg-amber-100 text-amber-600' }] : []),
+                      ...(college.naac_grade ? [{ label: 'NAAC Grade', value: `${college.naac_grade}${college.naac_cgpa ? ` (${college.naac_cgpa})` : ''}`, icon: Award, color: 'bg-violet-100 text-violet-600' }] : []),
+                      ...(college.campus_size ? [{ label: 'Campus', value: college.campus_size, icon: MapPin, color: 'bg-rose-100 text-rose-600' }] : []),
+                      ...(college.total_students ? [{ label: 'Students', value: college.total_students.toLocaleString('en-IN'), icon: Users, color: 'bg-blue-100 text-blue-600' }] : []),
+                      ...(college.entrance_exam ? [{ label: 'Entrance', value: college.entrance_exam, icon: BookOpen, color: 'bg-indigo-100 text-indigo-600' }] : []),
+                      ...(college.bank_guarantee || (college as any).content?.bank_guarantee
+                        ? [{ label: 'Bank Guarantee', value: formatBgText(college.bank_guarantee || (college as any).content?.bank_guarantee), icon: ShieldCheck, color: 'bg-teal-100 text-teal-600' }]
                         : []),
                     ].map((item, i) => (
-                      <div key={i} className="flex items-center gap-4">
-                        <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100 flex-shrink-0">
+                      <div key={i} className="flex items-center gap-3">
+                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 ${item.color}`}>
                           <item.icon size={14} />
                         </div>
                         <div>
-                          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">{item.label}</p>
+                          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-0.5">{item.label}</p>
                           <p className="text-xs font-black text-slate-900">{item.value}</p>
                         </div>
                       </div>
@@ -602,14 +623,16 @@ export default async function CollegePage({ params }: any) {
                   </div>
                 </div>
 
-                {/* Also Read — same stream, same state */}
+                {/* Also Read */}
                 {similarColleges.length > 0 && (
-                  <div>
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Also Read</p>
-                    <div className="space-y-5">
+                  <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden" style={{ boxShadow: '0 2px 12px -4px rgba(15,23,42,0.06)' }}>
+                    <div className="px-5 py-3 border-b border-slate-100 bg-slate-50">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Also Read</p>
+                    </div>
+                    <div className="p-4 space-y-4">
                       {similarColleges.slice(0, 3).map((c: any) => (
                         <Link key={c.slug} href={`/colleges/${c.slug}`} className="group block">
-                          <p className="text-[10px] font-black text-sky-500 uppercase tracking-widest mb-1 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                          <p className="text-[10px] font-black text-sky-500 uppercase tracking-widest mb-0.5 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
                             <FileText size={10} /> Expert View
                           </p>
                           <p className="text-xs font-bold text-slate-900 group-hover:text-sky-600 transition-colors leading-snug">
@@ -622,14 +645,15 @@ export default async function CollegePage({ params }: any) {
                 )}
 
                 {/* Expert CTA */}
-                <div className="p-6 bg-slate-900 rounded-3xl text-white shadow-2xl relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-sky-500/20 rounded-full blur-2xl" />
-                  <p className="text-[9px] font-black text-sky-400 uppercase tracking-widest mb-4">Promote Education Exclusive</p>
-                  <h4 className="text-sm font-black mb-2">Need Admission Help?</h4>
-                  <p className="text-[11px] text-slate-400 leading-relaxed mb-6">
+                <div className="rounded-3xl text-white shadow-2xl relative overflow-hidden p-6" style={{ background: 'linear-gradient(135deg,#1e3a8a 0%,#7c3aed 60%,#0f172a 100%)' }}>
+                  <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl pointer-events-none" style={{ background: 'rgba(99,102,241,0.4)' }} />
+                  <div className="absolute bottom-0 left-0 w-24 h-24 rounded-full blur-2xl pointer-events-none" style={{ background: 'rgba(14,165,233,0.3)' }} />
+                  <p className="text-[9px] font-black text-sky-300 uppercase tracking-widest mb-3 relative">Promote Education Exclusive</p>
+                  <h4 className="text-sm font-black mb-2 relative">Need Admission Help?</h4>
+                  <p className="text-[11px] text-slate-300 leading-relaxed mb-5 relative">
                     Get personalized guidance for {college.entrance_exam || 'entrance exams'} and centralized counselling for {college.name}.
                   </p>
-                  <button className="w-full py-3 bg-white text-slate-900 font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-sky-50 transition-all">
+                  <button className="relative w-full py-2.5 bg-white text-slate-900 font-black text-[10px] uppercase tracking-widest rounded-xl hover:bg-sky-50 transition-all duration-200 shadow-lg">
                     Connect with Expert
                   </button>
                 </div>
@@ -639,28 +663,31 @@ export default async function CollegePage({ params }: any) {
           </aside>
 
           {/* ── MAIN ARTICLE ── */}
-          <article className="lg:col-span-9 space-y-24 pb-32">
+          <article className="lg:col-span-9 space-y-20 pb-32">
 
             {/* OVERVIEW */}
-            <section id="overview" className="scroll-mt-32">
-              <h2 className="text-4xl font-black mb-10 text-slate-900 tracking-tight leading-tight">
-                {college.short_name || college.name}:{' '}
-                <span className="text-slate-400">
-                  {college.stream === 'Medical'
-                    ? 'A Premier Institution for Healthcare Excellence'
-                    : `India's Leading ${college.stream} Institution`}
-                </span>
-              </h2>
+            <section id="overview" className="scroll-mt-24">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-1 h-10 rounded-full" style={{ background: 'linear-gradient(180deg,#2563eb,#7c3aed)' }} />
+                <h2 className="text-3xl font-black text-slate-900 tracking-tight leading-tight">
+                  {college.short_name || college.name}:{' '}
+                  <span className="text-slate-400 font-light">
+                    {college.stream === 'Medical'
+                      ? 'A Premier Institution for Healthcare Excellence'
+                      : `India's Leading ${college.stream} Institution`}
+                  </span>
+                </h2>
+              </div>
               <div className="prose prose-slate prose-lg max-w-none text-slate-600 leading-relaxed space-y-6">
                 <p>{overviewText}</p>
-          
+
                 {/* Facilities pills */}
                 {college.facilities && college.facilities.length > 0 && (
                   <div className="not-prose mt-8">
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Key Facilities</p>
                     <div className="flex flex-wrap gap-2">
                       {college.facilities.map((f: string, i: number) => (
-                        <span key={i} className="px-3 py-1.5 bg-slate-50 border border-slate-100 rounded-lg text-xs font-bold text-slate-700">
+                        <span key={i} className="px-3 py-1.5 rounded-xl text-xs font-bold text-blue-700 border border-blue-100 bg-blue-50 hover:bg-blue-100 transition-colors">
                           {f}
                         </span>
                       ))}
@@ -668,18 +695,19 @@ export default async function CollegePage({ params }: any) {
                   </div>
                 )}
 
-                {/* At-a-glance stats row */}
+                {/* At-a-glance stats */}
                 {(college.faculty_count || college.phd_scholars || college.research_publications || college.international_students) && (
                   <div className="not-prose grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
                     {[
-                      { label: 'Faculty', val: college.faculty_count?.toLocaleString('en-IN'), show: !!college.faculty_count },
-                      { label: 'PhD Scholars', val: college.phd_scholars?.toLocaleString('en-IN'), show: !!college.phd_scholars },
-                      { label: 'Research Papers', val: college.research_publications?.toLocaleString('en-IN'), show: !!college.research_publications },
-                      { label: 'Intl. Students', val: college.international_students?.toLocaleString('en-IN'), show: !!college.international_students },
+                      { label: 'Faculty', val: college.faculty_count?.toLocaleString('en-IN'), show: !!college.faculty_count, grad: 'linear-gradient(135deg,#1d4ed8,#2563eb)', icon: '👨‍🏫' },
+                      { label: 'PhD Scholars', val: college.phd_scholars?.toLocaleString('en-IN'), show: !!college.phd_scholars, grad: 'linear-gradient(135deg,#5b21b6,#7c3aed)', icon: '🎓' },
+                      { label: 'Research Papers', val: college.research_publications?.toLocaleString('en-IN'), show: !!college.research_publications, grad: 'linear-gradient(135deg,#065f46,#059669)', icon: '📄' },
+                      { label: 'Intl. Students', val: college.international_students?.toLocaleString('en-IN'), show: !!college.international_students, grad: 'linear-gradient(135deg,#92400e,#d97706)', icon: '🌏' },
                     ].filter(s => s.show).map((s, i) => (
-                      <div key={i} className="p-5 bg-slate-50 border border-slate-100 rounded-2xl text-center">
-                        <p className="text-2xl font-black text-slate-900">{s.val}</p>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">{s.label}</p>
+                      <div key={i} className="p-5 rounded-2xl text-center text-white shadow-lg hover:-translate-y-1 transition-transform duration-200" style={{ background: s.grad }}>
+                        <p className="text-2xl mb-1">{s.icon}</p>
+                        <p className="text-xl font-black">{s.val}</p>
+                        <p className="text-[9px] font-black uppercase tracking-widest mt-1 text-white/70">{s.label}</p>
                       </div>
                     ))}
                   </div>
@@ -716,15 +744,30 @@ export default async function CollegePage({ params }: any) {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 text-sm">
-                          <tr>
-                            <td className="px-6 py-4 font-bold text-slate-900">Semester Tuition Fee</td>
-                            <td className="px-6 py-4 text-slate-750 bg-emerald-50/10 font-medium">
-                              {college.content.fee_structure.state_quota.split('(')[0].trim() || '—'}
-                            </td>
-                            <td className="px-6 py-4 text-slate-750 bg-indigo-50/10 font-medium">
-                              {college.content.fee_structure.management_quota.split('(')[0].trim() || '—'}
-                            </td>
-                          </tr>
+                          {((college.content.fee_structure.state_quota.includes('Sem') || 
+                            college.content.fee_structure.state_quota.includes('sem') || 
+                            college.content.fee_structure.state_quota.includes('(')) ||
+                            (college.content.fee_structure.management_quota && (
+                              college.content.fee_structure.management_quota.includes('Sem') || 
+                              college.content.fee_structure.management_quota.includes('sem') || 
+                              college.content.fee_structure.management_quota.includes('(')
+                            ))) && (
+                            <tr>
+                              <td className="px-6 py-4 font-bold text-slate-900">Semester Tuition Fee</td>
+                              <td className="px-6 py-4 text-slate-750 bg-emerald-50/10 font-medium">
+                                {college.content.fee_structure.state_quota.includes('(') 
+                                  ? college.content.fee_structure.state_quota.split('(')[0].trim() 
+                                  : (college.content.fee_structure.state_quota.includes('Sem') || college.content.fee_structure.state_quota.includes('sem') ? college.content.fee_structure.state_quota : '—')}
+                              </td>
+                              <td className="px-6 py-4 text-slate-750 bg-indigo-50/10 font-medium">
+                                {college.content.fee_structure.management_quota ? (
+                                  college.content.fee_structure.management_quota.includes('(') 
+                                    ? college.content.fee_structure.management_quota.split('(')[0].trim() 
+                                    : (college.content.fee_structure.management_quota.includes('Sem') || college.content.fee_structure.management_quota.includes('sem') ? college.content.fee_structure.management_quota : '—')
+                                ) : '—'}
+                              </td>
+                            </tr>
+                          )}
                           <tr>
                             <td className="px-6 py-4 font-bold text-slate-900">Total Course Fee</td>
                             <td className="px-6 py-4 text-slate-750 bg-emerald-50/10 font-medium">
@@ -733,28 +776,28 @@ export default async function CollegePage({ params }: any) {
                                 : college.content.fee_structure.state_quota}
                             </td>
                             <td className="px-6 py-4 text-slate-750 bg-indigo-50/10 font-medium">
-                              {college.content.fee_structure.management_quota.includes('(') 
-                                ? college.content.fee_structure.management_quota.split('(')[1].replace(')', '').trim() 
-                                : college.content.fee_structure.management_quota}
+                              {college.content.fee_structure.management_quota ? (
+                                college.content.fee_structure.management_quota.includes('(') 
+                                  ? college.content.fee_structure.management_quota.split('(')[1].replace(')', '').trim() 
+                                  : college.content.fee_structure.management_quota
+                              ) : '—'}
                             </td>
                           </tr>
-                            <tr>
-                              <td className="px-6 py-4 font-bold text-slate-900">Bank Guarantee (BG)</td>
-                              <td className="px-6 py-4 text-slate-750 bg-emerald-50/10 font-medium">
-                                {college.bank_guarantee ? (
-                                  college.bank_guarantee.includes('|')
+                            {college.bank_guarantee && (
+                              <tr>
+                                <td className="px-6 py-4 font-bold text-slate-900">Bank Guarantee (BG)</td>
+                                <td className="px-6 py-4 text-slate-750 bg-emerald-50/10 font-medium">
+                                  {college.bank_guarantee.includes('|')
                                     ? formatBgText(college.bank_guarantee.split('|')[0])
-                                    : formatBgText(college.bank_guarantee)
-                                ) : 'None required'}
-                              </td>
-                              <td className="px-6 py-4 text-slate-750 bg-indigo-50/10 font-medium">
-                                {college.bank_guarantee ? (
-                                  college.bank_guarantee.includes('|')
+                                    : formatBgText(college.bank_guarantee)}
+                                </td>
+                                <td className="px-6 py-4 text-slate-750 bg-indigo-50/10 font-medium">
+                                  {college.bank_guarantee.includes('|')
                                     ? formatBgText(college.bank_guarantee.split('|')[1])
-                                    : 'None required'
-                                ) : 'None required'}
-                              </td>
-                            </tr>
+                                    : 'None required'}
+                                </td>
+                              </tr>
+                            )}
                         </tbody>
                       </table>
                     </div>
@@ -1269,11 +1312,20 @@ export default async function CollegePage({ params }: any) {
           {/*
           <aside className="lg:col-span-0">
           */}
-
         </div>
       </div>
+
+      <HighlightsModal
+        collegeName={college.name}
+        established={college.established}
+        accreditations={college.naac_grade ? `NAAC Grade ${college.naac_grade}${college.naac_cgpa ? ` (${college.naac_cgpa} CGPA)` : ''}` : '—'}
+        affiliation={college.affiliation || 'WBUHS, NMC'}
+        stateQuotaFee={String(college.content?.fee_structure?.state_quota || college.total_fee || '—')}
+        managementQuotaFee={college.content?.fee_structure?.management_quota || '—'}
+        hostelFee={college.content?.fee_structure?.hostel_fees || '—'}
+        location={`${college.location}, ${college.state}`}
+      />
 
     </main>
   )
 }
-

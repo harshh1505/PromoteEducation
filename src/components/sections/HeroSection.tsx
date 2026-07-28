@@ -161,8 +161,8 @@ export default function HeroSection() {
 
             {/* Main Heading */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[62px] font-black text-slate-900 leading-[1.08] tracking-tighter mb-6 font-display">
-              Your career begins with <br className="hidden md:inline" />
-              the <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-600">right admission</span>
+              Your Career Begins With <br className="hidden md:inline" />
+              The <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-teal-500 to-indigo-600">Right Admission</span>
             </h1>
 
             {/* Subtitle */}
