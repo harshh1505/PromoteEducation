@@ -38,7 +38,7 @@ export default function HighlightsModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in">
-      <div 
+      <div
         className="relative w-full max-w-lg overflow-hidden rounded-[32px] bg-white border-2 shadow-2xl p-8 text-slate-800 animate-scale-up"
         style={{
           borderImage: 'linear-gradient(to bottom right, #6366f1, #0ea5e9, #10b981) 1',
@@ -115,7 +115,7 @@ export default function HighlightsModal({
               <CreditCard size={16} className="text-rose-500" />
               <p className="text-[10px] font-black text-slate-500 uppercase tracking-wider">Fee Structure Details</p>
             </div>
-            
+
             <div className="grid grid-cols-1 gap-2.5 text-xs text-slate-700">
               {(!managementQuotaFee || managementQuotaFee === '—' || managementQuotaFee === 'N/A' || managementQuotaFee.toLowerCase().includes('n/a') || managementQuotaFee.toLowerCase().includes('none')) ? (
                 <div className="flex flex-col gap-0.5">
