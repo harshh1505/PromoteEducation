@@ -744,23 +744,25 @@ export default async function CollegePage({ params }: any) {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 text-sm">
-                          {((college.content.fee_structure.state_quota.includes('Sem') || 
-                            college.content.fee_structure.state_quota.includes('sem') || 
-                            college.content.fee_structure.state_quota.includes('(')) ||
-                            (college.content.fee_structure.management_quota && (
+                          {(((college.content.fee_structure.state_quota && typeof college.content.fee_structure.state_quota === 'string' && (
+                              college.content.fee_structure.state_quota.includes('Sem') || 
+                              college.content.fee_structure.state_quota.includes('sem') || 
+                              college.content.fee_structure.state_quota.includes('(')
+                            )) ||
+                            (college.content.fee_structure.management_quota && typeof college.content.fee_structure.management_quota === 'string' && (
                               college.content.fee_structure.management_quota.includes('Sem') || 
                               college.content.fee_structure.management_quota.includes('sem') || 
                               college.content.fee_structure.management_quota.includes('(')
-                            ))) && (
+                            )))) && (
                             <tr>
                               <td className="px-6 py-4 font-bold text-slate-900">Semester Tuition Fee</td>
                               <td className="px-6 py-4 text-slate-750 bg-emerald-50/10 font-medium">
-                                {college.content.fee_structure.state_quota.includes('(') 
+                                {college.content.fee_structure.state_quota && typeof college.content.fee_structure.state_quota === 'string' && college.content.fee_structure.state_quota.includes('(') 
                                   ? college.content.fee_structure.state_quota.split('(')[0].trim() 
-                                  : (college.content.fee_structure.state_quota.includes('Sem') || college.content.fee_structure.state_quota.includes('sem') ? college.content.fee_structure.state_quota : '—')}
+                                  : (college.content.fee_structure.state_quota && typeof college.content.fee_structure.state_quota === 'string' && (college.content.fee_structure.state_quota.includes('Sem') || college.content.fee_structure.state_quota.includes('sem')) ? college.content.fee_structure.state_quota : '—')}
                               </td>
                               <td className="px-6 py-4 text-slate-750 bg-indigo-50/10 font-medium">
-                                {college.content.fee_structure.management_quota ? (
+                                {college.content.fee_structure.management_quota && typeof college.content.fee_structure.management_quota === 'string' ? (
                                   college.content.fee_structure.management_quota.includes('(') 
                                     ? college.content.fee_structure.management_quota.split('(')[0].trim() 
                                     : (college.content.fee_structure.management_quota.includes('Sem') || college.content.fee_structure.management_quota.includes('sem') ? college.content.fee_structure.management_quota : '—')
@@ -771,16 +773,18 @@ export default async function CollegePage({ params }: any) {
                           <tr>
                             <td className="px-6 py-4 font-bold text-slate-900">Total Course Fee</td>
                             <td className="px-6 py-4 text-slate-750 bg-emerald-50/10 font-medium">
-                              {college.content.fee_structure.state_quota.includes('(') 
-                                ? college.content.fee_structure.state_quota.split('(')[1].replace(')', '').trim() 
-                                : college.content.fee_structure.state_quota}
+                              {college.content.fee_structure.state_quota && typeof college.content.fee_structure.state_quota === 'string' ? (
+                                college.content.fee_structure.state_quota.includes('(') 
+                                  ? college.content.fee_structure.state_quota.split('(')[1].replace(')', '').trim() 
+                                  : college.content.fee_structure.state_quota
+                              ) : college.content.fee_structure.state_quota || '—'}
                             </td>
                             <td className="px-6 py-4 text-slate-750 bg-indigo-50/10 font-medium">
-                              {college.content.fee_structure.management_quota ? (
+                              {college.content.fee_structure.management_quota && typeof college.content.fee_structure.management_quota === 'string' ? (
                                 college.content.fee_structure.management_quota.includes('(') 
                                   ? college.content.fee_structure.management_quota.split('(')[1].replace(')', '').trim() 
                                   : college.content.fee_structure.management_quota
-                              ) : '—'}
+                              ) : college.content.fee_structure.management_quota || '—'}
                             </td>
                           </tr>
                             {college.bank_guarantee && (
