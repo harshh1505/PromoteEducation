@@ -120,7 +120,7 @@ Ensure your `.env` file in the `backend/` directory has `GEMINI_API_KEY` and `SU
 ```bash
 cd backend
 node generateContent.js
-````
+```
 
 ---
 
