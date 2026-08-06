@@ -2,7 +2,7 @@
 
 PromoteEducation is a comprehensive educational platform designed to help students discover courses, compare colleges, view cutoffs, calculate loans, access counselling support, and make informed choices about their higher education journeys in India and abroad.
 
-The platform integrates a modern Next.js frontend with Tailwind CSS, Framer Motion for premium animations, and a Supabase backend for robust data management, paired with Google Gemini AI for automated content generation and comparisons.
+This platform integrates a modern Next.js frontend with Tailwind CSS, Framer Motion for premium animations, and a Supabase backend for robust data management, paired with Google Gemini AI for automated content generation and comparisons.
 
 ----
 
