@@ -59,7 +59,7 @@ PromoteEducation/
 └── README.md                 # Project documentation
 ```
 
-----
+---
 
 ## ⚙️ Environment Variables Setup
 
