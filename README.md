@@ -9,7 +9,16 @@ This platform integrates a modern Next.js frontend with Tailwind CSS, Framer Mot
 ## 🚀 Key Features
 
 - **Course Hub**: Browse and filter various degrees and specializations.
-- **College Finder & Comparison**: Compare different colleges based on placements, fees, rankings, and cutoffs.
+- **College Finder & Explorer**:
+  - Live search and filter dashboard (streams, states, cities, ownership) powered by Next.js client-side states & Supabase.
+  - Sorting criteria by popularity, highest packages, lowest fees, and NIRF rankings.
+- **Dynamic College Route & Template System**: A high-performance template router (`/colleges/[slug]`) serving multiple page variants:
+  - **Category**: Browse specific domains (e.g., `/colleges/engineering`).
+  - **Location**: Pre-filtered location views (e.g., `/colleges/engineering-in-delhi`).
+  - **Budget**: Fee ceiling filters (e.g., `/colleges/engineering-under-2000000`).
+  - **Placement**: Packages filters (e.g., `/colleges/engineering-with-10-lpa`).
+  - **Individual College Profiles**: Deep-dive profile pages (e.g., `/colleges/aiims-kalyani`) featuring multi-tab navigation across Overview, Fees, Placements, Admissions, Cutoffs, rankings, and Campus Galleries.
+- **SEO & Schema Integration**: Automatically generates structured data formats (JSON-LD) for `CollegeOrUniversity` and dynamic `FAQPage` tags to boost local search rankings.
 - **Cutoff Listings & Tools**: Real-time tools to check academic cutoffs and admission probabilities.
 - **Interactive Tools**: 
   - Educational Loan Calculator
