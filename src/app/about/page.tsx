@@ -81,7 +81,7 @@ const leadership = [
     { name: 'Ritesh Rastogi', role: 'MD & Founder', image: '/images/Leadership/RiteshRastogi.jpeg' },
     { name: 'Aman Rastogi', role: 'Managing Director', image: '/images/Leadership/AmanRastogi.jpeg' },
     { name: 'Somnath Ghosh', role: 'Head of Operations', image: '/images/Leadership/SomnathGhosh.jpeg' },
-    { name: 'Ritu Choudhury', role: 'Media Head', image: '/images/Leadership/RituChoudhury.jpeg' },
+    { name: 'Ritu Chowdhary', role: 'Media Head', image: '/images/Leadership/RituChoudhury.jpeg' },
 ]
 
 const gameOptions = [
