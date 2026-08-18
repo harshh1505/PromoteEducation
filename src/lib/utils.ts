@@ -59,10 +59,15 @@ export function resolveImageUrl(url: string | null | undefined): string | null {
 
 export function fixMarkdownBold(text: string | null | undefined): string {
   if (!text) return '';
+
+  // Convert HTML headings to Markdown headings to prevent block parsing issues in ReactMarkdown
+  let cleaned = text.replace(/<h([1-6])(?:\s+[^>]*?)?>(.*?)<\/h\1>/gi, (match, level, content) => {
+    return `\n\n${'#'.repeat(Number(level))} ${content.trim()}\n\n`;
+  });
   
   // Collapse any sequence of 3 or more asterisks down to standard double asterisks '**'
   // and dynamically strip HTML <u> tags to prevent unwanted underlines
-  let cleaned = text.replace(/\*{3,}/g, '**').replace(/<\/?u>/gi, '');
+  cleaned = cleaned.replace(/\*{3,}/g, '**').replace(/<\/?u>/gi, '');
   
   // Resolve spacing issues around double asterisks.
   // Match bold tags within a line, correcting inside spacing and ensuring outside spacing to letters, numbers, and symbols like HTML tags.
