@@ -22,12 +22,6 @@ import { supabase } from '@/lib/supabase'
 
 const OFFICES = [
   {
-    city: 'Delhi NCR Office',
-    address: 'U-179, Office No. 303, The Eduguide, 3rd Floor, Shakarpur, Laxmi Nagar, New Delhi - 110092',
-    landmark: 'Near Laxmi Nagar Metro Station Gate No. 4 (Landmark: Kotak Mahindra Bank)',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=U-179+Office+no+-+303+The+Eduguide,+3rd+floor+near+Laxmi+nagar+metro+station+gate+no+4'
-  },
-  {
     city: 'Kolkata Office',
     address: 'Ecosuite Business Tower, Street No. 676, Action Area II, Newtown, Kolkata, West Bengal - 700161',
     landmark: 'Action Area IID',
@@ -38,6 +32,12 @@ const OFFICES = [
     address: 'S5, Hiprofiles Business Centre, 1/A Church Street, Bangalore - 560001',
     landmark: 'Opposite Tata Starbucks Coffee Shop',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=S5,+Hiprofiles+Business+center,+1/A+CHURCH+STREET,+Bangalore+-+560001'
+  },
+  {
+    city: 'Delhi NCR Office',
+    address: 'U-179, Office No. 303, The Eduguide, 3rd Floor, Shakarpur, Laxmi Nagar, New Delhi - 110092',
+    landmark: 'Near Laxmi Nagar Metro Station Gate No. 4 (Landmark: Kotak Mahindra Bank)',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=U-179+Office+no+-+303+The+Eduguide,+3rd+floor+near+Laxmi+nagar+metro+station+gate+no+4'
   }
 ]
 
