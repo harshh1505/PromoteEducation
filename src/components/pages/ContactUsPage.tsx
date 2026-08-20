@@ -75,18 +75,33 @@ export default function ContactUsPage() {
     }
 
     try {
-      const { error } = await supabase.from('leads').insert([
+      // Primary: Insert into contact_submissions table
+      const { error: subError } = await supabase.from('contact_submissions').insert([
         {
           full_name: formData.name.trim(),
           email: formData.email.trim(),
           phone: formData.phone.trim(),
           stream: formData.stream,
-          source: `contact_us_form: ${formData.message.trim() || 'No message provided'}`,
+          message: formData.message.trim() || null,
           status: 'new'
         }
       ])
 
-      if (error) throw error
+      // Fallback: If table contact_submissions doesn't exist yet, insert into leads
+      if (subError) {
+        console.warn('Failed to insert into contact_submissions, falling back to leads:', subError.message)
+        const { error: leadsError } = await supabase.from('leads').insert([
+          {
+            full_name: formData.name.trim(),
+            email: formData.email.trim(),
+            phone: formData.phone.trim(),
+            stream: formData.stream,
+            source: `contact_us_form: ${formData.message.trim() || 'No message provided'}`,
+            status: 'new'
+          }
+        ])
+        if (leadsError) throw leadsError
+      }
 
       setSuccess(true)
       setFormData({
