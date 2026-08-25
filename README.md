@@ -131,7 +131,7 @@ cd backend
 node generateContent.js
 ```
 
----
+----
 
 ## 🌐 Deployment
 
