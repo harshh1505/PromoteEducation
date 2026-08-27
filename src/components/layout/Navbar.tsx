@@ -65,7 +65,7 @@ const exploreGroups: ExploreGroup[] = [
   {
     title: 'Platform Tools',
     items: [
-      { label: 'College Predictor', href: '/colleges', icon: 'Search', badge: 'AI Tool' },
+      { label: 'College Predictor', href: '/tools/college-predictor', icon: 'Search', badge: 'AI Tool' },
       { label: 'Loan Calculator', href: '/#loan-calculator-section', icon: 'IndianRupee' },
       { label: 'Admission Alerts', href: '/alerts', icon: 'Bell', status: 'New' },
       { label: 'College Finder', href: '/colleges', icon: 'Search' },

@@ -13,7 +13,7 @@ const avatars = [
   "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&q=80&w=100&h=100"
 ]
 const platformTools = [
-  { name: 'College Predictor', icon: '🎯', href: '/colleges' },
+  { name: 'College Predictor', icon: '🎯', href: '/tools/college-predictor' },
   { name: 'Compare Colleges', icon: '📊', href: '/#compare-section' },
   { name: 'Loan Calculator', icon: '💵', href: '/#loan-calculator-section' },
   { name: 'AI Brainstorm', icon: '💡', href: '/tools/brainstorm' },
