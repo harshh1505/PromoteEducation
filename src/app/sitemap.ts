@@ -25,6 +25,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/about',
     '/contact',
     '/faq',
+    '/study-abroad',
+    '/compare',
+    '/loan-calculator',
+    '/careers',
+    '/events',
+    '/tools/brainstorm',
+    '/tools/college-predictor',
+    '/privacy-policy',
+    '/terms-of-use',
+    '/cookie-policy',
+    '/disclaimer',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
@@ -84,5 +95,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }) || []
 
-  return [...staticPages, ...collegePages, ...magnetPages, ...blogPages, ...coursePages]
+  // 6. Individual Exam Pages
+  const { data: exams } = await supabase.from('exams').select('slug, updated_at')
+  const examPages = exams?.map((e) => ({
+    url: `${baseUrl}/exams/${e.slug}`,
+    lastModified: e.updated_at ? new Date(e.updated_at) : new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  })) || []
+
+  // 7. Individual Article Pages
+  const { data: articles } = await supabase.from('articles').select('slug, updated_at')
+  const articlePages = articles?.map((a) => ({
+    url: `${baseUrl}/articles/${a.slug}`,
+    lastModified: a.updated_at ? new Date(a.updated_at) : new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  })) || []
+
+  return [
+    ...staticPages, 
+    ...collegePages, 
+    ...magnetPages, 
+    ...blogPages, 
+    ...coursePages,
+    ...examPages,
+    ...articlePages
+  ]
 }

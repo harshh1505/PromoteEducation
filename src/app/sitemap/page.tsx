@@ -41,6 +41,7 @@ const SITEMAP_DATA = [
       { label: 'College Selection', href: '/selection' },
       { label: 'Expert Consultation', href: '/consultation' },
       { label: 'Scholarship Guide', href: '/scholarships' },
+      { label: 'Study Abroad Support', href: '/study-abroad' },
     ]
   },
   {
@@ -89,12 +90,12 @@ const SITEMAP_DATA = [
     icon: Activity,
     color: 'text-amber-500',
     links: [
-      { label: 'College Predictor', href: '/tools/college-predictor' },
-      { label: 'Loan Calculator', href: '/#loan-calculator-section' },
-      { label: 'Education News', href: '/news' },
-      { label: 'Latest Articles', href: '/articles' },
-      { label: 'Student Testimonials', href: '/reviews' },
-      { label: 'Compare Colleges', href: '/#compare-section' },
+      { label: 'College Predictor (AI Tool)', href: '/tools/college-predictor' },
+      { label: 'AI Brainstorming Assistant', href: '/tools/brainstorm' },
+      { label: 'Compare Colleges Portal', href: '/compare' },
+      { label: 'Education Loan Calculator', href: '/loan-calculator' },
+      { label: 'Featured Events & Seminars', href: '/events' },
+      { label: 'Latest Blogs & News', href: '/blogs' },
     ]
   },
   {
@@ -105,8 +106,7 @@ const SITEMAP_DATA = [
       { label: 'About Promote Education', href: '/about' },
       { label: 'Contact Support', href: '/contact' },
       { label: 'Help Center (FAQ)', href: '/faq' },
-      { label: 'Join as Mentor', href: '/careers/mentor' },
-      { label: 'Media & Press', href: '/press' },
+      { label: 'Careers Portal', href: '/careers' },
     ]
   },
   {
@@ -118,7 +118,6 @@ const SITEMAP_DATA = [
       { label: 'Terms of Use', href: '/terms-of-use' },
       { label: 'Disclaimer', href: '/disclaimer' },
       { label: 'Cookie Policy', href: '/cookie-policy' },
-      { label: 'Refund Policy', href: '/refund-policy' },
     ]
   }
 ]
