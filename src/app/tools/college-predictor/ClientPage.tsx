@@ -46,6 +46,7 @@ interface CutoffRow {
     state: string
     type: string | null
     total_fee: string | null
+    content: any | null
     nirf_rank: number | null
     avg_package: number | null
     highest_package: number | null
@@ -55,6 +56,7 @@ interface CutoffRow {
 
 interface MatchResult {
   collegeId: string
+  quota: string
   name: string
   shortName: string
   location: string
@@ -69,6 +71,38 @@ interface MatchResult {
   latestRound: number
   chance: 'safe' | 'target' | 'reach'
   trendData: { year: number; rank: number }[]
+}
+
+// Helper to resolve quota-specific fee
+function getQuotaFee(college: any, quotaName: string): string {
+  if (!college) return 'N/A'
+  
+  const fs = college.content?.fee_structure
+  if (fs) {
+    const qLower = quotaName.toLowerCase()
+    
+    // Resolve based on quota name
+    if (qLower.includes('management')) {
+      if (fs.management_quota) return fs.management_quota
+      if (fs.private_fees) return fs.private_fees
+    }
+    
+    if (qLower.includes('nri')) {
+      if (fs.nri_quota) return fs.nri_quota
+    }
+    
+    if (qLower.includes('deemed paid') || qLower.includes('deemed fees')) {
+      if (fs.deemed_fees) return fs.deemed_fees
+      if (fs.management_quota) return fs.management_quota
+    }
+    
+    if (qLower.includes('state')) {
+      if (fs.state_quota) return fs.state_quota
+    }
+  }
+  
+  // Fallback to total_fee
+  return college.total_fee || 'N/A'
 }
 
 export default function ClientPage() {
@@ -89,7 +123,6 @@ export default function ClientPage() {
   const [marks, setMarks] = useState('')
   const [course, setCourse] = useState('MBBS')
   const [category, setCategory] = useState('Open')
-  const [quota, setQuota] = useState('All India quota')
   const [domicile, setDomicile] = useState('West Bengal')
   const [isProcessing, setIsProcessing] = useState(false)
   const [academicError, setAcademicError] = useState('')
@@ -100,18 +133,16 @@ export default function ClientPage() {
   // Computed Predictions
   const [predictions, setPredictions] = useState<MatchResult[]>([])
   
-  // Expanded College ID for Detail View (Trend graph)
-  const [expandedCollegeId, setExpandedCollegeId] = useState<string | null>(null)
+  // Expanded Unique ID for Detail View (Trend graph, compound college_quota)
+  const [expandedId, setExpandedId] = useState<string | null>(null)
 
   // Dashboard Filters
   const [searchQuery, setSearchQuery] = useState('')
   const [filterState, setFilterState] = useState('All')
   const [filterType, setFilterType] = useState('All')
+  const [filterQuota, setFilterQuota] = useState('All')
   const [filterChance, setFilterChance] = useState<'All' | 'safe' | 'target' | 'reach'>('All')
   const [showFilters, setShowFilters] = useState(false)
-
-  // Domicile input visibility rule
-  const showDomicileSelect = quota === 'State Quota'
 
   useEffect(() => {
     setIsMounted(true)
@@ -213,71 +244,120 @@ export default function ClientPage() {
     setIsProcessing(true)
     try {
       // 1. Fetch historical cutoff data matching course and category
-      const { data, error } = await supabase
-        .from('cutoffs')
-        .select(`
-          rank,
-          marks,
-          course,
-          category,
-          quota,
-          state,
-          year,
-          round,
-          college_id,
-          college_type,
-          colleges (
-            id,
-            name,
-            short_name,
-            location,
-            state,
-            type,
-            total_fee,
-            nirf_rank,
-            avg_package,
-            highest_package,
-            established
+      let allData: any[] = []
+      let page = 0
+      const pageSize = 1000
+      let hasMore = true
+
+      const categoriesToQuery = ['Open']
+      if (category !== 'Open') {
+        categoriesToQuery.push(category)
+        if (category === 'OBC') {
+          categoriesToQuery.push(
+            'OBC-A', 
+            'OBC-B', 
+            'OBC-A (Non- Creamy Layer)', 
+            'OBC-B (Non- Creamy Layer)',
+            'OBC PwD',
+            'OBC-A PwD',
+            'OBC-B PwD',
+            'OBC-A (Non- Creamy Layer) PwD',
+            'OBC-B (Non- Creamy Layer) PwD'
           )
-        `)
-        .eq('course', course)
-        .eq('category', category)
+        } else if (category === 'SC') {
+          categoriesToQuery.push('SC PwD')
+        } else if (category === 'ST') {
+          categoriesToQuery.push('ST PwD')
+        } else if (category === 'EWS') {
+          categoriesToQuery.push('EWS PwD')
+        }
+      } else {
+        categoriesToQuery.push('Open PwD', 'UR PwD')
+      }
 
-      if (error) throw error
+      while (hasMore) {
+        const { data, error } = await supabase
+          .from('cutoffs')
+          .select(`
+            rank,
+            marks,
+            course,
+            category,
+            quota,
+            state,
+            year,
+            round,
+            college_id,
+            college_type,
+            colleges (
+              id,
+              name,
+              short_name,
+              location,
+              state,
+              type,
+              total_fee,
+              content,
+              nirf_rank,
+              avg_package,
+              highest_package,
+              established
+            )
+          `)
+          .eq('course', course)
+          .in('category', categoriesToQuery)
+          .range(page * pageSize, (page + 1) * pageSize - 1)
 
-      if (!data || data.length === 0) {
+        if (error) throw error
+
+        if (!data || data.length === 0) {
+          hasMore = false
+        } else {
+          allData = allData.concat(data)
+          if (data.length < pageSize) {
+            hasMore = false
+          } else {
+            page++
+          }
+        }
+      }
+
+      if (!allData || allData.length === 0) {
         setAcademicError('No historical cutoff data found for the selected Course and Category.')
         setIsProcessing(false)
         return
       }
 
-      const rows = data as unknown as CutoffRow[]
+      const rows = allData as unknown as CutoffRow[]
       setAllCutoffs(rows)
 
       // 2. Perform Prediction Match Analysis
-      // Group rows by college ID to analyze latest cutoffs and historical trends
+      // Group rows by college ID + quota to analyze latest cutoffs and historical trends
       const collegeGroups: Record<string, CutoffRow[]> = {}
       rows.forEach(row => {
         if (!row.college_id || !row.colleges) return
 
-        // Apply Quota filter logic:
-        // - For All India Quota, match only AIQ rows
-        // - For State Quota, match State rows for the student's domicile state
         const rowQuotaLower = (row.quota || '').toLowerCase()
-        const isAIQMatch = quota === 'All India quota' && (rowQuotaLower.includes('all india') || rowQuotaLower.includes('open seat'))
-        const isStateMatch = quota === 'State Quota' && rowQuotaLower.includes('state') && row.state.toLowerCase() === domicile.toLowerCase()
+        const rowStateLower = (row.state || '').toLowerCase()
+        const domicileLower = domicile.toLowerCase()
 
-        if (isAIQMatch || isStateMatch) {
-          if (!collegeGroups[row.college_id]) {
-            collegeGroups[row.college_id] = []
+        // Check if candidate is eligible for this cutoff row:
+        const isStateOrESIC = rowQuotaLower.includes('state') || rowQuotaLower.includes('esic')
+        const isEligible = isStateOrESIC ? (rowStateLower === domicileLower) : true
+
+        if (isEligible) {
+          // Use compound key to keep distinct quotas for the same college separate
+          const key = `${row.college_id}_${row.quota}`
+          if (!collegeGroups[key]) {
+            collegeGroups[key] = []
           }
-          collegeGroups[row.college_id].push(row)
+          collegeGroups[key].push(row)
         }
       })
 
       const computedResults: MatchResult[] = []
 
-      Object.entries(collegeGroups).forEach(([collegeId, records]) => {
+      Object.entries(collegeGroups).forEach(([compoundKey, records]) => {
         // Find latest cutoff details (highest year and round)
         const sortedRecords = [...records].sort((a, b) => {
           if (b.year !== a.year) return b.year - a.year
@@ -286,11 +366,12 @@ export default function ClientPage() {
 
         const latest = sortedRecords[0]
         const college = latest.colleges!
+        const collegeId = latest.college_id
 
         // Probability chances
-        // Safe: closing rank is 1.15 times user rank or more (e.g. closing is 15000, user is 12000)
+        // Safe: closing rank is 1.15 times user rank or more
         // Target: closing rank is close (within +/- 15% range)
-        // Reach: closing rank is up to 30% lower (closing rank is 8400, user is 12000, stretch target)
+        // Reach: closing rank is up to 30% lower (stretch target)
         let chance: 'safe' | 'target' | 'reach' = 'target'
         if (latest.rank >= parsedRank * 1.15) {
           chance = 'safe'
@@ -311,7 +392,6 @@ export default function ClientPage() {
         })
 
         const trendData = Object.entries(yearlyTrends).map(([yearStr, ranks]) => {
-          // Use median or min rank as standard representation
           const avgRank = Math.round(ranks.reduce((sum, val) => sum + val, 0) / ranks.length)
           return {
             year: parseInt(yearStr),
@@ -321,12 +401,13 @@ export default function ClientPage() {
 
         computedResults.push({
           collegeId,
+          quota: latest.quota,
           name: college.name,
           shortName: college.short_name || college.name.split(',')[0],
           location: college.location,
           state: college.state,
           type: latest.college_type || college.type || 'Govt.',
-          totalFee: college.total_fee || 'N/A',
+          totalFee: getQuotaFee(college, latest.quota),
           nirfRank: college.nirf_rank,
           established: college.established,
           latestCutoffRank: latest.rank,
@@ -379,11 +460,13 @@ export default function ClientPage() {
         }
       }
 
+      const matchQuota = filterQuota === 'All' || item.quota.toLowerCase() === filterQuota.toLowerCase()
+
       const matchChance = filterChance === 'All' || item.chance === filterChance
 
-      return matchSearch && matchState && matchType && matchChance
+      return matchSearch && matchState && matchType && matchQuota && matchChance
     })
-  }, [predictions, searchQuery, filterState, filterType, filterChance])
+  }, [predictions, searchQuery, filterState, filterType, filterQuota, filterChance])
 
   // Aggregate counts
   const counts = useMemo(() => {
@@ -399,6 +482,12 @@ export default function ClientPage() {
   const predictionStates = useMemo(() => {
     const states = predictions.map(p => p.state)
     return Array.from(new Set(states)).sort()
+  }, [predictions])
+
+  // Get distinct quotas from predictions to populate filters
+  const predictionQuotas = useMemo(() => {
+    const quotas = predictions.map(p => p.quota)
+    return Array.from(new Set(quotas)).sort()
   }, [predictions])
 
   return (
@@ -592,21 +681,10 @@ export default function ClientPage() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div>
-                      <label htmlFor="quota" className="block text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Seat Quota</label>
-                      <select
-                        id="quota"
-                        value={quota}
-                        onChange={(e) => setQuota(e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:bg-white text-slate-900 rounded-2xl py-3.5 px-4 text-sm font-bold transition-all duration-200 outline-none cursor-pointer"
-                      >
-                        {QUOTAS.map(q => <option key={q} value={q}>{q}</option>)}
-                      </select>
-                    </div>
+                  <div className="grid grid-cols-1 gap-5">
                     <div>
                       <label htmlFor="domicile" className="block text-xs font-black uppercase text-slate-400 tracking-wider mb-2">
-                        {showDomicileSelect ? 'Domicile / Home State' : 'State Preference'}
+                        Domicile / Home State
                       </label>
                       <select
                         id="domicile"
@@ -663,13 +741,13 @@ export default function ClientPage() {
                   </div>
                   <div>
                     <h3 className="text-xl font-black tracking-tight">Predictions Generated</h3>
-                    <p className="text-slate-400 text-xs font-bold uppercase tracking-wider">NEET Rank: {rank} • {category} • {quota}</p>
+                    <p className="text-slate-400 text-xs font-bold uppercase tracking-wider">NEET Rank: {parseInt(rank).toLocaleString()} • {category} • Domicile: {domicile}</p>
                   </div>
                 </div>
 
                 <div className="flex gap-3 w-full md:w-auto">
                   <button
-                    onClick={() => { setStep(1); setPredictions([]) }}
+                    onClick={() => { setStep(1); setPredictions([]); setExpandedId(null); setFilterQuota('All'); }}
                     className="flex-1 md:flex-none border border-slate-200 hover:border-slate-300 bg-white text-slate-700 font-semibold py-3 px-6 rounded-2xl transition-all duration-150 flex items-center justify-center gap-2 text-sm cursor-pointer"
                   >
                     <ArrowLeft size={16} />
@@ -685,6 +763,8 @@ export default function ClientPage() {
                       setRank('')
                       setMarks('')
                       setPredictions([]) 
+                      setExpandedId(null)
+                      setFilterQuota('All')
                     }}
                     className="flex-1 md:flex-none bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-6 rounded-2xl transition-all duration-150 flex items-center justify-center gap-2 text-sm cursor-pointer"
                   >
@@ -777,6 +857,19 @@ export default function ClientPage() {
                       </div>
 
                       <div>
+                        <label htmlFor="quota-fil" className="block text-xs font-bold text-slate-400 mb-2 uppercase">Seat Quota</label>
+                        <select
+                          id="quota-fil"
+                          value={filterQuota}
+                          onChange={(e) => setFilterQuota(e.target.value)}
+                          className="w-full bg-slate-50 border border-slate-200 text-slate-900 rounded-xl py-2.5 px-3 text-xs font-bold outline-none cursor-pointer"
+                        >
+                          <option value="All">All Quotas</option>
+                          {predictionQuotas.map(q => <option key={q} value={q}>{q}</option>)}
+                        </select>
+                      </div>
+
+                      <div>
                         <label htmlFor="type-fil" className="block text-xs font-bold text-slate-400 mb-2 uppercase">College Type</label>
                         <select
                           id="type-fil"
@@ -822,7 +915,8 @@ export default function ClientPage() {
                     </div>
                   ) : (
                     filteredPredictions.map((item) => {
-                      const isExpanded = expandedCollegeId === item.collegeId
+                      const uniqueId = `${item.collegeId}_${item.quota}`
+                      const isExpanded = expandedId === uniqueId
                       const chanceColors = {
                         safe: { bg: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-100', dot: 'bg-emerald-500' },
                         target: { bg: 'bg-sky-50', text: 'text-sky-700', border: 'border-sky-100', dot: 'bg-sky-500' },
@@ -832,11 +926,11 @@ export default function ClientPage() {
 
                       return (
                         <div
-                          key={item.collegeId}
+                          key={uniqueId}
                           className="bg-white border border-slate-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
                         >
                           <div
-                            onClick={() => setExpandedCollegeId(isExpanded ? null : item.collegeId)}
+                            onClick={() => setExpandedId(isExpanded ? null : uniqueId)}
                             className="p-6 sm:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 cursor-pointer hover:bg-slate-50/50 transition-colors"
                           >
                             <div className="space-y-2.5 max-w-xl">
@@ -846,6 +940,9 @@ export default function ClientPage() {
                                 </span>
                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider bg-slate-100 px-3 py-1 rounded-full">
                                   {item.type}
+                                </span>
+                                <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">
+                                  {item.quota}
                                 </span>
                                 {item.nirfRank && (
                                   <span className="text-[10px] font-black text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
