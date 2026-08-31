@@ -7,7 +7,7 @@ import {
   Target, FileText, Coins, Globe, ClipboardList,
   BookOpen, Newspaper, IndianRupee, HelpCircle,
   CheckSquare, Search, FileEdit, BarChart3,
-  Compass, Users, ShieldCheck, Video, Clock
+  Compass, Users, ShieldCheck, Video, Phone
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
@@ -99,7 +99,6 @@ export default function Navbar() {
   const [searchResults, setSearchResults] = useState<any[]>([])
   const [searchFocused, setSearchFocused] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
-  const [currentTime, setCurrentTime] = useState<string>('')
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null)
   const [topCategories, setTopCategories] = useState<{label: string, href: string}[]>([
     { label: 'All Courses', href: '/courses' }
@@ -126,13 +125,6 @@ export default function Navbar() {
       setUser(session?.user ?? null)
     })
 
-    // Running Clock Logic
-    const clockTimer = setInterval(() => {
-      setCurrentTime(new Date().toLocaleTimeString('en-IN', { 
-        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true 
-      }))
-    }, 1000)
-
     // Removed fetchTopCategories to use static array as requested
     setTopCategories([
       { label: 'All Courses', href: '/courses' },
@@ -145,7 +137,6 @@ export default function Navbar() {
     return () => {
       window.removeEventListener('scroll', handleScroll)
       subscription.unsubscribe()
-      clearInterval(clockTimer)
     }
   }, [])
 
@@ -426,17 +417,17 @@ export default function Navbar() {
             </div>
 
             <div className="flex items-center gap-8 pl-6 bg-gradient-to-r from-transparent via-white to-white sticky right-0">
-              <div className="hidden lg:flex items-center gap-2 px-1">
-                <Clock size={14} className="text-sky-500" />
-                <span className="text-sm font-black text-slate-800 tabular-nums uppercase tracking-tight min-w-[85px]">
-                  {currentTime || '--:--:-- --'}
+              <a href="tel:+919900116101" className="hidden lg:flex items-center gap-2 px-1 text-slate-800 hover:text-sky-600 transition-colors">
+                <Phone size={14} className="text-sky-500" />
+                <span className="text-sm font-black tracking-tight whitespace-nowrap">
+                  +91 99001 16101
                 </span>
-              </div>
+              </a>
               <a href="/cutoffs" className="flex items-center gap-1.5 text-xs font-bold text-amber-700 hover:text-amber-800 transition-colors whitespace-nowrap bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200/60 shadow-sm ring-4 ring-amber-500/5 animate-pulse-slow">
                 <BarChart3 size={13} className="text-amber-500" /> Cutoffs
               </a>
-              <a href="/abroad" className="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-sky-600 transition-colors whitespace-nowrap">
-                <Globe size={13} className="text-sky-500" /> Study Abroad
+              <a href="/contact" className="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-sky-600 transition-colors whitespace-nowrap">
+                <MessageSquare size={13} className="text-sky-500" /> Contact Us
               </a>
             </div>
           </div>
@@ -580,11 +571,11 @@ export default function Navbar() {
                   <BarChart3 size={14} className="text-amber-500" /> Cutoffs
                 </a>
                 <a
-                  href="/abroad"
+                  href="/contact"
                   onClick={() => setMobileOpen(false)}
                   className="flex items-center justify-center gap-2 py-3 bg-sky-50 hover:bg-sky-100/50 border border-sky-200 rounded-xl text-xs font-bold text-sky-800 transition-colors shadow-sm"
                 >
-                  <Globe size={14} className="text-sky-500" /> Study Abroad
+                  <MessageSquare size={14} className="text-sky-500" /> Contact Us
                 </a>
               </div>
 
@@ -691,13 +682,13 @@ export default function Navbar() {
                 <FileEdit size={14} className="text-slate-500" /> Write a Review
               </button>
 
-              {/* Time display indicator */}
-              <div className="flex items-center justify-center gap-2 py-2.5 bg-slate-50 border border-slate-100 rounded-2xl">
-                <Clock size={14} className="text-sky-500" />
-                <span className="text-xs font-extrabold text-slate-500 tabular-nums">
-                  CLOCK: {currentTime || '--:--:-- --'}
+              {/* Phone display indicator */}
+              <a href="tel:+919900116101" className="flex items-center justify-center gap-2 py-2.5 bg-slate-50 border border-slate-100 rounded-2xl hover:bg-slate-100 transition-colors">
+                <Phone size={14} className="text-sky-500" />
+                <span className="text-xs font-extrabold text-slate-700">
+                  +91 99001 16101
                 </span>
-              </div>
+              </a>
 
             </div>
           </div>
