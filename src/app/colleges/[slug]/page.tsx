@@ -229,7 +229,7 @@ async function CategoryView({ slug }: { slug: string }) {
   }
   return (
     <div className="min-h-screen bg-white pt-20">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "ItemList", itemListElement: colleges.map((c, i) => ({ "@type": "ListItem", position: i + 1, name: c.name, url: `https://promoteeducation.in/colleges/${c.slug}` })) }) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "ItemList", itemListElement: colleges.map((c, i) => ({ "@type": "ListItem", position: i + 1, name: c.name, url: `https://promoteducation.com/colleges/${c.slug}` })) }) }} />
       <section className="bg-slate-50 border-b border-slate-100 py-20 px-6">
         <div className="max-w-5xl mx-auto">
           <h1 className="text-5xl font-black text-slate-900 mb-4 capitalize leading-tight">Best {query.stream} Colleges in <span className="text-sky-500 italic">{query.location}</span></h1>
@@ -429,7 +429,7 @@ export default async function CollegePage({ params }: any) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{
         __html: JSON.stringify({
           '@context': 'https://schema.org', '@type': 'CollegeOrUniversity',
-          name: college.name, url: `https://promoteeducation.in/colleges/${college.slug}`,
+          name: college.name, url: `https://promoteducation.com/colleges/${college.slug}`,
           address: { '@type': 'PostalAddress', addressLocality: college.location, addressRegion: college.state, addressCountry: 'IN' },
           description: college.description,
         })

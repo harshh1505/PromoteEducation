@@ -75,7 +75,7 @@ export default function BrainstormPage() {
   const [dataSource, setDataSource] = useState<'loading' | 'database' | 'fallback'>('loading')
 
   // Base URL for PDF links
-  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://promoteeducation.in'
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://promoteducation.com'
 
   // Fetch real questions from Supabase
   useEffect(() => {

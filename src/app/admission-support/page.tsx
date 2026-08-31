@@ -36,9 +36,9 @@ export const metadata: Metadata = {
     description:
       'Secure your future seat with India\'s top admission consultants. End-to-end fulfillment for all major entrance exams and university admissions.',
     type: 'website',
-    url: 'https://promoteeducation.in/admission-support',
+    url: 'https://promoteducation.com/admission-support',
   },
-  alternates: { canonical: 'https://promoteeducation.in/admission-support' },
+  alternates: { canonical: 'https://promoteducation.com/admission-support' },
 }
 
 // ─────────────────────────────────────────────
@@ -182,8 +182,8 @@ export default function AdmissionSupportPage() {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://promoteeducation.in' },
-      { '@type': 'ListItem', position: 2, name: 'Admission Support', item: 'https://promoteeducation.in/admission-support' },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://promoteducation.com' },
+      { '@type': 'ListItem', position: 2, name: 'Admission Support', item: 'https://promoteducation.com/admission-support' },
     ],
   }
 
@@ -194,7 +194,7 @@ export default function AdmissionSupportPage() {
     'provider': {
       '@type': 'Organization',
       'name': 'Promote Education',
-      'url': 'https://promoteeducation.in'
+      'url': 'https://promoteducation.com'
     },
     'areaServed': 'India',
     'description': 'End-to-end admission support for JEE, NEET, CUET, and MBA. Services include form filling, document verification, and strategic choice-filling for JoSAA/MCC counselling.',

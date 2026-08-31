@@ -40,9 +40,9 @@ export const metadata: Metadata = {
     description:
       'Expert career guidance is now a click away. Access our network of certified counselors from any device, anywhere in the world.',
     type: 'website',
-    url: 'https://promoteeducation.in/consultation',
+    url: 'https://promoteducation.com/consultation',
   },
-  alternates: { canonical: 'https://promoteeducation.in/consultation' },
+  alternates: { canonical: 'https://promoteducation.com/consultation' },
 }
 
 // ─────────────────────────────────────────────
@@ -161,7 +161,7 @@ export default function ConsultationPage() {
     'provider': {
       '@type': 'Organization',
       'name': 'Promote Education',
-      'url': 'https://promoteeducation.in'
+      'url': 'https://promoteducation.com'
     },
     'areaServed': 'India',
     'description': 'Expert 1-on-1 educational consultation for university selection, career planning, and profile building.',
@@ -193,8 +193,8 @@ export default function ConsultationPage() {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://promoteeducation.in' },
-      { '@type': 'ListItem', position: 2, name: 'Consultation', item: 'https://promoteeducation.in/consultation' },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://promoteducation.com' },
+      { '@type': 'ListItem', position: 2, name: 'Consultation', item: 'https://promoteducation.com/consultation' },
     ],
   }
 

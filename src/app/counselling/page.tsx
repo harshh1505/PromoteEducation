@@ -41,9 +41,9 @@ export const metadata: Metadata = {
     description:
       'Maximize your rank potential with scientific choice filling. End-to-end counselling support for all major national and state-level entrance exams.',
     type: 'website',
-    url: 'https://promoteeducation.in/counselling',
+    url: 'https://promoteducation.com/counselling',
   },
-  alternates: { canonical: 'https://promoteeducation.in/counselling' },
+  alternates: { canonical: 'https://promoteducation.com/counselling' },
 }
 
 // ─────────────────────────────────────────────
@@ -162,7 +162,7 @@ export default function CounsellingPage() {
     'provider': {
       '@type': 'Organization',
       'name': 'Promote Education',
-      'url': 'https://promoteeducation.in'
+      'url': 'https://promoteducation.com'
     },
     'areaServed': 'India',
     'description': 'Expert college counselling for JoSAA, MCC, and state rounds. Specialized choice-filling optimization for JEE and NEET aspirants.',
@@ -194,8 +194,8 @@ export default function CounsellingPage() {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://promoteeducation.in' },
-      { '@type': 'ListItem', position: 2, name: 'Counselling', item: 'https://promoteeducation.in/counselling' },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://promoteducation.com' },
+      { '@type': 'ListItem', position: 2, name: 'Counselling', item: 'https://promoteducation.com/counselling' },
     ],
   }
 

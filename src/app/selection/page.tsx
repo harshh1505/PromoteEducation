@@ -43,9 +43,9 @@ export const metadata: Metadata = {
     description:
       'Choosing the right university is a lifelong decision. Use our data-driven matrix to select the campus that guarantees your career success.',
     type: 'website',
-    url: 'https://promoteeducation.in/selection',
+    url: 'https://promoteducation.com/selection',
   },
-  alternates: { canonical: 'https://promoteeducation.in/selection' },
+  alternates: { canonical: 'https://promoteducation.com/selection' },
 }
 
 // ─────────────────────────────────────────────
@@ -164,7 +164,7 @@ export default function SelectionPage() {
     'provider': {
       '@type': 'Organization',
       'name': 'Promote Education',
-      'url': 'https://promoteeducation.in'
+      'url': 'https://promoteducation.com'
     },
     'areaServed': 'India',
     'description': 'End-to-end college selection support. Data-driven matching of ranks with institutions based on ROI, placements, and campus quality.',
@@ -196,8 +196,8 @@ export default function SelectionPage() {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://promoteeducation.in' },
-      { '@type': 'ListItem', position: 2, name: 'Selection', item: 'https://promoteeducation.in/selection' },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://promoteducation.com' },
+      { '@type': 'ListItem', position: 2, name: 'Selection', item: 'https://promoteducation.com/selection' },
     ],
   }
 

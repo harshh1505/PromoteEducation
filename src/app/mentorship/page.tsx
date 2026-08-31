@@ -42,9 +42,9 @@ export const metadata: Metadata = {
     description:
       'Bridge the gap between your potential and your goals. Connect with mentors who have already conquered the path you are on.',
     type: 'website',
-    url: 'https://promoteeducation.in/mentorship',
+    url: 'https://promoteducation.com/mentorship',
   },
-  alternates: { canonical: 'https://promoteeducation.in/mentorship' },
+  alternates: { canonical: 'https://promoteducation.com/mentorship' },
 }
 
 // ─────────────────────────────────────────────
@@ -163,7 +163,7 @@ export default function MentorshipPage() {
     'provider': {
       '@type': 'Organization',
       'name': 'Promote Education',
-      'url': 'https://promoteeducation.in'
+      'url': 'https://promoteducation.com'
     },
     'areaServed': 'India',
     'description': 'Personalized mentorship for JEE, NEET, and career growth. Connect with mentors from IITs and AIIMS for personalized study plans and strategy.',
@@ -195,8 +195,8 @@ export default function MentorshipPage() {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://promoteeducation.in' },
-      { '@type': 'ListItem', position: 2, name: 'Mentorship', item: 'https://promoteeducation.in/mentorship' },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://promoteducation.com' },
+      { '@type': 'ListItem', position: 2, name: 'Mentorship', item: 'https://promoteducation.com/mentorship' },
     ],
   }
 

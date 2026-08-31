@@ -21,9 +21,9 @@ export const metadata: Metadata = {
     description:
       'Find the right scholarship for your course, category and budget. Detailed guide to 50+ national and international funding schemes with amounts and deadlines.',
     type: 'website',
-    url: 'https://promoteeducation.in/scholarships',
+    url: 'https://promoteducation.com/scholarships',
   },
-  alternates: { canonical: 'https://promoteeducation.in/scholarships' },
+  alternates: { canonical: 'https://promoteducation.com/scholarships' },
 }
 
 // ─────────────────────────────────────────────
@@ -226,8 +226,8 @@ export default function ScholarshipsPage() {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://promoteeducation.in' },
-      { '@type': 'ListItem', position: 2, name: 'Scholarships', item: 'https://promoteeducation.in/scholarships' },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://promoteducation.com' },
+      { '@type': 'ListItem', position: 2, name: 'Scholarships', item: 'https://promoteducation.com/scholarships' },
     ],
   }
 
@@ -236,11 +236,11 @@ export default function ScholarshipsPage() {
     '@type': 'WebPage',
     name: 'Scholarships & Education Loans India 2026',
     description: 'Complete guide to scholarships in India 2026 — merit, need-based, government, international.',
-    url: 'https://promoteeducation.in/scholarships',
+    url: 'https://promoteducation.com/scholarships',
     publisher: {
       '@type': 'Organization',
       name: 'Promote Education',
-      url: 'https://promoteeducation.in',
+      url: 'https://promoteducation.com',
     },
   }
 
