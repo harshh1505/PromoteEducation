@@ -1,5 +1,7 @@
 import { MetadataRoute } from 'next'
 import { supabase } from '@/lib/supabase'
+import fs from 'fs'
+import path from 'path'
 
 export const dynamic = 'force-static'
 
@@ -77,49 +79,88 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   })) || []
 
-  // 5. Individual Course Pages
-  const { data: courses } = await supabase.from('courses').select('slug, created_at')
-  const coursePages = courses?.map((c) => {
-    let urlPath = c.slug || '';
-    if (c.slug) {
-      const parts = c.slug.split('-');
-      if (parts.length > 1) {
-        urlPath = `${parts[0]}/${parts.slice(1).join('-')}`;
-      }
-    }
+  // 5. Course Hub Pages (Degree Slugs)
+  const degreeSlugs = [
+    'btech', 'mtech', 'mba', 'mbbs', 'bds', 'bsc-nursing',
+    'ba-llb', 'llm', 'bpharm', 'mpharm', 'march', 'be', 'msc', 'phd'
+  ]
+  const degreePages = degreeSlugs.map((deg) => ({
+    url: `${baseUrl}/courses/${deg}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }))
+
+  // 6. Course Specialization Pages (from course_catalog table)
+  const { data: courseCatalog } = await supabase.from('course_catalog').select('slug, degree')
+  const coursePages = (courseCatalog || []).map((c) => {
+    const degreeSlug = (c.degree || '').replace(/\./g, '').toLowerCase()
     return {
-      url: `${baseUrl}/courses/${urlPath}`,
-      lastModified: c.created_at ? new Date(c.created_at) : new Date(),
+      url: `${baseUrl}/courses/${degreeSlug}/${c.slug}`,
+      lastModified: new Date(),
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     }
-  }) || []
+  })
 
-  // 6. Individual Exam Pages
-  const { data: exams } = await supabase.from('exams').select('slug, updated_at')
-  const examPages = exams?.map((e) => ({
-    url: `${baseUrl}/exams/${e.slug}`,
-    lastModified: e.updated_at ? new Date(e.updated_at) : new Date(),
+  // 7. Individual Exam Pages
+  let examSlugs: string[] = [
+    'aiims-entrance', 'bitsat', 'cat', 'clat', 'cuet-ug', 'gate',
+    'ini-cet', 'ini-ss', 'jee-advanced', 'jee-main', 'neet-pg', 'neet-ug', 'nift', 'xat'
+  ]
+  try {
+    const examsDir = path.join(process.cwd(), 'src/app/exams')
+    if (fs.existsSync(examsDir)) {
+      examSlugs = fs.readdirSync(examsDir).filter(f => {
+        try {
+          return fs.statSync(path.join(examsDir, f)).isDirectory() && !f.startsWith('[')
+        } catch {
+          return false
+        }
+      })
+    }
+  } catch {
+    // Keep fallback list
+  }
+  const examPages = examSlugs.map((slug) => ({
+    url: `${baseUrl}/exams/${slug}`,
+    lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
-  })) || []
+  }))
 
-  // 7. Individual Article Pages
-  const { data: articles } = await supabase.from('articles').select('slug, updated_at')
-  const articlePages = articles?.map((a) => ({
-    url: `${baseUrl}/articles/${a.slug}`,
-    lastModified: a.updated_at ? new Date(a.updated_at) : new Date(),
+  // 8. Individual Article Pages
+  let articleSlugs: string[] = []
+  try {
+    const articlesDir = path.join(process.cwd(), 'src/app/articles')
+    if (fs.existsSync(articlesDir)) {
+      articleSlugs = fs.readdirSync(articlesDir).filter(f => {
+        try {
+          return fs.statSync(path.join(articlesDir, f)).isDirectory() && !f.startsWith('[')
+        } catch {
+          return false
+        }
+      })
+    }
+  } catch {
+    // Keep empty if failed
+  }
+  const articlePages = articleSlugs.map((slug) => ({
+    url: `${baseUrl}/articles/${slug}`,
+    lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
-  })) || []
+  }))
 
   return [
     ...staticPages, 
     ...collegePages, 
     ...magnetPages, 
     ...blogPages, 
+    ...degreePages,
     ...coursePages,
     ...examPages,
     ...articlePages
   ]
 }
+
