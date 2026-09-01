@@ -19,6 +19,9 @@ export const metadata: Metadata = {
   description:
     'Comprehensive website map of Promote Education. Easily navigate through our admission support, mentorship, counselling, rankings, and exam guides.',
   keywords: ['sitemap', 'website map', 'promote education directory', 'navigation guide'],
+  alternates: {
+    canonical: 'https://promoteducation.com/sitemap',
+  },
   openGraph: {
     title: 'Website Sitemap | Promote Education',
     description: 'Find every page on Promote Education—from admission aid to career mentorship.',

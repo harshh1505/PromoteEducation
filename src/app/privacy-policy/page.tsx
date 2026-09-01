@@ -4,6 +4,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Privacy Policy',
   description: 'Learn how Promote Education collects, uses, and protects your personal data.',
+  alternates: {
+    canonical: 'https://promoteducation.com/privacy-policy',
+  },
 }
 
 export default function PrivacyPolicy() {

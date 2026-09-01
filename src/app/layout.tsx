@@ -23,9 +23,6 @@ export const metadata: Metadata = {
   creator: 'Promote Education',
   publisher: 'Promote Education Technologies',
   metadataBase: new URL('https://promoteducation.com'), // Replace with your actual domain
-  alternates: {
-    canonical: '/',
-  },
   icons: {
     icon: [
       { url: '/favicon.ico' },

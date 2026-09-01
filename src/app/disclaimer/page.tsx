@@ -4,6 +4,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Disclaimer',
   description: 'Important legal notices and content accuracy disclaimers for Promote Education.',
+  alternates: {
+    canonical: 'https://promoteducation.com/disclaimer',
+  },
 }
 
 export default function Disclaimer() {

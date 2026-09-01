@@ -194,19 +194,35 @@ function formatFees(inr: number | null | undefined): string {
 // ===============================
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
+  const canonical = `https://promoteducation.com/colleges/${slug}`
   if (slug.includes('-in-')) {
     const query = parseSlug(slug)
     if (query) return {
       title: `Top ${query.stream} Colleges in ${query.location} 2026`,
       description: `Explore best ${query.stream} colleges in ${query.location}. Check fees, placements, rankings and admission details.`,
+      alternates: {
+        canonical,
+      },
     }
   }
   const data = await getCollegeData(slug)
-  if (!data) return { title: 'College Not Found' }
+  if (!data) return { 
+    title: 'College Not Found',
+    alternates: {
+      canonical,
+    },
+  }
   const { college } = data
   const title = college.meta_title || `${college.name} 2026: Fees, Cutoff, Placements, Ranking`
   const description = college.meta_description || `${college.name}, ${college.location} — NIRF #${college.nirf_rank}. Check ${college.stream} courses, fees, placement stats, cutoffs, and admission 2026.`
-  return { title, description, openGraph: { title, description, type: 'website' } }
+  return { 
+    title, 
+    description, 
+    alternates: {
+      canonical,
+    },
+    openGraph: { title, description, type: 'website', url: canonical } 
+  }
 }
 
 // ===============================

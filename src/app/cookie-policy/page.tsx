@@ -4,6 +4,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Cookie Policy',
   description: 'Learn how Promote Education uses cookies to enhance your experience.',
+  alternates: {
+    canonical: 'https://promoteducation.com/cookie-policy',
+  },
 }
 
 export default function CookiePolicy() {

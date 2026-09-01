@@ -2,6 +2,15 @@ import dynamic from 'next/dynamic'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import HeroSection from '@/components/sections/HeroSection'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Promote Education — India\'s #1 College Discovery & Admission Platform',
+  description: 'Explore 50,000+ top colleges in India. Compare NIRF rankings, fees, average placements (CTC), and verified student reviews. Get AI-powered college matching and career guidance.',
+  alternates: {
+    canonical: 'https://promoteducation.com',
+  },
+}
 
 // Dynamic imports for below-the-fold heavy sections — code-split into separate chunks
 const CompareSection = dynamic(() => import('@/components/sections/CompareSection'))

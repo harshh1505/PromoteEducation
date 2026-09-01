@@ -158,7 +158,7 @@ export default function Footer() {
                           category === 'Services' ? (
                             link === 'Scholarship' ? '/scholarships' : `/${link.toLowerCase().replace(/ /g, '-')}`
                           ) :
-                          category === 'Company' ? `/${link.toLowerCase().replace(/ /g, '-')}` :
+                          category === 'Company' ? (link === 'Contact Us' ? '/contact' : `/${link.toLowerCase().replace(/ /g, '-')}`) :
                             category === 'Courses' ? `/courses/${link.toLowerCase().replace(/ /g, '-').replace(/\./g, '')}` :
                               category === 'Exams' ? `/exams/${link.toLowerCase().replace(/ /g, '-')}` :
                                 '#'

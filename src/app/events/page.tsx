@@ -6,6 +6,9 @@ import { Calendar, MapPin, Users, ArrowRight } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'Events & Seminars | Promote Education',
   description: 'Join our fests, seminars, and conferences focused on student wellbeing and academic success in collaboration with top colleges.',
+  alternates: {
+    canonical: 'https://promoteducation.com/events',
+  },
 }
 
 

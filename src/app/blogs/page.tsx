@@ -8,6 +8,9 @@ export const revalidate = 3600 // Cache for 1 hour, serve instantly
 export const metadata: Metadata = {
   title: 'Expert Education Blogs & Prep Guides 2026 | Promote Education',
   description: 'Explore insightful blogs, expert preparation guides, exam strategies, and college selection tips written by expert education advisors at Promote Education.',
+  alternates: {
+    canonical: 'https://promoteducation.com/blogs',
+  },
 }
 
 export default async function BlogsPage() {

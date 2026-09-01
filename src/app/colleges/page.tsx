@@ -1,7 +1,16 @@
 import { supabase } from '@/lib/supabase'
 import CollegesClient from './CollegesClient'
+import type { Metadata } from 'next'
 
 export const revalidate = 86400 // Revalidate daily
+
+export const metadata: Metadata = {
+  title: 'Top Colleges in India 2026: Rankings, Fees, Placements & Reviews | Promote Education',
+  description: 'Explore 50,000+ top colleges in India across Engineering, Medical, Management, and Law. Compare verified NIRF rankings, cutoff marks, fee structure, and average salary packages.',
+  alternates: {
+    canonical: 'https://promoteducation.com/colleges',
+  },
+}
 
 export default async function CollegesPage() {
   const [collegesRes, coursesRes] = await Promise.all([

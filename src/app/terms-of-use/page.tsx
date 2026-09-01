@@ -4,6 +4,9 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Terms of Use',
   description: 'Read the terms and conditions for using the Promote Education platform.',
+  alternates: {
+    canonical: 'https://promoteducation.com/terms-of-use',
+  },
 }
 
 export default function TermsOfUse() {

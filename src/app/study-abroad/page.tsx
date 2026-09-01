@@ -21,6 +21,9 @@ import {
 export const metadata: Metadata = {
   title: 'Study Abroad Coming Soon | Promote Education',
   description: 'We are building something exceptional to help you study at the world\'s best universities. Get early access and updates.',
+  alternates: {
+    canonical: 'https://promoteducation.com/study-abroad',
+  },
   openGraph: {
     title: 'Study Abroad Coming Soon | Promote Education',
     description: 'Personalized guidance. End-to-end support. Global opportunities.',
