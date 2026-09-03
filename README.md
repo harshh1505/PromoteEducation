@@ -85,7 +85,7 @@ SUPABASE_SERVICE_ROLE_KEY=<your-supabase-service-role-key>
 GEMINI_API_KEY=<your-google-gemini-api-key>
 ```
 
----
+----
 
 ## 📦 Getting Started
 
