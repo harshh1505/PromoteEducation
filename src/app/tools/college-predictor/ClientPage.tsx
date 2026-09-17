@@ -91,11 +91,17 @@ function getQuotaFee(college: any, quotaName: string): string {
       if (fs.nri_quota) return fs.nri_quota
     }
     
-    if (qLower.includes('deemed paid') || qLower.includes('deemed fees')) {
+    if (qLower.includes('deemed paid') || qLower.includes('deemed/paid') || qLower.includes('deemed fees') || qLower.includes('deemed')) {
       if (fs.deemed_fees) return fs.deemed_fees
       if (fs.management_quota) return fs.management_quota
     }
     
+    if (qLower.includes('minority') || qLower.includes('christian')) {
+      if (fs.christian_minority) return fs.christian_minority
+      if (fs.management_quota) return fs.management_quota
+      if (fs.state_quota) return fs.state_quota
+    }
+
     if (qLower.includes('state')) {
       if (fs.state_quota) return fs.state_quota
     }
@@ -249,7 +255,7 @@ export default function ClientPage() {
       const pageSize = 1000
       let hasMore = true
 
-      const categoriesToQuery = ['Open']
+      const categoriesToQuery = ['Open', 'RC1', 'RC2', 'RC3', 'RC4', 'RC5', 'RC6', 'RC7', 'RC8']
       if (category !== 'Open') {
         categoriesToQuery.push(category)
         if (category === 'OBC') {

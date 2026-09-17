@@ -103,7 +103,20 @@ function parseSlug(slug: string): CategoryQuery | null {
 
 type Course = { id: string; college_id: string; name: string; fees: number; duration: string; eligibility: string; is_popular: boolean }
 type Placement = { id: string; college_id: string; year: number; avg_package: number; highest_package: number; placement_rate: number; total_offers: number; companies_visited: number; recruiters: string[] }
-type Cutoff = { id: string; college_id: string; branch: string; category: string; gender: string; opening_rank: number; closing_rank: number; year: number }
+type Cutoff = { 
+  id: string
+  college_id: string
+  course?: string
+  quota?: string
+  category: string
+  rank?: number
+  marks?: number | null
+  round?: number
+  year: number
+  branch?: string
+  gender?: string
+  closing_rank?: number
+}
 type Ranking = { id: string; college_id: string; agency: string; rank: string; year: number }
 type FAQ = { id: string; college_id: string; question: string; answer: string; created_at: string }
 type Review = { id: string; college_id: string; user_name: string; rating: number; comment: string; user_tag: string; is_verified: boolean }
@@ -121,7 +134,7 @@ async function getCollegeData(slug: string) {
   const [courses, placements, cutoffs, rankings, faqs, reviews, gallery, scholarships, important_dates] = await Promise.all([
     supabase.from('courses').select('*, course_catalog(name)').eq('college_id', college.id).order('is_popular', { ascending: false }).order('fees', { ascending: false }),
     supabase.from('placements').select('*').eq('college_id', college.id).order('year', { ascending: false }).limit(1),
-    supabase.from('cutoffs').select('*').eq('college_id', college.id).order('year', { ascending: false }).order('closing_rank', { ascending: true }),
+    supabase.from('cutoffs').select('*').eq('college_id', college.id).order('year', { ascending: false }).order('rank', { ascending: true }),
     supabase.from('rankings').select('*').eq('college_id', college.id).order('year', { ascending: false }),
     supabase.from('faqs').select('*').eq('college_id', college.id).order('created_at', { ascending: true }),
     supabase.from('reviews').select('*').eq('college_id', college.id).order('created_at', { ascending: false }),
@@ -1016,22 +1029,45 @@ export default async function CollegePage({ params }: any) {
                     {college.name} maintains competitive cutoffs. The data below reflects the final round of the most recent counselling cycle.
                   </p>
                   <div className="overflow-x-auto">
-                    <table className="w-full border-collapse bg-white border border-slate-100 rounded-2xl overflow-hidden">
+                    <table className="w-full border-collapse bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
                       <thead>
-                        <tr className="border-b border-slate-100 bg-slate-50">
-                          <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Specialisation</th>
+                        <tr className="border-b border-slate-100 bg-slate-50/80">
+                          <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Course & Quota</th>
                           <th className="px-6 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest">Category</th>
-                          <th className="px-6 py-4 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">Closing Rank</th>
+                          <th className="px-6 py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-widest">Round / Year</th>
+                          <th className="px-6 py-4 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">Cutoff Rank</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-50">
-                        {cutoffs.map((ct) => (
-                          <tr key={ct.id} className="hover:bg-slate-50 transition-colors">
-                            <td className="px-6 py-5 font-black text-slate-900 text-sm">{ct.branch}</td>
-                            <td className="px-6 py-5 text-sm text-slate-400 font-medium">{ct.category} · {ct.gender}</td>
-                            <td className="px-6 py-5 text-right font-black text-sky-500 text-lg">{ct.closing_rank.toLocaleString('en-IN')}</td>
-                          </tr>
-                        ))}
+                        {cutoffs.map((ct) => {
+                          const displayRank = ct.rank || ct.closing_rank || '—'
+                          const displayCourse = ct.course || ct.branch || 'MBBS'
+                          const displayQuota = ct.quota ? ` · ${ct.quota}` : ''
+                          return (
+                            <tr key={ct.id} className="hover:bg-slate-50/60 transition-colors">
+                              <td className="px-6 py-5 font-black text-slate-900 text-sm">
+                                <div>{displayCourse}</div>
+                                {ct.quota && (
+                                  <div className="text-xs font-semibold text-emerald-600 tracking-wide mt-0.5">{ct.quota}</div>
+                                )}
+                              </td>
+                              <td className="px-6 py-5 text-sm text-slate-600 font-medium">
+                                <span className="inline-block px-2.5 py-1 bg-slate-100 text-slate-700 rounded-lg text-xs font-bold">
+                                  {ct.category}{ct.gender ? ` · ${ct.gender}` : ''}
+                                </span>
+                              </td>
+                              <td className="px-6 py-5 text-center text-xs text-slate-500 font-bold">
+                                {ct.round ? `Round ${ct.round}` : ''} {ct.year ? `(${ct.year})` : ''}
+                              </td>
+                              <td className="px-6 py-5 text-right font-black text-sky-600 text-lg">
+                                {typeof displayRank === 'number' ? displayRank.toLocaleString('en-IN') : displayRank}
+                                {ct.marks ? (
+                                  <span className="block text-xs font-semibold text-slate-400">{ct.marks} Marks</span>
+                                ) : null}
+                              </td>
+                            </tr>
+                          )
+                        })}
                       </tbody>
                     </table>
                   </div>
