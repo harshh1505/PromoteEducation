@@ -19,7 +19,7 @@ import {
 // SEO METADATA — Next.js App Router
 // ─────────────────────────────────────────────
 export const metadata: Metadata = {
-  title: 'Study Abroad Coming Soon | Promote Education',
+  title: 'Study Abroad Programs - Coming Soon',
   description: 'We are building something exceptional to help you study at the world\'s best universities. Get early access and updates.',
   alternates: {
     canonical: 'https://promoteducation.com/study-abroad',

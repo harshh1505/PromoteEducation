@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'CUET UG 2026 Preparation Strategy: Study Plan for Top Universities',
   description: 'Preparing for CUET UG requires a balanced approach across NCERT and Aptitude. Get expert tips, daily schedules, and study plans for CUET UG 2026.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/cuet-ug-preparation-strategy'
-  }
+    canonical: 'https://promoteducation.com/articles/cuet-ug-preparation-strategy',
+  },
+  openGraph: {
+    title: 'CUET UG 2026 Preparation Strategy: Study Plan for Top Universities | Promote Education',
+    description: 'Preparing for CUET UG requires a balanced approach across NCERT and Aptitude. Get expert tips, daily schedules, and study plans for CUET UG 2026.',
+    url: 'https://promoteducation.com/articles/cuet-ug-preparation-strategy',
+    type: 'article',
+  },
 }
 
 export default function Page() {

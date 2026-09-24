@@ -5,8 +5,15 @@ import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 export const metadata: Metadata = {
   title: 'JEE Advanced 2026 — Eligibility, Syllabus, Dates & Preparation Tips',
   description: 'Complete guide to Joint Entrance Examination Advanced (JEE Advanced) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top IITs.',
+  keywords: ["JEE Advanced","JEE Advanced 2026","IIT admission","JEE Advanced syllabus","JEE Advanced eligibility","IIT cutoff"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/jee-advanced'
+  },
+  openGraph: {
+    title: 'JEE Advanced 2026 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
+    description: 'Complete guide to Joint Entrance Examination Advanced (JEE Advanced) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top IITs.',
+    url: 'https://promoteducation.com/exams/jee-advanced',
+    type: 'article',
   }
 }
 

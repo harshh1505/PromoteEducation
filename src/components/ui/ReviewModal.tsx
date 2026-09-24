@@ -18,17 +18,7 @@ export default function ReviewModal({ isOpen, onClose, collegeName }: ReviewModa
   const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
-  const [user, setUser] = useState<any>(null)
   const [agreed, setAgreed] = useState(false)
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null)
-      if (session?.user) {
-        setName(session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || '')
-      }
-    })
-  }, [isOpen])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -40,7 +30,7 @@ export default function ReviewModal({ isOpen, onClose, collegeName }: ReviewModa
       college_name: collegeName,
       rating: rating,
       review_text: comment,
-      verified: !!user,
+      verified: true,
       initials: name.charAt(0).toUpperCase()
     }])
 

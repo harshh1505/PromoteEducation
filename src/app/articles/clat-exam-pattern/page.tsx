@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'CLAT 2026 Exam Pattern: Sections, Marking & Duration Explained',
   description: 'The CLAT 2026 exam is conducted in offline mode. Check the detailed sections, marking scheme with negative marks, and the total duration.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/clat-exam-pattern'
-  }
+    canonical: 'https://promoteducation.com/articles/clat-exam-pattern',
+  },
+  openGraph: {
+    title: 'CLAT 2026 Exam Pattern: Sections, Marking & Duration Explained | Promote Education',
+    description: 'The CLAT 2026 exam is conducted in offline mode. Check the detailed sections, marking scheme with negative marks, and the total duration.',
+    url: 'https://promoteducation.com/articles/clat-exam-pattern',
+    type: 'article',
+  },
 }
 
 export default function Page() {

@@ -4,6 +4,15 @@ import BlogTemplate from '@/components/pages/BlogTemplate'
 export const metadata: Metadata = {
   title: 'JEE Main 2026 Preparation Strategy: Study Plan for Top Rank',
   description: 'Cracking JEE Main requires consistency and a smart study plan. Get expert preparation tips, topper strategies, and daily schedules for JEE Main 2026.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/jee-main-preparation-strategy',
+  },
+  openGraph: {
+    title: 'JEE Main 2026 Preparation Strategy: Study Plan for Top Rank | Promote Education',
+    description: 'Cracking JEE Main requires consistency and a smart study plan. Get expert preparation tips, topper strategies, and daily schedules for JEE Main 2026.',
+    url: 'https://promoteducation.com/articles/jee-main-preparation-strategy',
+    type: 'article',
+  },
 }
 
 export default function Page() {

@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'Top NIFT Colleges in India: Campuses, Courses & Rankings 2026',
   description: 'Explore the list of top NIFT campuses including Delhi, Mumbai, and Bengaluru. Check their rankings, popular courses, and infrastructure.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/colleges-accepting-nift'
-  }
+    canonical: 'https://promoteducation.com/articles/colleges-accepting-nift',
+  },
+  openGraph: {
+    title: 'Top NIFT Colleges in India: Campuses, Courses & Rankings 2026 | Promote Education',
+    description: 'Explore the list of top NIFT campuses including Delhi, Mumbai, and Bengaluru. Check their rankings, popular courses, and infrastructure.',
+    url: 'https://promoteducation.com/articles/colleges-accepting-nift',
+    type: 'article',
+  },
 }
 
 export default function Page() {

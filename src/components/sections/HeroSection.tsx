@@ -26,7 +26,7 @@ const platformTools = [
 const carouselItems = [
   {
     name: 'Amity University, Noida',
-    slug: 'amity-university-noida',
+    slug: 'amity-university-uttar-pradesh',
     image: 'https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/amitynoida.jpg'
   },
   {
@@ -41,7 +41,7 @@ const carouselItems = [
   },
   {
     name: 'MIT WPU, Pune',
-    slug: 'mit-wpu',
+    slug: 'mit-world-peace-university',
     image: 'https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/mitwpu.webp'
   },
   {

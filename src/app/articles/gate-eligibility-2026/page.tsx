@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'GATE 2026 Eligibility Criteria: Age Limit, Qualification & Attempts',
   description: 'Understanding the eligibility criteria for GATE 2026 is the first step for aspirants planning higher studies or PSU jobs. Check age limit and qualification.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/gate-eligibility-2026'
-  }
+    canonical: 'https://promoteducation.com/articles/gate-eligibility-2026',
+  },
+  openGraph: {
+    title: 'GATE 2026 Eligibility Criteria: Age Limit, Qualification & Attempts | Promote Education',
+    description: 'Understanding the eligibility criteria for GATE 2026 is the first step for aspirants planning higher studies or PSU jobs. Check age limit and qualification.',
+    url: 'https://promoteducation.com/articles/gate-eligibility-2026',
+    type: 'article',
+  },
 }
 
 export default function Page() {

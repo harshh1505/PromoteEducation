@@ -68,7 +68,22 @@ export function fixMarkdownBold(text: string | null | undefined): string {
   // Collapse any sequence of 3 or more asterisks down to standard double asterisks '**'
   // and dynamically strip HTML <u> tags to prevent unwanted underlines
   cleaned = cleaned.replace(/\*{3,}/g, '**').replace(/<\/?u>/gi, '');
-  
+
+  // Strip <ol> and <ul> tags when they don't contain <li> tags (e.g. invalid HTML wrappers around markdown lists)
+  if (!/<li[\s>]/i.test(cleaned)) {
+    cleaned = cleaned.replace(/<\/?(?:ol|ul)[^>]*>/gi, '\n\n');
+  } else {
+    cleaned = cleaned.replace(/<(ol|ul)[^>]*>([\s\S]*?)<\/\1>/gi, (match, tag, inner) => {
+      if (!/<li[\s>]/i.test(inner)) {
+        return `\n\n${inner.trim()}\n\n`;
+      }
+      return match;
+    });
+  }
+
+  // Ensure closing HTML block tags have double newlines before following text/markdown
+  cleaned = cleaned.replace(/(<\/(?:p|div|section|blockquote|table|ol|ul)>)([^\r\n])/gi, '$1\n\n$2');
+
   // Resolve spacing issues around double asterisks.
   // Match bold tags within a line, correcting inside spacing and ensuring outside spacing to letters, numbers, and symbols like HTML tags.
   return cleaned.replace(/([^\s([{\x22\x27])?\*\*([^*\r\n]+)\*\*([^\s)\]}.,;:!?\x22\x27])?/g, (match, before, content, after) => {

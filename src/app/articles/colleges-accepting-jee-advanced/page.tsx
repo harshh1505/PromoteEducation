@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'Top IITs in India Accepting JEE Advanced Score 2026',
   description: 'Explore the list of the prestigious Indian Institutes of Technology (IITs) accepting JEE Advanced scores for B.Tech admissions. Check rankings and placements.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/colleges-accepting-jee-advanced'
-  }
+    canonical: 'https://promoteducation.com/articles/colleges-accepting-jee-advanced',
+  },
+  openGraph: {
+    title: 'Top IITs in India Accepting JEE Advanced Score 2026 | Promote Education',
+    description: 'Explore the list of the prestigious Indian Institutes of Technology (IITs) accepting JEE Advanced scores for B.Tech admissions. Check rankings and placements.',
+    url: 'https://promoteducation.com/articles/colleges-accepting-jee-advanced',
+    type: 'article',
+  },
 }
 
 export default function Page() {

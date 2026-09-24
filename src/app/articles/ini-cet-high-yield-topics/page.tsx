@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'INI CET High-Yield Topics: What Actually Gets Asked | Promote Education',
+  title: 'INI CET High-Yield Topics: What Actually Gets Asked',
   description: 'Data-driven analysis of the most frequently tested topics in INI CET from 2019–2025. Focus on these high-yield chapters to maximize your score efficiently.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/ini-cet-high-yield-topics',
+  },
+  openGraph: {
+    title: 'INI CET High-Yield Topics: What Actually Gets Asked | Promote Education',
+    description: 'Data-driven analysis of the most frequently tested topics in INI CET from 2019–2025. Focus on these high-yield chapters to maximize your score efficiently.',
+    url: 'https://promoteducation.com/articles/ini-cet-high-yield-topics',
+    type: 'article',
+  },
 }
 
 export default function Page() {

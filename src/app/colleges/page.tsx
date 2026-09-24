@@ -5,10 +5,17 @@ import type { Metadata } from 'next'
 export const revalidate = 86400 // Revalidate daily
 
 export const metadata: Metadata = {
-  title: 'Top Colleges in India 2026: Rankings, Fees, Placements & Reviews | Promote Education',
+  title: 'Top Colleges in India 2026: Rankings, Fees, Placements & Reviews',
   description: 'Explore 50,000+ top colleges in India across Engineering, Medical, Management, and Law. Compare verified NIRF rankings, cutoff marks, fee structure, and average salary packages.',
+  keywords: ['top colleges in india 2026', 'best engineering colleges', 'top mba colleges', 'medical colleges ranking', 'college admission 2026', 'nirf ranking 2025'],
   alternates: {
     canonical: 'https://promoteducation.com/colleges',
+  },
+  openGraph: {
+    title: 'Top Colleges in India 2026: Rankings, Fees, Placements & Reviews | Promote Education',
+    description: 'Explore 50,000+ top colleges in India across Engineering, Medical, Management, and Law. Compare verified NIRF rankings, cutoff marks, fee structure, and average salary packages.',
+    url: 'https://promoteducation.com/colleges',
+    type: 'website',
   },
 }
 
@@ -19,9 +26,11 @@ export default async function CollegesPage() {
       .select('id, slug, name, short_name, location, state, stream, ranking, total_fee, avg_ctc, ownership, type, cover_image, image_url')
       .eq('is_active', true)
       .order('ranking', { ascending: true }),
-    supabase
-      .from('courses')
-      .select('college_id, course_catalog(degree, slug)')
+    (async () => {
+      const { data, error } = await supabase.from('college_courses').select('college_id, course_catalog(degree, slug)')
+      if (!error && data) return { data, error: null }
+      return supabase.from('courses').select('college_id, course_catalog(degree, slug)')
+    })()
   ])
 
   const colleges = collegesRes.data || []

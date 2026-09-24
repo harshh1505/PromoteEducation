@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 
 export const metadata: Metadata = {
-  title: 'Contact Us | Promote Education',
+  title: 'Contact Us',
   robots: {
     index: false,
     follow: true,

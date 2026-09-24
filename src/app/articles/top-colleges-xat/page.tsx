@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Top Colleges Accepting XAT Complete List for 2026 | Promote Education',
+  title: 'Top Colleges Accepting XAT Complete List for 2026',
   description: 'The definitive list of top MBA colleges accepting XAT scores in 2026. Includes XLRI, SPJIMR, IMT, XIMB, GIM, and 150+ other B-schools with their cutoff percentiles and key programme details.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/top-colleges-xat',
+  },
+  openGraph: {
+    title: 'Top Colleges Accepting XAT Complete List for 2026 | Promote Education',
+    description: 'The definitive list of top MBA colleges accepting XAT scores in 2026. Includes XLRI, SPJIMR, IMT, XIMB, GIM, and 150+ other B-schools with their cutoff percentiles and key programme details.',
+    url: 'https://promoteducation.com/articles/top-colleges-xat',
+    type: 'article',
+  },
 }
 
 export default function Page() {

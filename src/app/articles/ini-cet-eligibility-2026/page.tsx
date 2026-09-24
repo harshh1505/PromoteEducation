@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'INI CET 2026 Eligibility Criteria — Complete Breakdown | Promote Education',
+  title: 'INI CET 2026 Eligibility Criteria — Complete Breakdown',
   description: 'Complete INI CET 2026 eligibility guide. Learn the MBBS qualification rule, 55%/50% aggregate requirement, internship cutoff date, and registration with NMC for AIIMS PG admissions.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/ini-cet-eligibility-2026',
+  },
+  openGraph: {
+    title: 'INI CET 2026 Eligibility Criteria — Complete Breakdown | Promote Education',
+    description: 'Complete INI CET 2026 eligibility guide. Learn the MBBS qualification rule, 55%/50% aggregate requirement, internship cutoff date, and registration with NMC for AIIMS PG admissions.',
+    url: 'https://promoteducation.com/articles/ini-cet-eligibility-2026',
+    type: 'article',
+  },
 }
 
 export default function Page() {

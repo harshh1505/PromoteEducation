@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'Top Medical Colleges Accepting NEET Score in India 2026',
   description: 'Explore the list of top AIIMS, government, and private medical colleges accepting NEET UG scores for MBBS and BDS admissions.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/colleges-accepting-neet'
-  }
+    canonical: 'https://promoteducation.com/articles/colleges-accepting-neet',
+  },
+  openGraph: {
+    title: 'Top Medical Colleges Accepting NEET Score in India 2026 | Promote Education',
+    description: 'Explore the list of top AIIMS, government, and private medical colleges accepting NEET UG scores for MBBS and BDS admissions.',
+    url: 'https://promoteducation.com/articles/colleges-accepting-neet',
+    type: 'article',
+  },
 }
 
 export default function Page() {

@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'Top NLUs in India Accepting CLAT Score 2026',
   description: 'Explore the list of the prestigious National Law Universities (NLUs) accepting CLAT scores. Check their rankings, popular courses, and placement records.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/colleges-accepting-clat'
-  }
+    canonical: 'https://promoteducation.com/articles/colleges-accepting-clat',
+  },
+  openGraph: {
+    title: 'Top NLUs in India Accepting CLAT Score 2026 | Promote Education',
+    description: 'Explore the list of the prestigious National Law Universities (NLUs) accepting CLAT scores. Check their rankings, popular courses, and placement records.',
+    url: 'https://promoteducation.com/articles/colleges-accepting-clat',
+    type: 'article',
+  },
 }
 
 export default function Page() {

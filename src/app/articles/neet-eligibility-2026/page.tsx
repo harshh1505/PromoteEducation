@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'NEET 2026 Eligibility Criteria: Age Limit, Attempts & Qualification',
   description: 'Understanding the eligibility criteria for NEET UG 2026 is essential before applying. Check age limit, attempts, and qualification for medical aspirants.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/neet-eligibility-2026'
-  }
+    canonical: 'https://promoteducation.com/articles/neet-eligibility-2026',
+  },
+  openGraph: {
+    title: 'NEET 2026 Eligibility Criteria: Age Limit, Attempts & Qualification | Promote Education',
+    description: 'Understanding the eligibility criteria for NEET UG 2026 is essential before applying. Check age limit, attempts, and qualification for medical aspirants.',
+    url: 'https://promoteducation.com/articles/neet-eligibility-2026',
+    type: 'article',
+  },
 }
 
 export default function Page() {

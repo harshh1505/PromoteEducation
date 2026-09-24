@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'AIIMS PG Seat Matrix 2026 — All Campuses | Promote Education',
+  title: 'AIIMS PG Seat Matrix 2026 — All Campuses',
   description: 'Complete seat intake breakdown for MD, MS, and DM/M.Ch programs across all AIIMS campuses for the 2026 session. Includes JIPMER and PGIMER seat data.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/aiims-pg-seat-matrix',
+  },
+  openGraph: {
+    title: 'AIIMS PG Seat Matrix 2026 — All Campuses | Promote Education',
+    description: 'Complete seat intake breakdown for MD, MS, and DM/M.Ch programs across all AIIMS campuses for the 2026 session. Includes JIPMER and PGIMER seat data.',
+    url: 'https://promoteducation.com/articles/aiims-pg-seat-matrix',
+    type: 'article',
+  },
 }
 
 export default function Page() {

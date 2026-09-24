@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Post-PG Medical Career Guide Salary, Specialties & Career Paths | Promote Education',
+  title: 'Post-PG Medical Career Guide Salary, Specialties & Career Paths',
   description: 'A comprehensive guide to career options after completing MD/MS through INI CET. Covers government vs private sector salaries, super-specialization (DM/MCh), academic careers, and USMLE pathways.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/post-pg-medical-career',
+  },
+  openGraph: {
+    title: 'Post-PG Medical Career Guide Salary, Specialties & Career Paths | Promote Education',
+    description: 'A comprehensive guide to career options after completing MD/MS through INI CET. Covers government vs private sector salaries, super-specialization (DM/MCh), academic careers, and USMLE pathways.',
+    url: 'https://promoteducation.com/articles/post-pg-medical-career',
+    type: 'article',
+  },
 }
 
 export default function Page() {

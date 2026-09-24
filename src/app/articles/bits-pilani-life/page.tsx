@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Life at BITS Pilani Campus, Culture & Placements | Promote Education',
+  title: 'Life at BITS Pilani Campus, Culture & Placements',
   description: 'An insider look at campus life at BITS Pilani — from world-class infrastructure and BITS Apogee festival to placement statistics and practice school (internship) programmes.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/bits-pilani-life',
+  },
+  openGraph: {
+    title: 'Life at BITS Pilani Campus, Culture & Placements | Promote Education',
+    description: 'An insider look at campus life at BITS Pilani — from world-class infrastructure and BITS Apogee festival to placement statistics and practice school (internship) programmes.',
+    url: 'https://promoteducation.com/articles/bits-pilani-life',
+    type: 'article',
+  },
 }
 
 export default function Page() {

@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'NEET 2026 Syllabus: Complete PCB Topic-wise Breakdown & Weightage',
   description: 'The syllabus for NEET UG 2026 is based on NCERT Class 11 and 12. Get a detailed subject-wise breakdown of Physics, Chemistry, and Biology topics.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/neet-syllabus-2026'
-  }
+    canonical: 'https://promoteducation.com/articles/neet-syllabus-2026',
+  },
+  openGraph: {
+    title: 'NEET 2026 Syllabus: Complete PCB Topic-wise Breakdown & Weightage | Promote Education',
+    description: 'The syllabus for NEET UG 2026 is based on NCERT Class 11 and 12. Get a detailed subject-wise breakdown of Physics, Chemistry, and Biology topics.',
+    url: 'https://promoteducation.com/articles/neet-syllabus-2026',
+    type: 'article',
+  },
 }
 
 export default function Page() {

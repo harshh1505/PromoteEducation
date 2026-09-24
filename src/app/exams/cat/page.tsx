@@ -5,8 +5,15 @@ import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 export const metadata: Metadata = {
   title: 'CAT 2026 — Eligibility, Syllabus, Dates & Preparation Tips',
   description: 'Complete guide to Common Admission Test (CAT) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top B-schools like IIMs.',
+  keywords: ["CAT","CAT 2026","IIM admission","MBA entrance exam","CAT syllabus","CAT eligibility","CAT exam pattern"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/cat'
+  },
+  openGraph: {
+    title: 'CAT 2026 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
+    description: 'Complete guide to Common Admission Test (CAT) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top B-schools like IIMs.',
+    url: 'https://promoteducation.com/exams/cat',
+    type: 'article',
   }
 }
 

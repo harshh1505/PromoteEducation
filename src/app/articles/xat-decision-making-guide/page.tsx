@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'XAT Decision Making: The Ultimate Strategy Guide | Promote Education',
+  title: 'XAT Decision Making: The Ultimate Strategy Guide',
   description: 'Master the XAT Decision Making section — the most unique and feared section in any MBA entrance exam. Learn ethical dilemma frameworks, common question types, and expert solving strategies.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/xat-decision-making-guide',
+  },
+  openGraph: {
+    title: 'XAT Decision Making: The Ultimate Strategy Guide | Promote Education',
+    description: 'Master the XAT Decision Making section — the most unique and feared section in any MBA entrance exam. Learn ethical dilemma frameworks, common question types, and expert solving strategies.',
+    url: 'https://promoteducation.com/articles/xat-decision-making-guide',
+    type: 'article',
+  },
 }
 
 export default function Page() {

@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'Top MBA Colleges Accepting CAT Score in India 2026',
   description: 'Explore the list of the prestigious IIMs and other top B-schools like FMS, SPJIMR, and MDI accepting CAT scores for MBA admissions.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/colleges-accepting-cat'
-  }
+    canonical: 'https://promoteducation.com/articles/colleges-accepting-cat',
+  },
+  openGraph: {
+    title: 'Top MBA Colleges Accepting CAT Score in India 2026 | Promote Education',
+    description: 'Explore the list of the prestigious IIMs and other top B-schools like FMS, SPJIMR, and MDI accepting CAT scores for MBA admissions.',
+    url: 'https://promoteducation.com/articles/colleges-accepting-cat',
+    type: 'article',
+  },
 }
 
 export default function Page() {

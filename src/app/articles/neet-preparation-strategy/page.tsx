@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'NEET 2026 Preparation Strategy: Study Plan for 650+ Score',
   description: 'Cracking NEET UG requires discipline and consistency. Get expert preparation tips, topper strategies, and daily schedules for NEET 2026.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/neet-preparation-strategy'
-  }
+    canonical: 'https://promoteducation.com/articles/neet-preparation-strategy',
+  },
+  openGraph: {
+    title: 'NEET 2026 Preparation Strategy: Study Plan for 650+ Score | Promote Education',
+    description: 'Cracking NEET UG requires discipline and consistency. Get expert preparation tips, topper strategies, and daily schedules for NEET 2026.',
+    url: 'https://promoteducation.com/articles/neet-preparation-strategy',
+    type: 'article',
+  },
 }
 
 export default function Page() {

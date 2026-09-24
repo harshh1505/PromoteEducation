@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'Best Books for CAT 2026: Section-wise Expert Preparation Guide',
   description: 'Selecting the right books is essential for CAT success. Get expert recommendations for VARC, DILR, and Quantitative Aptitude for CAT 2026.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/best-books-cat'
-  }
+    canonical: 'https://promoteducation.com/articles/best-books-cat',
+  },
+  openGraph: {
+    title: 'Best Books for CAT 2026: Section-wise Expert Preparation Guide | Promote Education',
+    description: 'Selecting the right books is essential for CAT success. Get expert recommendations for VARC, DILR, and Quantitative Aptitude for CAT 2026.',
+    url: 'https://promoteducation.com/articles/best-books-cat',
+    type: 'article',
+  },
 }
 
 export default function Page() {

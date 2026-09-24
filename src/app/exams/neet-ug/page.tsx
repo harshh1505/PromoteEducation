@@ -5,8 +5,15 @@ import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 export const metadata: Metadata = {
   title: 'NEET UG 2026 — Eligibility, Syllabus, Dates & Preparation Tips',
   description: 'Complete guide to National Eligibility cum Entrance Test (NEET UG) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top medical colleges.',
+  keywords: ["NEET UG","NEET UG 2026","medical entrance exam","MBBS admission","NEET syllabus","NEET eligibility"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/neet-ug'
+  },
+  openGraph: {
+    title: 'NEET UG 2026 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
+    description: 'Complete guide to National Eligibility cum Entrance Test (NEET UG) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top medical colleges.',
+    url: 'https://promoteducation.com/exams/neet-ug',
+    type: 'article',
   }
 }
 

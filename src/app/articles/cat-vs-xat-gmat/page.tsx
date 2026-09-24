@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'CAT vs XAT vs GMAT: Which MBA Entrance Exam is Best for You?',
   description: 'MBA aspirants often compare CAT, XAT, and GMAT. Understand the differences in focus, difficulty, and colleges to make the right career choice.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/cat-vs-xat-gmat'
-  }
+    canonical: 'https://promoteducation.com/articles/cat-vs-xat-gmat',
+  },
+  openGraph: {
+    title: 'CAT vs XAT vs GMAT: Which MBA Entrance Exam is Best for You? | Promote Education',
+    description: 'MBA aspirants often compare CAT, XAT, and GMAT. Understand the differences in focus, difficulty, and colleges to make the right career choice.',
+    url: 'https://promoteducation.com/articles/cat-vs-xat-gmat',
+    type: 'article',
+  },
 }
 
 export default function Page() {

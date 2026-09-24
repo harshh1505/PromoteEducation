@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'INI CET 2026 Exam Pattern & Marking Scheme | Promote Education',
+  title: 'INI CET 2026 Exam Pattern & Marking Scheme',
   description: 'Detailed breakdown of the INI CET 2026 exam pattern. Covers total questions, marking scheme (+1/-1/3), time management, and the unique image-based question format used by AIIMS.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/ini-cet-exam-pattern',
+  },
+  openGraph: {
+    title: 'INI CET 2026 Exam Pattern & Marking Scheme | Promote Education',
+    description: 'Detailed breakdown of the INI CET 2026 exam pattern. Covers total questions, marking scheme (+1/-1/3), time management, and the unique image-based question format used by AIIMS.',
+    url: 'https://promoteducation.com/articles/ini-cet-exam-pattern',
+    type: 'article',
+  },
 }
 
 export default function Page() {

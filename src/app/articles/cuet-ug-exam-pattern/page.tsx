@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'CUET UG 2026 Exam Pattern: Sections, Marking & Mode Explained',
   description: 'The CUET UG 2026 exam is a computer-based test with a unique marking scheme. Check the structure of Language, Domain, and General tests.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/cuet-ug-exam-pattern'
-  }
+    canonical: 'https://promoteducation.com/articles/cuet-ug-exam-pattern',
+  },
+  openGraph: {
+    title: 'CUET UG 2026 Exam Pattern: Sections, Marking & Mode Explained | Promote Education',
+    description: 'The CUET UG 2026 exam is a computer-based test with a unique marking scheme. Check the structure of Language, Domain, and General tests.',
+    url: 'https://promoteducation.com/articles/cuet-ug-exam-pattern',
+    type: 'article',
+  },
 }
 
 export default function Page() {

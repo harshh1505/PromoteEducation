@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'BITSAT 2026 Eligibility — The 75-60 Rule Explained | Promote Education',
+  title: 'BITSAT 2026 Eligibility — The 75-60 Rule Explained',
   description: 'Complete BITSAT 2026 eligibility guide. Learn the 75% aggregate rule, 60% per-subject rule, year-of-passing restriction, and the direct admission policy for board toppers at BITS Pilani.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/bitsat-eligibility',
+  },
+  openGraph: {
+    title: 'BITSAT 2026 Eligibility — The 75-60 Rule Explained | Promote Education',
+    description: 'Complete BITSAT 2026 eligibility guide. Learn the 75% aggregate rule, 60% per-subject rule, year-of-passing restriction, and the direct admission policy for board toppers at BITS Pilani.',
+    url: 'https://promoteducation.com/articles/bitsat-eligibility',
+    type: 'article',
+  },
 }
 
 export default function Page() {

@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'GATE 2026 Preparation Strategy: Study Plan for Top Rank',
   description: 'Cracking GATE requires conceptual clarity and consistency. Get expert preparation tips, topper strategies, and study plans for GATE 2026.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/gate-preparation-strategy'
-  }
+    canonical: 'https://promoteducation.com/articles/gate-preparation-strategy',
+  },
+  openGraph: {
+    title: 'GATE 2026 Preparation Strategy: Study Plan for Top Rank | Promote Education',
+    description: 'Cracking GATE requires conceptual clarity and consistency. Get expert preparation tips, topper strategies, and study plans for GATE 2026.',
+    url: 'https://promoteducation.com/articles/gate-preparation-strategy',
+    type: 'article',
+  },
 }
 
 export default function Page() {

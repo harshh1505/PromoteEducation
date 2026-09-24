@@ -12,11 +12,12 @@ export const metadata: Metadata = {
   },
 }
 
+import StatsBar from '@/components/sections/StatsBar'
+
 // Dynamic imports for below-the-fold heavy sections — code-split into separate chunks
 const CompareSection = dynamic(() => import('@/components/sections/CompareSection'))
 const CollegesSection = dynamic(() => import('@/components/sections/CollegesSection'))
 const LoanSection = dynamic(() => import('@/components/sections/LoanSection'))
-const StatsBar = dynamic(() => import('@/components/sections/StatsBar'))
 const TestimonialsSection = dynamic(() => import('@/components/sections/TestimonialsSection'))
 const MoreFromUsSection = dynamic(() => import('@/components/sections/MoreFromUsSection'))
 const NewsSection = dynamic(() => import('@/components/sections/NewsSection'))

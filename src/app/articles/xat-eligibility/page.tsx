@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2, AlertTriangle } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'XAT 2026 Eligibility & Registration Guide | Promote Education',
+  title: 'XAT 2026 Eligibility & Registration Guide',
   description: 'Complete XAT 2026 eligibility guide. No minimum percentage, open to all graduates and final-year students. Learn registration steps, fees, and important deadlines for XLRI Jamshedpur admission.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/xat-eligibility',
+  },
+  openGraph: {
+    title: 'XAT 2026 Eligibility & Registration Guide | Promote Education',
+    description: 'Complete XAT 2026 eligibility guide. No minimum percentage, open to all graduates and final-year students. Learn registration steps, fees, and important deadlines for XLRI Jamshedpur admission.',
+    url: 'https://promoteducation.com/articles/xat-eligibility',
+    type: 'article',
+  },
 }
 
 export default function Page() {

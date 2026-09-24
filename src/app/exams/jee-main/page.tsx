@@ -5,8 +5,15 @@ import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 export const metadata: Metadata = {
   title: 'JEE Main 2026 — Eligibility, Syllabus, Dates & Preparation Tips',
   description: 'Complete guide to Joint Entrance Examination Main (JEE Main) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, cut-offs, and top colleges accepting JEE Main scores.',
+  keywords: ["JEE Main","JEE Main 2026","engineering entrance exam","NTA JEE","JEE syllabus","JEE eligibility","NIT admission"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/jee-main'
+  },
+  openGraph: {
+    title: 'JEE Main 2026 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
+    description: 'Complete guide to Joint Entrance Examination Main (JEE Main) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, cut-offs, and top colleges accepting JEE Main scores.',
+    url: 'https://promoteducation.com/exams/jee-main',
+    type: 'article',
   }
 }
 

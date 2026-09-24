@@ -5,8 +5,15 @@ import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 export const metadata: Metadata = {
   title: 'GATE 2026 — Eligibility, Syllabus, Dates & Preparation Tips',
   description: 'Complete guide to Graduate Aptitude Test in Engineering (GATE) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top colleges for M.Tech.',
+  keywords: ["GATE","GATE 2026","M.Tech admission","PSU recruitment through GATE","GATE syllabus","GATE eligibility"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/gate'
+  },
+  openGraph: {
+    title: 'GATE 2026 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
+    description: 'Complete guide to Graduate Aptitude Test in Engineering (GATE) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top colleges for M.Tech.',
+    url: 'https://promoteducation.com/exams/gate',
+    type: 'article',
   }
 }
 

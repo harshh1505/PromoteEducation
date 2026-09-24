@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'CAT 2026 Eligibility Criteria: Age Limit, Qualification & Attempts',
   description: 'Understanding the eligibility criteria for CAT 2026 is the first step for MBA aspirants. Check the qualification marks and attempt limits for IIM admissions.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/cat-eligibility-2026'
-  }
+    canonical: 'https://promoteducation.com/articles/cat-eligibility-2026',
+  },
+  openGraph: {
+    title: 'CAT 2026 Eligibility Criteria: Age Limit, Qualification & Attempts | Promote Education',
+    description: 'Understanding the eligibility criteria for CAT 2026 is the first step for MBA aspirants. Check the qualification marks and attempt limits for IIM admissions.',
+    url: 'https://promoteducation.com/articles/cat-eligibility-2026',
+    type: 'article',
+  },
 }
 
 export default function Page() {

@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'XLRI HRM vs BM Which Programme Should You Choose? | Promote Education',
-  description: 'A detailed comparison of XLRI\'s flagship MBA programmes — Human Resource Management (HRM) and Business Management (BM). Covers curriculum, placements, XAT cutoffs, and career trajectories.',
+  title: 'XLRI HRM vs BM Which Programme Should You Choose?',
+  description: "A detailed comparison of XLRI's flagship MBA programmes — Human Resource Management (HRM) and Business Management (BM). Covers curriculum, placements, XAT cutoffs, and career trajectories.",
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/xlri-hrm-vs-bm',
+  },
+  openGraph: {
+    title: 'XLRI HRM vs BM Which Programme Should You Choose? | Promote Education',
+    description: "A detailed comparison of XLRI's flagship MBA programmes — Human Resource Management (HRM) and Business Management (BM). Covers curriculum, placements, XAT cutoffs, and career trajectories.",
+    url: 'https://promoteducation.com/articles/xlri-hrm-vs-bm',
+    type: 'article',
+  },
 }
 
 export default function Page() {

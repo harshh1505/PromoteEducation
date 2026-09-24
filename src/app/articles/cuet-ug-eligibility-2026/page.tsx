@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'CUET UG 2026 Eligibility Criteria: Age Limit, Qualification & Board Requirements',
   description: 'Understanding the eligibility criteria for CUET UG 2026 is essential for students aiming for central universities like DU, JNU, and BHU. Check qualification marks.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/cuet-ug-eligibility-2026'
-  }
+    canonical: 'https://promoteducation.com/articles/cuet-ug-eligibility-2026',
+  },
+  openGraph: {
+    title: 'CUET UG 2026 Eligibility Criteria: Age Limit, Qualification & Board Requirements | Promote Education',
+    description: 'Understanding the eligibility criteria for CUET UG 2026 is essential for students aiming for central universities like DU, JNU, and BHU. Check qualification marks.',
+    url: 'https://promoteducation.com/articles/cuet-ug-eligibility-2026',
+    type: 'article',
+  },
 }
 
 export default function Page() {

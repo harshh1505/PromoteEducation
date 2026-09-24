@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'CLAT 2026 Preparation Strategy: Study Plan for Top NLUs',
   description: 'Cracking CLAT requires strong reading and reasoning skills. Get expert preparation tips, topper strategies, and daily schedules for CLAT 2026.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/clat-preparation-strategy'
-  }
+    canonical: 'https://promoteducation.com/articles/clat-preparation-strategy',
+  },
+  openGraph: {
+    title: 'CLAT 2026 Preparation Strategy: Study Plan for Top NLUs | Promote Education',
+    description: 'Cracking CLAT requires strong reading and reasoning skills. Get expert preparation tips, topper strategies, and daily schedules for CLAT 2026.',
+    url: 'https://promoteducation.com/articles/clat-preparation-strategy',
+    type: 'article',
+  },
 }
 
 export default function Page() {

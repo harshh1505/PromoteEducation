@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Best Coaching for INI CET Online & Offline Options in 2026 | Promote Education',
+  title: 'Best Coaching for INI CET Online & Offline Options in 2026',
   description: 'Top coaching platforms and institutes for INI CET 2026 preparation. Comparison of Marrow, PrepLadder, DAMS, and Medicovision with fee structures, faculty quality, and student success rates.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/best-ini-cet-coaching',
+  },
+  openGraph: {
+    title: 'Best Coaching for INI CET Online & Offline Options in 2026 | Promote Education',
+    description: 'Top coaching platforms and institutes for INI CET 2026 preparation. Comparison of Marrow, PrepLadder, DAMS, and Medicovision with fee structures, faculty quality, and student success rates.',
+    url: 'https://promoteducation.com/articles/best-ini-cet-coaching',
+    type: 'article',
+  },
 }
 
 export default function Page() {

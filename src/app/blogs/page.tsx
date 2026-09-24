@@ -6,10 +6,16 @@ export const revalidate = 3600 // Cache for 1 hour, serve instantly
 
 // Blogs directory page component
 export const metadata: Metadata = {
-  title: 'Expert Education Blogs & Prep Guides 2026 | Promote Education',
+  title: 'Expert Education Blogs & Prep Guides 2026',
   description: 'Explore insightful blogs, expert preparation guides, exam strategies, and college selection tips written by expert education advisors at Promote Education.',
   alternates: {
     canonical: 'https://promoteducation.com/blogs',
+  },
+  openGraph: {
+    title: 'Expert Education Blogs & Prep Guides 2026 | Promote Education',
+    description: 'Explore insightful blogs, expert preparation guides, exam strategies, and college selection tips written by expert education advisors at Promote Education.',
+    url: 'https://promoteducation.com/blogs',
+    type: 'website',
   },
 }
 

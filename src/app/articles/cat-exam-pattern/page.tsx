@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'CAT 2026 Exam Pattern: Sections, Time Limit & Marking Scheme',
   description: 'The CAT 2026 exam is conducted online. Check the detailed sections, time limits for each section, and the marking scheme for MCQs and TITA questions.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/cat-exam-pattern'
-  }
+    canonical: 'https://promoteducation.com/articles/cat-exam-pattern',
+  },
+  openGraph: {
+    title: 'CAT 2026 Exam Pattern: Sections, Time Limit & Marking Scheme | Promote Education',
+    description: 'The CAT 2026 exam is conducted online. Check the detailed sections, time limits for each section, and the marking scheme for MCQs and TITA questions.',
+    url: 'https://promoteducation.com/articles/cat-exam-pattern',
+    type: 'article',
+  },
 }
 
 export default function Page() {

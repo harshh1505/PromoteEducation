@@ -4,7 +4,16 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'AIIMS Nursing & Para-Medical Entrance 2026 | Eligibility & Dates',
   description: 'Comprehensive guide to AIIMS B.Sc Nursing and Para-Medical entrance exams 2026. Get latest eligibility criteria (55% Gen/OBC), exam pattern, and important dates for AIIMS across India.',
-  keywords: ['AIIMS Nursing entrance', 'AIIMS B.Sc Nursing 2026', 'AIIMS Para-medical admission', 'AIIMS entrance exam eligibility']
+  keywords: ["AIIMS Nursing entrance","AIIMS B.Sc Nursing 2026","AIIMS Para-medical admission","AIIMS entrance exam eligibility"],
+  alternates: {
+    canonical: 'https://promoteducation.com/exams/aiims-entrance'
+  },
+  openGraph: {
+    title: 'AIIMS Nursing & Para-Medical Entrance 2026 | Eligibility & Dates | Promote Education',
+    description: 'Comprehensive guide to AIIMS B.Sc Nursing and Para-Medical entrance exams 2026. Get latest eligibility criteria (55% Gen/OBC), exam pattern, and important dates for AIIMS across India.',
+    url: 'https://promoteducation.com/exams/aiims-entrance',
+    type: 'article',
+  }
 }
 
 const examData = {

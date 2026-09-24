@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'NEET 2026 Exam Pattern: Marking Scheme, Questions & Time Duration',
   description: 'The NEET UG 2026 exam is conducted in offline (pen-paper) mode. Check the detailed marking scheme, number of questions, and time duration.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/neet-exam-pattern'
-  }
+    canonical: 'https://promoteducation.com/articles/neet-exam-pattern',
+  },
+  openGraph: {
+    title: 'NEET 2026 Exam Pattern: Marking Scheme, Questions & Time Duration | Promote Education',
+    description: 'The NEET UG 2026 exam is conducted in offline (pen-paper) mode. Check the detailed marking scheme, number of questions, and time duration.',
+    url: 'https://promoteducation.com/articles/neet-exam-pattern',
+    type: 'article',
+  },
 }
 
 export default function Page() {

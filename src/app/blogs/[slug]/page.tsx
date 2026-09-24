@@ -28,20 +28,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     .eq('slug', slug)
     .single()
 
-  const title = blog?.title 
-    ? `${blog.title} | Promote Education Blog` 
-    : 'Expert Education Blog | Promote Education'
+  const rawTitle = blog?.title || 'Expert Education Blog'
+  const baseTitle = rawTitle.replace(/\s*\|\s*Promote Education.*$/i, '').trim()
+  const fullTitle = `${baseTitle} | Promote Education`
   const description = blog?.summary || 'Read expert education insights, guides, and college preparation tips.'
   const canonical = `https://promoteducation.com/blogs/${slug}`
 
   return {
-    title,
+    title: baseTitle,
     description,
     alternates: {
       canonical,
     },
     openGraph: {
-      title,
+      title: fullTitle,
       description,
       url: canonical,
       type: 'article',
@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     },
     twitter: {
       card: 'summary_large_image',
-      title,
+      title: fullTitle,
       description,
       images: blog?.featured_image ? [blog.featured_image] : ['/og-image.png'],
     },

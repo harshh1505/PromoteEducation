@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'How to Write the XAT Essay Structure, Topics & Examples | Promote Education',
-  description: 'XAT\'s Essay Writing component (required by XLRI and select institutes) tests your ability to construct a coherent, well-argued essay in 20 minutes. Learn the winning structure, common topic themes, and sample essays.',
+  title: 'How to Write the XAT Essay Structure, Topics & Examples',
+  description: "XAT's Essay Writing component (required by XLRI and select institutes) tests your ability to construct a coherent, well-argued essay in 20 minutes. Learn the winning structure, common topic themes, and sample essays.",
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/xat-essay-writing',
+  },
+  openGraph: {
+    title: 'How to Write the XAT Essay Structure, Topics & Examples | Promote Education',
+    description: "XAT's Essay Writing component (required by XLRI and select institutes) tests your ability to construct a coherent, well-argued essay in 20 minutes. Learn the winning structure, common topic themes, and sample essays.",
+    url: 'https://promoteducation.com/articles/xat-essay-writing',
+    type: 'article',
+  },
 }
 
 export default function Page() {

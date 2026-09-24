@@ -10,31 +10,47 @@ const stats = [
 ]
 
 function AnimatedCounter({ target, suffix }: { target: number; suffix: string }) {
-  const [count, setCount] = useState(0)
+  // Start with target so server-rendered HTML contains actual real numbers for search engines (e.g. 12,000+, 98%)
+  const [count, setCount] = useState(target)
   const ref = useRef<HTMLDivElement>(null)
   const hasAnimated = useRef(false)
 
   useEffect(() => {
+    // Respect user's reduced motion preference
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasAnimated.current) {
           hasAnimated.current = true
-          const duration = 2000
-          const steps = 60
-          const increment = target / steps
-          let current = 0
-          const timer = setInterval(() => {
-            current += increment
-            if (current >= target) {
-              setCount(target)
-              clearInterval(timer)
+          
+          const duration = 1800
+          let startTimestamp: number | null = null
+
+          const step = (timestamp: number) => {
+            if (!startTimestamp) startTimestamp = timestamp
+            const elapsed = timestamp - startTimestamp
+            const progress = Math.min(elapsed / duration, 1)
+
+            // Smooth ease-out cubic curve: 1 - (1 - progress)^3
+            const easeOut = 1 - Math.pow(1 - progress, 3)
+            setCount(Math.round(target * easeOut))
+
+            if (progress < 1) {
+              requestAnimationFrame(step)
             } else {
-              setCount(Math.floor(current))
+              setCount(target)
             }
-          }, duration / steps)
+          }
+
+          // Reset to 0 and trigger smooth count-up once in viewport
+          setCount(0)
+          requestAnimationFrame(step)
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.2 }
     )
     if (ref.current) observer.observe(ref.current)
     return () => observer.disconnect()

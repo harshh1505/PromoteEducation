@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, BookOpen } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'INI CET 2026 Complete Syllabus Breakdown | Promote Education',
+  title: 'INI CET 2026 Complete Syllabus Breakdown',
   description: 'Subject-wise INI CET syllabus for 2026. Pre-clinical, Para-clinical, and Clinical subjects with high-yield topic weightage analysis for AIIMS, JIPMER, and PGIMER PG admissions.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/ini-cet-syllabus-2026',
+  },
+  openGraph: {
+    title: 'INI CET 2026 Complete Syllabus Breakdown | Promote Education',
+    description: 'Subject-wise INI CET syllabus for 2026. Pre-clinical, Para-clinical, and Clinical subjects with high-yield topic weightage analysis for AIIMS, JIPMER, and PGIMER PG admissions.',
+    url: 'https://promoteducation.com/articles/ini-cet-syllabus-2026',
+    type: 'article',
+  },
 }
 
 export default function Page() {

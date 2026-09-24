@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'XLRI Jamshedpur Selection Process & GD-PI | Promote Education',
+  title: 'XLRI Jamshedpur Selection Process & GD-PI',
   description: 'Step-by-step guide to the XLRI selection process after XAT — shortlist criteria, Group Discussion format, Personal Interview structure, and final merit list preparation for HRM and BM programmes.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/xat-selection-process',
+  },
+  openGraph: {
+    title: 'XLRI Jamshedpur Selection Process & GD-PI | Promote Education',
+    description: 'Step-by-step guide to the XLRI selection process after XAT — shortlist criteria, Group Discussion format, Personal Interview structure, and final merit list preparation for HRM and BM programmes.',
+    url: 'https://promoteducation.com/articles/xat-selection-process',
+    type: 'article',
+  },
 }
 
 export default function Page() {

@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'NIFT vs NID vs UCEED: Which Design Exam is Best for You?',
   description: 'Design aspirants often compare NIFT, NID, and UCEED. Understand the differences in focus, difficulty, and colleges to make the right choice.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/nift-vs-nid-uceed'
-  }
+    canonical: 'https://promoteducation.com/articles/nift-vs-nid-uceed',
+  },
+  openGraph: {
+    title: 'NIFT vs NID vs UCEED: Which Design Exam is Best for You? | Promote Education',
+    description: 'Design aspirants often compare NIFT, NID, and UCEED. Understand the differences in focus, difficulty, and colleges to make the right choice.',
+    url: 'https://promoteducation.com/articles/nift-vs-nid-uceed',
+    type: 'article',
+  },
 }
 
 export default function Page() {

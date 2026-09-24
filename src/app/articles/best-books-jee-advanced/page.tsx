@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'Best Books for JEE Advanced 2026: Subject-wise Expert Picks',
   description: 'Advanced preparation requires high-level conceptual books. Get expert recommendations for Physics, Chemistry, and Mathematics for JEE Advanced 2026.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/best-books-jee-advanced'
-  }
+    canonical: 'https://promoteducation.com/articles/best-books-jee-advanced',
+  },
+  openGraph: {
+    title: 'Best Books for JEE Advanced 2026: Subject-wise Expert Picks | Promote Education',
+    description: 'Advanced preparation requires high-level conceptual books. Get expert recommendations for Physics, Chemistry, and Mathematics for JEE Advanced 2026.',
+    url: 'https://promoteducation.com/articles/best-books-jee-advanced',
+    type: 'article',
+  },
 }
 
 export default function Page() {

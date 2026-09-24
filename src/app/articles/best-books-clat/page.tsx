@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'Best Books for CLAT 2026: Section-wise Expert Preparation Guide',
   description: 'Choosing the right books is essential for CLAT success. Get expert recommendations for Legal Aptitude, English, and Current Affairs for CLAT 2026.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/best-books-clat'
-  }
+    canonical: 'https://promoteducation.com/articles/best-books-clat',
+  },
+  openGraph: {
+    title: 'Best Books for CLAT 2026: Section-wise Expert Preparation Guide | Promote Education',
+    description: 'Choosing the right books is essential for CLAT success. Get expert recommendations for Legal Aptitude, English, and Current Affairs for CLAT 2026.',
+    url: 'https://promoteducation.com/articles/best-books-clat',
+    type: 'article',
+  },
 }
 
 export default function Page() {

@@ -5,8 +5,15 @@ import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 export const metadata: Metadata = {
   title: 'NIFT 2026 — Eligibility, Syllabus, Dates & Preparation Tips',
   description: 'Complete guide to National Institute of Fashion Technology (NIFT) Entrance Exam 2026. Get eligibility criteria, syllabus, exam dates, and preparation tips.',
+  keywords: ["NIFT","NIFT 2026","fashion design entrance","NIFT syllabus","NIFT eligibility","NIFT admission"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/nift'
+  },
+  openGraph: {
+    title: 'NIFT 2026 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
+    description: 'Complete guide to National Institute of Fashion Technology (NIFT) Entrance Exam 2026. Get eligibility criteria, syllabus, exam dates, and preparation tips.',
+    url: 'https://promoteducation.com/exams/nift',
+    type: 'article',
   }
 }
 

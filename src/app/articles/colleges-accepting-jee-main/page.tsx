@@ -4,6 +4,15 @@ import BlogTemplate from '@/components/pages/BlogTemplate'
 export const metadata: Metadata = {
   title: 'Top Engineering Colleges Accepting JEE Main Score in India',
   description: 'Looking for colleges after JEE Main? Explore the list of top NITs, IIITs, and other premier engineering institutes accepting JEE Main scores for admission.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/colleges-accepting-jee-main',
+  },
+  openGraph: {
+    title: 'Top Engineering Colleges Accepting JEE Main Score in India | Promote Education',
+    description: 'Looking for colleges after JEE Main? Explore the list of top NITs, IIITs, and other premier engineering institutes accepting JEE Main scores for admission.',
+    url: 'https://promoteducation.com/articles/colleges-accepting-jee-main',
+    type: 'article',
+  },
 }
 
 export default function Page() {

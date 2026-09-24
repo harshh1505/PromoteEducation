@@ -5,8 +5,16 @@ import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 export const metadata: Metadata = {
   title: 'BITSAT 2026 — Eligibility, Syllabus, Pattern & Preparation Guide',
   description: 'Complete guide to BITSAT 2026. Detailed eligibility (75-60 rule), full PCM syllabus, bonus question strategy, campus-wise cutoffs, and top preparation tips for BITS Pilani admission.',
-  keywords: ['BITSAT', 'BITSAT 2026', 'BITS Pilani', 'BITS Goa', 'BITSAT syllabus', 'BITSAT eligibility', 'BITSAT cutoff'],
-  alternates: { canonical: 'https://promoteducation.com/exams/bitsat' }
+  keywords: ["BITSAT","BITSAT 2026","BITS Pilani","BITS Goa","BITSAT syllabus","BITSAT eligibility","BITSAT cutoff"],
+  alternates: {
+    canonical: 'https://promoteducation.com/exams/bitsat'
+  },
+  openGraph: {
+    title: 'BITSAT 2026 — Eligibility, Syllabus, Pattern & Preparation Guide | Promote Education',
+    description: 'Complete guide to BITSAT 2026. Detailed eligibility (75-60 rule), full PCM syllabus, bonus question strategy, campus-wise cutoffs, and top preparation tips for BITS Pilani admission.',
+    url: 'https://promoteducation.com/exams/bitsat',
+    type: 'article',
+  }
 }
 
 const exam: ExamInfo = {

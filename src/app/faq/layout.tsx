@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Frequently Asked Questions (FAQ) | Promote Education',
+  title: 'Frequently Asked Questions (FAQ)',
   description: 'Find answers to common questions about college admissions, NEET & JEE counseling, seat allocation, tuition fees, and admission guidance at Promote Education.',
   alternates: {
     canonical: 'https://promoteducation.com/faq',

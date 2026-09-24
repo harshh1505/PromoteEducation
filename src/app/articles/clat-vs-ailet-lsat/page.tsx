@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'CLAT vs AILET vs LSAT India: Which Law Exam Should You Choose?',
   description: 'Law aspirants often compare CLAT, AILET, and LSAT India. Understand the differences in colleges, focus, and difficulty to make the right choice.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/clat-vs-ailet-lsat'
-  }
+    canonical: 'https://promoteducation.com/articles/clat-vs-ailet-lsat',
+  },
+  openGraph: {
+    title: 'CLAT vs AILET vs LSAT India: Which Law Exam Should You Choose? | Promote Education',
+    description: 'Law aspirants often compare CLAT, AILET, and LSAT India. Understand the differences in colleges, focus, and difficulty to make the right choice.',
+    url: 'https://promoteducation.com/articles/clat-vs-ailet-lsat',
+    type: 'article',
+  },
 }
 
 export default function Page() {

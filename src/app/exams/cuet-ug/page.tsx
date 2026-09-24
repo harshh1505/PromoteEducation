@@ -5,8 +5,15 @@ import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 export const metadata: Metadata = {
   title: 'CUET UG 2026 — Eligibility, Syllabus, Dates & Preparation Tips',
   description: 'Complete guide to Common University Entrance Test (CUET UG) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top universities.',
+  keywords: ["CUET UG","CUET UG 2026","central university admission","CUET syllabus","CUET eligibility","NTA CUET"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/cuet-ug'
+  },
+  openGraph: {
+    title: 'CUET UG 2026 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
+    description: 'Complete guide to Common University Entrance Test (CUET UG) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top universities.',
+    url: 'https://promoteducation.com/exams/cuet-ug',
+    type: 'article',
   }
 }
 

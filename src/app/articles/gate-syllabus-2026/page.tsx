@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'GATE 2026 Syllabus: Branch-wise Topics & Weightage Analysis',
   description: 'The syllabus for GATE 2026 varies by branch. Get a detailed breakdown of Engineering Mathematics, General Aptitude, and Core Subjects.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/gate-syllabus-2026'
-  }
+    canonical: 'https://promoteducation.com/articles/gate-syllabus-2026',
+  },
+  openGraph: {
+    title: 'GATE 2026 Syllabus: Branch-wise Topics & Weightage Analysis | Promote Education',
+    description: 'The syllabus for GATE 2026 varies by branch. Get a detailed breakdown of Engineering Mathematics, General Aptitude, and Core Subjects.',
+    url: 'https://promoteducation.com/articles/gate-syllabus-2026',
+    type: 'article',
+  },
 }
 
 export default function Page() {

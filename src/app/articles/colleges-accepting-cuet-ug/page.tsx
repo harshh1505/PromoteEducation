@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'Top Universities in India Accepting CUET UG Score 2026',
   description: 'Explore the list of top central and participating universities accepting CUET UG scores including DU, BHU, and JNU. Check rankings and courses.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/colleges-accepting-cuet-ug'
-  }
+    canonical: 'https://promoteducation.com/articles/colleges-accepting-cuet-ug',
+  },
+  openGraph: {
+    title: 'Top Universities in India Accepting CUET UG Score 2026 | Promote Education',
+    description: 'Explore the list of top central and participating universities accepting CUET UG scores including DU, BHU, and JNU. Check rankings and courses.',
+    url: 'https://promoteducation.com/articles/colleges-accepting-cuet-ug',
+    type: 'article',
+  },
 }
 
 export default function Page() {

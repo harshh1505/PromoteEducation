@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'Best Books for NIFT 2026: CAT & GAT Preparation Guide',
   description: 'Choosing the right preparation material is crucial for NIFT success. Get expert recommendations for sketching, aptitude, and creative tests.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/best-books-nift'
-  }
+    canonical: 'https://promoteducation.com/articles/best-books-nift',
+  },
+  openGraph: {
+    title: 'Best Books for NIFT 2026: CAT & GAT Preparation Guide | Promote Education',
+    description: 'Choosing the right preparation material is crucial for NIFT success. Get expert recommendations for sketching, aptitude, and creative tests.',
+    url: 'https://promoteducation.com/articles/best-books-nift',
+    type: 'article',
+  },
 }
 
 export default function Page() {

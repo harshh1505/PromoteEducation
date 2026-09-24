@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'The Bonus Question Strategy How to Score 390+ | Promote Education',
-  description: 'BITSAT\'s bonus questions are the ultimate secret weapon. If you complete all 130 questions, you unlock 12 additional questions that can push your score past 390. Learn exactly when to attempt them and when not to.',
+  title: 'The Bonus Question Strategy How to Score 390+',
+  description: "BITSAT's bonus questions are the ultimate secret weapon. If you complete all 130 questions, you unlock 12 additional questions that can push your score past 390. Learn exactly when to attempt them and when not to.",
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/bitsat-bonus-questions',
+  },
+  openGraph: {
+    title: 'The Bonus Question Strategy How to Score 390+ | Promote Education',
+    description: "BITSAT's bonus questions are the ultimate secret weapon. If you complete all 130 questions, you unlock 12 additional questions that can push your score past 390. Learn exactly when to attempt them and when not to.",
+    url: 'https://promoteducation.com/articles/bitsat-bonus-questions',
+    type: 'article',
+  },
 }
 
 export default function Page() {

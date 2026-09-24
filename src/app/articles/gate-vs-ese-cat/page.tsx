@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'GATE vs ESE vs CAT: Which Exam Should You Choose after Engineering?',
   description: 'Aspirants often compare GATE with Engineering Services Examination and CAT. Understand the purpose and difficulty levels of these exams.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/gate-vs-ese-cat'
-  }
+    canonical: 'https://promoteducation.com/articles/gate-vs-ese-cat',
+  },
+  openGraph: {
+    title: 'GATE vs ESE vs CAT: Which Exam Should You Choose after Engineering? | Promote Education',
+    description: 'Aspirants often compare GATE with Engineering Services Examination and CAT. Understand the purpose and difficulty levels of these exams.',
+    url: 'https://promoteducation.com/articles/gate-vs-ese-cat',
+    type: 'article',
+  },
 }
 
 export default function Page() {

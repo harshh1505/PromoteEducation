@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'Best Books for NEET 2026: Subject-wise Expert Recommendations',
   description: 'Choosing the right books is critical for NEET success. Get expert recommendations for Biology, Physics, and Chemistry for NEET 2026.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/best-books-neet'
-  }
+    canonical: 'https://promoteducation.com/articles/best-books-neet',
+  },
+  openGraph: {
+    title: 'Best Books for NEET 2026: Subject-wise Expert Recommendations | Promote Education',
+    description: 'Choosing the right books is critical for NEET success. Get expert recommendations for Biology, Physics, and Chemistry for NEET 2026.',
+    url: 'https://promoteducation.com/articles/best-books-neet',
+    type: 'article',
+  },
 }
 
 export default function Page() {

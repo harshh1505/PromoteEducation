@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'NIFT 2026 Preparation Strategy: How to Crack CAT & GAT',
   description: 'Cracking the NIFT Entrance Exam requires a mix of creativity and preparation. Get expert tips, daily sketching schedules, and study plans for 2026.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/nift-preparation-strategy'
-  }
+    canonical: 'https://promoteducation.com/articles/nift-preparation-strategy',
+  },
+  openGraph: {
+    title: 'NIFT 2026 Preparation Strategy: How to Crack CAT & GAT | Promote Education',
+    description: 'Cracking the NIFT Entrance Exam requires a mix of creativity and preparation. Get expert tips, daily sketching schedules, and study plans for 2026.',
+    url: 'https://promoteducation.com/articles/nift-preparation-strategy',
+    type: 'article',
+  },
 }
 
 export default function Page() {

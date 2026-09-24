@@ -340,7 +340,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-8">
           <p className="text-[10px] text-slate-500">
-            © 2026 Promote Education Technologies Pvt. Ltd. All rights reserved.
+            © 2026 Promote Education Pvt. Ltd. All rights reserved.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
             {[

@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'JEE Advanced 2026 Preparation Strategy: How to Crack the IIT Entrance',
   description: 'Cracking JEE Advanced requires deep conceptual clarity and problem-solving skills. Get expert preparation tips and topper strategies for 2026.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/jee-advanced-preparation-strategy'
-  }
+    canonical: 'https://promoteducation.com/articles/jee-advanced-preparation-strategy',
+  },
+  openGraph: {
+    title: 'JEE Advanced 2026 Preparation Strategy: How to Crack the IIT Entrance | Promote Education',
+    description: 'Cracking JEE Advanced requires deep conceptual clarity and problem-solving skills. Get expert preparation tips and topper strategies for 2026.',
+    url: 'https://promoteducation.com/articles/jee-advanced-preparation-strategy',
+    type: 'article',
+  },
 }
 
 export default function Page() {

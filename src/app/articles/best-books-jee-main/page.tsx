@@ -4,6 +4,15 @@ import BlogTemplate from '@/components/pages/BlogTemplate'
 export const metadata: Metadata = {
   title: 'Best Books for JEE Main 2026: Subject-wise Expert Recommendations',
   description: 'Choosing the right books is crucial for JEE success. Get expert recommendations for Physics, Chemistry, and Mathematics books for JEE Main 2026.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/best-books-jee-main',
+  },
+  openGraph: {
+    title: 'Best Books for JEE Main 2026: Subject-wise Expert Recommendations | Promote Education',
+    description: 'Choosing the right books is crucial for JEE success. Get expert recommendations for Physics, Chemistry, and Mathematics books for JEE Main 2026.',
+    url: 'https://promoteducation.com/articles/best-books-jee-main',
+    type: 'article',
+  },
 }
 
 export default function Page() {

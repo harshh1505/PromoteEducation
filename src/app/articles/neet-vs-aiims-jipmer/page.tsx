@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'NEET vs AIIMS vs JIPMER: What Changed After NEET Became Common Exam',
   description: 'Understand the transition from individual exams like AIIMS and JIPMER to the unified NEET UG. Check what has changed for medical aspirants.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/neet-vs-aiims-jipmer'
-  }
+    canonical: 'https://promoteducation.com/articles/neet-vs-aiims-jipmer',
+  },
+  openGraph: {
+    title: 'NEET vs AIIMS vs JIPMER: What Changed After NEET Became Common Exam | Promote Education',
+    description: 'Understand the transition from individual exams like AIIMS and JIPMER to the unified NEET UG. Check what has changed for medical aspirants.',
+    url: 'https://promoteducation.com/articles/neet-vs-aiims-jipmer',
+    type: 'article',
+  },
 }
 
 export default function Page() {

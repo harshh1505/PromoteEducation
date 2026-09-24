@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'GATE 2026 Exam Pattern: Marking Scheme, Questions & Duration',
   description: 'The GATE 2026 exam is conducted online as a Computer Based Test. Check the marking scheme for MCQs, MSQs, and NAT questions.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/gate-exam-pattern'
-  }
+    canonical: 'https://promoteducation.com/articles/gate-exam-pattern',
+  },
+  openGraph: {
+    title: 'GATE 2026 Exam Pattern: Marking Scheme, Questions & Duration | Promote Education',
+    description: 'The GATE 2026 exam is conducted online as a Computer Based Test. Check the marking scheme for MCQs, MSQs, and NAT questions.',
+    url: 'https://promoteducation.com/articles/gate-exam-pattern',
+    type: 'article',
+  },
 }
 
 export default function Page() {

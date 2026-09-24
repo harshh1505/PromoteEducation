@@ -4,6 +4,15 @@ import BlogTemplate from '@/components/pages/BlogTemplate'
 export const metadata: Metadata = {
   title: 'JEE Main vs JEE Advanced vs BITSAT: Key Differences Explained',
   description: 'Engineering aspirants often compare exams like JEE Main, JEE Advanced, and BITSAT. Understand the key differences in difficulty, syllabus, and colleges.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/jee-main-vs-advanced-bitsat',
+  },
+  openGraph: {
+    title: 'JEE Main vs JEE Advanced vs BITSAT: Key Differences Explained | Promote Education',
+    description: 'Engineering aspirants often compare exams like JEE Main, JEE Advanced, and BITSAT. Understand the key differences in difficulty, syllabus, and colleges.',
+    url: 'https://promoteducation.com/articles/jee-main-vs-advanced-bitsat',
+    type: 'article',
+  },
 }
 
 export default function Page() {

@@ -5,10 +5,16 @@ import type { Metadata } from 'next'
 export const revalidate = 3600 // Cache for 1 hour
 
 export const metadata: Metadata = {
-  title: 'Latest Education News & Exam Alerts 2026 | Promote Education',
+  title: 'Latest Education News & Exam Alerts 2026',
   description: 'Stay updated with the latest news on JEE, NEET, admissions, and policy changes in the Indian education sector. Real-time alerts and analysis.',
   alternates: {
     canonical: 'https://promoteducation.com/news',
+  },
+  openGraph: {
+    title: 'Latest Education News & Exam Alerts 2026 | Promote Education',
+    description: 'Stay updated with the latest news on JEE, NEET, admissions, and policy changes in the Indian education sector. Real-time alerts and analysis.',
+    url: 'https://promoteducation.com/news',
+    type: 'website',
   },
 }
 

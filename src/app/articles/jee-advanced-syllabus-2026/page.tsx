@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'JEE Advanced 2026 Syllabus: Complete PCM Topic Breakdown & Analysis',
   description: 'The syllabus for JEE Advanced 2026 is significantly more advanced than JEE Main. Get a detailed breakdown of Physics, Chemistry, and Mathematics.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/jee-advanced-syllabus-2026'
-  }
+    canonical: 'https://promoteducation.com/articles/jee-advanced-syllabus-2026',
+  },
+  openGraph: {
+    title: 'JEE Advanced 2026 Syllabus: Complete PCM Topic Breakdown & Analysis | Promote Education',
+    description: 'The syllabus for JEE Advanced 2026 is significantly more advanced than JEE Main. Get a detailed breakdown of Physics, Chemistry, and Mathematics.',
+    url: 'https://promoteducation.com/articles/jee-advanced-syllabus-2026',
+    type: 'article',
+  },
 }
 
 export default function Page() {

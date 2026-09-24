@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'Best Books for GATE 2026: Branch-wise Expert Recommended Books',
   description: 'Choosing the right resources is key for GATE success. Get expert recommendations for Engineering Mathematics, Aptitude, and Core subjects.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/best-books-gate'
-  }
+    canonical: 'https://promoteducation.com/articles/best-books-gate',
+  },
+  openGraph: {
+    title: 'Best Books for GATE 2026: Branch-wise Expert Recommended Books | Promote Education',
+    description: 'Choosing the right resources is key for GATE success. Get expert recommendations for Engineering Mathematics, Aptitude, and Core subjects.',
+    url: 'https://promoteducation.com/articles/best-books-gate',
+    type: 'article',
+  },
 }
 
 export default function Page() {

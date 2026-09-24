@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'CLAT 2026 Syllabus: English, Legal Reasoning, GK & Logical Topics',
   description: 'The syllabus for CLAT 2026 focuses heavily on comprehension and reasoning skills. Get a detailed breakdown of all five sections including Legal Reasoning.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/clat-syllabus-2026'
-  }
+    canonical: 'https://promoteducation.com/articles/clat-syllabus-2026',
+  },
+  openGraph: {
+    title: 'CLAT 2026 Syllabus: English, Legal Reasoning, GK & Logical Topics | Promote Education',
+    description: 'The syllabus for CLAT 2026 focuses heavily on comprehension and reasoning skills. Get a detailed breakdown of all five sections including Legal Reasoning.',
+    url: 'https://promoteducation.com/articles/clat-syllabus-2026',
+    type: 'article',
+  },
 }
 
 export default function Page() {

@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'BITSAT vs JEE Main Key Differences in 2026 | Promote Education',
+  title: 'BITSAT vs JEE Main Key Differences in 2026',
   description: 'A head-to-head comparison of BITSAT and JEE Main — exam pattern, difficulty level, syllabus differences, college quality, and which one to prioritize based on your target institutions.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/bitsat-vs-jee',
+  },
+  openGraph: {
+    title: 'BITSAT vs JEE Main Key Differences in 2026 | Promote Education',
+    description: 'A head-to-head comparison of BITSAT and JEE Main — exam pattern, difficulty level, syllabus differences, college quality, and which one to prioritize based on your target institutions.',
+    url: 'https://promoteducation.com/articles/bitsat-vs-jee',
+    type: 'article',
+  },
 }
 
 export default function Page() {

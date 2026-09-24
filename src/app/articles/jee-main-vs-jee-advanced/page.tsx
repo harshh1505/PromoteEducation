@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'JEE Main vs JEE Advanced: Key Differences, Difficulty & Colleges',
   description: 'Understand the fundamental differences between JEE Main and JEE Advanced. Compare difficulty levels, attempt limits, and the colleges you can enter.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/jee-main-vs-jee-advanced'
-  }
+    canonical: 'https://promoteducation.com/articles/jee-main-vs-jee-advanced',
+  },
+  openGraph: {
+    title: 'JEE Main vs JEE Advanced: Key Differences, Difficulty & Colleges | Promote Education',
+    description: 'Understand the fundamental differences between JEE Main and JEE Advanced. Compare difficulty levels, attempt limits, and the colleges you can enter.',
+    url: 'https://promoteducation.com/articles/jee-main-vs-jee-advanced',
+    type: 'article',
+  },
 }
 
 export default function Page() {

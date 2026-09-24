@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'XAT vs CAT Which MBA Exam Should You Take? | Promote Education',
+  title: 'XAT vs CAT Which MBA Exam Should You Take?',
   description: 'A definitive comparison of XAT and CAT 2026 — difficulty level, section-wise differences, college coverage, and expert advice on which exam to prioritize based on your target B-schools.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/xat-vs-cat-comparison',
+  },
+  openGraph: {
+    title: 'XAT vs CAT Which MBA Exam Should You Take? | Promote Education',
+    description: 'A definitive comparison of XAT and CAT 2026 — difficulty level, section-wise differences, college coverage, and expert advice on which exam to prioritize based on your target B-schools.',
+    url: 'https://promoteducation.com/articles/xat-vs-cat-comparison',
+    type: 'article',
+  },
 }
 
 export default function Page() {

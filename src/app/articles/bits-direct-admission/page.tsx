@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Direct Admission at BITS The Board Topper Policy Explained | Promote Education',
+  title: 'Direct Admission at BITS The Board Topper Policy Explained',
   description: 'BITS Pilani offers guaranteed direct admission to first-rank holders of any recognized Central or State board in India, regardless of their BITSAT score. Learn who qualifies, how to apply, and which programme you can choose.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/bits-direct-admission',
+  },
+  openGraph: {
+    title: 'Direct Admission at BITS The Board Topper Policy Explained | Promote Education',
+    description: 'BITS Pilani offers guaranteed direct admission to first-rank holders of any recognized Central or State board in India, regardless of their BITSAT score. Learn who qualifies, how to apply, and which programme you can choose.',
+    url: 'https://promoteducation.com/articles/bits-direct-admission',
+    type: 'article',
+  },
 }
 
 export default function Page() {

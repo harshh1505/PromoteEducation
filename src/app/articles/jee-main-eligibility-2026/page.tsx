@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'JEE Main 2026 Eligibility Criteria: Age Limit, Attempts & Qualification',
   description: 'Understanding the eligibility criteria for the JEE Main 2026 is the first step for every engineering aspirant. Check age limit, attempts, and qualification.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/jee-main-eligibility-2026'
-  }
+    canonical: 'https://promoteducation.com/articles/jee-main-eligibility-2026',
+  },
+  openGraph: {
+    title: 'JEE Main 2026 Eligibility Criteria: Age Limit, Attempts & Qualification | Promote Education',
+    description: 'Understanding the eligibility criteria for the JEE Main 2026 is the first step for every engineering aspirant. Check age limit, attempts, and qualification.',
+    url: 'https://promoteducation.com/articles/jee-main-eligibility-2026',
+    type: 'article',
+  },
 }
 
 export default function Page() {

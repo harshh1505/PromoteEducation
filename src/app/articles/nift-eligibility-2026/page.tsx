@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'NIFT 2026 Eligibility Criteria: Age Limit, Qualification & Courses',
   description: 'Understanding the eligibility criteria for the NIFT Entrance Exam is essential for students aspiring to build a career in fashion and design. Check age limit and qualification.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/nift-eligibility-2026'
-  }
+    canonical: 'https://promoteducation.com/articles/nift-eligibility-2026',
+  },
+  openGraph: {
+    title: 'NIFT 2026 Eligibility Criteria: Age Limit, Qualification & Courses | Promote Education',
+    description: 'Understanding the eligibility criteria for the NIFT Entrance Exam is essential for students aspiring to build a career in fashion and design. Check age limit and qualification.',
+    url: 'https://promoteducation.com/articles/nift-eligibility-2026',
+    type: 'article',
+  },
 }
 
 export default function Page() {

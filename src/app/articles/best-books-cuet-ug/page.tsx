@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'Best Books for CUET UG 2026: Subject-wise Recommended Guide',
   description: 'Selecting the right study material is crucial for CUET success. Get expert recommendations for NCERT, Language, and General Aptitude for CUET UG 2026.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/best-books-cuet-ug'
-  }
+    canonical: 'https://promoteducation.com/articles/best-books-cuet-ug',
+  },
+  openGraph: {
+    title: 'Best Books for CUET UG 2026: Subject-wise Recommended Guide | Promote Education',
+    description: 'Selecting the right study material is crucial for CUET success. Get expert recommendations for NCERT, Language, and General Aptitude for CUET UG 2026.',
+    url: 'https://promoteducation.com/articles/best-books-cuet-ug',
+    type: 'article',
+  },
 }
 
 export default function Page() {

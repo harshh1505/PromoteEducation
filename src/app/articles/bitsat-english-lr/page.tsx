@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'BITSAT English & LR Master the Ignored 25 Marks | Promote Education',
+  title: 'BITSAT English & LR Master the Ignored 25 Marks',
   description: 'The English & Logical Reasoning section in BITSAT is worth 25 marks and is consistently under-prepared. Learn the exact high-yield topics, a 2-week preparation plan, and why this section can be the deciding factor in your rank.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/bitsat-english-lr',
+  },
+  openGraph: {
+    title: 'BITSAT English & LR Master the Ignored 25 Marks | Promote Education',
+    description: 'The English & Logical Reasoning section in BITSAT is worth 25 marks and is consistently under-prepared. Learn the exact high-yield topics, a 2-week preparation plan, and why this section can be the deciding factor in your rank.',
+    url: 'https://promoteducation.com/articles/bitsat-english-lr',
+    type: 'article',
+  },
 }
 
 export default function Page() {

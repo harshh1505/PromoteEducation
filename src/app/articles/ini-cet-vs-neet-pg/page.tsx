@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'INI CET vs NEET PG: Key Differences in 2026 | Promote Education',
+  title: 'INI CET vs NEET PG: Key Differences in 2026',
   description: 'A head-to-head comparison of INI CET and NEET PG — difficulty level, marking, syllabus overlap, colleges covered, and which exam to prioritize if you are targeting AIIMS.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/ini-cet-vs-neet-pg',
+  },
+  openGraph: {
+    title: 'INI CET vs NEET PG: Key Differences in 2026 | Promote Education',
+    description: 'A head-to-head comparison of INI CET and NEET PG — difficulty level, marking, syllabus overlap, colleges covered, and which exam to prioritize if you are targeting AIIMS.',
+    url: 'https://promoteducation.com/articles/ini-cet-vs-neet-pg',
+    type: 'article',
+  },
 }
 
 export default function Page() {

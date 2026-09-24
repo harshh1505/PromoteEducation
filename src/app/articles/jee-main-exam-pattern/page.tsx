@@ -4,6 +4,15 @@ import BlogTemplate from '@/components/pages/BlogTemplate'
 export const metadata: Metadata = {
   title: 'JEE Main 2026 Exam Pattern: Marking Scheme, Questions & Mode',
   description: 'The JEE Main 2026 exam is conducted in online mode with multiple-choice and numerical questions. Check the detailed marking scheme.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/jee-main-exam-pattern',
+  },
+  openGraph: {
+    title: 'JEE Main 2026 Exam Pattern: Marking Scheme, Questions & Mode | Promote Education',
+    description: 'The JEE Main 2026 exam is conducted in online mode with multiple-choice and numerical questions. Check the detailed marking scheme.',
+    url: 'https://promoteducation.com/articles/jee-main-exam-pattern',
+    type: 'article',
+  },
 }
 
 export default function Page() {

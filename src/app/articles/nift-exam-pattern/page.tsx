@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'NIFT 2026 Exam Pattern: CAT, GAT & Situation Test Explained',
   description: 'The NIFT Entrance Exam has multiple stages including CAT, GAT, and the Situation Test. Check the selection process and marking scheme for 2026.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/nift-exam-pattern'
-  }
+    canonical: 'https://promoteducation.com/articles/nift-exam-pattern',
+  },
+  openGraph: {
+    title: 'NIFT 2026 Exam Pattern: CAT, GAT & Situation Test Explained | Promote Education',
+    description: 'The NIFT Entrance Exam has multiple stages including CAT, GAT, and the Situation Test. Check the selection process and marking scheme for 2026.',
+    url: 'https://promoteducation.com/articles/nift-exam-pattern',
+    type: 'article',
+  },
 }
 
 export default function Page() {

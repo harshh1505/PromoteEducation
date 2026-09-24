@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'NIFT 2026 Syllabus: CAT & GAT Detailed Topic Breakdown',
   description: 'The syllabus for the NIFT Entrance Exam includes creative and analytical sections. Get a detailed breakdown of CAT and GAT topics.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/nift-syllabus-2026'
-  }
+    canonical: 'https://promoteducation.com/articles/nift-syllabus-2026',
+  },
+  openGraph: {
+    title: 'NIFT 2026 Syllabus: CAT & GAT Detailed Topic Breakdown | Promote Education',
+    description: 'The syllabus for the NIFT Entrance Exam includes creative and analytical sections. Get a detailed breakdown of CAT and GAT topics.',
+    url: 'https://promoteducation.com/articles/nift-syllabus-2026',
+    type: 'article',
+  },
 }
 
 export default function Page() {

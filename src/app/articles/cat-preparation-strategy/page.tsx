@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'CAT 2026 Preparation Strategy: Study Plan for 99+ Percentile',
   description: 'Cracking CAT requires strategy and consistency. Get expert preparation tips, topper strategies, and daily schedules for CAT 2026.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/cat-preparation-strategy'
-  }
+    canonical: 'https://promoteducation.com/articles/cat-preparation-strategy',
+  },
+  openGraph: {
+    title: 'CAT 2026 Preparation Strategy: Study Plan for 99+ Percentile | Promote Education',
+    description: 'Cracking CAT requires strategy and consistency. Get expert preparation tips, topper strategies, and daily schedules for CAT 2026.',
+    url: 'https://promoteducation.com/articles/cat-preparation-strategy',
+    type: 'article',
+  },
 }
 
 export default function Page() {

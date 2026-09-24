@@ -9,16 +9,6 @@ export const metadata: Metadata = {
     template: '%s | Promote Education'
   },
   description: 'Explore 50,000+ top colleges in India. Compare NIRF rankings, fees, average placements (CTC), and verified student reviews. Get AI-powered college matching and career guidance.',
-  keywords: [
-    'top colleges in india 2025', 
-    'nirf rankings 2025', 
-    'best engineering colleges 2025',
-    'medical colleges nirf ranking',
-    'iit bombay ranking 2025',
-    'university ranking india',
-    'college admission guide 2026',
-    'education loan calculator india'
-  ],
   authors: [{ name: 'Promote Education Team' }],
   creator: 'Promote Education',
   publisher: 'Promote Education Technologies',

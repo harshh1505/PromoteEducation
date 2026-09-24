@@ -11,7 +11,6 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
-import AuthModal from '@/components/ui/AuthModal'
 import CounsellingModal from '@/components/ui/CounsellingModal'
 import GoalModal from '@/components/ui/GoalModal'
 
@@ -88,12 +87,9 @@ export default function Navbar() {
     return () => document.body.classList.remove('body-modal-open')
   }, [mobileOpen])
   const [activeItem, setActiveItem] = useState('Home')
-  const [authVisible, setAuthVisible] = useState(false)
   const [counsellingVisible, setCounsellingVisible] = useState(false)
   const [goalVisible, setGoalVisible] = useState(false)
   const [exploreMobileOpen, setExploreMobileOpen] = useState(false)
-  const [user, setUser] = useState<any>(null)
-  const [userDropdown, setUserDropdown] = useState(false)
   const [megaMenuOpen, setMegaMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState<any[]>([])
@@ -116,15 +112,6 @@ export default function Navbar() {
     const handleScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', handleScroll)
 
-    // Listen for auth changes
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null)
-    })
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-    })
-
     // Removed fetchTopCategories to use static array as requested
     setTopCategories([
       { label: 'All Courses', href: '/courses' },
@@ -136,7 +123,6 @@ export default function Navbar() {
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
-      subscription.unsubscribe()
     }
   }, [])
 
@@ -166,11 +152,6 @@ export default function Navbar() {
     const timer = setTimeout(fetchResults, 300)
     return () => clearTimeout(timer)
   }, [searchQuery])
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    setUserDropdown(false)
-  }
 
   const handleMouseEnter = () => {
     if (hoverTimeout) clearTimeout(hoverTimeout)
@@ -297,7 +278,10 @@ export default function Navbar() {
             {/* Action Items */}
             <div className="flex items-center gap-3 md:gap-5 shrink-0">
               <div className="hidden xl:flex flex-col items-center">
-                <button className="flex items-center gap-2 text-white hover:text-sky-400 transition-colors">
+                <button 
+                  onClick={() => setCounsellingVisible(true)}
+                  className="flex items-center gap-2 text-white hover:text-sky-400 transition-colors"
+                >
                   <FileEdit size={16} className="text-sky-500" />
                   <span className="text-xs font-bold">Write a Review</span>
                 </button>
@@ -331,42 +315,12 @@ export default function Navbar() {
                 <span className="absolute top-2 right-2 w-2 h-2 bg-sky-500 rounded-full border-2 border-slate-900" />
               </button>
 
-              {user ? (
-                <div className="relative">
-                  <button
-                    onClick={() => setUserDropdown(!userDropdown)}
-                    className="flex items-center gap-2 p-1 pl-2 rounded-full border border-white/10 hover:bg-white/5 transition-all"
-                  >
-                    <div className="w-7 h-7 rounded-full bg-sky-500 flex items-center justify-center text-white text-[10px] font-bold">
-                      {user.email?.[0].toUpperCase()}
-                    </div>
-                    <ChevronDown size={14} className="text-white/40 mr-1" />
-                  </button>
-
-                  {userDropdown && (
-                    <div className="absolute top-full right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-slate-100 py-2 z-[60] animate-in slide-in-from-top-2">
-                      <div className="px-4 py-3 border-b border-slate-50 mb-1">
-                        <p className="text-[10px] uppercase font-black text-slate-400 tracking-widest">Signed in as</p>
-                        <p className="text-xs font-bold text-slate-900 truncate">{user.email}</p>
-                      </div>
-                      <a href="/dashboard" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50">
-                        <User size={16} /> My Dashboard
-                      </a>
-                      <button onClick={handleSignOut} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50">
-                        <LogOut size={16} /> Sign out
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <button
-                  onClick={() => setAuthVisible(true)}
-                  className="w-8 h-8 md:w-auto md:px-4 md:py-2 rounded-full border border-white/20 text-white text-xs font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-2"
-                >
-                  <User size={14} className="md:hidden" />
-                  <span className="hidden md:inline text-white">Sign in</span>
-                </button>
-              )}
+              <button
+                onClick={() => setCounsellingVisible(true)}
+                className="px-4 py-2 rounded-full bg-sky-500 hover:bg-sky-400 text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-md shadow-sky-500/20 active:scale-95"
+              >
+                <span>Free Counselling</span>
+              </button>
 
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
@@ -676,7 +630,7 @@ export default function Navbar() {
 
               {/* Extra Secondary Action: Write a Review */}
               <button
-                onClick={() => { setMobileOpen(false); setAuthVisible(true); }}
+                onClick={() => { setMobileOpen(false); setCounsellingVisible(true); }}
                 className="w-full flex items-center justify-center gap-2 py-3.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-2xl text-xs font-bold text-slate-700 transition-colors"
               >
                 <FileEdit size={14} className="text-slate-500" /> Write a Review
@@ -704,7 +658,6 @@ export default function Navbar() {
         isOpen={goalVisible}
         onClose={() => setGoalVisible(false)}
       />
-      <AuthModal isOpen={authVisible} onClose={() => setAuthVisible(false)} />
     </>
   )
 }

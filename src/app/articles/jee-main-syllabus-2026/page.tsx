@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'JEE Main 2026 Syllabus: Subject-wise Detailed Topics & Weightage',
   description: 'The syllabus for JEE Main 2026 is based on NCERT Class 11 and 12 topics. Get a detailed subject-wise breakdown and weightage analysis.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/jee-main-syllabus-2026'
-  }
+    canonical: 'https://promoteducation.com/articles/jee-main-syllabus-2026',
+  },
+  openGraph: {
+    title: 'JEE Main 2026 Syllabus: Subject-wise Detailed Topics & Weightage | Promote Education',
+    description: 'The syllabus for JEE Main 2026 is based on NCERT Class 11 and 12 topics. Get a detailed subject-wise breakdown and weightage analysis.',
+    url: 'https://promoteducation.com/articles/jee-main-syllabus-2026',
+    type: 'article',
+  },
 }
 
 export default function Page() {

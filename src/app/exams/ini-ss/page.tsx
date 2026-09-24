@@ -4,7 +4,16 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'INI SS 2026 | Eligibility, DM/M.Ch Admission, Exam Pattern',
   description: 'Everything you need to know about INI SS 2026. Explore eligibility for super-specialty medical courses (DM/M.Ch) at AIIMS, JIPMER, and other institutes of national importance.',
-  keywords: ['INI SS', 'INI SS 2026', 'DM MCh admission', 'Super-specialty medical entrance', 'AIIMS SS entrance']
+  keywords: ["INI SS","INI SS 2026","DM MCh admission","Super-specialty medical entrance","AIIMS SS entrance"],
+  alternates: {
+    canonical: 'https://promoteducation.com/exams/ini-ss'
+  },
+  openGraph: {
+    title: 'INI SS 2026 | Eligibility, DM/M.Ch Admission, Exam Pattern | Promote Education',
+    description: 'Everything you need to know about INI SS 2026. Explore eligibility for super-specialty medical courses (DM/M.Ch) at AIIMS, JIPMER, and other institutes of national importance.',
+    url: 'https://promoteducation.com/exams/ini-ss',
+    type: 'article',
+  }
 }
 
 const examData = {

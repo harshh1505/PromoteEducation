@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'CUET UG 2026 Syllabus: Domain Subjects, Language & General Test',
   description: 'The syllabus for CUET UG 2026 is divided into three major sections. Get a detailed breakdown of Language, Domain Subjects (NCERT-based), and the General Test.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/cuet-ug-syllabus-2026'
-  }
+    canonical: 'https://promoteducation.com/articles/cuet-ug-syllabus-2026',
+  },
+  openGraph: {
+    title: 'CUET UG 2026 Syllabus: Domain Subjects, Language & General Test | Promote Education',
+    description: 'The syllabus for CUET UG 2026 is divided into three major sections. Get a detailed breakdown of Language, Domain Subjects (NCERT-based), and the General Test.',
+    url: 'https://promoteducation.com/articles/cuet-ug-syllabus-2026',
+    type: 'article',
+  },
 }
 
 export default function Page() {

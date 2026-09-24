@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, AlertTriangle, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'BITS Pilani Campus-Wise Cutoff Trends 2021–2025 | Promote Education',
+  title: 'BITS Pilani Campus-Wise Cutoff Trends 2021–2025',
   description: 'BITSAT cutoff scores for Computer Science, Electronics, and Mechanical at BITS Pilani, Goa, and Hyderabad campuses. Historical trends from 2021 to 2025 with 2026 predictions.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/bits-pilani-cutoff',
+  },
+  openGraph: {
+    title: 'BITS Pilani Campus-Wise Cutoff Trends 2021–2025 | Promote Education',
+    description: 'BITSAT cutoff scores for Computer Science, Electronics, and Mechanical at BITS Pilani, Goa, and Hyderabad campuses. Historical trends from 2021 to 2025 with 2026 predictions.',
+    url: 'https://promoteducation.com/articles/bits-pilani-cutoff',
+    type: 'article',
+  },
 }
 
 export default function Page() {

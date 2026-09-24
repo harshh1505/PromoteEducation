@@ -5,8 +5,16 @@ import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 export const metadata: Metadata = {
   title: 'XAT 2026 — Eligibility, Syllabus, Exam Pattern & Preparation Guide',
   description: 'Complete guide to XAT 2026 by XLRI Jamshedpur. Detailed eligibility, Decision Making strategy, section-wise syllabus, XLRI cutoffs, and expert preparation tips for India\'s top MBA entrance.',
-  keywords: ['XAT', 'XAT 2026', 'XLRI', 'MBA entrance', 'XAT syllabus', 'XAT eligibility', 'Decision Making XAT'],
-  alternates: { canonical: 'https://promoteducation.com/exams/xat' }
+  keywords: ["XAT","XAT 2026","XLRI","MBA entrance","XAT syllabus","XAT eligibility","Decision Making XAT"],
+  alternates: {
+    canonical: 'https://promoteducation.com/exams/xat'
+  },
+  openGraph: {
+    title: 'XAT 2026 — Eligibility, Syllabus, Exam Pattern & Preparation Guide | Promote Education',
+    description: 'Complete guide to XAT 2026 by XLRI Jamshedpur. Detailed eligibility, Decision Making strategy, section-wise syllabus, XLRI cutoffs, and expert preparation tips for India\'s top MBA entrance.',
+    url: 'https://promoteducation.com/exams/xat',
+    type: 'article',
+  }
 }
 
 const exam: ExamInfo = {

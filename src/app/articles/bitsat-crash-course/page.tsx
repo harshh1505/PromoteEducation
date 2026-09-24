@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: '30-Day BITSAT Sprint The Final Month Strategy | Promote Education',
+  title: '30-Day BITSAT Sprint The Final Month Strategy',
   description: 'A phase-by-phase 30-day preparation plan for BITSAT 2026. Week-wise breakdown of high-weightage chapters, mock test schedule, and the final 48-hour revision plan used by BITS toppers.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/bitsat-crash-course',
+  },
+  openGraph: {
+    title: '30-Day BITSAT Sprint The Final Month Strategy | Promote Education',
+    description: 'A phase-by-phase 30-day preparation plan for BITSAT 2026. Week-wise breakdown of high-weightage chapters, mock test schedule, and the final 48-hour revision plan used by BITS toppers.',
+    url: 'https://promoteducation.com/articles/bitsat-crash-course',
+    type: 'article',
+  },
 }
 
 export default function Page() {

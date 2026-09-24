@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'JEE Advanced 2026 Eligibility Criteria: Attempts, Rank & Qualification',
   description: 'Understanding the eligibility criteria for JEE Advanced 2026 is crucial because only the top candidates from JEE Main qualify. Check attempt limits and rank requirements.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/jee-advanced-eligibility-2026'
-  }
+    canonical: 'https://promoteducation.com/articles/jee-advanced-eligibility-2026',
+  },
+  openGraph: {
+    title: 'JEE Advanced 2026 Eligibility Criteria: Attempts, Rank & Qualification | Promote Education',
+    description: 'Understanding the eligibility criteria for JEE Advanced 2026 is crucial because only the top candidates from JEE Main qualify. Check attempt limits and rank requirements.',
+    url: 'https://promoteducation.com/articles/jee-advanced-eligibility-2026',
+    type: 'article',
+  },
 }
 
 export default function Page() {

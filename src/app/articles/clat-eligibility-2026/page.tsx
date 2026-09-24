@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'CLAT 2026 Eligibility Criteria: Age Limit, Qualification & Attempts',
   description: 'Understanding the eligibility criteria for CLAT 2026 is essential for law aspirants. Check the qualification marks, age limits, and NLU admission rules.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/clat-eligibility-2026'
-  }
+    canonical: 'https://promoteducation.com/articles/clat-eligibility-2026',
+  },
+  openGraph: {
+    title: 'CLAT 2026 Eligibility Criteria: Age Limit, Qualification & Attempts | Promote Education',
+    description: 'Understanding the eligibility criteria for CLAT 2026 is essential for law aspirants. Check the qualification marks, age limits, and NLU admission rules.',
+    url: 'https://promoteducation.com/articles/clat-eligibility-2026',
+    type: 'article',
+  },
 }
 
 export default function Page() {

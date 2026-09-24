@@ -26,10 +26,23 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const title = dbArticle?.title || slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
   const examTitle = exam?.title || 'Entrance Exams'
 
+  const canonical = `https://promoteducation.com/articles/${slug}`
+  const pageTitle = `${title} | ${examTitle} Guide 2026`
+  const pageDescription = `Complete guide to ${title} for 2026. Get expert tips, eligibility criteria, and preparation strategies for ${examTitle} aspirants.`
+
   return {
-    title: `${title} | ${examTitle} Guide 2026`,
-    description: `Complete guide to ${title} for 2026. Get expert tips, eligibility criteria, and preparation strategies for ${examTitle} aspirants.`,
+    title: pageTitle,
+    description: pageDescription,
     keywords: [examTitle, slug, 'admission 2026', 'exam preparation', 'syllabus'],
+    alternates: {
+      canonical,
+    },
+    openGraph: {
+      title: `${pageTitle} | Promote Education`,
+      description: pageDescription,
+      url: canonical,
+      type: 'article',
+    },
   }
 }
 

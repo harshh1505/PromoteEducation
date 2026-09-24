@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'CAT 2026 Syllabus: VARC, DILR & QA Detailed Topic-wise Breakdown',
   description: 'The syllabus for CAT 2026 is divided into three sections: VARC, DILR, and QA. Get a detailed breakdown of the topics you need to master.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/cat-syllabus-2026'
-  }
+    canonical: 'https://promoteducation.com/articles/cat-syllabus-2026',
+  },
+  openGraph: {
+    title: 'CAT 2026 Syllabus: VARC, DILR & QA Detailed Topic-wise Breakdown | Promote Education',
+    description: 'The syllabus for CAT 2026 is divided into three sections: VARC, DILR, and QA. Get a detailed breakdown of the topics you need to master.',
+    url: 'https://promoteducation.com/articles/cat-syllabus-2026',
+    type: 'article',
+  },
 }
 
 export default function Page() {

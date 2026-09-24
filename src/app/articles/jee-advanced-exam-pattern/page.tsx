@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'JEE Advanced 2026 Exam Pattern: Papers, Marking & Question Types',
   description: 'The JEE Advanced exam is known for its unpredictable pattern and multiple question types. Check the marking scheme for Paper 1 and Paper 2.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/jee-advanced-exam-pattern'
-  }
+    canonical: 'https://promoteducation.com/articles/jee-advanced-exam-pattern',
+  },
+  openGraph: {
+    title: 'JEE Advanced 2026 Exam Pattern: Papers, Marking & Question Types | Promote Education',
+    description: 'The JEE Advanced exam is known for its unpredictable pattern and multiple question types. Check the marking scheme for Paper 1 and Paper 2.',
+    url: 'https://promoteducation.com/articles/jee-advanced-exam-pattern',
+    type: 'article',
+  },
 }
 
 export default function Page() {

@@ -5,8 +5,17 @@ import Link from 'next/link'
 import { ArrowLeft, Share2, Clock, Calendar, CheckCircle2 } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'XAT 2026 Exam Pattern Section-wise Analysis | Promote Education',
+  title: 'XAT 2026 Exam Pattern Section-wise Analysis',
   description: 'Complete breakdown of XAT 2026 exam pattern. Sectional time limits, question count, marking scheme, and strategic time allocation for VARC, Decision Making, and Quant sections.',
+  alternates: {
+    canonical: 'https://promoteducation.com/articles/xat-exam-pattern',
+  },
+  openGraph: {
+    title: 'XAT 2026 Exam Pattern Section-wise Analysis | Promote Education',
+    description: 'Complete breakdown of XAT 2026 exam pattern. Sectional time limits, question count, marking scheme, and strategic time allocation for VARC, Decision Making, and Quant sections.',
+    url: 'https://promoteducation.com/articles/xat-exam-pattern',
+    type: 'article',
+  },
 }
 
 export default function Page() {

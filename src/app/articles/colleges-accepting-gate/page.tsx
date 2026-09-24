@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'Top M.Tech Colleges Accepting GATE Score in India 2026',
   description: 'Explore the list of top IITs, IISc, NITs, and other premier engineering institutes accepting GATE scores for M.Tech admissions.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/colleges-accepting-gate'
-  }
+    canonical: 'https://promoteducation.com/articles/colleges-accepting-gate',
+  },
+  openGraph: {
+    title: 'Top M.Tech Colleges Accepting GATE Score in India 2026 | Promote Education',
+    description: 'Explore the list of top IITs, IISc, NITs, and other premier engineering institutes accepting GATE scores for M.Tech admissions.',
+    url: 'https://promoteducation.com/articles/colleges-accepting-gate',
+    type: 'article',
+  },
 }
 
 export default function Page() {

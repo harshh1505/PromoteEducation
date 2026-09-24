@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import ReviewForm from '@/components/sections/ReviewForm'
 import QuestionForm from '@/components/sections/QuestionForm'
@@ -10,6 +10,14 @@ import {
   FileText, Info, MapPin, BookOpen, Users, Building2
 } from 'lucide-react'
 import HighlightsModal from '@/components/ui/HighlightsModal'
+
+// ===============================
+// SLUG REDIRECT ALIASES
+// ===============================
+export const SLUG_ALIASES: Record<string, string> = {
+  'amity-university-noida': 'amity-university-uttar-pradesh',
+  'mit-wpu': 'mit-world-peace-university',
+}
 
 // ===============================
 // SETTINGS
@@ -33,6 +41,9 @@ export async function generateStaticParams() {
   colleges?.forEach(c => {
     if (c.slug && typeof c.slug === 'string') pages.push({ slug: c.slug })
   })
+
+  // Include aliases so static export generates redirect handlers
+  Object.keys(SLUG_ALIASES).forEach(alias => pages.push({ slug: alias }))
 
   return pages
 }
@@ -132,7 +143,11 @@ async function getCollegeData(slug: string) {
   if (error || !college) return null
 
   const [courses, placements, cutoffs, rankings, faqs, reviews, gallery, scholarships, important_dates] = await Promise.all([
-    supabase.from('courses').select('*, course_catalog(name)').eq('college_id', college.id).order('is_popular', { ascending: false }).order('fees', { ascending: false }),
+    (async () => {
+      const { data, error } = await supabase.from('college_courses').select('*, course_catalog(name)').eq('college_id', college.id).order('is_popular', { ascending: false }).order('fees', { ascending: false })
+      if (!error && data) return { data, error: null }
+      return supabase.from('courses').select('*, course_catalog(name)').eq('college_id', college.id).order('is_popular', { ascending: false }).order('fees', { ascending: false })
+    })(),
     supabase.from('placements').select('*').eq('college_id', college.id).order('year', { ascending: false }).limit(1),
     supabase.from('cutoffs').select('*').eq('college_id', college.id).order('year', { ascending: false }).order('rank', { ascending: true }),
     supabase.from('rankings').select('*').eq('college_id', college.id).order('year', { ascending: false }),
@@ -207,18 +222,26 @@ function formatFees(inr: number | null | undefined): string {
 // ===============================
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const canonical = `https://promoteducation.com/colleges/${slug}`
+  const targetSlug = SLUG_ALIASES[slug] || slug
+  const canonical = `https://promoteducation.com/colleges/${targetSlug}`
   if (slug.includes('-in-')) {
     const query = parseSlug(slug)
     if (query) return {
       title: `Top ${query.stream} Colleges in ${query.location} 2026`,
       description: `Explore best ${query.stream} colleges in ${query.location}. Check fees, placements, rankings and admission details.`,
+      keywords: [`top ${query.stream} colleges in ${query.location}`, `best ${query.stream} colleges ${query.location}`, `${query.location} ${query.stream} admission 2026`],
       alternates: {
         canonical,
       },
+      openGraph: {
+        title: `Top ${query.stream} Colleges in ${query.location} 2026 | Promote Education`,
+        description: `Explore best ${query.stream} colleges in ${query.location}. Check fees, placements, rankings and admission details.`,
+        url: canonical,
+        type: 'website',
+      },
     }
   }
-  const data = await getCollegeData(slug)
+  const data = await getCollegeData(targetSlug)
   if (!data) return { 
     title: 'College Not Found',
     alternates: {
@@ -226,15 +249,26 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     },
   }
   const { college } = data
-  const title = college.meta_title || `${college.name} 2026: Fees, Cutoff, Placements, Ranking`
+  const rawTitle = college.meta_title || `${college.name} 2026: Fees, Cutoff, Placements, Ranking`
+  const baseTitle = rawTitle.replace(/\s*\|\s*Promote Education.*$/i, '').trim()
   const description = college.meta_description || `${college.name}, ${college.location} — NIRF #${college.nirf_rank}. Check ${college.stream} courses, fees, placement stats, cutoffs, and admission 2026.`
+  const pageKeywords = [
+    college.name,
+    college.short_name ? `${college.short_name} admission 2026` : null,
+    `${college.name} fees`,
+    `${college.name} placements`,
+    `${college.name} cutoff 2026`,
+    college.stream ? `top ${college.stream} colleges in ${college.location || 'India'}` : null
+  ].filter(Boolean) as string[]
+
   return { 
-    title, 
+    title: baseTitle, 
     description, 
+    keywords: pageKeywords,
     alternates: {
       canonical,
     },
-    openGraph: { title, description, type: 'website', url: canonical } 
+    openGraph: { title: `${baseTitle} | Promote Education`, description, type: 'website', url: canonical } 
   }
 }
 
@@ -375,6 +409,10 @@ async function ListingPage({ slug, type }: { slug: string; type: string }) {
 // ===============================
 export default async function CollegePage({ params }: any) {
   const resolvedParams = await params
+  if (SLUG_ALIASES[resolvedParams.slug]) {
+    redirect(`/colleges/${SLUG_ALIASES[resolvedParams.slug]}`)
+  }
+
   const pageInfo = parsePageType(resolvedParams.slug)
   if (pageInfo.type !== 'college') return <ListingPage slug={resolvedParams.slug} type={pageInfo.type} />
 

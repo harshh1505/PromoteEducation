@@ -5,8 +5,15 @@ import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 export const metadata: Metadata = {
   title: 'CLAT 2026 — Eligibility, Syllabus, Dates & Preparation Tips',
   description: 'Complete guide to Common Law Admission Test (CLAT) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top NLUs.',
+  keywords: ["CLAT","CLAT 2026","NLU admission","law entrance exam","CLAT syllabus","CLAT eligibility"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/clat'
+  },
+  openGraph: {
+    title: 'CLAT 2026 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
+    description: 'Complete guide to Common Law Admission Test (CLAT) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top NLUs.',
+    url: 'https://promoteducation.com/exams/clat',
+    type: 'article',
   }
 }
 

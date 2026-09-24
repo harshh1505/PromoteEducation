@@ -25,8 +25,21 @@ const degreeMap: Record<string, string> = {
   'march': 'M.Arch',
   'be': 'B.E.',
   'msc': 'M.Sc.',
-  'phd': 'Ph.D.'
+  'phd': 'Ph.D.',
+  'md-ms': 'MD / MS',
+  'dm-mch': 'DM / M.Ch.',
+  'bsc': 'B.Sc.',
+  'barch': 'B.Arch',
+  'bs': 'B.S.',
 };
+
+export function cleanDegreeSlug(degree: string): string {
+  const d = (degree || '').trim();
+  if (d.toLowerCase() === 'md / ms') return 'md-ms';
+  if (d.toLowerCase() === 'dm / m.ch.') return 'dm-mch';
+  if (d.toLowerCase() === 'b.a. ll.b.') return 'ba-llb';
+  return d.toLowerCase().replace(/\./g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
 
 function getCourseDuration(degree: string): number {
   const deg = (degree || '').toLowerCase();
@@ -42,10 +55,10 @@ function getCourseDuration(degree: string): number {
 export async function generateStaticParams() {
   const { data } = await supabase.from('course_catalog').select('slug, degree')
   return (data || []).map((c) => {
-    const degreeSlug = (c.degree || '').replace(/\./g, '').toLowerCase();
+    const slug = cleanDegreeSlug(c.degree);
     const specSlug = c.slug;
     return {
-      degreeSlug,
+      slug,
       specSlug
     };
   })
@@ -53,9 +66,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: any) {
   const resolvedParams = await params
-  const degreeSlugLower = resolvedParams.degreeSlug.toLowerCase();
-  const degreeName = degreeMap[degreeSlugLower] || resolvedParams.degreeSlug.toUpperCase();
-  const searchSlug = resolvedParams.specSlug.includes('-') ? resolvedParams.specSlug : `${resolvedParams.degreeSlug}-${resolvedParams.specSlug}`;
+  const slugLower = (resolvedParams.slug || resolvedParams.degreeSlug || '').toLowerCase();
+  const degreeName = degreeMap[slugLower] || slugLower.toUpperCase();
+  const searchSlug = resolvedParams.specSlug.includes('-') ? resolvedParams.specSlug : `${slugLower}-${resolvedParams.specSlug}`;
 
   const { data: specItem } = await supabase
     .from('course_catalog')
@@ -66,17 +79,39 @@ export async function generateMetadata({ params }: any) {
 
   if (!specItem) return { title: 'Specialisation Not Found' }
 
+  const canonicalUrl = `https://promoteducation.com/courses/${slugLower}/${resolvedParams.specSlug}`
+
+  const specBaseTitle = `${slugLower.toUpperCase()} in ${specItem.name} 2026: Details, Scope & Colleges`
+  const specKeywords = [
+    `${degreeName} in ${specItem.name}`,
+    specItem.name,
+    `${specItem.name} career scope`,
+    `${specItem.name} top colleges India`,
+    `${slugLower.toUpperCase()} admission 2026`
+  ]
+
   return {
-    title: `${resolvedParams.degreeSlug.toUpperCase()} in ${specItem.name} 2026: Details, Scope & Colleges | Promote Education`,
-    description: `Explore ${resolvedParams.degreeSlug.toUpperCase()} in ${specItem.name} — duration, eligibility, average salary, career scope, and top colleges in India.`,
+    title: specBaseTitle,
+    description: `Explore ${slugLower.toUpperCase()} in ${specItem.name} — duration, eligibility, average salary, career scope, and top colleges in India.`,
+    keywords: specKeywords,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: `${specBaseTitle} | Promote Education`,
+      description: `Explore ${slugLower.toUpperCase()} in ${specItem.name} — duration, eligibility, average salary, career scope, and top colleges in India.`,
+      url: canonicalUrl,
+      type: 'article',
+    }
   }
 }
 
 export default async function SpecialisationPage({ params }: any) {
   const resolvedParams = await params
-  const degreeSlugLower = resolvedParams.degreeSlug.toLowerCase();
-  const degreeName = degreeMap[degreeSlugLower] || resolvedParams.degreeSlug.toUpperCase();
-  const searchSlug = resolvedParams.specSlug.includes('-') ? resolvedParams.specSlug : `${resolvedParams.degreeSlug}-${resolvedParams.specSlug}`;
+  const slugLower = (resolvedParams.slug || resolvedParams.degreeSlug || '').toLowerCase();
+  const degreeSlugLower = slugLower;
+  const degreeName = degreeMap[slugLower] || slugLower.toUpperCase();
+  const searchSlug = resolvedParams.specSlug.includes('-') ? resolvedParams.specSlug : `${slugLower}-${resolvedParams.specSlug}`;
 
   // 1. Fetch the specialization detail from catalog
   const { data: specItem, error } = await supabase

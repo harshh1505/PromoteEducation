@@ -5,8 +5,14 @@ export const metadata: Metadata = {
   title: 'CUET UG vs JEE vs NEET: Which Entrance Exam is Best for You?',
   description: 'Understand the fundamental differences between CUET UG, JEE, and NEET. Compare focus, versatility, and the universities you can enter.',
   alternates: {
-    canonical: 'https://promoteducation.com/articles/cuet-ug-vs-jee-neet'
-  }
+    canonical: 'https://promoteducation.com/articles/cuet-ug-vs-jee-neet',
+  },
+  openGraph: {
+    title: 'CUET UG vs JEE vs NEET: Which Entrance Exam is Best for You? | Promote Education',
+    description: 'Understand the fundamental differences between CUET UG, JEE, and NEET. Compare focus, versatility, and the universities you can enter.',
+    url: 'https://promoteducation.com/articles/cuet-ug-vs-jee-neet',
+    type: 'article',
+  },
 }
 
 export default function Page() {

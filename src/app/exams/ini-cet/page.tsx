@@ -5,8 +5,16 @@ import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 export const metadata: Metadata = {
   title: 'INI CET 2026 — Eligibility, Syllabus, Dates & Preparation Guide',
   description: 'The ultimate guide to INI CET 2026. Detailed eligibility, full syllabus, exam pattern, important dates, and expert preparation strategies for MD/MS admission at AIIMS, JIPMER, and PGIMER.',
-  keywords: ['INI CET', 'INI CET 2026', 'AIIMS PG', 'MD MS admission', 'INI CET syllabus', 'INI CET eligibility'],
-  alternates: { canonical: 'https://promoteducation.com/exams/ini-cet' }
+  keywords: ["INI CET","INI CET 2026","AIIMS PG","MD MS admission","INI CET syllabus","INI CET eligibility"],
+  alternates: {
+    canonical: 'https://promoteducation.com/exams/ini-cet'
+  },
+  openGraph: {
+    title: 'INI CET 2026 — Eligibility, Syllabus, Dates & Preparation Guide | Promote Education',
+    description: 'The ultimate guide to INI CET 2026. Detailed eligibility, full syllabus, exam pattern, important dates, and expert preparation strategies for MD/MS admission at AIIMS, JIPMER, and PGIMER.',
+    url: 'https://promoteducation.com/exams/ini-cet',
+    type: 'article',
+  }
 }
 
 const exam: ExamInfo = {
