@@ -365,7 +365,7 @@ export default function ContactUsPage() {
                       <div>
                         <p className="text-[10px] font-black text-sky-400 uppercase tracking-widest mb-1 leading-none">Counseling Hours</p>
                         <p className="text-sm font-semibold text-slate-300">
-                          Monday – Saturday: 9:00 AM – 7:00 PM IST
+                          Monday – Saturday: 10:00 AM – 6:00 PM IST
                         </p>
                         <p className="text-[10px] font-black text-sky-400 uppercase tracking-widest mt-1">
                           * 24/7 Helpline Available for Enrolled Students
