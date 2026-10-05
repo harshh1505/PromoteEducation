@@ -3,15 +3,15 @@ import Link from 'next/link'
 import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 
 export const metadata: Metadata = {
-  title: 'BITSAT 2026 — Eligibility, Syllabus, Pattern & Preparation Guide',
-  description: 'Complete guide to BITSAT 2026. Detailed eligibility (75-60 rule), full PCM syllabus, bonus question strategy, campus-wise cutoffs, and top preparation tips for BITS Pilani admission.',
-  keywords: ["BITSAT","BITSAT 2026","BITS Pilani","BITS Goa","BITSAT syllabus","BITSAT eligibility","BITSAT cutoff"],
+  title: 'BITSAT 2027 — Eligibility, Syllabus, Pattern & Preparation Guide',
+  description: 'Complete guide to BITSAT 2027. Detailed eligibility (75-60 rule), full PCM syllabus, bonus question strategy, campus-wise cutoffs, and top preparation tips for BITS Pilani admission.',
+  keywords: ["BITSAT","BITSAT 2027","BITS Pilani","BITS Goa","BITSAT syllabus","BITSAT eligibility","BITSAT cutoff"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/bitsat'
   },
   openGraph: {
-    title: 'BITSAT 2026 — Eligibility, Syllabus, Pattern & Preparation Guide | Promote Education',
-    description: 'Complete guide to BITSAT 2026. Detailed eligibility (75-60 rule), full PCM syllabus, bonus question strategy, campus-wise cutoffs, and top preparation tips for BITS Pilani admission.',
+    title: 'BITSAT 2027 — Eligibility, Syllabus, Pattern & Preparation Guide | Promote Education',
+    description: 'Complete guide to BITSAT 2027. Detailed eligibility (75-60 rule), full PCM syllabus, bonus question strategy, campus-wise cutoffs, and top preparation tips for BITS Pilani admission.',
     url: 'https://promoteducation.com/exams/bitsat',
     type: 'article',
   }
@@ -37,15 +37,15 @@ const exam: ExamInfo = {
     'Passed 10+2 or equivalent with Physics, Chemistry, and Mathematics (for Engineering) / Biology (for B.Pharm)',
     'Minimum 75% aggregate marks in Physics, Chemistry, and Maths/Biology — the "75% Rule"',
     'Minimum 60% marks in each of the three core subjects individually — the "60% Rule"',
-    'Candidates appearing in the 2026 boards are eligible; students who passed before 2025 are NOT eligible',
+    'Candidates appearing in the 2027 boards are eligible; students who passed before 2026 are NOT eligible',
     'First-rank holders (toppers) of any central or state board are offered direct admission irrespective of BITSAT score',
   ],
   importantDates: [
-    { label: 'Application Form Opens', date: 'January 2026' },
-    { label: 'Application Deadline', date: 'March 2026' },
-    { label: 'Session 1 Exam', date: 'May 2026' },
-    { label: 'Session 2 Exam', date: 'June 2026' },
-    { label: 'Iteration 1 Admissions', date: 'July 2026' },
+    { label: 'Application Form Opens', date: 'January 2027' },
+    { label: 'Application Deadline', date: 'March 2027' },
+    { label: 'Session 1 Exam', date: 'May 2027' },
+    { label: 'Session 2 Exam', date: 'June 2027' },
+    { label: 'Iteration 1 Admissions', date: 'July 2027' },
   ],
   syllabus: [
     { subject: 'Physics', topics: ['Units & Measurement', 'Kinematics', 'Newton\'s Laws of Motion', 'Work, Energy & Power', 'Gravitation', 'Thermodynamics', 'Electrostatics', 'Current Electricity', 'Magnetic Effects', 'Optics', 'Modern Physics'] },

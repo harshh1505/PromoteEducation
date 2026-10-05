@@ -27,6 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { route: '/colleges/engineering', priority: 0.9, changeFrequency: 'weekly' },
     { route: '/colleges/medical', priority: 0.9, changeFrequency: 'weekly' },
     { route: '/exams', priority: 0.95, changeFrequency: 'daily' },
+    { route: '/alerts', priority: 0.95, changeFrequency: 'daily' },
     { route: '/cutoffs', priority: 0.9, changeFrequency: 'weekly' },
     { route: '/cutoffs/engineering', priority: 0.85, changeFrequency: 'weekly' },
     { route: '/cutoffs/medical', priority: 0.85, changeFrequency: 'weekly' },
@@ -70,7 +71,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   // 2. Individual College Pages (Filter out alias/redirect slugs)
-  const aliasSlugs = new Set(['amity-university-noida', 'mit-wpu'])
+  const aliasSlugs = new Set(['amity-university-noida', 'amity-university-uttar-pradesh', 'amity-university-haryana', 'mit-wpu'])
   const { data: colleges } = await supabase.from('colleges').select('slug, updated_at')
   const collegePages = (colleges || [])
     .filter((c) => c.slug && !aliasSlugs.has(c.slug))

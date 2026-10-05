@@ -22,15 +22,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const canonical = `https://promoteducation.com/exams/${slug}`
 
   return {
-    title: `${exam.title} 2026 | Eligibility, Syllabus, Exam Pattern & Dates`,
-    description: `Complete guide to ${exam.title} 2026. Get latest updates on admission, syllabus, exam pattern, and important dates for ${exam.stream} candidates.`,
-    keywords: [exam.title, `${exam.title} 2026`, `${exam.stream} admission`, `${exam.title} syllabus`],
+    title: `${exam.title} 2027 | Eligibility, Syllabus, Exam Pattern & Dates`,
+    description: `Complete guide to ${exam.title} 2027. Get latest updates on admission, syllabus, exam pattern, and important dates for ${exam.stream} candidates.`,
+    keywords: [exam.title, `${exam.title} 2027`, `${exam.stream} admission`, `${exam.title} syllabus`],
     alternates: {
       canonical,
     },
     openGraph: {
-      title: `${exam.title} 2026 Guide | Promote Education`,
-      description: `Complete guide to ${exam.title} 2026. Get latest updates on admission, syllabus, exam pattern, and important dates.`,
+      title: `${exam.title} 2027 Guide | Promote Education`,
+      description: `Complete guide to ${exam.title} 2027. Get latest updates on admission, syllabus, exam pattern, and important dates.`,
       url: canonical,
       type: 'article',
     }

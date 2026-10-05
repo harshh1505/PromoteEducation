@@ -94,7 +94,7 @@ export default function ExamBlogPage({ exam }: { exam: ExamInfo }) {
               {exam.stream}
             </span>
             <span className="text-xs text-slate-400 font-medium">|</span>
-            <span className="text-xs text-slate-400 font-medium">Updated April 2026</span>
+            <span className="text-xs text-slate-400 font-medium">Updated for 2027 Session</span>
           </div>
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight mb-4" style={{ fontFamily: 'Georgia, serif' }}>

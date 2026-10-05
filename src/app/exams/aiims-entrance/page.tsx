@@ -2,15 +2,15 @@ import ExamEditorialContent from '@/components/pages/exams/ExamEditorialContent'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'AIIMS Nursing & Para-Medical Entrance 2026 | Eligibility & Dates',
-  description: 'Comprehensive guide to AIIMS B.Sc Nursing and Para-Medical entrance exams 2026. Get latest eligibility criteria (55% Gen/OBC), exam pattern, and important dates for AIIMS across India.',
-  keywords: ["AIIMS Nursing entrance","AIIMS B.Sc Nursing 2026","AIIMS Para-medical admission","AIIMS entrance exam eligibility"],
+  title: 'AIIMS Nursing & Para-Medical Entrance 2027 | Eligibility & Dates',
+  description: 'Comprehensive guide to AIIMS B.Sc Nursing and Para-Medical entrance exams 2027. Get latest eligibility criteria (55% Gen/OBC), exam pattern, and important dates for AIIMS across India.',
+  keywords: ["AIIMS Nursing entrance","AIIMS B.Sc Nursing 2027","AIIMS Para-medical admission 2027","AIIMS entrance exam eligibility"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/aiims-entrance'
   },
   openGraph: {
-    title: 'AIIMS Nursing & Para-Medical Entrance 2026 | Eligibility & Dates | Promote Education',
-    description: 'Comprehensive guide to AIIMS B.Sc Nursing and Para-Medical entrance exams 2026. Get latest eligibility criteria (55% Gen/OBC), exam pattern, and important dates for AIIMS across India.',
+    title: 'AIIMS Nursing & Para-Medical Entrance 2027 | Eligibility & Dates | Promote Education',
+    description: 'Comprehensive guide to AIIMS B.Sc Nursing and Para-Medical entrance exams 2027. Get latest eligibility criteria (55% Gen/OBC), exam pattern, and important dates for AIIMS across India.',
     url: 'https://promoteducation.com/exams/aiims-entrance',
     type: 'article',
   }
@@ -46,10 +46,10 @@ const examData = {
     { label: "Mode", value: "Computer Based" }
   ],
   dates: [
-    { event: "Basic Registration", date: "Feb 2026", status: 'open' as const },
-    { event: "Final Registration", date: "Mar 2026", status: 'upcoming' as const },
-    { event: "Exam Date", date: "June 2026", status: 'upcoming' as const },
-    { event: "Results", date: "July 2026", status: 'upcoming' as const }
+    { event: "Basic Registration", date: "Feb 2027", status: 'upcoming' as const },
+    { event: "Final Registration", date: "Mar 2027", status: 'upcoming' as const },
+    { event: "Exam Date", date: "June 2027", status: 'upcoming' as const },
+    { event: "Results", date: "July 2027", status: 'upcoming' as const }
   ],
   syllabus: [
     { subject: "Physics", topics: ["Magnetic Effect of Current", "Atoms and Nuclei", "Electronic Devices", "Optics", "Dual Nature of Matter"] },

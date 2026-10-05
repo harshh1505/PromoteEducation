@@ -22,12 +22,12 @@ export const examDatabase: Record<string, ExamInfo> = {
       'Minimum 75% in 12th board (for NITs/IIITs admission)',
     ],
     importantDates: [
-      { label: 'Session 1 Registration', date: 'November 2025' },
-      { label: 'Session 1 Exam', date: 'January 2026' },
-      { label: 'Session 1 Result', date: 'February 2026' },
-      { label: 'Session 2 Registration', date: 'February 2026' },
-      { label: 'Session 2 Exam', date: 'April 2026' },
-      { label: 'Session 2 Result', date: 'May 2026' },
+      { label: 'Session 1 Registration', date: 'November 2026' },
+      { label: 'Session 1 Exam', date: 'January 2027' },
+      { label: 'Session 1 Result', date: 'February 2027' },
+      { label: 'Session 2 Registration', date: 'February 2027' },
+      { label: 'Session 2 Exam', date: 'April 2027' },
+      { label: 'Session 2 Result', date: 'May 2027' },
     ],
     syllabus: [
       { subject: 'Physics', topics: ['Mechanics', 'Thermodynamics', 'Electrodynamics', 'Optics', 'Modern Physics', 'Waves & Oscillations'] },
@@ -77,10 +77,10 @@ export const examDatabase: Record<string, ExamInfo> = {
       'Age limit: 25 years (30 for SC/ST/PwD)',
     ],
     importantDates: [
-      { label: 'Registration Opens', date: 'April 2026' },
-      { label: 'Exam Date', date: 'May 2026' },
-      { label: 'Result Declaration', date: 'June 2026' },
-      { label: 'Counselling (JoSAA)', date: 'June-July 2026' },
+      { label: 'Registration Opens', date: 'April 2027' },
+      { label: 'Exam Date', date: 'May 2027' },
+      { label: 'Result Declaration', date: 'June 2027' },
+      { label: 'Counselling (JoSAA)', date: 'June-July 2027' },
     ],
     syllabus: [
       { subject: 'Physics', topics: ['General Physics', 'Mechanics', 'Thermal Physics', 'Electricity & Magnetism', 'Optics', 'Modern Physics'] },
@@ -130,11 +130,11 @@ export const examDatabase: Record<string, ExamInfo> = {
       'No upper age limit (as per Supreme Court ruling)',
     ],
     importantDates: [
-      { label: 'Registration Opens', date: 'February 2026' },
-      { label: 'Last Date to Apply', date: 'March 2026' },
-      { label: 'Exam Date', date: 'May 2026' },
-      { label: 'Result Declaration', date: 'June 2026' },
-      { label: 'Counselling Begins', date: 'July 2026' },
+      { label: 'Registration Opens', date: 'February 2027' },
+      { label: 'Last Date to Apply', date: 'March 2027' },
+      { label: 'Exam Date', date: 'May 2027' },
+      { label: 'Result Declaration', date: 'June 2027' },
+      { label: 'Counselling Begins', date: 'July 2027' },
     ],
     syllabus: [
       { subject: 'Physics', topics: ['Mechanics', 'Thermodynamics', 'Electrostatics', 'Current Electricity', 'Optics', 'Modern Physics', 'Magnetism'] },
@@ -184,11 +184,12 @@ export const examDatabase: Record<string, ExamInfo> = {
       'No limit on number of attempts',
     ],
     importantDates: [
-      { label: 'Registration Opens', date: 'August 2025' },
-      { label: 'Last Date to Apply', date: 'September 2025' },
-      { label: 'Admit Card', date: 'October 2025' },
-      { label: 'Exam Date', date: 'November 2025' },
-      { label: 'Result', date: 'January 2026' },
+      { label: 'Registration Opens', date: 'August 2026' },
+      { label: 'Last Date to Apply', date: 'September 2026' },
+      { label: 'Admit Card', date: 'October 2026' },
+      { label: 'Exam Date', date: 'November 2026' },
+      { label: 'Result', date: 'January 2027' },
+      { label: 'IIM GD-PI Rounds', date: 'February - April 2027' },
     ],
     syllabus: [
       { subject: 'VARC', topics: ['Reading Comprehension', 'Para Summary', 'Para Jumbles', 'Odd Sentence', 'Critical Reasoning'] },
@@ -238,10 +239,10 @@ export const examDatabase: Record<string, ExamInfo> = {
       'No age limit',
     ],
     importantDates: [
-      { label: 'Registration Opens', date: 'August 2025' },
-      { label: 'Exam Dates', date: 'February 2026' },
-      { label: 'Result', date: 'March 2026' },
-      { label: 'Counselling (CCMT)', date: 'April 2026' },
+      { label: 'Registration Opens', date: 'August 2026' },
+      { label: 'Exam Dates', date: 'February 2027' },
+      { label: 'Result', date: 'March 2027' },
+      { label: 'Counselling (CCMT)', date: 'April 2027' },
     ],
     syllabus: [
       { subject: 'General Aptitude', topics: ['Verbal Ability', 'Quantitative Aptitude', 'Analytical Aptitude', 'Spatial Aptitude'] },
@@ -291,11 +292,11 @@ export const examDatabase: Record<string, ExamInfo> = {
       'No limit on attempts',
     ],
     importantDates: [
-      { label: 'Registration Opens', date: 'August 2025' },
-      { label: 'Last Date to Apply', date: 'October 2025' },
-      { label: 'Exam Date', date: 'December 2025' },
-      { label: 'Result', date: 'January 2026' },
-      { label: 'Counselling', date: 'February 2026' },
+      { label: 'Registration Opens', date: 'July 2026' },
+      { label: 'Last Date to Apply', date: 'November 2026' },
+      { label: 'Exam Date', date: 'December 2026' },
+      { label: 'Result', date: 'January 2027' },
+      { label: 'Counselling', date: 'January - May 2027' },
     ],
     syllabus: [
       { subject: 'English Language', topics: ['Reading Comprehension', 'Grammar', 'Vocabulary', 'Sentence Correction'] },
@@ -345,10 +346,10 @@ export const examDatabase: Record<string, ExamInfo> = {
       'No age limit',
     ],
     importantDates: [
-      { label: 'Registration Opens', date: 'October 2025' },
-      { label: 'Exam Date (CAT/GAT)', date: 'January 2026' },
-      { label: 'Situation Test', date: 'March 2026' },
-      { label: 'Result', date: 'April 2026' },
+      { label: 'Registration Opens', date: 'November 2026' },
+      { label: 'Exam Date (CAT/GAT)', date: 'February 2027' },
+      { label: 'Situation Test', date: 'April 2027' },
+      { label: 'Result', date: 'May 2027' },
     ],
     syllabus: [
       { subject: 'Creative Ability Test', topics: ['Drawing', 'Illustration', 'Design Composition', 'Color Theory', 'Creative Thinking'] },
@@ -398,11 +399,11 @@ export const examDatabase: Record<string, ExamInfo> = {
       'No limit on attempts',
     ],
     importantDates: [
-      { label: 'Registration Opens', date: 'February 2026' },
-      { label: 'Last Date to Apply', date: 'March 2026' },
-      { label: 'Exam Dates', date: 'May 2026' },
-      { label: 'Result', date: 'June 2026' },
-      { label: 'Counselling', date: 'July 2026' },
+      { label: 'Registration Opens', date: 'February 2027' },
+      { label: 'Last Date to Apply', date: 'March 2027' },
+      { label: 'Exam Dates', date: 'May 2027' },
+      { label: 'Result', date: 'June 2027' },
+      { label: 'Counselling', date: 'July 2027' },
     ],
     syllabus: [
       { subject: 'Language Section', topics: ['Reading Comprehension', 'Vocabulary', 'Grammar', 'Literary Aptitude'] },
@@ -451,9 +452,11 @@ export const examDatabase: Record<string, ExamInfo> = {
       'Minimum 55% for Gen/OBC/EWS (50% for SC/ST)'
     ],
     importantDates: [
-      { label: 'Jan Session Registration', date: 'September 2025' },
-      { label: 'Jan Session Exam', date: 'November 2025' },
-      { label: 'July Session Exam', date: 'May 2026' }
+      { label: 'Jan 2027 Session Registration', date: 'September 2026' },
+      { label: 'Jan 2027 Session Exam', date: 'November 2026' },
+      { label: 'July 2027 Session Registration', date: 'March 2027' },
+      { label: 'July 2027 Session Exam', date: 'May 2027' },
+      { label: 'Result Declaration', date: 'June 2027' }
     ],
     syllabus: [
       { subject: 'Pre-clinical', topics: ['Anatomy', 'Physiology', 'Biochemistry'] },
@@ -498,8 +501,10 @@ export const examDatabase: Record<string, ExamInfo> = {
       'Age limit: 35 years (Relaxation for SC/ST)'
     ],
     importantDates: [
-      { label: 'Jan Session Exam', date: 'October 2025' },
-      { label: 'July Session Exam', date: 'April 2026' }
+      { label: 'Jan 2027 Session Registration', date: 'September 2026' },
+      { label: 'Jan 2027 Session Exam', date: 'October 2026' },
+      { label: 'July 2027 Session Registration', date: 'March 2027' },
+      { label: 'July 2027 Session Exam', date: 'April 2027' }
     ],
     syllabus: [
       { subject: 'Medical/Surgical', topics: ['Core specialty subjects', 'Recent advances', 'Clinical cases', 'Imaging in SS'] }
@@ -540,9 +545,10 @@ export const examDatabase: Record<string, ExamInfo> = {
       'Minimum age: 17 years'
     ],
     importantDates: [
-      { label: 'Basic Registration', date: 'March 2026' },
-      { label: 'Final Registration', date: 'April 2026' },
-      { label: 'Exam Date', date: 'June 2026' }
+      { label: 'Basic Registration', date: 'February 2027' },
+      { label: 'Final Registration', date: 'March 2027' },
+      { label: 'Exam Date', date: 'June 2027' },
+      { label: 'Results', date: 'July 2027' }
     ],
     syllabus: [
       { subject: 'Biology', topics: ['Cell Theory', 'Genetics', 'Human Physiology', 'Plant Physiology', 'Ecology'] },
@@ -585,9 +591,11 @@ export const examDatabase: Record<string, ExamInfo> = {
       'No specific minimum percentage required for XAT application'
     ],
     importantDates: [
-      { label: 'Registration Opens', date: 'July 2025' },
-      { label: 'Last Date to Apply', date: 'November 2025' },
-      { label: 'Exam Date', date: 'January 2026' }
+      { label: 'Registration Opens', date: 'July 2026' },
+      { label: 'Last Date to Apply', date: 'November 2026' },
+      { label: 'Admit Card Download', date: 'December 2026' },
+      { label: 'Exam Date', date: '3 January 2027' },
+      { label: 'Result Declaration', date: 'January 2027' }
     ],
     syllabus: [
       { subject: 'Decision Making', topics: ['Ethical Dilemmas', 'Business Decisions', 'Financial Decisions', 'Scenario Analysis'] },
@@ -632,9 +640,11 @@ export const examDatabase: Record<string, ExamInfo> = {
       'Direct admission for board toppers'
     ],
     importantDates: [
-      { label: 'Session 1 Exam', date: 'May 2026' },
-      { label: 'Session 2 Exam', date: 'June 2026' },
-      { label: 'Counselling Starts', date: 'July 2026' }
+      { label: 'Application Form Opens', date: 'January 2027' },
+      { label: 'Application Deadline', date: 'March 2027' },
+      { label: 'Session 1 Exam', date: 'May 2027' },
+      { label: 'Session 2 Exam', date: 'June 2027' },
+      { label: 'Counselling Starts', date: 'July 2027' }
     ],
     syllabus: [
       { subject: 'English & LR', topics: ['Grammar', 'Vocabulary', 'Analogies', 'Logical Deduction', 'Reading Comprehension'] },
@@ -679,10 +689,10 @@ export const examDatabase: Record<string, ExamInfo> = {
       'Completed 1 year of internship by the cutoff date'
     ],
     importantDates: [
-      { label: 'Registration Opens', date: 'April 2026' },
-      { label: 'Exam Date', date: 'June 2026' },
-      { label: 'Result', date: 'July 2026' },
-      { label: 'Counselling Begins', date: 'August 2026' }
+      { label: 'Registration Opens', date: 'April 2027' },
+      { label: 'Exam Date', date: 'June 2027' },
+      { label: 'Result', date: 'July 2027' },
+      { label: 'Counselling Begins', date: 'August 2027' }
     ],
     syllabus: [
       { subject: 'Part A', topics: ['Anatomy', 'Physiology', 'Biochemistry'] },
@@ -727,8 +737,9 @@ export const examDatabase: Record<string, ExamInfo> = {
       'Direct admission for board toppers of selected boards'
     ],
     importantDates: [
-      { label: 'Phase 1 Exam', date: 'April 2026' },
-      { label: 'Phase 2 Exam', date: 'June 2026' }
+      { label: 'Registration Opens', date: 'November 2026' },
+      { label: 'Phase 1 Exam', date: 'April 2027' },
+      { label: 'Phase 2 Exam', date: 'June 2027' }
     ],
     syllabus: [
       { subject: 'Maths', topics: ['Sets, Relations and Functions', 'Complex Numbers', 'Matrices and Determinants', 'Calculus'] },
@@ -766,8 +777,9 @@ export const examDatabase: Record<string, ExamInfo> = {
       'No upper age limit for 5-year LLB'
     ],
     importantDates: [
-      { label: 'Registration Opens', date: 'January 2026' },
-      { label: 'Exam Date', date: 'April 2026' }
+      { label: 'Registration Opens', date: 'January 2027' },
+      { label: 'Exam Date', date: 'April - May 2027' },
+      { label: 'Result Declaration', date: 'June 2027' }
     ],
     syllabus: [
       { subject: 'Legal Aptitude', topics: ['Legal Reasoning', 'Law of Torts', 'Contracts', 'Constitution'] },
@@ -804,8 +816,10 @@ export const examDatabase: Record<string, ExamInfo> = {
       'Age limit: 20 years for General category'
     ],
     importantDates: [
-      { label: 'Registration Opens', date: 'October 2025' },
-      { label: 'Prelims Exam', date: 'January 2026' }
+      { label: 'Registration Opens', date: 'September 2026' },
+      { label: 'Prelims Exam', date: 'December 2026 / January 2027' },
+      { label: 'Mains (Studio Test)', date: 'April 2027' },
+      { label: 'Final Result', date: 'May 2027' }
     ],
     syllabus: [
       { subject: 'Creative Ability', topics: ['Sketching', 'Visualization', 'Color Theory', 'Design Principles'] },
@@ -842,8 +856,9 @@ export const examDatabase: Record<string, ExamInfo> = {
       'Valid identity proof'
     ],
     importantDates: [
-      { label: 'Registration Opens', date: 'February 2026' },
-      { label: 'Exam Date', date: 'May 2026' }
+      { label: 'Registration Opens', date: 'February 2027' },
+      { label: 'Exam Date', date: 'May 2027' },
+      { label: 'Result Declaration', date: 'May 2027' }
     ],
     syllabus: [
       { subject: 'Physics', topics: ['Mechanics', 'Waves', 'Optics', 'Electricity'] },
@@ -882,9 +897,9 @@ export const examDatabase: Record<string, ExamInfo> = {
       'PIO/OCI candidates are also eligible'
     ],
     importantDates: [
-      { label: 'Registration Opens', date: 'November 2025' },
-      { label: 'Exam Window', date: 'April 2026' },
-      { label: 'Result', date: 'May 2026' }
+      { label: 'Registration Opens', date: 'November 2026' },
+      { label: 'Exam Window', date: 'April 2027' },
+      { label: 'Result', date: 'April 2027' }
     ],
     syllabus: [
       { subject: 'Physics', topics: ['Laws of Motion', 'Work, Energy and Power', 'Properties of Matter', 'Electrostatics', 'Current Electricity', 'Magnetic Effects'] },
@@ -929,9 +944,9 @@ export const examDatabase: Record<string, ExamInfo> = {
       'Citizens of India or OCI candidates'
     ],
     importantDates: [
-      { label: 'Registration Opens', date: 'December 2025' },
-      { label: 'Exam Date', date: 'April 2026' },
-      { label: 'Result', date: 'May 2026' }
+      { label: 'Registration Opens', date: 'December 2026' },
+      { label: 'Exam Date', date: 'April 2027' },
+      { label: 'Result', date: 'May 2027' }
     ],
     syllabus: [
       { subject: 'Mathematics', topics: ['Algebra', 'Trigonometry', 'Coordinate Geometry', 'Calculus', 'Probability'] },
@@ -976,9 +991,10 @@ export const examDatabase: Record<string, ExamInfo> = {
       'NRI candidates can apply through separate category'
     ],
     importantDates: [
-      { label: 'Registration Opens', date: 'August 2025' },
-      { label: 'Exam Dates', date: 'December 2025' },
-      { label: 'Result', date: 'January 2026' }
+      { label: 'Registration Opens', date: 'August 2026' },
+      { label: 'Exam Dates', date: 'December 2026' },
+      { label: 'Result', date: 'January 2027' },
+      { label: 'GE-PIWAT Rounds', date: 'February 2027' }
     ],
     syllabus: [
       { subject: 'General English', topics: ['Reading Comprehension', 'Verbal Reasoning', 'Grammar', 'Vocabulary'] },
@@ -995,14 +1011,445 @@ export const examDatabase: Record<string, ExamInfo> = {
     topColleges: ['SIBM Pune', 'SCMHRD Pune', 'SIIB Pune', 'SIBM Bangalore', 'SIBM Hyderabad'],
     description: <>SNAP is the entrance test for admission to MBA and other postgraduate programs at Symbiosis International. It is one of the most student-friendly MBA exams due to its shorter duration. Candidates often take SNAP as a backup to <Link href="/exams/cat" className="text-[#f59e0b] font-bold hover:underline">CAT</Link> or <Link href="/exams/xat" className="text-[#f59e0b] font-bold hover:underline">XAT</Link>.</>,
     relatedArticles: [
-      { title: 'SNAP 2025 Eligibility', href: '/articles/snap-eligibility' },
+      { title: 'SNAP 2027 Eligibility', href: '/articles/snap-eligibility' },
       { title: 'SIBM Pune Selection Process', href: '/articles/sibm-selection' },
       { title: 'SNAP vs CAT Comparison', href: '/articles/snap-vs-cat' },
-      { title: 'Top Symbiosis Colleges', href: '/articles/top-symbiosis-campuses' },
-      { title: 'SNAP Speed-Based Test Tips', href: '/articles/snap-speed-tips' },
-      { title: 'Symbiosis MBA Fee Structure', href: '/articles/symbiosis-fees' },
-      { title: 'SNAP Logical Reasoning Guide', href: '/articles/snap-lr-prep' },
-      { title: 'GE-PIWAT Preparation', href: '/articles/symbiosis-gepiwat' }
+      { title: 'Top Symbiosis Colleges', href: '/articles/top-symbiosis-campuses' }
     ]
+  },
+  'mhcet-law': {
+    slug: 'mhcet-law',
+    title: 'MH CET Law',
+    fullName: 'Maharashtra Common Entrance Test for Law',
+    stream: 'Law',
+    color: '#7c3aed',
+    conductedBy: <a href="https://cetcell.mahacet.org" target="_blank" rel="noopener noreferrer" className="hover:underline">State CET Cell, Maharashtra</a>,
+    mode: 'Computer Based Test (CBT)',
+    frequency: 'Once a year (March-May)',
+    duration: '2 Hours',
+    totalMarks: '150',
+    sections: ['Legal Aptitude', 'General Knowledge', 'Logical Reasoning', 'English', 'Maths'],
+    eligibility: [
+      'Passed 12th with 45% aggregate (40% for SC/ST) for 5-Year LLB',
+      'Graduation degree with min 45% aggregate for 3-Year LLB',
+      'No upper age limit'
+    ],
+    importantDates: [
+      { label: 'Registration Opens', date: 'January 2027' },
+      { label: 'Exam Date', date: 'April - May 2027' },
+      { label: 'Result Declaration', date: 'June 2027' }
+    ],
+    syllabus: [
+      { subject: 'Legal Aptitude', topics: ['Legal Reasoning', 'Law of Torts', 'Contracts', 'Constitution'] },
+      { subject: 'General Knowledge', topics: ['Current Affairs', 'History', 'Geography', 'Science'] }
+    ],
+    preparationTips: [
+      'Focus on legal principles and reasoning',
+      'Daily current affairs reading is essential',
+      'Practice past year papers for pattern analysis'
+    ],
+    topColleges: ['GLC Mumbai', 'ILS Law College Pune', 'DES Navalmal Firodia Law College Pune'],
+    description: <>MH CET Law is the primary gateway for admission to 5-year and 3-year LLB courses in top law colleges across Maharashtra.</>
+  },
+  'nata': {
+    slug: 'nata',
+    title: 'NATA',
+    fullName: 'National Aptitude Test in Architecture',
+    stream: 'Design',
+    color: '#e11d48',
+    conductedBy: <a href="https://nata.in" target="_blank" rel="noopener noreferrer" className="hover:underline">Council of Architecture (CoA)</a>,
+    mode: 'Computer Based Test & Drawing / Offline Assessment',
+    frequency: 'Multiple phases (April - July)',
+    duration: '3 Hours',
+    totalMarks: '200',
+    sections: ['Drawing and Composition', 'Visual Reasoning', 'Architectural Awareness & Mathematics'],
+    eligibility: [
+      'Passed 10+2 with Physics, Chemistry, and Mathematics (min 50% aggregate)',
+      '10+3 Diploma candidates with Mathematics are also eligible',
+      'No upper age limit'
+    ],
+    importantDates: [
+      { label: 'Registration Opens', date: 'February 2027' },
+      { label: 'Phase 1 Exam', date: 'April 2027' },
+      { label: 'Phase 2 Exam', date: 'June 2027' },
+      { label: 'Phase 3 Exam', date: 'July 2027' },
+      { label: 'Scorecard Validity', date: 'Academic Session 2027-28' }
+    ],
+    syllabus: [
+      { subject: 'Drawing & Aesthetics', topics: ['Perspective Drawing', 'Light & Shadow', '2D/3D Composition', 'Color Schemes'] },
+      { subject: 'Aptitude & Architectural GK', topics: ['Architectural Landmarks', 'Material Identification', 'Visual Perception', 'Mental Ability'] }
+    ],
+    preparationTips: [
+      'Practice 2D/3D pencil sketches and perspective projections regularly',
+      'Memorize famous historical and modern buildings and their architects',
+      'Build speed in freehand drawing and geometric composition'
+    ],
+    topColleges: ['Sir JJ College of Architecture Mumbai', 'CEPT University Ahmedabad', 'Chandigarh College of Architecture', 'BMS College of Architecture Bangalore'],
+    description: <>NATA is the national entrance examination for admission into 5-year Bachelor of Architecture (B.Arch) degree courses across India, administered by the Council of Architecture.</>
+  },
+  'lsat-india': {
+    slug: 'lsat-india',
+    title: 'LSAT India',
+    fullName: 'Law School Admission Test India',
+    stream: 'Law',
+    color: '#4338ca',
+    conductedBy: <a href="https://www.discoverlaw.in" target="_blank" rel="noopener noreferrer" className="hover:underline">Law School Admission Council (LSAC)</a>,
+    mode: 'Online Remote Proctored Test',
+    frequency: 'Twice a year (January & May sessions)',
+    duration: '2 Hours 20 Minutes',
+    totalMarks: 'Scaled Score (420-480)',
+    sections: ['Analytical Reasoning', 'Logical Reasoning (1)', 'Logical Reasoning (2)', 'Reading Comprehension'],
+    eligibility: [
+      'For 5-year Integrated LLB: 10+2 with minimum 45% aggregate',
+      'For 3-year LLB: Graduation from recognized university',
+      'No age restriction'
+    ],
+    importantDates: [
+      { label: 'January Session Registration', date: 'August - December 2026' },
+      { label: 'January Session Exam', date: 'January 2027' },
+      { label: 'May Session Registration', date: 'January - April 2027' },
+      { label: 'May Session Exam', date: 'May 2027' },
+      { label: 'Scorecards Released', date: 'June 2027' }
+    ],
+    syllabus: [
+      { subject: 'Logical Reasoning', topics: ['Recognizing Arguments', 'Drawing Conclusions', 'Identifying Assumptions', 'Flaws in Reasoning'] },
+      { subject: 'Analytical Reasoning', topics: ['Logic Games', 'Grouping and Ordering', 'Spatial and Conditional Logic'] },
+      { subject: 'Reading Comprehension', topics: ['Law, Ethics, Social Sciences, Philosophy Excerpts'] }
+    ],
+    preparationTips: [
+      'LSAT India has no GK or Math questions — it tests purely reasoning and critical reading',
+      'Practice diagramming rules for Analytical Reasoning logic games',
+      'Focus on precision and speed without making outside factual assumptions'
+    ],
+    topColleges: ['Jindal Global Law School (JGLS)', 'BML Munjal University', 'Bennett University', 'UPES Dehradun', 'Alliance School of Law'],
+    description: <>LSAT India is a premier entrance exam for top private law colleges in India, including Jindal Global Law School. It measures critical thinking and reasoning skills needed for legal studies.</>
+  },
+  'nmat': {
+    slug: 'nmat',
+    title: 'NMAT',
+    fullName: 'NMAT by GMAC',
+    stream: 'Management',
+    color: '#d97706',
+    conductedBy: <a href="https://www.mba.com/exams/nmat" target="_blank" rel="noopener noreferrer" className="hover:underline">Graduate Management Admission Council (GMAC)</a>,
+    mode: 'Computer Based Test (CBT) at Test Centers or Online Proctored',
+    frequency: '75-day test window (October - December)',
+    duration: '2 Hours (120 Minutes)',
+    totalMarks: '360',
+    sections: ['Language Skills', 'Quantitative Skills', 'Logical Reasoning'],
+    eligibility: [
+      'Bachelor’s degree in any discipline with minimum 50% aggregate marks',
+      'Final year undergraduate students can apply',
+      'Candidate may attempt the exam up to 3 times (1 main attempt + 2 retakes)'
+    ],
+    importantDates: [
+      { label: 'Registration Window', date: 'August - October 2026' },
+      { label: 'Exam Window', date: 'October - December 2026' },
+      { label: 'Retake Scheduling', date: 'October - December 2026' },
+      { label: 'Final Scorecards', date: 'January 2027' },
+      { label: 'NMIMS CD / PI Rounds', date: 'February - March 2027' }
+    ],
+    syllabus: [
+      { subject: 'Language Skills', topics: ['Reading Comprehension', 'Para Jumbles', 'Vocabulary', 'Sentence Completion', 'Error Spotting'] },
+      { subject: 'Quantitative Skills', topics: ['Arithmetic', 'Data Interpretation', 'Algebra', 'Trigonometry', 'Number Systems', 'Probability'] },
+      { subject: 'Logical Reasoning', topics: ['Critical Reasoning', 'Analytical Puzzles', 'Deductive Logic', 'Course of Action'] }
+    ],
+    preparationTips: [
+      'NMAT has no negative marking — answer every question before section time expires',
+      'Choose section order carefully to build confidence early in the test',
+      'Practice strict sectional time management since sections have dedicated timers'
+    ],
+    topColleges: ['NMIMS Mumbai', 'K J Somaiya Institute of Management', 'XIM University Bhubaneswar', 'SDA Bocconi Asia Center', 'TAPMI Bengaluru'],
+    description: <>NMAT by GMAC is the entrance exam for NMIMS and other leading business schools in India and abroad. It is a candidate-friendly exam allowing up to 3 attempts with self-scheduled dates.</>
+  },
+  'uceed': {
+    slug: 'uceed',
+    title: 'UCEED',
+    fullName: 'Undergraduate Common Entrance Examination for Design',
+    stream: 'Design',
+    color: '#f43f5e',
+    conductedBy: <a href="https://uceed.iitb.ac.in" target="_blank" rel="noopener noreferrer" className="hover:underline">IIT Bombay</a>,
+    mode: 'Computer Based Test (Part A) + Paper Based Drawing (Part B)',
+    frequency: 'Once a year (January)',
+    duration: '3 Hours',
+    totalMarks: '300 (Part A: 240, Part B: 60)',
+    sections: ['Visualization and Spatial Ability', 'Observation and Design Sensitivity', 'Environmental and Social Awareness', 'Analytical and Logical Reasoning', 'Drawing / Design Aptitude'],
+    eligibility: [
+      'Passed Class 12th from any stream (Science, Commerce, Arts & Humanities)',
+      'Born on or after October 1, 2002 (with 5-year relaxation for SC/ST/PwD)',
+      'Maximum 2 consecutive attempts'
+    ],
+    importantDates: [
+      { label: 'Registration Opens', date: 'October 2026' },
+      { label: 'Last Date to Apply', date: 'November 2026' },
+      { label: 'Admit Card Release', date: 'January 2027' },
+      { label: 'Exam Date', date: 'January 2027' },
+      { label: 'Result Declaration', date: 'March 2027' },
+      { label: 'B.Des Seat Allotment', date: 'April - July 2027' }
+    ],
+    syllabus: [
+      { subject: 'Part A (CBT)', topics: ['Spatial Visualization', 'Observation Sensitivity', 'Logical Deduction', 'Problem Solving', 'Design History'] },
+      { subject: 'Part B (Drawing)', topics: ['Perspective Sketching', 'Proportion & Line Quality', 'Scene Visualization', 'Product Ideation'] }
+    ],
+    preparationTips: [
+      'Part B drawing is evaluated only if you clear the cutoff in Part A — prepare both equally',
+      'Solve previous 8 years of official UCEED question papers under timed conditions',
+      'Work on perspective drawing (1-point, 2-point, and human anatomy proportions)'
+    ],
+    topColleges: ['IIT Bombay', 'IIT Delhi', 'IIT Guwahati', 'IIT Hyderabad', 'IIT Roorkee', 'IIITDM Jabalpur'],
+    description: <>UCEED is conducted by IIT Bombay for admission to Bachelor of Design (B.Des) programs at premier IITs and participating design colleges in India.</>
+  },
+  'ailet': {
+    slug: 'ailet',
+    title: 'AILET',
+    fullName: 'All India Law Entrance Test',
+    stream: 'Law',
+    color: '#4f46e5',
+    conductedBy: <a href="https://nationallawuniversitydelhi.in" target="_blank" rel="noopener noreferrer" className="hover:underline">National Law University, Delhi (NLU Delhi)</a>,
+    mode: 'Pen and Paper (OMR)',
+    frequency: 'Once a year (December)',
+    duration: '2 Hours (120 Minutes)',
+    totalMarks: '150',
+    sections: ['English Language', 'Current Affairs & General Knowledge', 'Logical Reasoning'],
+    eligibility: [
+      'For B.A. LL.B. (Hons.): 10+2 with minimum 45% marks (40% for SC/ST/PwD)',
+      'Candidates appearing in 12th board exams in 2027 are eligible',
+      'No upper age limit'
+    ],
+    importantDates: [
+      { label: 'Registration Opens', date: 'August 2026' },
+      { label: 'Last Date to Apply', date: 'November 2026' },
+      { label: 'Exam Date', date: 'December 2026' },
+      { label: 'Result Declaration', date: 'December 2026 / January 2027' },
+      { label: 'Counselling & Admissions', date: 'January - May 2027' }
+    ],
+    syllabus: [
+      { subject: 'Logical Reasoning (70 marks)', topics: ['Critical Reasoning', 'Legal Principles & Case Scenarios', 'Deductive Logic', 'Analogies'] },
+      { subject: 'English (50 marks)', topics: ['Reading Comprehension', 'Vocabulary', 'Contextual Inference', 'Grammar'] },
+      { subject: 'Current Affairs & GK (30 marks)', topics: ['National & International Events', 'Legal Developments', 'Judicial Appointments', 'Constitutional Updates'] }
+    ],
+    preparationTips: [
+      'Logical Reasoning forms nearly 50% of the entire paper — practice critical reasoning daily',
+      'Read editorials and legal columns in The Hindu or Indian Express to tackle dense reading passages',
+      'Take 20+ full-length mock exams to master the strict 120-minute time constraint'
+    ],
+    topColleges: ['National Law University Delhi (NLU Delhi)'],
+    description: <>AILET is the exclusive entrance test conducted by NLU Delhi for admission to its five-year B.A. LL.B. (Hons.), LL.M., and Ph.D. programs.</>
+  },
+  'mat': {
+    slug: 'mat',
+    title: 'MAT',
+    fullName: 'Management Aptitude Test',
+    stream: 'Management',
+    color: '#b45309',
+    conductedBy: <a href="https://mat.aima.in" target="_blank" rel="noopener noreferrer" className="hover:underline">All India Management Association (AIMA)</a>,
+    mode: 'CBT (Computer Based), PBT (Paper Based), or IBT (Internet Based)',
+    frequency: '4 Sessions a Year (February, May, September, December)',
+    duration: '2 Hours (120 Minutes)',
+    totalMarks: '200 Scaled (Composite 800)',
+    sections: ['Language Comprehension', 'Mathematical Skills', 'Data Analysis & Sufficiency', 'Intelligence & Critical Reasoning', 'Economic & Business Environment'],
+    eligibility: [
+      'Graduates in any discipline from a recognized university',
+      'Final year undergraduate students can apply',
+      'No minimum percentage required to register for MAT'
+    ],
+    importantDates: [
+      { label: 'Feb 2027 Session Registration', date: 'December 2026 - February 2027' },
+      { label: 'Feb 2027 Session Exam', date: 'February 2027' },
+      { label: 'May 2027 Session Registration', date: 'March - May 2027' },
+      { label: 'May 2027 Session Exam', date: 'May 2027' },
+      { label: 'Scorecards Released', date: 'Within 3 weeks of exam date' }
+    ],
+    syllabus: [
+      { subject: 'Language Comprehension', topics: ['Reading Comprehension', 'Sentence Correction', 'Idioms & Phrases', 'Para Jumbles'] },
+      { subject: 'Mathematical Skills', topics: ['Arithmetic', 'Geometry', 'Algebra', 'Number Systems', 'Percentages'] },
+      { subject: 'Data Analysis & Sufficiency', topics: ['Bar Graphs', 'Pie Charts', 'Tables', 'Data Sufficiency'] }
+    ],
+    preparationTips: [
+      'General business awareness does not affect composite score but helps in GD-PI',
+      'Speed and basic formula clarity are enough to score 90+ percentile in MAT',
+      'Solve past 5 years of MAT memory-based papers to gauge recurring difficulty'
+    ],
+    topColleges: ['Christ University Bengaluru', 'Amity Business School', 'BIMTECH Greater Noida', 'JIMS Rohini', 'XIME Bengaluru'],
+    description: <>MAT is a national entrance exam administered by AIMA for MBA and PGDM admissions across more than 600 business schools in India.</>
+  },
+  'jipmer-nursing': {
+    slug: 'jipmer-nursing',
+    title: 'JIPMER Nursing',
+    fullName: 'JIPMER B.Sc Nursing & Allied Sciences Entrance',
+    stream: 'Medical',
+    color: '#059669',
+    conductedBy: <a href="https://jipmer.edu.in" target="_blank" rel="noopener noreferrer" className="hover:underline">JIPMER Puducherry</a>,
+    mode: 'Based on NEET UG scores / JIPMER Entrance Examination',
+    frequency: 'Once a year (July)',
+    duration: '2 Hours (if entrance held) / NEET score merit',
+    totalMarks: '100 / NEET Percentile',
+    sections: ['Physics', 'Chemistry', 'Biology', 'English & General Aptitude'],
+    eligibility: [
+      'Passed 10+2 with Physics, Chemistry, Biology/Biotechnology, and English',
+      'Minimum aggregate 50% in PCB (40% for SC/ST)',
+      'Minimum age: 17 years as on December 31, 2027'
+    ],
+    importantDates: [
+      { label: 'Application Opens', date: 'April 2027' },
+      { label: 'Application Deadline', date: 'May 2027' },
+      { label: 'Exam / Merit List', date: 'July 2027' },
+      { label: 'Counselling Begins', date: 'August 2027' }
+    ],
+    syllabus: [
+      { subject: 'Biology', topics: ['Human Physiology', 'Cell Biology', 'Genetics', 'Ecology', 'Biotechnology'] },
+      { subject: 'Physics & Chemistry', topics: ['Class 11 and 12 NCERT core concepts'] }
+    ],
+    preparationTips: [
+      'Thoroughly study Class 11 & 12 NCERT Biology',
+      'Keep up with basic medical and healthcare general knowledge',
+      'Practice clinical problem-solving questions'
+    ],
+    topColleges: ['JIPMER Puducherry', 'JIPMER Karaikal'],
+    description: <>JIPMER Nursing is the prestigious route to undergraduate nursing and allied health science courses at Jawaharlal Institute of Postgraduate Medical Education and Research, Puducherry.</>
+  },
+  'cmat': {
+    slug: 'cmat',
+    title: 'CMAT',
+    fullName: 'Common Management Admission Test',
+    stream: 'Management',
+    color: '#f59e0b',
+    conductedBy: <a href="https://cmat.nta.nic.in" target="_blank" rel="noopener noreferrer" className="hover:underline">National Testing Agency (NTA)</a>,
+    mode: 'Computer Based Test (CBT)',
+    frequency: 'Once a year (May)',
+    duration: '3 Hours (180 Minutes)',
+    totalMarks: '400',
+    sections: ['Quantitative Techniques & DI', 'Logical Reasoning', 'Language Comprehension', 'General Awareness', 'Innovation & Entrepreneurship'],
+    eligibility: [
+      'Bachelor\'s degree in any discipline from a recognized university',
+      'Final year undergraduate students are eligible',
+      'No age restriction'
+    ],
+    importantDates: [
+      { label: 'Registration Window', date: 'February - March 2027' },
+      { label: 'Admit Card Release', date: 'April 2027' },
+      { label: 'Exam Date', date: 'May 2027' },
+      { label: 'Result Declaration', date: 'June 2027' }
+    ],
+    syllabus: [
+      { subject: 'Quantitative & DI', topics: ['Arithmetic', 'Algebra', 'Geometry', 'Data Tables', 'Graphs'] },
+      { subject: 'Logical Reasoning', topics: ['Linear Sequencing', 'Syllogisms', 'Cause and Effect', 'Blood Relations'] },
+      { subject: 'Innovation & Entrepreneurship', topics: ['Startups in India', 'Government Schemes', 'Business Terminology', 'Funding Stages'] }
+    ],
+    preparationTips: [
+      'Innovation & Entrepreneurship is unique to CMAT — read startup success stories and Government schemes like Startup India',
+      'CMAT gives ample time (180 minutes for 100 questions) — focus on accuracy over speed',
+      'General Awareness section tests both static GK and recent business news'
+    ],
+    topColleges: ['JBIMS Mumbai (MMS)', 'SIMSREE Mumbai', 'GIM Goa', 'Great Lakes Institute of Management', 'K J Somaiya Institute of Management'],
+    description: <>CMAT is a national-level entrance examination conducted by NTA for admission into AICTE-approved management programs across India.</>
+  },
+  'ceed': {
+    slug: 'ceed',
+    title: 'CEED',
+    fullName: 'Common Entrance Examination for Design',
+    stream: 'Design',
+    color: '#e11d48',
+    conductedBy: <a href="https://ceed.iitb.ac.in" target="_blank" rel="noopener noreferrer" className="hover:underline">IIT Bombay</a>,
+    mode: 'Computer Based Test (Part A) + Offline Paper Based (Part B)',
+    frequency: 'Once a year (January)',
+    duration: '3 Hours',
+    totalMarks: '200',
+    sections: ['Part A: Visualization, Spatial Ability, Observation', 'Part B: Drawing, Creativity, Communication, Problem Solving'],
+    eligibility: [
+      'Degree/diploma/postgraduate degree of minimum 3 years duration',
+      'Final year students are eligible',
+      'No age limit and no restriction on number of attempts'
+    ],
+    importantDates: [
+      { label: 'Registration Opens', date: 'October 2026' },
+      { label: 'Last Date to Apply', date: 'November 2026' },
+      { label: 'Exam Date', date: 'January 2027' },
+      { label: 'Result Declaration', date: 'March 2027' }
+    ],
+    syllabus: [
+      { subject: 'Part A (Visual & Spatial)', topics: ['Visual Perception', 'Spatial Reasoning', 'Color Sensitivity', 'Design Awareness'] },
+      { subject: 'Part B (Design Skills)', topics: ['Drawing & Perspective', 'Creativity & Lateral Thinking', 'Product & Industrial Design Ideation'] }
+    ],
+    preparationTips: [
+      'Build a portfolio of sketches, 3D renderings, and product concept diagrams',
+      'Practice quick visual storytelling and user journey sketches',
+      'Solve past 10 years CEED papers'
+    ],
+    topColleges: ['IDC School of Design (IIT Bombay)', 'IIT Delhi', 'IISc Bangalore (CPDM)', 'IIT Guwahati', 'IIT Kanpur'],
+    description: <>CEED is conducted by IIT Bombay to evaluate candidates for admission to Master of Design (M.Des) and Ph.D. programs in design at premier IITs and IISc.</>
+  },
+  'slat': {
+    slug: 'slat',
+    title: 'SLAT',
+    fullName: 'Symbiosis Law Admission Test',
+    stream: 'Law',
+    color: '#6366f1',
+    conductedBy: <a href="https://set-test.org" target="_blank" rel="noopener noreferrer" className="hover:underline">Symbiosis International (Deemed University)</a>,
+    mode: 'Computer Based Test (CBT)',
+    frequency: 'Once a year (May)',
+    duration: '60 Minutes',
+    totalMarks: '60',
+    sections: ['Logical Reasoning', 'Legal Reasoning', 'Analytical Reasoning', 'Reading Comprehension', 'General Knowledge'],
+    eligibility: [
+      'Passed 10+2 with minimum 45% marks (40% for SC/ST)',
+      'Final year 12th students are eligible',
+      'No upper age limit'
+    ],
+    importantDates: [
+      { label: 'Registration Window', date: 'December 2026 - April 2027' },
+      { label: 'Exam Dates (Test 1 & 2)', date: 'May 2027' },
+      { label: 'Result Declaration', date: 'May 2027' },
+      { label: 'PIWAT Rounds', date: 'June 2027' }
+    ],
+    syllabus: [
+      { subject: 'Legal Reasoning', topics: ['Legal Principles', 'Law of Torts', 'Constitutional Law', 'Contracts'] },
+      { subject: 'Logical & Analytical', topics: ['Series', 'Puzzles', 'Critical Reasoning', 'Syllogisms'] },
+      { subject: 'General Knowledge', topics: ['Current Affairs', 'Static GK', 'Legal Current Events'] }
+    ],
+    preparationTips: [
+      'SLAT is 60 questions in 60 minutes — high speed and instant decision-making are necessary',
+      'Legal reasoning passages test application of given principles rather than prior legal knowledge',
+      'Prepare well for the subsequent Personal Interaction and Writing Ability Test (PIWAT)'
+    ],
+    topColleges: ['Symbiosis Law School (SLS) Pune', 'SLS Noida', 'SLS Hyderabad', 'SLS Nagpur'],
+    description: <>SLAT is the exclusive entrance test for admission to B.A. LL.B. (Hons.) and B.B.A. LL.B. (Hons.) programs offered by Symbiosis Law Schools across India.</>
+  },
+  'mht-cet': {
+    slug: 'mht-cet',
+    title: 'MHT CET',
+    fullName: 'Maharashtra Common Entrance Test (Engineering & Pharmacy)',
+    stream: 'Engineering',
+    color: '#0284c7',
+    conductedBy: <a href="https://cetcell.mahacet.org" target="_blank" rel="noopener noreferrer" className="hover:underline">State Common Entrance Test Cell, Maharashtra</a>,
+    mode: 'Computer Based Test (CBT)',
+    frequency: 'Once a year (April - May)',
+    duration: '3 Hours (180 Minutes)',
+    totalMarks: '200 (PCM/PCB)',
+    sections: ['Mathematics (100 Marks)', 'Physics & Chemistry (100 Marks)'],
+    eligibility: [
+      'Passed 10+2 with Physics and Mathematics (for PCM) with minimum 45% (40% for reserved)',
+      'Maharashtra State candidature candidates get preferential quota',
+      'All India candidates can apply through JEE Main or MHT CET'
+    ],
+    importantDates: [
+      { label: 'Registration Window', date: 'January - March 2027' },
+      { label: 'Admit Card Release', date: 'April 2027' },
+      { label: 'PCM Exam Window', date: 'April - May 2027' },
+      { label: 'PCB Exam Window', date: 'April - May 2027' },
+      { label: 'Result Declaration', date: 'June 2027' },
+      { label: 'CAP Rounds Counselling', date: 'July - August 2027' }
+    ],
+    syllabus: [
+      { subject: 'Mathematics (Class 11 & 12 Maharashtra State Board)', topics: ['Calculus', 'Vectors & 3D Geometry', 'Trigonometry', 'Probability Distributions', 'Matrices'] },
+      { subject: 'Physics & Chemistry', topics: ['Rotational Dynamics', 'Electrostatics', 'Thermodynamics', 'Organic Reactions', 'p/d/f Block'] }
+    ],
+    preparationTips: [
+      'Questions are strictly aligned with the Maharashtra State Board textbook syllabus — memorize state board books thoroughly',
+      'No negative marking — attempt all questions strategically',
+      'Mathematics questions carry 2 marks each — dedicate adequate focus to Math'
+    ],
+    topColleges: ['COEP Technological University Pune', 'VJTI Mumbai', 'ICT Mumbai', 'SPIT Mumbai', 'MIT-WPU Pune', 'PICT Pune'],
+    description: <>MHT CET is the entrance examination conducted by the Maharashtra State CET Cell for admission into B.Tech and B.Pharm programs in premier state engineering colleges.</>
   }
 }
+

@@ -3,15 +3,15 @@ import Link from 'next/link'
 import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 
 export const metadata: Metadata = {
-  title: 'JEE Advanced 2026 — Eligibility, Syllabus, Dates & Preparation Tips',
-  description: 'Complete guide to Joint Entrance Examination Advanced (JEE Advanced) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top IITs.',
-  keywords: ["JEE Advanced","JEE Advanced 2026","IIT admission","JEE Advanced syllabus","JEE Advanced eligibility","IIT cutoff"],
+  title: 'JEE Advanced 2027 — Eligibility, Syllabus, Dates & Preparation Tips',
+  description: 'Complete guide to Joint Entrance Examination Advanced (JEE Advanced) 2027. Get eligibility criteria, syllabus, exam dates, preparation tips, and top IITs.',
+  keywords: ["JEE Advanced","JEE Advanced 2027","IIT admission","JEE Advanced syllabus","JEE Advanced eligibility","IIT cutoff"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/jee-advanced'
   },
   openGraph: {
-    title: 'JEE Advanced 2026 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
-    description: 'Complete guide to Joint Entrance Examination Advanced (JEE Advanced) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top IITs.',
+    title: 'JEE Advanced 2027 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
+    description: 'Complete guide to Joint Entrance Examination Advanced (JEE Advanced) 2027. Get eligibility criteria, syllabus, exam dates, preparation tips, and top IITs.',
     url: 'https://promoteducation.com/exams/jee-advanced',
     type: 'article',
   }
@@ -36,11 +36,11 @@ const exam: ExamInfo = {
     'Maximum 2 attempts in consecutive years',
   ],
   importantDates: [
-    { label: 'JEE Main Result', date: 'April 2026' },
-    { label: 'Registration Starts', date: 'April 2026' },
-    { label: 'Exam Date', date: 'May 2026' },
-    { label: 'Result Declaration', date: 'June 2026' },
-    { label: 'JoSAA Counselling', date: 'June 2026' },
+    { label: 'JEE Main Result', date: 'April 2027' },
+    { label: 'Registration Starts', date: 'April 2027' },
+    { label: 'Exam Date', date: 'May 2027' },
+    { label: 'Result Declaration', date: 'June 2027' },
+    { label: 'JoSAA Counselling', date: 'June-July 2027' },
   ],
   syllabus: [
     { subject: 'Physics', topics: ['Mechanics', 'Thermal Physics', 'Electricity & Magnetism', 'Optics', 'Modern Physics'] },

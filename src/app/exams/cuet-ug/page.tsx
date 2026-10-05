@@ -3,15 +3,15 @@ import Link from 'next/link'
 import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 
 export const metadata: Metadata = {
-  title: 'CUET UG 2026 — Eligibility, Syllabus, Dates & Preparation Tips',
-  description: 'Complete guide to Common University Entrance Test (CUET UG) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top universities.',
-  keywords: ["CUET UG","CUET UG 2026","central university admission","CUET syllabus","CUET eligibility","NTA CUET"],
+  title: 'CUET UG 2027 — Eligibility, Syllabus, Dates & Preparation Tips',
+  description: 'Complete guide to Common University Entrance Test (CUET UG) 2027. Get eligibility criteria, syllabus, exam dates, preparation tips, and top universities.',
+  keywords: ["CUET UG","CUET UG 2027","central university admission 2027","CUET syllabus","CUET eligibility","NTA CUET"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/cuet-ug'
   },
   openGraph: {
-    title: 'CUET UG 2026 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
-    description: 'Complete guide to Common University Entrance Test (CUET UG) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top universities.',
+    title: 'CUET UG 2027 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
+    description: 'Complete guide to Common University Entrance Test (CUET UG) 2027. Get eligibility criteria, syllabus, exam dates, preparation tips, and top universities.',
     url: 'https://promoteducation.com/exams/cuet-ug',
     type: 'article',
   }
@@ -36,10 +36,10 @@ const exam: ExamInfo = {
     'Final year students are also eligible',
   ],
   importantDates: [
-    { label: 'Registration Window', date: 'February - March 2026' },
-    { label: 'Exam Dates', date: 'May 2026' },
-    { label: 'Result Declaration', date: 'June 2026' },
-    { label: 'Counselling Starts', date: 'July 2026' },
+    { label: 'Registration Window', date: 'February - March 2027' },
+    { label: 'Exam Dates', date: 'May 2027' },
+    { label: 'Result Declaration', date: 'June 2027' },
+    { label: 'Counselling Starts', date: 'July 2027' },
   ],
   syllabus: [
     { subject: 'Section IA & IB (Languages)', topics: ['Reading Comprehension', 'Literary Aptitude', 'Vocabulary'] },

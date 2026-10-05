@@ -16,157 +16,157 @@ const allExams = [
   {
     name: 'JEE Main', fullName: 'Joint Entrance Examination Main', stream: 'Engineering',
     icon: GraduationCap, applicants: '12L+', slug: 'jee-main', color: 'sky',
-    date: 'Jan & Apr 2026', status: 'Upcoming', conductedBy: 'NTA'
+    date: 'Jan & Apr 2027', status: 'Upcoming', conductedBy: 'NTA'
   },
   {
     name: 'NEET UG', fullName: 'National Eligibility cum Entrance Test', stream: 'Medical',
     icon: Stethoscope, applicants: '20L+', slug: 'neet-ug', color: 'emerald',
-    date: 'May 2026', status: 'Open', conductedBy: 'NTA'
+    date: 'May 2027', status: 'Upcoming', conductedBy: 'NTA'
   },
   {
     name: 'CAT', fullName: 'Common Admission Test', stream: 'Management',
     icon: Briefcase, applicants: '2.8L+', slug: 'cat', color: 'amber',
-    date: 'Nov 2025', status: 'Closed', conductedBy: 'IIMs'
+    date: 'Nov 2026', status: 'Upcoming', conductedBy: 'IIMs'
   },
   {
     name: 'GATE', fullName: 'Graduate Aptitude Test in Engineering', stream: 'Engineering',
     icon: FlaskConical, applicants: '8L+', slug: 'gate', color: 'violet',
-    date: 'Feb 2026', status: 'Upcoming', conductedBy: 'IISc'
+    date: 'Feb 2027', status: 'Upcoming', conductedBy: 'IISc'
   },
   {
     name: 'CLAT', fullName: 'Common Law Admission Test', stream: 'Law',
     icon: Scale, applicants: '70K+', slug: 'clat', color: 'indigo',
-    date: 'Dec 2025', status: 'Closed', conductedBy: 'NLU'
+    date: 'Dec 2026', status: 'Upcoming', conductedBy: 'NLU'
   },
   {
     name: 'NIFT', fullName: 'NIFT Entrance Examination', stream: 'Design',
     icon: Palette, applicants: '40K+', slug: 'nift', color: 'rose',
-    date: 'Jan 2026', status: 'Upcoming', conductedBy: 'NIFT'
+    date: 'Feb 2027', status: 'Upcoming', conductedBy: 'NIFT'
   },
   {
     name: 'CUET UG', fullName: 'Common University Entrance Test', stream: 'General',
     icon: BookOpen, applicants: '14L+', slug: 'cuet-ug', color: 'cyan',
-    date: 'May 2026', status: 'Upcoming', conductedBy: 'NTA'
+    date: 'May 2027', status: 'Upcoming', conductedBy: 'NTA'
   },
   {
     name: 'INI CET', fullName: 'INI Combined Entrance Test', stream: 'Medical',
     icon: Stethoscope, applicants: '1.5L+', slug: 'ini-cet', color: 'emerald',
-    date: 'Nov 2025', status: 'Closed', conductedBy: 'AIIMS'
+    date: 'Nov 2026 & May 2027', status: 'Upcoming', conductedBy: 'AIIMS'
   },
   {
     name: 'XAT', fullName: 'Xavier Aptitude Test', stream: 'Management',
     icon: Briefcase, applicants: '1L+', slug: 'xat', color: 'amber',
-    date: 'Jan 2026', status: 'Upcoming', conductedBy: 'XLRI'
+    date: 'Jan 2027', status: 'Upcoming', conductedBy: 'XLRI'
   },
   {
     name: 'BITSAT', fullName: 'BITS Admission Test', stream: 'Engineering',
     icon: GraduationCap, applicants: '3L+', slug: 'bitsat', color: 'sky',
-    date: 'June 2026', status: 'Upcoming', conductedBy: 'BITS'
+    date: 'May-June 2027', status: 'Upcoming', conductedBy: 'BITS'
   },
   {
     name: 'NEET PG', fullName: 'NEET for Postgraduates', stream: 'Medical',
     icon: Stethoscope, applicants: '2L+', slug: 'neet-pg', color: 'emerald',
-    date: 'June 2026', status: 'Upcoming', conductedBy: 'NBE'
+    date: 'June 2027', status: 'Upcoming', conductedBy: 'NBE'
   },
   {
     name: 'VITEEE', fullName: 'VIT Engineering Entrance Exam', stream: 'Engineering',
     icon: GraduationCap, applicants: '2.5L+', slug: 'viteee', color: 'sky',
-    date: 'Apr 2026', status: 'Upcoming', conductedBy: 'VIT'
+    date: 'Apr 2027', status: 'Upcoming', conductedBy: 'VIT'
   },
   {
     name: 'SNAP', fullName: 'Symbiosis National Aptitude Test', stream: 'Management',
     icon: Briefcase, applicants: '80K+', slug: 'snap', color: 'amber',
-    date: 'Dec 2025', status: 'Closed', conductedBy: 'Symbiosis'
+    date: 'Dec 2026', status: 'Upcoming', conductedBy: 'Symbiosis'
   },
   {
     name: 'NATA', fullName: 'National Aptitude Test in Architecture', stream: 'Design',
     icon: Palette, applicants: '50K+', slug: 'nata', color: 'rose',
-    date: 'Apr-July 2026', status: 'Upcoming', conductedBy: 'CoA'
+    date: 'Apr-July 2027', status: 'Upcoming', conductedBy: 'CoA'
   },
   {
     name: 'LSAT India', fullName: 'Law School Admission Test India', stream: 'Law',
     icon: Scale, applicants: '30K+', slug: 'lsat-india', color: 'indigo',
-    date: 'Jan & May 2026', status: 'Upcoming', conductedBy: 'LSAC'
+    date: 'Jan & May 2027', status: 'Upcoming', conductedBy: 'LSAC'
   },
   {
     name: 'COMEDK', fullName: 'COMEDK UGET', stream: 'Engineering',
     icon: GraduationCap, applicants: '80K+', slug: 'comedk', color: 'sky',
-    date: 'May 2026', status: 'Upcoming', conductedBy: 'COMEDK'
+    date: 'May 2027', status: 'Upcoming', conductedBy: 'COMEDK'
   },
   {
     name: 'AIIMS Nursing', fullName: 'AIIMS B.Sc Nursing Entrance', stream: 'Medical',
     icon: Stethoscope, applicants: '1L+', slug: 'aiims-entrance', color: 'emerald',
-    date: 'June 2026', status: 'Upcoming', conductedBy: 'AIIMS'
+    date: 'June 2027', status: 'Upcoming', conductedBy: 'AIIMS'
   },
   {
     name: 'NMAT', fullName: 'NMAT by GMAC', stream: 'Management',
     icon: Briefcase, applicants: '90K+', slug: 'nmat', color: 'amber',
-    date: 'Oct-Dec 2025', status: 'Closed', conductedBy: 'GMAC'
+    date: 'Oct-Dec 2026', status: 'Upcoming', conductedBy: 'GMAC'
   },
   {
     name: 'UCEED', fullName: 'Undergraduate Common Entrance Exam for Design', stream: 'Design',
     icon: Palette, applicants: '15K+', slug: 'uceed', color: 'rose',
-    date: 'Jan 2026', status: 'Upcoming', conductedBy: 'IITB'
+    date: 'Jan 2027', status: 'Upcoming', conductedBy: 'IITB'
   },
   {
     name: 'AILET', fullName: 'All India Law Entrance Test', stream: 'Law',
     icon: Scale, applicants: '20K+', slug: 'ailet', color: 'indigo',
-    date: 'Dec 2025', status: 'Closed', conductedBy: 'NLU Delhi'
+    date: 'Dec 2026', status: 'Upcoming', conductedBy: 'NLU Delhi'
   },
   {
     name: 'WBJEE', fullName: 'West Bengal Joint Entrance Examination', stream: 'Engineering',
     icon: GraduationCap, applicants: '1L+', slug: 'wbjee', color: 'sky',
-    date: 'Apr 2026', status: 'Upcoming', conductedBy: 'WBJEEB'
+    date: 'Apr 2027', status: 'Upcoming', conductedBy: 'WBJEEB'
   },
   {
     name: 'INI SS', fullName: 'INI Super-Specialty Entrance Test', stream: 'Medical',
     icon: Stethoscope, applicants: '20K+', slug: 'ini-ss', color: 'emerald',
-    date: 'Oct 2025', status: 'Closed', conductedBy: 'AIIMS'
+    date: 'Oct 2026 & Apr 2027', status: 'Upcoming', conductedBy: 'AIIMS'
   },
   {
     name: 'MAT', fullName: 'Management Aptitude Test', stream: 'Management',
     icon: Briefcase, applicants: '1.5L+', slug: 'mat', color: 'amber',
-    date: 'Feb & May 2026', status: 'Upcoming', conductedBy: 'AIMA'
+    date: 'Feb & May 2027', status: 'Upcoming', conductedBy: 'AIMA'
   },
   {
     name: 'NID DAT', fullName: 'NID Design Aptitude Test', stream: 'Design',
     icon: Palette, applicants: '25K+', slug: 'nid-dat', color: 'rose',
-    date: 'Dec 2025', status: 'Closed', conductedBy: 'NID'
+    date: 'Dec 2026 / Jan 2027', status: 'Upcoming', conductedBy: 'NID'
   },
   {
     name: 'MH CET Law', fullName: 'Maharashtra Common Entrance Test for Law', stream: 'Law',
     icon: Scale, applicants: '40K+', slug: 'mhcet-law', color: 'indigo',
-    date: 'Apr 2026', status: 'Upcoming', conductedBy: 'CET Cell'
+    date: 'Apr-May 2027', status: 'Upcoming', conductedBy: 'CET Cell'
   },
   {
     name: 'SRMJEEE', fullName: 'SRM Joint Engineering Entrance Exam', stream: 'Engineering',
     icon: GraduationCap, applicants: '1.5L+', slug: 'srmjeee', color: 'sky',
-    date: 'Apr-June 2026', status: 'Upcoming', conductedBy: 'SRM'
+    date: 'Apr-June 2027', status: 'Upcoming', conductedBy: 'SRM'
   },
   {
     name: 'JIPMER Nursing', fullName: 'JIPMER B.Sc Nursing Entrance', stream: 'Medical',
     icon: Stethoscope, applicants: '40K+', slug: 'jipmer-nursing', color: 'emerald',
-    date: 'July 2026', status: 'Upcoming', conductedBy: 'JIPMER'
+    date: 'July 2027', status: 'Upcoming', conductedBy: 'JIPMER'
   },
   {
     name: 'CMAT', fullName: 'Common Management Admission Test', stream: 'Management',
     icon: Briefcase, applicants: '70K+', slug: 'cmat', color: 'amber',
-    date: 'May 2026', status: 'Upcoming', conductedBy: 'NTA'
+    date: 'May 2027', status: 'Upcoming', conductedBy: 'NTA'
   },
   {
     name: 'CEED', fullName: 'Common Entrance Exam for Design', stream: 'Design',
     icon: Palette, applicants: '10K+', slug: 'ceed', color: 'rose',
-    date: 'Jan 2026', status: 'Upcoming', conductedBy: 'IITB'
+    date: 'Jan 2027', status: 'Upcoming', conductedBy: 'IITB'
   },
   {
     name: 'SLAT', fullName: 'Symbiosis Law Admission Test', stream: 'Law',
     icon: Scale, applicants: '25K+', slug: 'slat', color: 'indigo',
-    date: 'May 2026', status: 'Upcoming', conductedBy: 'Symbiosis'
+    date: 'May 2027', status: 'Upcoming', conductedBy: 'Symbiosis'
   },
   {
     name: 'MHT CET', fullName: 'Maharashtra Common Entrance Test', stream: 'Engineering',
     icon: GraduationCap, applicants: '6L+', slug: 'mht-cet', color: 'sky',
-    date: 'Apr-May 2026', status: 'Upcoming', conductedBy: 'CET Cell'
+    date: 'Apr-May 2027', status: 'Upcoming', conductedBy: 'CET Cell'
   }
 ]
 
@@ -201,10 +201,10 @@ export default function ExamsListPage() {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                 <div>
                     <h1 className="text-2xl md:text-3xl font-medium text-[var(--ink)] mb-3" style={{ fontFamily: 'var(--font-display)' }}>
-                        Entrance Exams <span className="text-[var(--action)]">2026</span>
+                        Entrance Exams <span className="text-[var(--action)]">2027</span>
                     </h1>
                     <p className="text-sm text-[var(--ink-2)] max-w-lg">
-                        Browse India's major entrance exams. Filter by stream and get direct links.
+                        Browse India's major entrance exams for the 2027 session. Filter by stream and get verified exam dates and preparation guides.
                     </p>
                 </div>
                 <div className="w-full md:w-80 relative">

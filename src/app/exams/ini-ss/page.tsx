@@ -2,15 +2,15 @@ import ExamEditorialContent from '@/components/pages/exams/ExamEditorialContent'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'INI SS 2026 | Eligibility, DM/M.Ch Admission, Exam Pattern',
-  description: 'Everything you need to know about INI SS 2026. Explore eligibility for super-specialty medical courses (DM/M.Ch) at AIIMS, JIPMER, and other institutes of national importance.',
-  keywords: ["INI SS","INI SS 2026","DM MCh admission","Super-specialty medical entrance","AIIMS SS entrance"],
+  title: 'INI SS 2027 | Eligibility, DM/M.Ch Admission, Exam Pattern',
+  description: 'Everything you need to know about INI SS 2027. Explore eligibility for super-specialty medical courses (DM/M.Ch) at AIIMS, JIPMER, and other institutes of national importance.',
+  keywords: ["INI SS","INI SS 2027","DM MCh admission 2027","Super-specialty medical entrance","AIIMS SS entrance"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/ini-ss'
   },
   openGraph: {
-    title: 'INI SS 2026 | Eligibility, DM/M.Ch Admission, Exam Pattern | Promote Education',
-    description: 'Everything you need to know about INI SS 2026. Explore eligibility for super-specialty medical courses (DM/M.Ch) at AIIMS, JIPMER, and other institutes of national importance.',
+    title: 'INI SS 2027 | Eligibility, DM/M.Ch Admission, Exam Pattern | Promote Education',
+    description: 'Everything you need to know about INI SS 2027. Explore eligibility for super-specialty medical courses (DM/M.Ch) at AIIMS, JIPMER, and other institutes of national importance.',
     url: 'https://promoteducation.com/exams/ini-ss',
     type: 'article',
   }
@@ -46,10 +46,10 @@ const examData = {
     { label: "Cutoff", value: "50% Percentile" }
   ],
   dates: [
-    { event: "Application Starts", date: "Sep 2025", status: 'closed' as const },
-    { event: "Exam Date (Jan Session)", date: "Oct 2025", status: 'closed' as const },
-    { event: "July Session Registration", date: "Mar 2026", status: 'open' as const },
-    { event: "Exam Date (July Session)", date: "Apr 2026", status: 'upcoming' as const }
+    { event: "Jan 2027 Session Registration", date: "Sep 2026", status: 'upcoming' as const },
+    { event: "Jan 2027 Session Exam", date: "Oct 2026", status: 'upcoming' as const },
+    { event: "July 2027 Session Registration", date: "Mar 2027", status: 'upcoming' as const },
+    { event: "July 2027 Session Exam", date: "Apr 2027", status: 'upcoming' as const }
   ],
   syllabus: [
     { subject: "Clinical Speciality", topics: ["Advanced Pathophysiology", "Diagnostic Modalities", "Surgical Techniques", "Recent Advances in Medical Science"] },

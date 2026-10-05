@@ -2,15 +2,15 @@ import ExamEditorialContent from '@/components/pages/exams/ExamEditorialContent'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'NEET PG 2026 | Eligibility, Cutoff, Syllabus & Important Dates',
-  description: 'Your ultimate guide to NEET PG 2026. Get the latest updates on MD/MS/PG Diploma admissions, qualifying marks, exam pattern, and detailed syllabus for all medical graduates.',
-  keywords: ["NEET PG","NEET PG 2026","MD MS admission","Postgraduate medical entrance","NBE exam"],
+  title: 'NEET PG 2027 | Eligibility, Cutoff, Syllabus & Important Dates',
+  description: 'Your ultimate guide to NEET PG 2027. Get the latest updates on MD/MS/PG Diploma admissions, qualifying marks, exam pattern, and detailed syllabus for all medical graduates.',
+  keywords: ["NEET PG","NEET PG 2027","MD MS admission","Postgraduate medical entrance","NBE exam"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/neet-pg'
   },
   openGraph: {
-    title: 'NEET PG 2026 | Eligibility, Cutoff, Syllabus & Important Dates | Promote Education',
-    description: 'Your ultimate guide to NEET PG 2026. Get the latest updates on MD/MS/PG Diploma admissions, qualifying marks, exam pattern, and detailed syllabus for all medical graduates.',
+    title: 'NEET PG 2027 | Eligibility, Cutoff, Syllabus & Important Dates | Promote Education',
+    description: 'Your ultimate guide to NEET PG 2027. Get the latest updates on MD/MS/PG Diploma admissions, qualifying marks, exam pattern, and detailed syllabus for all medical graduates.',
     url: 'https://promoteducation.com/exams/neet-pg',
     type: 'article',
   }
@@ -46,10 +46,10 @@ const examData = {
     { label: "Session", value: "Single Shift" }
   ],
   dates: [
-    { event: "Registration Opens", date: "Jan 2026", status: 'open' as const },
-    { event: "Registration Closes", date: "Feb 2026", status: 'upcoming' as const },
-    { event: "Exam Date", date: "June 2026", status: 'upcoming' as const },
-    { event: "Result Date", date: "July 2026", status: 'upcoming' as const }
+    { event: "Registration Opens", date: "Apr 2027", status: 'upcoming' as const },
+    { event: "Registration Closes", date: "May 2027", status: 'upcoming' as const },
+    { event: "Exam Date", date: "June 2027", status: 'upcoming' as const },
+    { event: "Result Date", date: "July 2027", status: 'upcoming' as const }
   ],
   syllabus: [
     { subject: "Part A (Pre-Clinical)", topics: ["Anatomy", "Physiology", "Biochemistry"] },

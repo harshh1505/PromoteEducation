@@ -3,15 +3,15 @@ import Link from 'next/link'
 import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 
 export const metadata: Metadata = {
-  title: 'CAT 2026 — Eligibility, Syllabus, Dates & Preparation Tips',
-  description: 'Complete guide to Common Admission Test (CAT) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top B-schools like IIMs.',
-  keywords: ["CAT","CAT 2026","IIM admission","MBA entrance exam","CAT syllabus","CAT eligibility","CAT exam pattern"],
+  title: 'CAT 2027 — Eligibility, Syllabus, Dates & Preparation Tips',
+  description: 'Complete guide to Common Admission Test (CAT) for the 2027 admission session. Get eligibility criteria, syllabus, exam dates, preparation tips, and top B-schools like IIMs.',
+  keywords: ["CAT","CAT 2027","CAT 2026","IIM admission 2027","MBA entrance exam","CAT syllabus","CAT eligibility","CAT exam pattern"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/cat'
   },
   openGraph: {
-    title: 'CAT 2026 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
-    description: 'Complete guide to Common Admission Test (CAT) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top B-schools like IIMs.',
+    title: 'CAT 2027 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
+    description: 'Complete guide to Common Admission Test (CAT) for the 2027 admission session. Get eligibility criteria, syllabus, exam dates, preparation tips, and top B-schools like IIMs.',
     url: 'https://promoteducation.com/exams/cat',
     type: 'article',
   }
@@ -41,6 +41,7 @@ const exam: ExamInfo = {
     { label: 'Admit Card Release', date: 'October 2026' },
     { label: 'Exam Date', date: 'November 2026' },
     { label: 'Result Declaration', date: 'January 2027' },
+    { label: 'IIM GD-PI Rounds', date: 'February - April 2027' },
   ],
   syllabus: [
     { subject: 'VARC', topics: ['Reading Comprehension', 'Para Jumbles', 'Para Summary', 'Sentence Correction', 'Odd One Out'] },

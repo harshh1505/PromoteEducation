@@ -25,34 +25,34 @@ const platformTools = [
 
 const carouselItems = [
   {
-    name: 'Amity University, Noida',
-    slug: 'amity-university-uttar-pradesh',
-    image: 'https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/amitynoida.jpg'
+    name: 'IIT, BHU',
+    slug: 'indian-institute-of-technology-banaras-hindu-university',
+    image: '/images/hero-carousel/iitbhu.png'
   },
   {
-    name: 'BITS Goa',
-    slug: 'bits-goa',
-    image: 'https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/bitsgoa.webp'
+    name: 'IIT, Roorkee',
+    slug: 'indian-institute-of-technology-roorkee',
+    image: '/images/hero-carousel/iitroorkee.png'
   },
   {
-    name: 'COEP Technological University, Pune',
-    slug: 'coep-pune',
-    image: 'https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/coepPune.jpg'
+    name: 'Amity University',
+    slug: 'amity-university',
+    image: '/images/hero-carousel/amity.png'
   },
   {
-    name: 'MIT WPU, Pune',
-    slug: 'mit-world-peace-university',
-    image: 'https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/mitwpu.webp'
+    name: 'Manipal University, Jaipur',
+    slug: 'manipal-university-jaipur',
+    image: '/images/hero-carousel/manipaluniversityjaipur.png'
   },
   {
-    name: 'Parul University, Vadodara',
-    slug: 'parul-university',
-    image: 'https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/parulUniversity.webp'
+    name: 'RVCE, Bangalore',
+    slug: 'rv-college-of-engineering-bangalore',
+    image: '/images/hero-carousel/rvcebangalore.png'
   },
   {
-    name: 'Sapthagiri College of Engineering, Bangalore',
-    slug: 'sapthagiri-college-of-engineering',
-    image: 'https://cnfmhdlkdjgnaqhngpin.supabase.co/storage/v1/object/public/college_images/Hero%20Carousel/sapthagiriNps.webp'
+    name: 'SRM Institute of Science and Technology',
+    slug: 'srm-institute-of-science-and-technology',
+    image: '/images/hero-carousel/srmist.png'
   }
 ]
 
@@ -64,7 +64,12 @@ const localFallbacks = [
 ]
 
 const getOptimizedUrl = (url: string) => {
-  return url.replace('/object/public/', '/render/image/public/') + '?width=800&quality=80&format=webp';
+  if (!url) return ''
+  if (url.startsWith('/')) return url
+  if (url.includes('/object/public/')) {
+    return url.replace('/object/public/', '/render/image/public/') + '?width=800&quality=80&format=webp';
+  }
+  return url
 }
 
 export default function HeroSection() {
@@ -240,19 +245,19 @@ export default function HeroSection() {
                 {/* Subtle dark gradient overlay to ensure text contrast and hide the green overlay film */}
                 <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-black/85 via-black/35 to-transparent pointer-events-none z-20" />
                 
-                {/* College Name Label */}
-                <div className="absolute bottom-20 inset-x-0 flex justify-center z-30 pointer-events-none">
-                  <div className="bg-black/60 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10 text-white font-extrabold text-[12px] tracking-wide shadow-lg text-center max-w-[85%] truncate animate-pulse">
-                    🏛️ {carouselItems[currentSlide].name}
+                {/* College Name Label & Explore Tag */}
+                <Link
+                  href={`/colleges/${carouselItems[currentSlide].slug}`}
+                  className="absolute bottom-16 inset-x-0 flex flex-col items-center justify-center z-30 px-4 group/badge cursor-pointer"
+                >
+                  <div className="bg-black/75 hover:bg-black/90 backdrop-blur-md px-5 py-2.5 rounded-2xl border border-white/20 text-white font-black text-xs sm:text-sm tracking-wide shadow-2xl text-center max-w-[90%] truncate transition-all duration-300 group-hover/badge:scale-105 group-hover/badge:border-sky-400 flex items-center gap-2">
+                    <span className="text-sm">🏛️</span>
+                    <span className="truncate">{carouselItems[currentSlide].name}</span>
                   </div>
-                </div>
-
-                {/* Click to Explore helper tag */}
-                <div className="absolute bottom-14 inset-x-0 flex justify-center z-30 pointer-events-none">
-                  <span className="bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-[8px] text-white/80 uppercase tracking-[0.25em] font-black border border-white/10">
-                    Click to explore campus
+                  <span className="mt-1.5 bg-white/15 backdrop-blur-md px-3 py-0.5 rounded-full text-[8px] text-white/90 uppercase tracking-[0.2em] font-extrabold border border-white/20 group-hover/badge:bg-sky-500 transition-colors">
+                    Click to explore campus →
                   </span>
-                </div>
+                </Link>
               </div>
 
               {/* Bottom Strip text inside container */}

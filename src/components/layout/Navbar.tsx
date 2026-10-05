@@ -56,7 +56,7 @@ const exploreGroups: ExploreGroup[] = [
       { label: 'NIRF Rankings', href: '/rankings', icon: 'Trophy' },
       { label: 'Entrance Exams', href: '/exams', icon: 'BookOpen' },
       { label: 'Course Directory', href: '/courses', icon: 'GraduationCap' },
-      { label: 'Study Abroad', href: '/abroad', icon: 'Globe', status: 'Popular' },
+      { label: 'Study Abroad', href: '/study-abroad', icon: 'Globe' },
       { label: 'Education News', href: '/news', icon: 'Newspaper' },
       { label: 'Review Hub', href: '/#reviews', icon: 'MessageSquare' },
     ]

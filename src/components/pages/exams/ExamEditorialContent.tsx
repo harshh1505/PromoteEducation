@@ -68,7 +68,7 @@ export default function ExamEditorialContent({ examData }: ExamEditorialContentP
                 <span className="px-3 py-1 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-sm">
                   National Examination
                 </span>
-                <span className="text-slate-400 text-xs font-medium">Updated: April 2026</span>
+                <span className="text-slate-400 text-xs font-medium">Updated for 2027 Session</span>
               </div>
               <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tight leading-[0.95] mb-8">
                 {examData.name.split(' ').map((word, i) => (
@@ -76,7 +76,7 @@ export default function ExamEditorialContent({ examData }: ExamEditorialContentP
                 ))}
               </h1>
               <p className="text-xl text-slate-500 font-medium leading-relaxed max-w-2xl">
-                {examData.fullName}: Everything you need to know about the 2026 session, including dates, eligibility, and preparation strategies.
+                {examData.fullName}: Everything you need to know about the 2027 session, including dates, eligibility, and preparation strategies.
               </p>
             </div>
             <div className="flex items-center gap-4 pb-2">

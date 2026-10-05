@@ -3,15 +3,15 @@ import Link from 'next/link'
 import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 
 export const metadata: Metadata = {
-  title: 'GATE 2026 — Eligibility, Syllabus, Dates & Preparation Tips',
-  description: 'Complete guide to Graduate Aptitude Test in Engineering (GATE) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top colleges for M.Tech.',
-  keywords: ["GATE","GATE 2026","M.Tech admission","PSU recruitment through GATE","GATE syllabus","GATE eligibility"],
+  title: 'GATE 2027 — Eligibility, Syllabus, Dates & Preparation Tips',
+  description: 'Complete guide to Graduate Aptitude Test in Engineering (GATE) 2027. Get eligibility criteria, syllabus, exam dates, preparation tips, and top colleges for M.Tech.',
+  keywords: ["GATE","GATE 2027","M.Tech admission 2027","PSU recruitment through GATE","GATE syllabus","GATE eligibility"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/gate'
   },
   openGraph: {
-    title: 'GATE 2026 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
-    description: 'Complete guide to Graduate Aptitude Test in Engineering (GATE) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top colleges for M.Tech.',
+    title: 'GATE 2027 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
+    description: 'Complete guide to Graduate Aptitude Test in Engineering (GATE) 2027. Get eligibility criteria, syllabus, exam dates, preparation tips, and top colleges for M.Tech.',
     url: 'https://promoteducation.com/exams/gate',
     type: 'article',
   }
@@ -36,10 +36,10 @@ const exam: ExamInfo = {
     'No age limit',
   ],
   importantDates: [
-    { label: 'Registration Opens', date: 'August 2025' },
-    { label: 'Exam Dates', date: 'February 2026' },
-    { label: 'Result', date: 'March 2026' },
-    { label: 'Counselling (CCMT)', date: 'April 2026' },
+    { label: 'Registration Opens', date: 'August 2026' },
+    { label: 'Exam Dates', date: 'February 2027' },
+    { label: 'Result', date: 'March 2027' },
+    { label: 'Counselling (CCMT)', date: 'April 2027' },
   ],
   syllabus: [
     { subject: 'General Aptitude', topics: ['Verbal Ability', 'Quantitative Aptitude', 'Analytical Aptitude', 'Spatial Aptitude'] },

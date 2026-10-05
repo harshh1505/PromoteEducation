@@ -3,15 +3,15 @@ import Link from 'next/link'
 import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 
 export const metadata: Metadata = {
-  title: 'CLAT 2026 — Eligibility, Syllabus, Dates & Preparation Tips',
-  description: 'Complete guide to Common Law Admission Test (CLAT) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top NLUs.',
-  keywords: ["CLAT","CLAT 2026","NLU admission","law entrance exam","CLAT syllabus","CLAT eligibility"],
+  title: 'CLAT 2027 — Eligibility, Syllabus, Dates & Preparation Tips',
+  description: 'Complete guide to Common Law Admission Test (CLAT) 2027. Get eligibility criteria, syllabus, exam dates, preparation tips, and top NLUs.',
+  keywords: ["CLAT","CLAT 2027","CLAT 2026","NLU admission 2027","law entrance exam","CLAT syllabus","CLAT eligibility"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/clat'
   },
   openGraph: {
-    title: 'CLAT 2026 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
-    description: 'Complete guide to Common Law Admission Test (CLAT) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, and top NLUs.',
+    title: 'CLAT 2027 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
+    description: 'Complete guide to Common Law Admission Test (CLAT) 2027. Get eligibility criteria, syllabus, exam dates, preparation tips, and top NLUs.',
     url: 'https://promoteducation.com/exams/clat',
     type: 'article',
   }
@@ -36,11 +36,12 @@ const exam: ExamInfo = {
     'Final year students are also eligible to apply',
   ],
   importantDates: [
-    { label: 'Notification Release', date: 'July 2025' },
-    { label: 'Registration Starts', date: 'July 2025' },
-    { label: 'Last Date to Apply', date: 'November 2025' },
-    { label: 'Exam Date', date: 'December 2025' },
-    { label: 'Result Declaration', date: 'January 2026' },
+    { label: 'Notification Release', date: 'July 2026' },
+    { label: 'Registration Starts', date: 'July 2026' },
+    { label: 'Last Date to Apply', date: 'November 2026' },
+    { label: 'Exam Date', date: 'December 2026' },
+    { label: 'Result Declaration', date: 'January 2027' },
+    { label: 'NLU Counselling Rounds', date: 'January - May 2027' },
   ],
   syllabus: [
     { subject: 'English Language', topics: ['Reading Comprehension', 'Inference-based questions', 'Vocabulary', 'Grammar'] },

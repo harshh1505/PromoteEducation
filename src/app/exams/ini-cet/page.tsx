@@ -3,15 +3,15 @@ import Link from 'next/link'
 import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 
 export const metadata: Metadata = {
-  title: 'INI CET 2026 — Eligibility, Syllabus, Dates & Preparation Guide',
-  description: 'The ultimate guide to INI CET 2026. Detailed eligibility, full syllabus, exam pattern, important dates, and expert preparation strategies for MD/MS admission at AIIMS, JIPMER, and PGIMER.',
-  keywords: ["INI CET","INI CET 2026","AIIMS PG","MD MS admission","INI CET syllabus","INI CET eligibility"],
+  title: 'INI CET 2027 — Eligibility, Syllabus, Dates & Preparation Guide',
+  description: 'The ultimate guide to INI CET 2027. Detailed eligibility, full syllabus, exam pattern, important dates, and expert preparation strategies for MD/MS admission at AIIMS, JIPMER, and PGIMER.',
+  keywords: ["INI CET","INI CET 2027","AIIMS PG 2027","MD MS admission","INI CET syllabus","INI CET eligibility"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/ini-cet'
   },
   openGraph: {
-    title: 'INI CET 2026 — Eligibility, Syllabus, Dates & Preparation Guide | Promote Education',
-    description: 'The ultimate guide to INI CET 2026. Detailed eligibility, full syllabus, exam pattern, important dates, and expert preparation strategies for MD/MS admission at AIIMS, JIPMER, and PGIMER.',
+    title: 'INI CET 2027 — Eligibility, Syllabus, Dates & Preparation Guide | Promote Education',
+    description: 'The ultimate guide to INI CET 2027. Detailed eligibility, full syllabus, exam pattern, important dates, and expert preparation strategies for MD/MS admission at AIIMS, JIPMER, and PGIMER.',
     url: 'https://promoteducation.com/exams/ini-cet',
     type: 'article',
   }
@@ -41,11 +41,11 @@ const exam: ExamInfo = {
     'Valid permanent or provisional registration with NMC or State Medical Council',
   ],
   importantDates: [
-    { label: 'Jan Session Registration', date: 'September 2025' },
-    { label: 'Jan Session Exam', date: 'November 2025' },
-    { label: 'Jul Session Registration', date: 'March 2026' },
-    { label: 'Jul Session Exam', date: 'May 2026' },
-    { label: 'Result Declaration', date: 'June 2026' },
+    { label: 'Jan 2027 Session Registration', date: 'September 2026' },
+    { label: 'Jan 2027 Session Exam', date: 'November 2026' },
+    { label: 'Jul 2027 Session Registration', date: 'March 2027' },
+    { label: 'Jul 2027 Session Exam', date: 'May 2027' },
+    { label: 'Result Declaration', date: 'June 2027' },
   ],
   syllabus: [
     { subject: 'Pre-Clinical', topics: ['Anatomy', 'Physiology', 'Biochemistry'] },

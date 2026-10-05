@@ -3,15 +3,15 @@ import Link from 'next/link'
 import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 
 export const metadata: Metadata = {
-  title: 'JEE Main 2026 — Eligibility, Syllabus, Dates & Preparation Tips',
-  description: 'Complete guide to Joint Entrance Examination Main (JEE Main) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, cut-offs, and top colleges accepting JEE Main scores.',
-  keywords: ["JEE Main","JEE Main 2026","engineering entrance exam","NTA JEE","JEE syllabus","JEE eligibility","NIT admission"],
+  title: 'JEE Main 2027 — Eligibility, Syllabus, Dates & Preparation Tips',
+  description: 'Complete guide to Joint Entrance Examination Main (JEE Main) 2027. Get eligibility criteria, syllabus, exam dates, preparation tips, cut-offs, and top colleges accepting JEE Main scores.',
+  keywords: ["JEE Main","JEE Main 2027","engineering entrance exam","NTA JEE","JEE syllabus","JEE eligibility","NIT admission"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/jee-main'
   },
   openGraph: {
-    title: 'JEE Main 2026 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
-    description: 'Complete guide to Joint Entrance Examination Main (JEE Main) 2026. Get eligibility criteria, syllabus, exam dates, preparation tips, cut-offs, and top colleges accepting JEE Main scores.',
+    title: 'JEE Main 2027 — Eligibility, Syllabus, Dates & Preparation Tips | Promote Education',
+    description: 'Complete guide to Joint Entrance Examination Main (JEE Main) 2027. Get eligibility criteria, syllabus, exam dates, preparation tips, cut-offs, and top colleges accepting JEE Main scores.',
     url: 'https://promoteducation.com/exams/jee-main',
     type: 'article',
   }
@@ -36,12 +36,12 @@ const exam: ExamInfo = {
     'Minimum 75% in 12th board (for NITs/IIITs admission)',
   ],
   importantDates: [
-    { label: 'Session 1 Registration', date: 'November 2025' },
-    { label: 'Session 1 Exam', date: 'January 2026' },
-    { label: 'Session 1 Result', date: 'February 2026' },
-    { label: 'Session 2 Registration', date: 'February 2026' },
-    { label: 'Session 2 Exam', date: 'April 2026' },
-    { label: 'Session 2 Result', date: 'May 2026' },
+    { label: 'Session 1 Registration', date: 'November 2026' },
+    { label: 'Session 1 Exam', date: 'January 2027' },
+    { label: 'Session 1 Result', date: 'February 2027' },
+    { label: 'Session 2 Registration', date: 'February 2027' },
+    { label: 'Session 2 Exam', date: 'April 2027' },
+    { label: 'Session 2 Result', date: 'May 2027' },
   ],
   syllabus: [
     { subject: 'Physics', topics: ['Mechanics', 'Thermodynamics', 'Electrodynamics', 'Optics', 'Modern Physics', 'Waves & Oscillations'] },

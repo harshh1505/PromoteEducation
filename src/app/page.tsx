@@ -18,6 +18,7 @@ import StatsBar from '@/components/sections/StatsBar'
 const CompareSection = dynamic(() => import('@/components/sections/CompareSection'))
 const CollegesSection = dynamic(() => import('@/components/sections/CollegesSection'))
 const LoanSection = dynamic(() => import('@/components/sections/LoanSection'))
+const ExclusiveTieUpsSection = dynamic(() => import('@/components/sections/ExclusiveTieUpsSection'))
 const TestimonialsSection = dynamic(() => import('@/components/sections/TestimonialsSection'))
 const MoreFromUsSection = dynamic(() => import('@/components/sections/MoreFromUsSection'))
 const NewsSection = dynamic(() => import('@/components/sections/NewsSection'))
@@ -33,6 +34,9 @@ export default function HomePage() {
 
       {/* 1. Hero Section */}
       <HeroSection />
+
+      {/* Exclusive Colleges */}
+      <ExclusiveTieUpsSection />
 
       {/* 2. College Comparison Tool */}
       <CompareSection />

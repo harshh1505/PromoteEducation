@@ -15,8 +15,25 @@ import HighlightsModal from '@/components/ui/HighlightsModal'
 // SLUG REDIRECT ALIASES
 // ===============================
 export const SLUG_ALIASES: Record<string, string> = {
-  'amity-university-noida': 'amity-university-uttar-pradesh',
+  'amity-university-uttar-pradesh': 'amity-university',
+  'amity-university-noida': 'amity-university',
+  'iamity-university': 'amity-university',
+  'amity': 'amity-university',
+  'amity-university-haryana': 'amity-university',
   'mit-wpu': 'mit-world-peace-university',
+  'bits-goa': 'birla-institute-of-technology-and-science-pilani',
+  'sapthagiri-college-of-engineering': 'sapthagiri-institute-of-medical-sciences-and-research-centre-bangalore',
+  'iem-kolkata': 'iem-kolkata-mgmt',
+  'techno-india-group': 'techno-india-university-mgmt',
+  'ms-ramaiah-foundation': 'ms-ramaiah-institute-of-technology-bangalore',
+  'kiit-bhubaneswar': 'ksom-kiit-bhubaneswar',
+  'srm-ist': 'srm-institute-of-science-and-technology',
+  'rvce': 'rv-college-of-engineering-bangalore',
+  'rvce-bangalore': 'rv-college-of-engineering-bangalore',
+  'iit-bhu': 'indian-institute-of-technology-banaras-hindu-university',
+  'iitbhu': 'indian-institute-of-technology-banaras-hindu-university',
+  'iit-roorkee': 'indian-institute-of-technology-roorkee',
+  'iitroorkee': 'indian-institute-of-technology-roorkee',
 }
 
 // ===============================
@@ -41,6 +58,9 @@ export async function generateStaticParams() {
   colleges?.forEach(c => {
     if (c.slug && typeof c.slug === 'string') pages.push({ slug: c.slug })
   })
+
+  // Explicitly ensure amity-university is included in static pages
+  pages.push({ slug: 'amity-university' })
 
   // Include aliases so static export generates redirect handlers
   Object.keys(SLUG_ALIASES).forEach(alias => pages.push({ slug: alias }))
@@ -139,14 +159,28 @@ type ImportantDate = { id: string; college_id: string; event_name: string; event
 // DATA FETCHING
 // ===============================
 async function getCollegeData(slug: string) {
-  const { data: college, error } = await supabase.from('colleges').select('*').eq('slug', slug).single()
-  if (error || !college) return null
+  const cleanSlug = slug.trim()
+  let { data: college } = await supabase.from('colleges').select('*').eq('slug', cleanSlug).maybeSingle()
+  if (!college && cleanSlug === 'amity-university') {
+    const fallback1 = await supabase.from('colleges').select('*').eq('id', '91b4f72a-0dff-4a33-adb0-6698b07e46e4').maybeSingle()
+    if (fallback1?.data) college = fallback1.data
+    if (!college) {
+      const fallback2 = await supabase.from('colleges').select('*').eq('slug', 'amity-university-uttar-pradesh').maybeSingle()
+      if (fallback2?.data) college = fallback2.data
+    }
+  }
+  if (!college) return null
 
   const [courses, placements, cutoffs, rankings, faqs, reviews, gallery, scholarships, important_dates] = await Promise.all([
     (async () => {
-      const { data, error } = await supabase.from('college_courses').select('*, course_catalog(name)').eq('college_id', college.id).order('is_popular', { ascending: false }).order('fees', { ascending: false })
-      if (!error && data) return { data, error: null }
-      return supabase.from('courses').select('*, course_catalog(name)').eq('college_id', college.id).order('is_popular', { ascending: false }).order('fees', { ascending: false })
+      try {
+        const { data, error } = await supabase.from('college_courses').select('*, course_catalog(name)').eq('college_id', college.id).order('is_popular', { ascending: false }).order('fees', { ascending: false })
+        if (!error && data && data.length > 0) return { data, error: null }
+        const fallbackRes = await supabase.from('courses').select('*, course_catalog(name)').eq('college_id', college.id).order('is_popular', { ascending: false }).order('fees', { ascending: false })
+        return { data: fallbackRes.data || [], error: null }
+      } catch {
+        return { data: [], error: null }
+      }
     })(),
     supabase.from('placements').select('*').eq('college_id', college.id).order('year', { ascending: false }).limit(1),
     supabase.from('cutoffs').select('*').eq('college_id', college.id).order('year', { ascending: false }).order('rank', { ascending: true }),
@@ -206,15 +240,20 @@ async function getSimilarColleges(college: College) {
 // ===============================
 // HELPERS
 // ===============================
-function formatPackage(lpa: number): string {
-  if (lpa >= 100) return `₹${(lpa / 100).toFixed(1)} Cr`
-  return `₹${lpa} LPA`
+function formatPackage(lpa: number | string | null | undefined): string {
+  if (!lpa) return 'N/A'
+  const num = typeof lpa === 'string' ? parseFloat(lpa) : lpa
+  if (isNaN(num)) return String(lpa)
+  if (num >= 100) return `₹${(num / 100).toFixed(1)} Cr`
+  return `₹${num} LPA`
 }
 
-function formatFees(inr: number | null | undefined): string {
-  if (inr === null || inr === undefined || isNaN(inr)) return '—'
-  if (inr >= 100000) return `₹${(inr / 100000).toFixed(2)}L`
-  return `₹${inr.toLocaleString('en-IN')}`
+function formatFees(inr: number | string | null | undefined): string {
+  if (inr === null || inr === undefined || inr === '') return '—'
+  const num = typeof inr === 'string' ? parseFloat(inr) : inr
+  if (isNaN(num)) return String(inr)
+  if (num >= 100000) return `₹${(num / 100000).toFixed(2)}L`
+  return `₹${num.toLocaleString('en-IN')}`
 }
 
 // ===============================

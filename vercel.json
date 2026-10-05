@@ -4,6 +4,21 @@
       "source": "/contact-us",
       "destination": "/contact",
       "permanent": true
+    },
+    {
+      "source": "/colleges/amity-university-uttar-pradesh",
+      "destination": "/colleges/amity-university",
+      "permanent": true
+    },
+    {
+      "source": "/colleges/amity-university-noida",
+      "destination": "/colleges/amity-university",
+      "permanent": true
+    },
+    {
+      "source": "/colleges/amity-university-haryana",
+      "destination": "/colleges/amity-university",
+      "permanent": true
     }
   ]
 }

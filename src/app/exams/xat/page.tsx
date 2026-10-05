@@ -3,15 +3,15 @@ import Link from 'next/link'
 import ExamBlogPage, { ExamInfo } from '@/components/pages/exams/ExamBlogPage'
 
 export const metadata: Metadata = {
-  title: 'XAT 2026 — Eligibility, Syllabus, Exam Pattern & Preparation Guide',
-  description: 'Complete guide to XAT 2026 by XLRI Jamshedpur. Detailed eligibility, Decision Making strategy, section-wise syllabus, XLRI cutoffs, and expert preparation tips for India\'s top MBA entrance.',
-  keywords: ["XAT","XAT 2026","XLRI","MBA entrance","XAT syllabus","XAT eligibility","Decision Making XAT"],
+  title: 'XAT 2027 — Eligibility, Syllabus, Exam Pattern & Preparation Guide',
+  description: 'Complete guide to XAT 2027 by XLRI Jamshedpur. Detailed eligibility, Decision Making strategy, section-wise syllabus, XLRI cutoffs, and expert preparation tips for India\'s top MBA entrance.',
+  keywords: ["XAT","XAT 2027","XLRI","MBA entrance 2027","XAT syllabus","XAT eligibility","Decision Making XAT"],
   alternates: {
     canonical: 'https://promoteducation.com/exams/xat'
   },
   openGraph: {
-    title: 'XAT 2026 — Eligibility, Syllabus, Exam Pattern & Preparation Guide | Promote Education',
-    description: 'Complete guide to XAT 2026 by XLRI Jamshedpur. Detailed eligibility, Decision Making strategy, section-wise syllabus, XLRI cutoffs, and expert preparation tips for India\'s top MBA entrance.',
+    title: 'XAT 2027 — Eligibility, Syllabus, Exam Pattern & Preparation Guide | Promote Education',
+    description: 'Complete guide to XAT 2027 by XLRI Jamshedpur. Detailed eligibility, Decision Making strategy, section-wise syllabus, XLRI cutoffs, and expert preparation tips for India\'s top MBA entrance.',
     url: 'https://promoteducation.com/exams/xat',
     type: 'article',
   }
@@ -41,11 +41,11 @@ const exam: ExamInfo = {
     'Working professionals with a bachelor\'s degree are also eligible',
   ],
   importantDates: [
-    { label: 'Registration Opens', date: 'July 2025' },
-    { label: 'Registration Closes', date: 'November 2025' },
-    { label: 'Admit Card Download', date: 'December 2025' },
-    { label: 'Exam Date', date: '5 January 2026' },
-    { label: 'Result Declaration', date: 'January 2026' },
+    { label: 'Registration Opens', date: 'July 2026' },
+    { label: 'Registration Closes', date: 'November 2026' },
+    { label: 'Admit Card Download', date: 'December 2026' },
+    { label: 'Exam Date', date: '3 January 2027' },
+    { label: 'Result Declaration', date: 'January 2027' },
   ],
   syllabus: [
     { subject: 'Decision Making (DM)', topics: ['Ethical Dilemmas', 'Managerial Decisions', 'Financial Decisions', 'Scenario Analysis', 'Group Situations', 'Analytical Reasoning'] },
