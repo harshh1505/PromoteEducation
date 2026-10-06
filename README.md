@@ -1,4 +1,4 @@
-# PromoteEducation
+# Promote Education
 
 Promote Education is a comprehensive educational platform designed to help students discover courses, compare colleges, view cutoffs, calculate loans, access counselling support, and make informed choices about their higher education journeys in India and abroad.
 
