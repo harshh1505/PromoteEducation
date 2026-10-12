@@ -37,7 +37,7 @@ export default async function EngineeringCollegesPage() {
               "@type": "ListItem",
               position: i + 1,
               name: c.name,
-              url: `https://yourdomain.com/colleges/${c.slug}`,
+              url: `https://promoteducation.com/colleges/${c.slug}`,
             })),
           }),
         }}

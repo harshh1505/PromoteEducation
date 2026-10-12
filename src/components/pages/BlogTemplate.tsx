@@ -34,7 +34,8 @@ export default function BlogTemplate({
     "description": description,
     "author": {
       "@type": "Organization",
-      "name": "Promote Education"
+      "name": "Promote Education Editorial",
+      "url": "https://promoteducation.com"
     },
     "dateModified": updatedDate,
     "publisher": {
@@ -51,6 +52,31 @@ export default function BlogTemplate({
     }
   }
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://promoteducation.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Articles & Guides",
+        "item": "https://promoteducation.com/articles"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": title,
+        "item": `https://promoteducation.com/articles/${slug}`
+      }
+    ]
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-[#f9fbff]">
       <script
@@ -58,16 +84,23 @@ export default function BlogTemplate({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
       />
+      <script
+        id="breadcrumb-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <Navbar />
 
       <main className="flex-1 pt-32 pb-20">
         <div className="max-w-[900px] mx-auto px-6">
           
           {/* Breadcrumbs / Category */}
-          <div className="flex items-center gap-2 mb-6">
-            <Link href="/" className="text-xs font-bold text-slate-400 hover:text-[#0b57d0] transition-colors uppercase tracking-wider">Home</Link>
+          <div className="flex items-center gap-2 mb-6 text-xs font-bold uppercase tracking-wider">
+            <Link href="/" className="text-slate-400 hover:text-[#0b57d0] transition-colors">Home</Link>
             <ChevronRight size={12} className="text-slate-300" />
-            <span className="text-xs font-bold text-[#0b57d0] uppercase tracking-wider">{category}</span>
+            <Link href="/articles" className="text-slate-400 hover:text-[#0b57d0] transition-colors">Articles</Link>
+            <ChevronRight size={12} className="text-slate-300" />
+            <span className="text-[#0b57d0]">{category}</span>
           </div>
 
           {/* Header */}
@@ -125,9 +158,12 @@ export default function BlogTemplate({
           )}
 
           {/* Bottom Navigation */}
-          <div className="mt-12 pt-8 border-t border-slate-100">
+          <div className="mt-12 pt-8 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
             <Link href="/exams" className="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors uppercase tracking-wider">
               <ArrowLeft size={16} /> Back to Exams
+            </Link>
+            <Link href="/articles" className="inline-flex items-center gap-2 text-sm font-bold text-[#0b57d0] hover:underline uppercase tracking-wider">
+              Browse All Articles & Guides →
             </Link>
           </div>
         </div>

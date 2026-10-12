@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 
-export const runtime = 'edge'
+
 
 // ── Supabase REST helper ────────────────────────────────────────────────────
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!

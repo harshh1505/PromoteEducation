@@ -24,10 +24,16 @@ import { supabase } from '@/lib/supabase'
 import { resolveImageUrl, fixMarkdownBold } from '@/lib/utils'
 import LeadModal from '@/components/ui/LeadModal'
 
-export default function BlogDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
-  const [blog, setBlog] = useState<any>(null)
-  const [trending, setTrending] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
+interface BlogDetailsPageProps {
+  params: Promise<{ slug: string }>
+  initialBlog?: any
+  initialTrending?: any[]
+}
+
+export default function BlogDetailsPage({ params, initialBlog, initialTrending }: BlogDetailsPageProps) {
+  const [blog, setBlog] = useState<any>(initialBlog || null)
+  const [trending, setTrending] = useState<any[]>(initialTrending || [])
+  const [loading, setLoading] = useState(!initialBlog)
   const [error, setError] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
   const [showLeadModal, setShowLeadModal] = useState(false)
@@ -48,14 +54,24 @@ export default function BlogDetailsPage({ params }: { params: Promise<{ slug: st
   }, [])
 
   useEffect(() => {
+    if (blog) {
+      // Background view increment
+      const increment = async () => {
+        try {
+          await supabase.rpc('increment_blog_views', { blog_slug: slug })
+        } catch {}
+      }
+      increment()
+      return
+    }
+
     async function loadData() {
       setLoading(true)
       try {
-        // 1. Increment views using RPC function
         try {
           await supabase.rpc('increment_blog_views', { blog_slug: slug })
         } catch (rpcErr) {
-          console.warn('RPC view increment failed, falling back to manual update:', rpcErr)
+          console.warn('RPC view increment failed:', rpcErr)
         }
 
         // 2. Fetch the current blog post

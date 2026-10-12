@@ -61,16 +61,85 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const readTime = dbArticle?.readTime || '8 min read'
   const summary = dbArticle?.summary || (exam ? `A detailed deep-dive into ${title} for the 2026 academic session. Verified by our editorial team for ${exam.title} aspirants.` : `This comprehensive guide covers everything you need to know about ${title}. Our experts have analyzed the latest notification to provide you with the most accurate information.`)
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": summary,
+    "datePublished": "2026-04-20T00:00:00Z",
+    "dateModified": "2026-04-25T00:00:00Z",
+    "author": {
+      "@type": "Organization",
+      "name": "Promote Education Editorial",
+      "url": "https://promoteducation.com"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Promote Education",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://promoteducation.com/logo.png"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://promoteducation.com/articles/${slug}`
+    }
+  }
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://promoteducation.com"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Articles & Guides",
+        "item": "https://promoteducation.com/articles"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": title,
+        "item": `https://promoteducation.com/articles/${slug}`
+      }
+    ]
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <Navbar />
       
       <main className="flex-1 pt-32 pb-20">
         <div className="max-w-4xl mx-auto px-6">
           {/* Breadcrumb */}
-          <Link href={exam ? `/exams/${exam.slug}` : "/exams"} className="inline-flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-slate-900 transition-all mb-10 uppercase tracking-widest">
-            <ArrowLeft size={14} /> Back to {exam ? exam.title : 'Exams'}
-          </Link>
+          <div className="flex flex-wrap items-center gap-2 mb-10 text-xs font-bold uppercase tracking-wider text-slate-400">
+            <Link href="/" className="hover:text-slate-900 transition-colors">Home</Link>
+            <span>/</span>
+            <Link href="/articles" className="hover:text-slate-900 transition-colors text-sky-600">Articles</Link>
+            {exam && (
+              <>
+                <span>/</span>
+                <Link href={`/exams/${exam.slug}`} className="hover:text-slate-900 transition-colors">{exam.title}</Link>
+              </>
+            )}
+            <span>/</span>
+            <span className="text-slate-900 truncate max-w-[240px]">{title}</span>
+          </div>
 
           {/* Article Header */}
           <header className="mb-12">
@@ -255,18 +324,18 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-12">
-                <Link href={exam ? `/exams/${exam.slug}` : "/exams"} className="p-6 rounded-3xl border border-slate-200 hover:border-slate-900 transition-all group">
-                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Previous Chapter</div>
-                    <div className="text-sm font-black text-slate-900 flex items-center justify-between">
-                        Exam Overview <ArrowLeft size={16} className="text-slate-300 group-hover:text-slate-900" />
+                <Link href="/articles" className="p-6 rounded-3xl border border-slate-200 hover:border-sky-500 hover:bg-sky-50/50 transition-all group">
+                    <div className="text-[10px] font-black text-sky-600 uppercase tracking-widest mb-2">Knowledge Base</div>
+                    <div className="text-sm font-black text-slate-900 group-hover:text-sky-600 flex items-center justify-between">
+                        Browse All Articles & Guides <ChevronRight size={16} className="text-slate-300 group-hover:text-sky-600 group-hover:translate-x-1 transition-all" />
                     </div>
                 </Link>
-                <button className="p-6 rounded-3xl border border-slate-200 hover:border-slate-900 transition-all group text-right">
-                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Social</div>
-                    <div className="text-sm font-black text-slate-900 flex items-center justify-between flex-row-reverse">
-                        Share Guide <Share2 size={16} className="text-slate-300 group-hover:text-slate-900" />
+                <Link href={exam ? `/exams/${exam.slug}` : "/exams"} className="p-6 rounded-3xl border border-slate-200 hover:border-slate-900 transition-all group">
+                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Exam Portal</div>
+                    <div className="text-sm font-black text-slate-900 flex items-center justify-between">
+                        {exam ? `${exam.title} Hub` : 'All Entrance Exams'} <ArrowLeft size={16} className="text-slate-300 group-hover:text-slate-900 rotate-180" />
                     </div>
-                </button>
+                </Link>
             </div>
           </article>
 

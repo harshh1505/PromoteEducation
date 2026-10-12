@@ -1,7 +1,7 @@
 import { supabase } from '@/lib/supabase'
 import { NextResponse } from 'next/server'
 
-export const runtime = 'edge'
+export const dynamic = 'force-static'
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url)

@@ -228,12 +228,11 @@ async function getCollegeData(slug: string) {
 async function getSimilarColleges(college: College) {
   const { data } = await supabase
     .from('colleges')
-    .select('name, slug, location, stream, nirf_rank')
+    .select('name, slug, location, state, stream, nirf_rank, avg_package')
     .neq('id', college.id)
-    .eq('stream', college.stream)
-    .ilike('state', `%${college.state}%`)
-    .order('nirf_rank', { ascending: true })
-    .limit(4)
+    .ilike('stream', `%${college.stream || 'Engineering'}%`)
+    .order('nirf_rank', { ascending: true, nullsFirst: false })
+    .limit(8)
   return data || []
 }
 
@@ -538,6 +537,19 @@ export default async function CollegePage({ params }: any) {
           name: college.name, url: `https://promoteducation.com/colleges/${college.slug}`,
           address: { '@type': 'PostalAddress', addressLocality: college.location, addressRegion: college.state, addressCountry: 'IN' },
           description: college.description,
+        })
+      }} />
+
+      <script type="application/ld+json" dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://promoteducation.com' },
+            { '@type': 'ListItem', position: 2, name: 'Colleges', item: 'https://promoteducation.com/colleges' },
+            { '@type': 'ListItem', position: 3, name: `${college.stream || 'Institutions'}`, item: `https://promoteducation.com/colleges/${(college.stream || 'engineering').toLowerCase()}` },
+            { '@type': 'ListItem', position: 4, name: college.name, item: `https://promoteducation.com/colleges/${college.slug}` },
+          ]
         })
       }} />
 
@@ -1415,6 +1427,51 @@ export default async function CollegePage({ params }: any) {
                 </div>
               </section>
             </ScrollReveal>
+
+            {/* SIMILAR INSTITUTIONS GRID */}
+            {similarColleges && similarColleges.length > 0 && (
+              <ScrollReveal>
+                <section id="similar-institutions" className="scroll-mt-32 pt-16 border-t border-slate-100 mb-12">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                    <div>
+                      <h2 className="text-3xl font-black text-slate-900 tracking-tight">Similar Top Institutions</h2>
+                      <p className="text-sm text-slate-500 font-medium mt-1">Explore other highly ranked {college.stream} colleges across India.</p>
+                    </div>
+                    <Link
+                      href={college.stream ? `/colleges/${college.stream.toLowerCase()}` : '/colleges'}
+                      className="text-xs font-black uppercase tracking-wider text-sky-600 hover:text-sky-700 transition-colors"
+                    >
+                      View All {college.stream} Colleges →
+                    </Link>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {similarColleges.map((sc: any) => (
+                      <Link
+                        key={sc.slug}
+                        href={`/colleges/${sc.slug}`}
+                        className="p-5 rounded-2xl border border-slate-100 bg-white hover:border-sky-300 hover:shadow-md transition-all group flex flex-col justify-between"
+                      >
+                        <div>
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-slate-900 text-white">
+                              {sc.nirf_rank ? `NIRF #${sc.nirf_rank}` : 'Featured'}
+                            </span>
+                          </div>
+                          <h4 className="text-sm font-bold text-slate-900 group-hover:text-sky-600 transition-colors line-clamp-2">
+                            {sc.name}
+                          </h4>
+                          <p className="text-xs text-slate-400 mt-1">{sc.location}, {sc.state}</p>
+                        </div>
+                        <div className="mt-4 pt-3 border-t border-slate-50 flex items-center justify-between text-xs font-bold text-sky-600">
+                          <span>View Details</span>
+                          <span>→</span>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              </ScrollReveal>
+            )}
 
             {/* FINAL CTA */}
             <section className="bg-slate-50 p-12 rounded-sm border border-slate-100 text-center">

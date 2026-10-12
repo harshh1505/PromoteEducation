@@ -9,7 +9,7 @@ import { supabase } from '@/lib/supabase'
 import { cn } from '@/lib/utils'
 
 const footerLinks = {
-  Exams: ['JEE Main', 'NEET', 'CAT', 'CUET', 'All exams'],
+  Exams: ['JEE Main', 'NEET', 'CAT', 'CUET', 'Articles & Guides', 'All exams'],
   Courses: ['BTech', 'MBA', 'MBBS', 'BDS', 'Others'],
   Services: ['Mentorship', 'Scholarship', 'Counselling', 'Admission Support', 'Selection', 'Consultation'],
   Company: ['About', 'Careers', 'Events', 'Contact Us', 'FAQ', 'Sitemap'],
@@ -154,6 +154,7 @@ export default function Footer() {
                       <a
                         href={
                           link === 'All exams' ? '/exams' :
+                          link === 'Articles & Guides' ? '/articles' :
                           link === 'Others' ? '/courses' :
                           category === 'Services' ? (
                             link === 'Scholarship' ? '/scholarships' : `/${link.toLowerCase().replace(/ /g, '-')}`

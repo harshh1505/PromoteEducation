@@ -8,7 +8,7 @@ import {
   TrendingUp, Layout, Briefcase, HeartPulse,
   Stethoscope, Code, FlaskConical, Zap,
   Search, Users, Compass, Shield, Target,
-  MessageSquare, FileSearch, PieChart, Activity
+  MessageSquare, FileSearch, PieChart, Activity, Newspaper
 } from 'lucide-react'
 
 // ─────────────────────────────────────────────
@@ -89,6 +89,55 @@ const SITEMAP_DATA = [
     ]
   },
   {
+    title: 'Entrance Exam Guides & Articles',
+    icon: FileText,
+    color: 'text-sky-500',
+    links: [
+      { label: 'All 80+ Articles & Blueprints', href: '/articles' },
+      { label: 'AIIMS PG Seat Matrix 2026', href: '/articles/aiims-pg-seat-matrix' },
+      { label: 'JEE Main Preparation Blueprint', href: '/articles/jee-main-preparation-strategy' },
+      { label: 'NEET UG 650+ Score Strategy', href: '/articles/neet-preparation-strategy' },
+      { label: 'BITSAT 75% Eligibility Rule', href: '/articles/bitsat-eligibility' },
+      { label: 'BITS Pilani Cutoff Trends', href: '/articles/bits-pilani-cutoff' },
+      { label: 'INI CET Complete 19-Subject Syllabus', href: '/articles/ini-cet-syllabus-2026' },
+      { label: 'CAT 6-Month Preparation Plan', href: '/articles/cat-preparation-strategy' },
+      { label: 'XAT Decision Making Master Guide', href: '/articles/xat-decision-making-guide' },
+      { label: 'GATE AIR < 100 Preparation', href: '/articles/gate-preparation-strategy' },
+      { label: 'CUET UG Domain Subject Syllabus', href: '/articles/cuet-ug-syllabus-2026' },
+      { label: 'CLAT Legal Reasoning Strategy', href: '/articles/clat-preparation-strategy' },
+    ]
+  },
+  {
+    title: 'Regional College Hubs',
+    icon: Compass,
+    color: 'text-emerald-500',
+    links: [
+      { label: 'Engineering in Delhi NCR', href: '/colleges/engineering-in-delhi' },
+      { label: 'Engineering in Bangalore', href: '/colleges/engineering-in-bangalore' },
+      { label: 'Engineering in Mumbai', href: '/colleges/engineering-in-mumbai' },
+      { label: 'Engineering in Pune', href: '/colleges/engineering-in-pune' },
+      { label: 'Medical in Delhi', href: '/colleges/medical-in-delhi' },
+      { label: 'Medical in Bangalore', href: '/colleges/medical-in-bangalore' },
+      { label: 'Medical in Kolkata', href: '/colleges/medical-in-kolkata' },
+      { label: 'Management in Mumbai', href: '/colleges/management-in-mumbai' },
+      { label: 'Management in Delhi NCR', href: '/colleges/management-in-delhi' },
+      { label: 'Management in Bangalore', href: '/colleges/management-in-bangalore' },
+    ]
+  },
+  {
+    title: 'Editorial Blogs & Insights',
+    icon: Newspaper,
+    color: 'text-purple-500',
+    links: [
+      { label: 'All Editorial Blogs', href: '/blogs' },
+      { label: 'MBBS Management Quota in WB 2026', href: '/blogs/mbbs-management-quota-seats-in-west-bengal-2026-fees-eligibility-admission-process' },
+      { label: 'Best Engineering Colleges After JEE', href: '/blogs/best-engineering-colleges-in-india-after-jee-admissions-fees-placements' },
+      { label: 'CAT 2026 Complete Guide & Registration', href: '/blogs/cat-2026-complete-guide-to-exam-date-registration-syllabus-preparation-strategy' },
+      { label: 'Top Medical Colleges NEET Strategy', href: '/blogs/neet-preparation-strategy-how-to-get-admission-in-top-medical-colleges-in-india' },
+      { label: 'College Admission Process Explained', href: '/blogs/college-admission-process-in-india-explained-entrance-exams-counselling-seat-allotment' },
+    ]
+  },
+  {
     title: 'Platform & Tools',
     icon: Activity,
     color: 'text-amber-500',
@@ -98,7 +147,7 @@ const SITEMAP_DATA = [
       { label: 'Compare Colleges Portal', href: '/compare' },
       { label: 'Education Loan Calculator', href: '/loan-calculator' },
       { label: 'Featured Events & Seminars', href: '/events' },
-      { label: 'Latest Blogs & News', href: '/blogs' },
+      { label: 'Latest News Feed', href: '/news' },
     ]
   },
   {

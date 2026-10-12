@@ -1,3 +1,6 @@
+import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
+
 export const dynamic = 'force-static'
 export const dynamicParams = false
 
@@ -13,8 +16,22 @@ export async function generateStaticParams() {
   return params
 }
 
-import PageClient from './PageClient'
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const canonicalUrl = `https://promoteducation.com/colleges/${slug}`
+  return {
+    title: `Redirecting to ${slug} Colleges...`,
+    robots: {
+      index: false,
+      follow: true,
+    },
+    alternates: {
+      canonical: canonicalUrl,
+    },
+  }
+}
 
-export default function Page({ params }: { params: Promise<{ slug: string }> }) {
-  return <PageClient params={params} />
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  redirect(`/colleges/${slug}`)
 }

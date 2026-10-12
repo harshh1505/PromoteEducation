@@ -53,6 +53,7 @@ const exploreGroups: ExploreGroup[] = [
   {
     title: 'Academic Hubs',
     items: [
+      { label: 'Articles & Guides', href: '/articles', icon: 'FileText', badge: '80+ Guides' },
       { label: 'NIRF Rankings', href: '/rankings', icon: 'Trophy' },
       { label: 'Entrance Exams', href: '/exams', icon: 'BookOpen' },
       { label: 'Course Directory', href: '/courses', icon: 'GraduationCap' },

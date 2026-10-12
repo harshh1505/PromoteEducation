@@ -27,6 +27,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { route: '/colleges/engineering', priority: 0.9, changeFrequency: 'weekly' },
     { route: '/colleges/medical', priority: 0.9, changeFrequency: 'weekly' },
     { route: '/exams', priority: 0.95, changeFrequency: 'daily' },
+    { route: '/articles', priority: 0.95, changeFrequency: 'daily' },
     { route: '/alerts', priority: 0.95, changeFrequency: 'daily' },
     { route: '/cutoffs', priority: 0.9, changeFrequency: 'weekly' },
     { route: '/cutoffs/engineering', priority: 0.85, changeFrequency: 'weekly' },
@@ -82,7 +83,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.85,
     }))
 
-  // 3. Location & Stream Traffic Magnet Pages
+  // 3. Location & Stream Traffic Magnet Pages (Canonical URLs only)
   const magnetStreams = ['engineering', 'medical', 'management', 'law']
   const magnetCities = ['delhi', 'mumbai', 'bangalore', 'pune', 'hyderabad', 'chennai', 'kolkata']
   const magnetPages: MetadataRoute.Sitemap = []
@@ -91,12 +92,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     magnetCities.forEach((city) => {
       magnetPages.push({
         url: `${baseUrl}/colleges/${stream}-in-${city}`,
-        lastModified: currentDate,
-        changeFrequency: 'weekly' as const,
-        priority: 0.75,
-      })
-      magnetPages.push({
-        url: `${baseUrl}/colleges/category/${stream}-in-${city}`,
         lastModified: currentDate,
         changeFrequency: 'weekly' as const,
         priority: 0.75,

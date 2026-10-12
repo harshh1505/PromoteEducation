@@ -102,7 +102,7 @@ export default function CollegesClient({
   const [compareList, setCompareList] = useState<string[]>([])
   const [savedList, setSavedList] = useState<Set<string>>(new Set())
   const [showMobileFilters, setShowMobileFilters] = useState(false)
-  const [visibleCount, setVisibleCount] = useState(20)
+  const [visibleCount, setVisibleCount] = useState(48)
 
   // Collapsible sidebar sections
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
@@ -853,9 +853,57 @@ export default function CollegesClient({
                 </button>
               </div>
             )}
+
+          {/* SEO Regional & Stream Directory */}
+          <div className="mt-16 pt-12 border-t border-slate-200">
+            <h2 className="text-lg font-bold text-slate-900 mb-6">Popular Colleges by Stream & City</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-sm">
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Engineering</h3>
+                <ul className="space-y-2">
+                  <li><Link href="/colleges/engineering-in-delhi" className="text-slate-600 hover:text-blue-600 transition-colors">Engineering in Delhi</Link></li>
+                  <li><Link href="/colleges/engineering-in-bangalore" className="text-slate-600 hover:text-blue-600 transition-colors">Engineering in Bangalore</Link></li>
+                  <li><Link href="/colleges/engineering-in-mumbai" className="text-slate-600 hover:text-blue-600 transition-colors">Engineering in Mumbai</Link></li>
+                  <li><Link href="/colleges/engineering-in-pune" className="text-slate-600 hover:text-blue-600 transition-colors">Engineering in Pune</Link></li>
+                  <li><Link href="/colleges/engineering-in-hyderabad" className="text-slate-600 hover:text-blue-600 transition-colors">Engineering in Hyderabad</Link></li>
+                  <li><Link href="/colleges/engineering-in-chennai" className="text-slate-600 hover:text-blue-600 transition-colors">Engineering in Chennai</Link></li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Medical</h3>
+                <ul className="space-y-2">
+                  <li><Link href="/colleges/medical-in-delhi" className="text-slate-600 hover:text-blue-600 transition-colors">Medical in Delhi</Link></li>
+                  <li><Link href="/colleges/medical-in-bangalore" className="text-slate-600 hover:text-blue-600 transition-colors">Medical in Bangalore</Link></li>
+                  <li><Link href="/colleges/medical-in-mumbai" className="text-slate-600 hover:text-blue-600 transition-colors">Medical in Mumbai</Link></li>
+                  <li><Link href="/colleges/medical-in-kolkata" className="text-slate-600 hover:text-blue-600 transition-colors">Medical in Kolkata</Link></li>
+                  <li><Link href="/colleges/medical-in-chennai" className="text-slate-600 hover:text-blue-600 transition-colors">Medical in Chennai</Link></li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Management</h3>
+                <ul className="space-y-2">
+                  <li><Link href="/colleges/management-in-mumbai" className="text-slate-600 hover:text-blue-600 transition-colors">MBA in Mumbai</Link></li>
+                  <li><Link href="/colleges/management-in-delhi" className="text-slate-600 hover:text-blue-600 transition-colors">MBA in Delhi</Link></li>
+                  <li><Link href="/colleges/management-in-bangalore" className="text-slate-600 hover:text-blue-600 transition-colors">MBA in Bangalore</Link></li>
+                  <li><Link href="/colleges/management-in-pune" className="text-slate-600 hover:text-blue-600 transition-colors">MBA in Pune</Link></li>
+                  <li><Link href="/colleges/management-in-chennai" className="text-slate-600 hover:text-blue-600 transition-colors">MBA in Chennai</Link></li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Law & Portals</h3>
+                <ul className="space-y-2">
+                  <li><Link href="/colleges/law-in-delhi" className="text-slate-600 hover:text-blue-600 transition-colors">Law in Delhi</Link></li>
+                  <li><Link href="/colleges/law-in-mumbai" className="text-slate-600 hover:text-blue-600 transition-colors">Law in Mumbai</Link></li>
+                  <li><Link href="/colleges/engineering" className="text-slate-600 hover:text-blue-600 transition-colors">Top Engineering Colleges</Link></li>
+                  <li><Link href="/colleges/medical" className="text-slate-600 hover:text-blue-600 transition-colors">Top Medical Colleges</Link></li>
+                  <li><Link href="/rankings" className="text-slate-600 hover:text-blue-600 transition-colors">NIRF 2026 Rankings</Link></li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+    </div>
 
       {/* ── MOBILE FILTER DRAWER ──────────────────────────────────────────── */}
       {showMobileFilters && (
