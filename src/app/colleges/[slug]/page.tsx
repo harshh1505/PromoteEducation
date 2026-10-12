@@ -34,6 +34,15 @@ export const SLUG_ALIASES: Record<string, string> = {
   'iitbhu': 'indian-institute-of-technology-banaras-hindu-university',
   'iit-roorkee': 'indian-institute-of-technology-roorkee',
   'iitroorkee': 'indian-institute-of-technology-roorkee',
+  'nmims-mumbai': 'nmims-mgmt-mumbai',
+  'nmims': 'nmims-mgmt-mumbai',
+  'sibm': 'sibm-pune',
+  'weschool-mumbai': 'welingkar-weschool-mumbai',
+  'welingkar-mumbai': 'welingkar-weschool-mumbai',
+  'weschool': 'welingkar-weschool-mumbai',
+  'welingkar': 'welingkar-weschool-mumbai',
+  'jbims': 'jbims-mumbai',
+  'pumba': 'pumba-pune',
 }
 
 // ===============================
