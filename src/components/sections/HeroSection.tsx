@@ -208,9 +208,6 @@ export default function HeroSection() {
           <div className="lg:col-span-6 flex justify-center lg:justify-end animate-in fade-in slide-in-from-right-6 duration-700">
             <div className="relative w-full max-w-[340px] md:max-w-[460px] aspect-[3/4] md:aspect-[4/5] bg-slate-900 rounded-[32px] md:rounded-[48px] shadow-2xl overflow-hidden lg:overflow-visible flex items-end">
               
-              {/* Stars decorative icon */}
-              <div className="absolute top-10 right-10 text-amber-300/30 font-bold select-none text-2xl z-20">✦</div>
-              <div className="absolute top-36 left-12 text-amber-300/20 font-bold select-none text-lg z-20">✦</div>
 
               {/* College Campus Images Carousel (Clipped inside rounded wrapper) */}
               <div className="absolute inset-0 rounded-[32px] md:rounded-[48px] overflow-hidden">

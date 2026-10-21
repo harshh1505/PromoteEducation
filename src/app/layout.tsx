@@ -73,9 +73,9 @@ export default function RootLayout({
     "url": "https://promoteducation.com",
     "logo": "https://promoteducation.com/logo.png",
     "sameAs": [
-      "https://facebook.com/promoteeducation",
+      "https://facebook.com/promoteducation",
       "https://twitter.com/promoteedu",
-      "https://linkedin.com/company/promoteeducation"
+      "https://www.linkedin.com/company/promote-education-pvt-ltd"
     ],
     "description": "India's premier institution discovery platform. Explore NIRF 2025 rankings, fees, and verified placements for 50,000+ top engineering, medical, and management colleges.",
     "address": {

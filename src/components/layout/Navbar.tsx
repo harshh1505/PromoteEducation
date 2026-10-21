@@ -371,12 +371,23 @@ export default function Navbar() {
               </div>
             </div>
 
-            <div className="flex items-center gap-8 pl-6 bg-gradient-to-r from-transparent via-white to-white sticky right-0">
+            <div className="flex items-center gap-4 lg:gap-6 pl-6 bg-gradient-to-r from-transparent via-white to-white sticky right-0">
               <a href="tel:+919900116101" className="hidden lg:flex items-center gap-2 px-1 text-slate-800 hover:text-sky-600 transition-colors">
                 <Phone size={14} className="text-sky-500" />
                 <span className="text-sm font-black tracking-tight whitespace-nowrap">
                   +91 99001 16101
                 </span>
+              </a>
+              <a
+                href="/news"
+                className="flex items-center gap-1.5 text-xs font-black text-white bg-red-600 hover:bg-red-700 transition-all whitespace-nowrap px-3.5 py-1.5 rounded-full shadow-md shadow-red-500/30 border border-red-500 ring-2 ring-red-400/40 animate-pulse active:scale-95"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-80" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+                </span>
+                <Newspaper size={13} className="text-white" />
+                <span>News</span>
               </a>
               <a href="/cutoffs" className="flex items-center gap-1.5 text-xs font-bold text-amber-700 hover:text-amber-800 transition-colors whitespace-nowrap bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200/60 shadow-sm ring-4 ring-amber-500/5 animate-pulse-slow">
                 <BarChart3 size={13} className="text-amber-500" /> Cutoffs
@@ -628,6 +639,19 @@ export default function Navbar() {
                   ))}
                 </div>
               </div>
+
+              {/* Latest News Action */}
+              <a
+                href="/news"
+                onClick={() => setMobileOpen(false)}
+                className="w-full flex items-center justify-center gap-2 py-3 bg-red-600 hover:bg-red-700 text-white rounded-2xl text-xs font-black shadow-md shadow-red-500/20 animate-pulse transition-all active:scale-98"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-80" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+                </span>
+                <Newspaper size={14} /> Latest News & Alerts
+              </a>
 
               {/* Extra Secondary Action: Write a Review */}
               <button
