@@ -28,7 +28,7 @@ This platform integrates a modern Next.js frontend with Tailwind CSS, Framer Mot
 - **Sitemap & SEO Optimization**: Auto-generated dynamic sitemaps and robots settings for search engine discovery.
 - **Study Abroad Section**: Advanced dashboard for international universities (Coming soon).
 
----
+----
 
 ## 🛠️ Tech Stack
 
