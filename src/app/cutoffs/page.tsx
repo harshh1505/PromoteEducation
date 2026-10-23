@@ -4,192 +4,213 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
-import { 
-  Code2, Stethoscope, ChevronRight, TrendingUp, 
-  Search, ShieldCheck, Zap, ArrowRight,
-  GraduationCap, Building2, Landmark, Sparkles
+import CounsellingModal from '@/components/ui/CounsellingModal'
+import {
+  Stethoscope,
+  Code2,
+  ArrowRight,
+  ShieldCheck,
+  CheckCircle2,
+  Building2,
+  GraduationCap,
+  Sparkles,
+  Compass,
+  FileSpreadsheet,
+  Award,
+  ChevronRight,
+  Search,
+  Layers
 } from 'lucide-react'
 
-const STREAMS = [
-  {
-    id: 'medical',
-    title: 'Medical Sciences',
-    subtitle: 'High Precision NEET Analysis',
-    icon: Stethoscope,
-    description: 'Explore verified cutoff ranks for AIIMS, Govt. Colleges, and Private institutions across 28 states. Optimized for 2024-25 counselling.',
-    stats: ['150K+ Records', 'Real-time Stats'],
-    color: 'emerald',
-    href: '/cutoffs/medical',
-    features: ['State-wise Analysis', 'Category Filtering', 'Round-wise Trends']
-  },
-  {
-    id: 'engineering',
-    title: 'Engineering & Tech',
-    subtitle: 'JoSAA & CSAB Intelligence',
-    icon: Code2,
-    description: 'A dedicated engine for IIT, NIT, and IIIT branch-wise cutoffs. Predict your college based on JEE Main and Advanced ranks.',
-    stats: ['IIT/NIT Focus', 'Branch Insights'],
-    color: 'sky',
-    href: '/cutoffs/engineering',
-    features: ['Branch Comparison', 'Opening/Closing Ranks', 'Seat Allotment Data']
-  }
-]
-
 export default function CutoffsPage() {
+  const [counsellingModalOpen, setCounsellingModalOpen] = useState(false)
+
   return (
-    <div className="min-h-screen bg-[#FDFDFF] text-slate-900 overflow-x-hidden selection:bg-sky-100 selection:text-sky-900">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col justify-between selection:bg-indigo-100 selection:text-indigo-900">
       <Navbar />
 
-      {/* ── HIGH-END HERO ────────────────────────────────────────── */}
-      <section className="relative pt-40 pb-28 bg-white overflow-hidden">
-        {/* Animated Background Orbs */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-sky-50 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3 opacity-50" />
-          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-emerald-50 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/4 opacity-40" />
-        </div>
-
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 bg-slate-900 text-white rounded-full text-[11px] font-black uppercase tracking-[0.2em] mb-10 shadow-xl shadow-slate-900/20">
-              <Sparkles size={14} className="text-sky-400" />
-              The Intelligence Hub
-            </div>
-            
-            <h1 className="text-6xl sm:text-8xl font-[850] text-slate-900 tracking-[-0.04em] leading-[0.9] mb-10">
-              Admissions. <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-600 via-indigo-600 to-emerald-600 italic font-medium tracking-normal">Data-First.</span>
-            </h1>
-            
-            <p className="text-2xl text-slate-500 leading-relaxed max-w-2xl mb-14 font-medium tracking-tight">
-              A professional-grade engine for analyzing historical cutoff trends. Navigate the complexity of admissions with verified, structured data.
-            </p>
-
-            <div className="flex flex-wrap gap-8 items-center pt-8 border-t border-slate-100">
-               <div className="flex -space-x-3">
-                  {[1,2,3,4].map(i => (
-                    <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-[10px] font-black text-slate-400">PE</div>
-                  ))}
-               </div>
-               <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">Trusted by <span className="text-slate-900">50K+ Students</span> Yearly</p>
-            </div>
+      {/* ── MAIN STREAM SELECTION VIEWPORT (Fits in one window) ──── */}
+      <main className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 lg:pt-32 pb-8 flex-1 flex flex-col justify-center">
+        
+        {/* Header Strip */}
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 text-white text-[11px] font-bold tracking-wider uppercase mb-3 shadow-sm">
+            <FileSpreadsheet size={13} className="text-emerald-400" />
+            Official Seat Allotment Archives • 2024–25
           </div>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            Explore College Cutoffs
+          </h1>
+          <p className="text-slate-600 text-sm sm:text-base mt-2 leading-relaxed">
+            Select your academic stream below to view verified opening & closing ranks, category quotas (AIQ vs State), and round-wise seat allotments.
+          </p>
         </div>
-      </section>
 
-      {/* ── STREAM SELECTION CARDS ──────────────────────────────── */}
-      <section className="py-32 relative z-10">
-        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-20">
-            <div className="flex items-center gap-4">
-              <div className="w-1.5 h-12 bg-sky-600 rounded-full" />
-              <div>
-                <h2 className="text-4xl font-[850] text-slate-900 tracking-tight">Select Stream</h2>
-                <p className="text-slate-400 font-bold uppercase tracking-widest text-xs mt-1">Navigate to your dashboard</p>
+        {/* ── THE 2 STREAM PORTALS (PRIMARY AGENDA) ────────────────── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-8">
+          
+          {/* MEDICAL CUTOFFS CARD */}
+          <div className="bg-white rounded-2xl border-2 border-slate-200 hover:border-emerald-500 hover:shadow-xl transition-all duration-300 p-6 sm:p-8 flex flex-col justify-between relative group">
+            <div className="absolute top-0 right-0 h-1.5 w-32 bg-emerald-500 rounded-tr-2xl" />
+
+            <div>
+              {/* Card Header */}
+              <div className="flex items-center justify-between mb-5">
+                <div className="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center text-emerald-700 shadow-sm group-hover:scale-105 transition-transform">
+                  <Stethoscope size={28} strokeWidth={2} />
+                </div>
+                <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200/60 px-3 py-1 rounded-full">
+                  MCC & State DME
+                </span>
+              </div>
+
+              {/* Title & Scope */}
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors">
+                Medical Cutoffs
+              </h2>
+              <p className="text-sm font-semibold text-emerald-600 mt-1">
+                NEET-UG & NEET-PG Admissions
+              </p>
+              <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+                Verified opening and closing ranks for AIIMS, Government Medical Colleges, Central Universities, and Deemed Medical institutions.
+              </p>
+
+              {/* High-Level Feature Pills */}
+              <div className="mt-5 space-y-2.5 text-xs text-slate-700 font-medium">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 size={15} className="text-emerald-600 shrink-0" />
+                  <span><strong>Courses:</strong> MBBS, BDS, BAMS, BHMS, B.Sc Nursing</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 size={15} className="text-emerald-600 shrink-0" />
+                  <span><strong>Quotas:</strong> 15% All India Quota (AIQ) & 85% State Quotas</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 size={15} className="text-emerald-600 shrink-0" />
+                  <span><strong>Rounds:</strong> Round 1, Round 2, Round 3 & Stray Vacancy</span>
+                </div>
+              </div>
+
+              {/* Benchmark Highlight Sneak Peek */}
+              <div className="mt-5 p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between text-xs">
+                <div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">AIIMS New Delhi (MBBS)</span>
+                  <span className="font-bold text-slate-900">General Closing Rank: #57</span>
+                </div>
+                <span className="text-[11px] font-bold text-emerald-700 bg-emerald-100/60 px-2 py-0.5 rounded">
+                  Round 1
+                </span>
               </div>
             </div>
+
+            {/* Launch Button */}
+            <Link
+              href="/cutoffs/medical"
+              className="mt-6 w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm tracking-wide shadow-md hover:shadow-lg transition-all group/btn"
+            >
+              <span>Explore Medical Cutoffs</span>
+              <ArrowRight size={17} className="group-hover/btn:translate-x-1.5 transition-transform" />
+            </Link>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {STREAMS.map((stream) => {
-              const Icon = stream.icon
-              const isSky = stream.color === 'sky'
-              return (
-                <Link 
-                  key={stream.id} 
-                  href={stream.href}
-                  className="group relative"
-                >
-                  <div className="absolute inset-0 bg-slate-900 translate-x-2 translate-y-2 rounded-[3rem] opacity-5 group-hover:translate-x-4 group-hover:translate-y-4 transition-transform duration-500" />
-                  
-                  <div className="relative bg-white border border-slate-100 rounded-[3rem] p-12 h-full shadow-[0_30px_100px_rgba(0,0,0,0.03)] group-hover:shadow-[0_40px_120px_rgba(0,0,0,0.08)] group-hover:border-slate-200 transition-all duration-500">
-                    <div className="flex flex-col h-full">
-                      <div className="flex items-center justify-between mb-12">
-                        <div className={`w-20 h-20 rounded-[2rem] flex items-center justify-center ${isSky ? 'bg-sky-50 text-sky-600' : 'bg-emerald-50 text-emerald-600'} transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3`}>
-                          <Icon size={40} strokeWidth={1.5} />
-                        </div>
-                        <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${isSky ? 'bg-sky-50/50 border-sky-100 text-sky-600' : 'bg-emerald-50/50 border-emerald-100 text-emerald-600'}`}>
-                          {stream.subtitle}
-                        </div>
-                      </div>
+          {/* ENGINEERING CUTOFFS CARD */}
+          <div className="bg-white rounded-2xl border-2 border-slate-200 hover:border-sky-500 hover:shadow-xl transition-all duration-300 p-6 sm:p-8 flex flex-col justify-between relative group">
+            <div className="absolute top-0 right-0 h-1.5 w-32 bg-sky-500 rounded-tr-2xl" />
 
-                      <h3 className="text-5xl font-[850] text-slate-900 tracking-[-0.03em] mb-6 group-hover:text-sky-600 transition-colors">
-                        {stream.title}
-                      </h3>
-                      
-                      <p className="text-slate-500 text-lg leading-relaxed font-medium mb-10">
-                        {stream.description}
-                      </p>
-
-                      <div className="space-y-4 mb-12">
-                        {stream.features.map(f => (
-                          <div key={f} className="flex items-center gap-3">
-                            <div className={`w-5 h-5 rounded-full flex items-center justify-center ${isSky ? 'bg-sky-100 text-sky-600' : 'bg-emerald-100 text-emerald-600'}`}>
-                               <ChevronRight size={10} strokeWidth={4} />
-                            </div>
-                            <span className="text-sm font-bold text-slate-600 tracking-tight">{f}</span>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="mt-auto flex items-center justify-between pt-10 border-t border-slate-50">
-                        <div className="flex gap-10">
-                           {stream.stats.map(s => (
-                             <div key={s} className="flex flex-col">
-                               <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1">Status</span>
-                               <span className="text-xs font-black text-slate-900 tracking-widest uppercase">{s}</span>
-                             </div>
-                           ))}
-                        </div>
-                        <div className={`w-16 h-16 rounded-[2rem] flex items-center justify-center text-white transition-all duration-500 ${isSky ? 'bg-slate-900 group-hover:bg-sky-600' : 'bg-slate-900 group-hover:bg-emerald-600'}`}>
-                          <ArrowRight size={24} strokeWidth={2.5} />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── DARK FEATURES BENTO ────────────────────────────────── */}
-      <section className="py-40 bg-slate-900 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-sky-600 rounded-full blur-[150px] opacity-20" />
-           <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-indigo-600 rounded-full blur-[150px] opacity-20" />
-        </div>
-
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8">
-           <div className="max-w-3xl mb-24">
-              <h2 className="text-4xl sm:text-6xl font-[850] text-white tracking-tight leading-[1.1] mb-8">
-                Designed for <br />
-                <span className="text-sky-400">High-Stake</span> Decisions.
-              </h2>
-              <p className="text-xl text-slate-400 font-medium leading-relaxed">
-                We collect and structure admission data from 1,200+ official sources to ensure you have the most accurate guidance for your career.
-              </p>
-           </div>
-
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
-              {[
-                { title: 'Official Data', icon: Landmark, desc: 'Every rank and score is verified against MCC, JoSAA, and State counselling archives.' },
-                { title: 'Trend Analysis', icon: TrendingUp, desc: 'View 3-year historical trends to predict opening and closing ranks for the upcoming cycle.' },
-                { title: 'Expert Support', icon: GraduationCap, desc: 'Get personalized choice-filling assistance from our network of expert counselors.' }
-              ].map((item, idx) => (
-                <div key={idx} className="group">
-                  <div className="w-14 h-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center mb-8 text-sky-400 group-hover:bg-sky-400 group-hover:text-white transition-all duration-500">
-                    <item.icon size={28} strokeWidth={1.5} />
-                  </div>
-                  <h4 className="text-xl font-bold text-white mb-4">{item.title}</h4>
-                  <p className="text-slate-500 font-medium leading-relaxed text-sm">{item.desc}</p>
+            <div>
+              {/* Card Header */}
+              <div className="flex items-center justify-between mb-5">
+                <div className="w-14 h-14 rounded-2xl bg-sky-50 border border-sky-200/80 flex items-center justify-center text-sky-700 shadow-sm group-hover:scale-105 transition-transform">
+                  <Code2 size={28} strokeWidth={2} />
                 </div>
-              ))}
-           </div>
-        </div>
-      </section>
+                <span className="text-xs font-bold uppercase tracking-wider text-sky-700 bg-sky-50 border border-sky-200/60 px-3 py-1 rounded-full">
+                  JoSAA & CSAB
+                </span>
+              </div>
 
+              {/* Title & Scope */}
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:text-sky-700 transition-colors">
+                Engineering Cutoffs
+              </h2>
+              <p className="text-sm font-semibold text-sky-600 mt-1">
+                JEE Main, JEE Advanced & BITSAT
+              </p>
+              <p className="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+                Branch-wise opening and closing ranks for 23 IITs, 31 NITs, 26 IIITs, GFTIs, and premier state engineering colleges.
+              </p>
+
+              {/* High-Level Feature Pills */}
+              <div className="mt-5 space-y-2.5 text-xs text-slate-700 font-medium">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 size={15} className="text-sky-600 shrink-0" />
+                  <span><strong>Branches:</strong> Computer Science (CSE), AI & DS, ECE, ME, CE</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 size={15} className="text-sky-600 shrink-0" />
+                  <span><strong>Institutes:</strong> IITs, NITs, IIITs, BITS Pilani & State Top</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 size={15} className="text-sky-600 shrink-0" />
+                  <span><strong>Pools:</strong> All India (AI), Home State (HS) & Female 20% Pool</span>
+                </div>
+              </div>
+
+              {/* Benchmark Highlight Sneak Peek */}
+              <div className="mt-5 p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between text-xs">
+                <div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">IIT Bombay (B.Tech CSE)</span>
+                  <span className="font-bold text-slate-900">General Closing Rank: #68</span>
+                </div>
+                <span className="text-[11px] font-bold text-sky-700 bg-sky-100/60 px-2 py-0.5 rounded">
+                  Round 5
+                </span>
+              </div>
+            </div>
+
+            {/* Launch Button */}
+            <Link
+              href="/cutoffs/engineering"
+              className="mt-6 w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-slate-900 hover:bg-sky-600 text-white font-bold text-sm tracking-wide shadow-md hover:shadow-lg transition-all group/btn"
+            >
+              <span>Explore Engineering Cutoffs</span>
+              <ArrowRight size={17} className="group-hover/btn:translate-x-1.5 transition-transform" />
+            </Link>
+          </div>
+
+        </div>
+
+        {/* ── TRUST & GUIDANCE FOOTNOTE DOCK ───────────────────────── */}
+        <div className="bg-white rounded-xl border border-slate-200 px-5 py-3.5 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-slate-500 text-[11px]">
+            <span className="font-semibold text-slate-800 flex items-center gap-1.5">
+              <ShieldCheck size={15} className="text-emerald-600" /> Sourced from MCC (mcc.nic.in) & JoSAA (josaa.nic.in) official archives
+            </span>
+            <span className="hidden md:inline text-slate-300">•</span>
+            <span className="hidden md:inline">Includes Category (GEN, OBC, EWS, SC, ST, PwD) Quota Matrix</span>
+          </div>
+
+          <div className="flex items-center gap-4 shrink-0">
+            <button
+              onClick={() => setCounsellingModalOpen(true)}
+              className="text-indigo-600 hover:text-indigo-800 font-bold text-xs flex items-center gap-1 transition-colors"
+            >
+              <Compass size={13} />
+              <span>Need Choice Filling Help?</span>
+            </button>
+          </div>
+        </div>
+
+      </main>
+
+      {/* ── OG SITE FOOTER ───────────────────────────────────────── */}
       <Footer />
+
+      {/* Counselling Modal */}
+      <CounsellingModal
+        isOpen={counsellingModalOpen}
+        onClose={() => setCounsellingModalOpen(false)}
+      />
     </div>
   )
 }
+
