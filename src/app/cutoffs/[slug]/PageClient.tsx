@@ -42,7 +42,7 @@ const STREAM_CONFIG = {
     states: [
       'All India', 'Andaman and Nicobar Islands', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chandigarh', 'Chhattisgarh', 'Dadra and Nagar Haveli and Daman and Diu', 'Delhi', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand', 'Karnataka', 'Kerala', 'Ladakh', 'Lakshadweep', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Puducherry', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'
     ],
-    years: ['2025', '2024'],
+    years: ['2025', '2024', '2023'],
     rankLabel: 'NEET Rank',
     emptyHint: 'Try selecting "Govt." college type with "All India quota" for AIIMS and top government MBBS seats.',
   },
@@ -141,8 +141,8 @@ export default function CutoffSlugPage({ params }: { params: Promise<{ slug: str
   const [sortField, setSortField] = useState<'rank' | 'round'>('rank')
   const [sortAsc, setSortAsc] = useState(true)
 
-  // Per-dropdown option lists
-  const [optYears, setOptYears] = useState<string[]>([])
+  // Per-dropdown option lists — pre-populate optYears with config.years so options are immediately interactive
+  const [optYears, setOptYears] = useState<string[]>(config.years ?? ['2025', '2024'])
   const [optCourses, setOptCourses] = useState<string[]>([])
   const [optCollegeTypes, setOptCollegeTypes] = useState<string[]>([])
   const [optStates, setOptStates] = useState<string[]>([])
@@ -157,9 +157,22 @@ export default function CutoffSlugPage({ params }: { params: Promise<{ slug: str
 
   // Year — depends on: exam (no DB column, just a UI gate)
   useEffect(() => {
-    if (!filters.exam) { setOptYears([]); return }
-    fetchDistinctValues('year', {}).then(setOptYears)
-  }, [filters.exam])
+    if (!filters.exam) {
+      setOptYears([])
+      return
+    }
+    fetchDistinctValues('year', {}).then(dbYears => {
+      const merged = Array.from(new Set([...(dbYears || []), ...(config.years || [])]))
+        .filter(Boolean)
+        .sort((a, b) => parseInt(b) - parseInt(a))
+      if (merged.length > 0) {
+        setOptYears(merged)
+      }
+    }).catch(err => {
+      console.error('[Cutoffs] Failed to fetch distinct years from DB:', err)
+      setOptYears(config.years || ['2025', '2024'])
+    })
+  }, [filters.exam, config.years])
 
   // Course — depends on: year
   useEffect(() => {
@@ -364,7 +377,7 @@ export default function CutoffSlugPage({ params }: { params: Promise<{ slug: str
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-8">
             <SelectField label="Entrance Exam"    value={filters.exam}        onChange={(v: string) => setFilter('exam', v)}        options={config.exams}          placeholder="All Exams"    theme={themeColor} />
-            <SelectField label="Academic Year"    value={filters.year}        onChange={(v: string) => setFilter('year', v)}        options={dbOptions.years}       placeholder="All Years"    theme={themeColor} disabled={!filters.exam} />
+            <SelectField label="Academic Year"    value={filters.year}        onChange={(v: string) => setFilter('year', v)}        options={dbOptions.years.length > 0 ? dbOptions.years : (config.years ?? ['2025', '2024'])}       placeholder="All Years"    theme={themeColor} disabled={!filters.exam} />
             <SelectField label="Desired Course"   value={filters.course}      onChange={(v: string) => setFilter('course', v)}      options={dbOptions.courses}     placeholder="All Courses"  theme={themeColor} disabled={!filters.year} />
             <SelectField label="College Type"     value={filters.collegeType} onChange={(v: string) => setFilter('collegeType', v)} options={dbOptions.collegeTypes} placeholder="All Types"    theme={themeColor} disabled={!filters.course} />
             <SelectField label="State / Territory" value={filters.state}      onChange={(v: string) => setFilter('state', v)}       options={dbOptions.states}      placeholder="All States"   theme={themeColor} disabled={!filters.collegeType} />
