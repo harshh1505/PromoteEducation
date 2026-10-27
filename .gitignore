@@ -15,6 +15,7 @@ out/
 # Production
 build/
 dist/
+_worker.bundle/
 
 # Environment Variables
 .env

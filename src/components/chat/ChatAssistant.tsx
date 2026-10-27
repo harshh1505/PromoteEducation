@@ -98,12 +98,31 @@ export default function ChatAssistant() {
         })
       })
 
-      const data = await res.json()
+      let data: any = null
+      try {
+        data = await res.json()
+      } catch (parseErr) {
+        console.warn('[Chat Widget] Non-JSON response from /api/chat:', res.status)
+      }
+
+      if (!res.ok) {
+        const errorMsg = data?.message || "I'm temporarily having trouble connecting to our counseling engine. Please reach out directly to our senior counselors at **+91 99001 16101** for immediate help!"
+        setMessages(prev => [
+          ...prev,
+          {
+            id: `bot-err-${Date.now()}`,
+            role: 'assistant',
+            content: errorMsg,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          }
+        ])
+        return
+      }
 
       const botMessage: Message = {
         id: `bot-${Date.now()}`,
         role: 'assistant',
-        content: data.message || "I apologize, I couldn't process that response. Please ask again or contact our counseling line at **+91 99001 16101**.",
+        content: data?.message || "I apologize, I couldn't process that response. Please ask again or contact our counseling line at **+91 99001 16101**.",
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
 
