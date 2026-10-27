@@ -14,7 +14,7 @@ import {
   Share2,
   Eye,
   Search,
-  Sparkles,
+  Newspaper,
   Flame,
   CheckCircle2,
   Clock,
@@ -302,7 +302,7 @@ export default function NewsPageContent({
       <main className="flex-1 max-w-[1440px] mx-auto w-full px-4 sm:px-6 lg:px-8 pb-20">
         {filteredArticles.length === 0 ? (
           <div className="bg-white rounded-3xl p-16 text-center border border-slate-200/90 shadow-sm my-10">
-            <Sparkles size={48} className="mx-auto text-slate-300 mb-4" />
+            <Search size={48} className="mx-auto text-slate-300 mb-4" />
             <h3 className="text-xl font-bold text-slate-900 mb-2">No matching news articles</h3>
             <p className="text-slate-500 text-sm max-w-md mx-auto mb-6">
               No articles match your current search and stream filters. Try resetting the filter to explore all updates.
@@ -565,7 +565,7 @@ export default function NewsPageContent({
             <div className="pt-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-                  <Sparkles size={20} className="text-sky-600" />
+                  <Newspaper size={20} className="text-sky-600" />
                   Latest Educational Feed
                 </h2>
                 <span className="text-xs text-slate-500 font-medium">

@@ -5,7 +5,6 @@ import Footer from '@/components/layout/Footer'
 import {
   BookOpen,
   GraduationCap,
-  Sparkles,
   ChevronRight,
   Target,
   Clock,
@@ -313,7 +312,7 @@ export default function ArticlesHubPage() {
 
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-50 border border-sky-100 text-sky-700 text-[11px] font-black uppercase tracking-widest mb-6">
-              <Sparkles size={12} className="text-sky-500" />
+              <span className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse" />
               Verified Academic Library · {totalArticles} In-Depth Guides
             </div>
 

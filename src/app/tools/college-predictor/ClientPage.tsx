@@ -8,7 +8,7 @@ import Footer from '@/components/layout/Footer'
 import {
   Search, MapPin, SlidersHorizontal, ArrowUpDown, AlertCircle, Loader2,
   TrendingUp, Building2, Landmark, ChevronRight, ChevronDown, CheckCircle2,
-  GraduationCap, Phone, Mail, User, Sparkles, Calendar, ArrowLeft, Heart, Info, DollarSign
+  GraduationCap, Phone, Mail, User, Calendar, ArrowLeft, Heart, Info, DollarSign
 } from 'lucide-react'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer

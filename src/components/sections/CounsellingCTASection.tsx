@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { PhoneCall, Sparkles, ArrowRight, ShieldCheck } from 'lucide-react'
+import { PhoneCall, ArrowRight, ShieldCheck } from 'lucide-react'
 import LeadModal from '@/components/ui/LeadModal'
 
 export default function CounsellingCTASection() {
@@ -15,9 +15,9 @@ export default function CounsellingCTASection() {
 
       <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
         
-        {/* Sparkle badge */}
+        {/* Badge */}
         <div className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-xs font-bold text-sky-400 uppercase tracking-widest mb-6">
-          <Sparkles size={14} className="text-sky-400 animate-spin-slow" />
+          <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
           Limited Slots for 2026 Admissions
         </div>
 

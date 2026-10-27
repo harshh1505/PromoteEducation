@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { X, Calendar, MapPin, CreditCard, Award, Sparkles, ShieldCheck } from 'lucide-react'
+import { X, Calendar, MapPin, CreditCard, Award, ShieldCheck } from 'lucide-react'
 
 type HighlightsModalProps = {
   collegeName: string

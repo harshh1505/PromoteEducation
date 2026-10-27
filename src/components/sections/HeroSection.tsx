@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Star, ArrowRight, Check } from 'lucide-react'
 import Link from 'next/link'
 import LeadModal from '@/components/ui/LeadModal'
+import HeroAIChatBar from '@/components/chat/HeroAIChatBar'
 
 const avatars = [
   "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100&h=100",
@@ -205,7 +206,10 @@ export default function HeroSection() {
           </div>
 
           {/* Right Column: Visual Container with College Images Carousel & Floating Info Cards */}
-          <div className="lg:col-span-6 flex justify-center lg:justify-end animate-in fade-in slide-in-from-right-6 duration-700">
+          <div className="lg:col-span-6 flex flex-col items-center lg:items-end justify-center animate-in fade-in slide-in-from-right-6 duration-700 w-full relative z-30">
+            {/* AI Chatbar: Positioned compactly on the right side only, between navbar and carousel */}
+            <HeroAIChatBar className="mb-4 w-full" />
+
             <div className="relative w-full max-w-[340px] md:max-w-[460px] aspect-[3/4] md:aspect-[4/5] bg-slate-900 rounded-[32px] md:rounded-[48px] shadow-2xl overflow-hidden lg:overflow-visible flex items-end">
               
 

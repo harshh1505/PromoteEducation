@@ -13,7 +13,6 @@ import {
   CheckCircle2,
   Building2,
   GraduationCap,
-  Sparkles,
   Compass,
   FileSpreadsheet,
   Award,

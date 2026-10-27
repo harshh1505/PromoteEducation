@@ -6,7 +6,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
-import { Calendar, ArrowRight, BookOpen, Clock, User, Eye, Sparkles } from 'lucide-react'
+import { Calendar, ArrowRight, BookOpen, Clock, User, Eye } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { resolveImageUrl, stripMarkdown } from '@/lib/utils'
 
@@ -195,7 +195,7 @@ export default function BlogsPageContent({ initialBlogs }: { initialBlogs: any[]
                     />
                     <div className="absolute top-6 left-6">
                       <span className="px-4 py-2 bg-white/90 backdrop-blur-md text-slate-900 text-[10px] font-black uppercase tracking-[0.2em] rounded-xl shadow-sm border border-slate-100 flex items-center gap-2">
-                        <Sparkles size={14} className="text-emerald-500" /> Featured Post
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Featured Post
                       </span>
                     </div>
                   </Link>

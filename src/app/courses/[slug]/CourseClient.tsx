@@ -11,7 +11,7 @@ import LeadModal from '@/components/ui/LeadModal'
 import { 
   GraduationCap, Clock, Award, CheckCircle2, ChevronRight, ArrowRight, 
   Building2, Briefcase, TrendingUp, HelpCircle, FileText, Calendar, 
-  IndianRupee, ShieldCheck, Check, Sparkles, BookOpen, MapPin, ChevronDown
+  IndianRupee, ShieldCheck, Check, BookOpen, MapPin, ChevronDown
 } from 'lucide-react'
 import type { CourseData } from '@/lib/courseService'
 
@@ -104,7 +104,7 @@ export default function CourseClient({ course, colleges }: CourseClientProps) {
 
                 <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 shadow-sm">
                   <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1 flex items-center gap-1.5">
-                    <Sparkles size={12} className="text-amber-500" /> Top Salary
+                    <Award size={12} className="text-amber-500" /> Top Salary
                   </div>
                   <div className="text-sm md:text-base font-extrabold text-slate-900">{course.top_salary || '₹35+ LPA'}</div>
                 </div>

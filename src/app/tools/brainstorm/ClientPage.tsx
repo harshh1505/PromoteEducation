@@ -13,8 +13,7 @@ import {
   BarChart3,
   Target,
   Lightbulb,
-  Loader2,
-  Sparkles
+  Loader2
 } from 'lucide-react'
 import {
   Radar as RadarRaw,
@@ -515,7 +514,7 @@ export default function BrainstormPage() {
                 <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -mr-32 -mt-32" />
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-10 h-10 bg-indigo-500 rounded-xl flex items-center justify-center text-white shadow-lg">
-                    <Sparkles size={20} />
+                    <Brain size={20} />
                   </div>
                   <div>
                     <h2 className="text-xl font-black tracking-tight">Personalized Interpretation</h2>
@@ -570,7 +569,7 @@ export default function BrainstormPage() {
                 </div>
                 <div className="bg-white border border-slate-100 rounded-3xl p-8 shadow-sm print-page-break">
                   <div className="flex items-center gap-3 mb-6">
-                    <Sparkles className="text-indigo-500" />
+                    <Brain className="text-indigo-500" />
                     <h3 className="font-black text-slate-900 print-bold">Personalized Interpretation</h3>
                   </div>
                   <div className="space-y-4">

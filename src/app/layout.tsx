@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { AuthProvider } from '@/components/auth/AuthProvider'
+import ChatAssistant from '@/components/chat/ChatAssistant'
 
 
 export const metadata: Metadata = {
@@ -125,6 +126,7 @@ export default function RootLayout({
         </noscript>
         <AuthProvider>
           {children}
+          <ChatAssistant />
         </AuthProvider>
       </body>
     </html>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { GitCompare, Check, Search, ChevronDown, Lock, ShieldCheck, ArrowRight, Sparkles } from 'lucide-react'
+import { GitCompare, Check, Search, ChevronDown, Lock, ShieldCheck, ArrowRight } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import LeadModal from '@/components/ui/LeadModal'
 
@@ -243,7 +243,6 @@ export default function CompareSection() {
               <div className="bg-indigo-900 text-white rounded-[24px] p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl animate-in zoom-in-95 duration-500">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <Sparkles className="text-amber-400 shrink-0" size={14} />
                     <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-200">Expert Counselling</span>
                   </div>
                   <h4 className="text-base font-extrabold mb-0.5">Get Professional Analysis on these Colleges</h4>

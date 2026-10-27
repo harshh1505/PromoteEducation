@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Phone, MessageCircle, GitCompare, ArrowRight, UserCheck } from 'lucide-react'
+import { Phone, GitCompare, ArrowRight, UserCheck } from 'lucide-react'
 import LeadModal from '@/components/ui/LeadModal'
 
 export default function StickyCROElements() {
@@ -21,12 +21,6 @@ export default function StickyCROElements() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const handleWhatsAppClick = () => {
-    const phoneNumber = '918218032826' // User's requested phone number
-    const text = encodeURIComponent("Hi, I want to discuss college admission opportunities and expert counselling support. Can you help me?")
-    window.open(`https://wa.me/${phoneNumber}?text=${text}`, '_blank')
-  }
-
   const scrollToCompare = (e: React.MouseEvent) => {
     e.preventDefault()
     const compareSec = document.getElementById('compare-section')
@@ -39,19 +33,7 @@ export default function StickyCROElements() {
 
   return (
     <>
-      {/* 1. Sticky WhatsApp Button */}
-      <button
-        onClick={handleWhatsAppClick}
-        className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] md:bottom-6 right-6 z-40 bg-[#25D366] hover:bg-[#20BA5A] text-white p-4 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 group flex items-center gap-2"
-        aria-label="Contact on WhatsApp"
-      >
-        <MessageCircle size={24} className="fill-white" />
-        <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 ease-in-out font-bold text-xs uppercase tracking-wider text-white whitespace-nowrap">
-          Chat Admissions
-        </span>
-      </button>
-
-      {/* 2. Desktop Floating Counselling Side-Tab (visible after scroll) */}
+      {/* 1. Desktop Floating Counselling Side-Tab (visible after scroll) */}
       <button
         onClick={() => setShowModal(true)}
         className={`fixed right-0 top-1/2 -translate-y-1/2 z-40 bg-[#3B2EA8] hover:bg-[#2C218B] text-white py-3 px-5 rounded-l-2xl shadow-2xl transition-all duration-300 hover:pr-7 items-center gap-2 cursor-pointer font-bold text-xs uppercase tracking-widest hidden md:flex origin-right transform ${

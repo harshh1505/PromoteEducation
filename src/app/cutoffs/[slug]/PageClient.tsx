@@ -10,7 +10,7 @@ import {
   SlidersHorizontal, ArrowUpDown, AlertCircle, Loader2,
   TrendingUp, Building2, MapPin,
   ArrowLeft, Download, Share2, Info,
-  Sparkles, GraduationCap, Calendar, BookOpen
+  GraduationCap, Calendar, BookOpen
 } from 'lucide-react'
 
 // ── Stream Config ──────────────────────────────────────────────────────────────
@@ -340,7 +340,7 @@ export default function CutoffSlugPage({ params }: { params: Promise<{ slug: str
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10">
             <div className="max-w-3xl">
               <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-6 ${themeColor === 'sky' ? 'bg-sky-50 text-sky-600' : 'bg-emerald-50 text-emerald-600'}`}>
-                <Sparkles size={12} strokeWidth={3} />
+                <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
                 Live Data Repository
               </div>
               <h1 className="text-4xl sm:text-6xl font-[850] tracking-tight text-slate-900 leading-[1.1]">

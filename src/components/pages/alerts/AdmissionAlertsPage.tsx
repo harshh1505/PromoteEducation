@@ -12,7 +12,6 @@ import {
   AlertTriangle,
   ArrowRight,
   Share2,
-  Sparkles,
   Filter,
   GraduationCap,
   ShieldCheck,
@@ -130,7 +129,7 @@ export default function AdmissionAlertsPage() {
 
             <div className="relative z-10 max-w-3xl">
               <div className="inline-flex items-center gap-2 bg-sky-500/20 border border-sky-400/30 px-3.5 py-1.5 rounded-full text-xs font-bold text-sky-300 uppercase tracking-wider mb-6">
-                <Sparkles size={14} className="text-sky-400" />
+                <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
                 Admission Season 2027 Official Monitor
               </div>
 

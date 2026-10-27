@@ -6,7 +6,7 @@ import { useSearchParams } from 'next/navigation'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import { 
-  Search, ArrowRight, Clock, Briefcase, Sparkles, Filter, ChevronDown, GraduationCap 
+  Search, ArrowRight, Clock, Briefcase, Filter, ChevronDown, GraduationCap 
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
